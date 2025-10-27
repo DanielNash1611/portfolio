@@ -1,0 +1,17 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F2E3D5"/>
+      <stop offset="0.5" stop-color="#DBBF96"/>
+      <stop offset="1" stop-color="#2C4F52"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="48" fill="url(#grad)"/>
+  <circle cx="280" cy="220" r="160" fill="#D17A5F" opacity="0.55"/>
+  <circle cx="920" cy="180" r="140" fill="#F2E3D5" opacity="0.35"/>
+  <rect x="160" y="360" width="880" height="140" rx="40" fill="#FFFFFF" opacity="0.12"/>
+  <text x="180" y="300" fill="#2C4F52" font-family="Georgia, serif" font-weight="600" font-size="72">Daniel Nash</text>
+  <text x="180" y="376" fill="#2C4F52" font-family="system-ui, sans-serif" font-size="32" opacity="0.85">
+    Bridging Creativity &amp; Strategy — Product Leadership &amp; Composer
+  </text>
+</svg>

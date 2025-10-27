@@ -1,0 +1,75 @@
+---
+title: "Checkout Redesign for Multi-Brand Retailer"
+date: "2025-01-12"
+summary: "Reduced checkout time, improved conversion, and established an experimentation engine for ongoing optimization."
+tags:
+  - AI Product
+  - Experimentation
+  - Growth
+---
+
+## Problem
+
+Legacy checkout flows were fragmented across three brands, requiring duplicate address entry and lacking personalization. Session drop-offs spiked at payment selection and cart review due to latency and unclear copy. The executive sponsor needed a scalable redesign that could support AI-driven offers without increasing compliance risk.
+
+## Role
+
+As the Senior AI Product Manager, I led discovery, requirements, and delivery across product, design, and engineering. I owned roadmap definition, AI experimentation strategy, and executive stakeholder updates while partnering with data science and compliance counterparts.
+
+## Insights
+
+- 62% of total delay surfaced between shipping and payment steps due to sequential API calls.
+- Customers exposed to contextual financing suggestions converted at 1.8× the baseline.
+- Mobile users abandoned at 2× the rate of desktop because form fields were not auto-formatting inputs.
+
+<ProConList
+  pros={[
+    { title: "Clear signal to prioritize payment latency", description: "Service calls could be batched and cached, shaving 5.2 seconds off the median flow." },
+    { title: "Experimentation-ready architecture", description: "A modular stepper allowed AI-generated offers, messaging, and sequencing to be tested without redeploying the core checkout." }
+  ]}
+  cons={[
+    { title: "Compliance guardrails", description: "Financial promotions required deterministic copy and audit trails, constraining AI content surfaces." },
+    { title: "Fragmented analytics", description: "Pre-existing instrumentation could not capture multi-step experiments, requiring a parallel analytics uplift." }
+  ]} />
+
+## Strategy
+
+We staged the initiative across three workstreams:
+
+1. **Experience Core** — rebuild checkout with responsive design, inline validation, and accessibility baked in.
+2. **AI Offer Engine** — orchestrate personalization via content slots controlled by experimentation toggles.
+3. **Experimentation Pod** — establish governance, KPI tracking, and insight cadence to sustain iteration.
+
+## Execution
+
+- Introduced a single-page architecture with progressive disclosure and inline save states.
+- Built a feature flag framework for AI-generated incentives, ensuring fallbacks existed for deterministic copy.
+- Established instrumentation to pipe core KPIs into a combined Looker + Amplitude dashboard.
+- Ran six sequential A/B tests covering copy, modular payment steps, and financing offer timing.
+
+<BeforeAfter
+  beforeSrc="/images/checkout-before.svg"
+  afterSrc="/images/checkout-after.svg"
+  beforeLabel="Legacy flow"
+  afterLabel="Unified flow"
+/>
+
+## Results
+
+<div className="grid gap-4 md:grid-cols-3">
+  <MetricCard value="-50%" delta="5.2s faster" description="Median time-to-checkout after consolidating API requests." />
+  <MetricCard value="+3%" delta="Statistically significant" description="Conversion lift across flagship brand after six weeks of experimentation." />
+  <MetricCard value="$16M" delta="Annualized" description="Projected incremental revenue uplift tied to conversion gains and order value." />
+</div>
+
+| Variant | Conversion lift | Checkout duration | Notes |
+| --- | --- | --- | --- |
+| Control | – | 48s | Legacy multi-step flow |
+| AI Offer Timing | +1.1% | 42s | Personalized offers during review |
+| Unified Stepper | +3.0% | 24s | Consolidated shipping & payment |
+
+## Artifacts
+
+- Modular design system spec in Figma with accessibility annotations.
+- Dashboard templates for funnel metrics, experiment readouts, and error monitoring.
+- API contract documentation for payment services to support future AI prompts.

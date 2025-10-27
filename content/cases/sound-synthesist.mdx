@@ -1,0 +1,51 @@
+---
+title: "Sound Synthesist — AI Composer Playground"
+date: "2025-02-01"
+summary: "Experimenting with AI-guided sound design to help musicians iterate faster while staying in control."
+tags:
+  - Prototype
+  - Music Tech
+  - AI
+---
+
+## Concept
+
+Sound Synthesist gives artists a promptable canvas: describe the vibe you want, and the system composes layered stems pulled from a curated sample graph. The interface exposes the generative logic so artists can remix, resample, or re-sequence without hitting a creative dead end.
+
+## Approach
+
+- Built a modular synthesis engine in TypeScript leveraging Web Audio nodes and lightweight DSP libraries.
+- Used OpenAI function calling to translate text prompts into modulatable parameters (tempo, timbre, envelopes).
+- Indexed public-domain stems with vector embeddings for timbral similarity.
+- Designed controls to keep the human in the loop: every AI action surfaces the parameters it touched with quick undo.
+
+<div className="grid gap-4 md:grid-cols-3">
+  <MetricCard value="6 weeks" description="Time from concept to playable prototype." />
+  <MetricCard value="24 sessions" delta="Private beta" description="Early musicians interviewed to refine guardrails." />
+  <MetricCard value="92%" delta="Wanted to keep exploring" description="Usability score after guided testing." />
+</div>
+
+## (Future) Live Demo
+
+The live playground will return soon. Infrastructure hardening is underway so the demo can run with isolated credentials and rate limiting.
+
+## Sources
+
+- Public-domain jazz, orchestral, and ambient stems curated from Library of Congress collections.
+- User research transcripts and prompt audit logs (anonymized) to continue tuning safety filters.
+
+<ProConList
+  pros={[
+    { title: "Transparent AI controls", description: "Explicit parameter mapping keeps artists in charge rather than the model improvising unchecked." },
+    { title: "Composable architecture", description: "Engine can be dropped into DAW plug-ins or hosted as a standalone web app." }
+  ]}
+  cons={[
+    { title: "Latency constraints", description: "On-device rendering remains a goal; current demo leverages small compute bursts in the cloud." },
+    { title: "Dataset provenance", description: "Requires ongoing diligence to ensure every sample stays within public-domain or licensed catalogs." }
+  ]} />
+
+## What’s Next
+
+- Ship the hardened live demo with offline-capable rendering.
+- Release MIDI export and patch sharing.
+- Open-source the prompt-to-parameter mapper for community contributions.

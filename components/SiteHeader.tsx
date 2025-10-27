@@ -1,0 +1,103 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/work", label: "Work" },
+  { href: "/music", label: "Music" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" }
+];
+
+const SiteHeader = (): JSX.Element => {
+  const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  return (
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-brand-slate/10 bg-brand-cream/90 backdrop-blur">
+      <div className="container flex items-center justify-between py-4">
+        <Link
+          href="/"
+          className="text-lg font-semibold text-brand-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream"
+        >
+          Daniel Nash
+        </Link>
+        <nav aria-label="Main navigation" className="hidden md:flex md:items-center md:gap-6">
+          {links.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname?.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={clsx(
+                  "rounded-xl px-3 py-2 text-sm font-medium transition hover:text-brand-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream",
+                  isActive
+                    ? "bg-brand-teal/10 text-brand-teal"
+                    : "text-brand-slate"
+                )}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+        <button
+          type="button"
+          className="inline-flex items-center justify-center rounded-xl border border-brand-slate/20 p-2 text-brand-slate focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream md:hidden"
+          onClick={() => setMenuOpen((prev) => !prev)}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          aria-label="Toggle navigation"
+        >
+          {menuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+        </button>
+      </div>
+      <div
+        id="mobile-menu"
+        className={clsx(
+          "md:hidden border-t border-brand-slate/10 bg-brand-cream/95 backdrop-blur",
+          menuOpen ? "block" : "hidden"
+        )}
+      >
+        <nav className="container flex flex-col gap-2 py-4" aria-label="Mobile navigation">
+          {links.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname?.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={clsx(
+                  "rounded-xl px-3 py-2 text-base font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream",
+                  isActive
+                    ? "bg-brand-teal/10 text-brand-teal"
+                    : "text-brand-slate hover:text-brand-teal"
+                )}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+    </header>
+  );
+};
+
+export default SiteHeader;
