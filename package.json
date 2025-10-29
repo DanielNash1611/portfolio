@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run images:meta && next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mdx}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mdx}\"",
+    "images:meta": "tsx scripts/read-image-meta.ts",
+    "images:build": "tsx scripts/make-derivatives.ts",
+    "postinstall": "npm run images:meta && npm run images:build"
   },
   "dependencies": {
     "clsx": "^2.1.0",
@@ -15,11 +18,12 @@
     "lucide-react": "^0.380.0",
     "next": "14.1.0",
     "next-mdx-remote": "^5.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
@@ -32,6 +36,7 @@
     "postcss": "^8.4.33",
     "prettier": "^3.1.1",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.20.6",
     "typescript": "^5.3.3"
   }
 }

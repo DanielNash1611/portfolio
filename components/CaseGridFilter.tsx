@@ -36,9 +36,28 @@ const CaseGridFilter = ({ items }: CaseGridFilterProps): JSX.Element => {
         ))}
       </div>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {filtered.map((item) => (
-          <CaseCard key={item.slug} {...item} />
-        ))}
+        {filtered.map((item) => {
+          const status = item.kpis?.find(
+            (metric) => metric.label.toLowerCase() === "status"
+          )?.value;
+          return (
+            <CaseCard
+              key={item.slug}
+              {...item}
+              status={status}
+              ctaLabel={
+                item.href
+                  ? `Explore ${item.title.split("–")[0].trim()}`
+                  : undefined
+              }
+              ariaLabel={
+                item.href
+                  ? `Open ${item.title} product page`
+                  : undefined
+              }
+            />
+          );
+        })}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 const releases = [
   {
@@ -29,7 +29,7 @@ const releases = [
 export const metadata: Metadata = {
   title: "Music",
   description:
-    "Listen to a cross-section of Daniel Nash’s recorded work, blending orchestration with AI-assisted synthesis."
+    "Listen to a cross-section of Daniel Nash's recorded work, blending orchestration with AI-assisted synthesis."
 };
 
 export default function MusicPage(): JSX.Element {
@@ -43,8 +43,7 @@ export default function MusicPage(): JSX.Element {
           Compositions, live sessions, and collaborations
         </h1>
         <p className="max-w-2xl text-brand-slate/80">
-          A snapshot of recent releases and experiments. Streams are embedded
-          from public platforms—no autoplay, all accessible.
+          A snapshot of recent releases and experiments. Streams are embedded from public platforms—no autoplay, all accessible.
         </p>
       </header>
       <div className="grid gap-8 md:grid-cols-2">

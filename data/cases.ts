@@ -5,6 +5,7 @@ export type Case = {
   tags: string[];
   heroImage: string;
   kpis?: { label: string; value: string }[];
+  href?: string;
 };
 
 export const cases: Case[] = [
@@ -32,5 +33,18 @@ export const cases: Case[] = [
       { label: "Prototype Velocity", value: "6 weeks" },
       { label: "User Satisfaction", value: "4.7/5" }
     ]
+  },
+  {
+    slug: "launchmuse",
+    title: "LaunchMuse – AI Fan Engagement Assistant",
+    summary:
+      "Real product: AI-assisted release planning, campaign generation, and audience insights.",
+    tags: ["AI", "Music Tech", "Product"],
+    heroImage: "/images/launchmuse-hero.jpg",
+    kpis: [
+      { label: "Status", value: "Early Access" },
+      { label: "Focus", value: "Campaigns • Insights • Timeline" }
+    ],
+    href: "/products/launchmuse"
   }
 ];

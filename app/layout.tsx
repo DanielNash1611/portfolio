@@ -1,7 +1,21 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import portraits from "@/public/portraits/metadata.json";
+
+const defaultOgImage = {
+  url: "/og-default.svg",
+  width: 1200,
+  height: 630,
+  alt: "Abstract gradient in brand palette for Daniel Nash"
+};
+
+const heroPortrait =
+  portraits.find((entry) => entry.roles.includes("hero")) ?? null;
+const heroImagePath = heroPortrait
+  ? `/portraits/${heroPortrait.file}`
+  : defaultOgImage.url;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://danielnash.com"),
@@ -10,7 +24,7 @@ export const metadata: Metadata = {
     default: "Daniel Nash | Bridging Creativity & Strategy"
   },
   description:
-    "Portfolio of Daniel Nash — Senior AI product leader and composer crafting high-impact journeys across digital products and sound.",
+    "Portfolio of Daniel Nash - Senior AI product leader and composer crafting high-impact journeys across digital products and sound.",
   openGraph: {
     title: "Daniel Nash | Bridging Creativity & Strategy",
     description:
@@ -18,12 +32,15 @@ export const metadata: Metadata = {
     url: "https://danielnash.com",
     siteName: "Daniel Nash Portfolio",
     images: [
-      {
-        url: "/og-default.svg",
-        width: 1200,
-        height: 630,
-        alt: "Abstract gradient in brand palette for Daniel Nash"
-      }
+      heroPortrait
+        ? {
+            url: heroImagePath,
+            width: heroPortrait.width,
+            height: heroPortrait.height,
+            alt: heroPortrait.alt,
+            type: "image/jpeg"
+          }
+        : defaultOgImage
     ],
     locale: "en_US",
     type: "website"
@@ -32,8 +49,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Daniel Nash | Bridging Creativity & Strategy",
     description:
-      "Product portfolio & compositions by Daniel Nash, blending AI, design, and sound.",
-    images: ["/og-default.svg"]
+      "Product portfolio and compositions by Daniel Nash, blending AI, design, and sound.",
+    images: [heroImagePath]
   }
 };
 

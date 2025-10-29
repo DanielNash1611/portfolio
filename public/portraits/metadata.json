@@ -1,0 +1,84 @@
+[
+  {
+    "file": "hero_square_photo.jpg",
+    "roles": [
+      "hero",
+      "avatar"
+    ],
+    "alt": "Daniel Nash smiling, close-up portrait.",
+    "width": 4024,
+    "height": 4025
+  },
+  {
+    "file": "about_medium_photo.jpg",
+    "roles": [
+      "about-header"
+    ],
+    "alt": "Daniel Nash seated on a teal sofa, smiling toward the camera.",
+    "width": 4894,
+    "height": 3269
+  },
+  {
+    "file": "front_medium_photo.jpg",
+    "roles": [
+      "inline"
+    ],
+    "alt": "Daniel Nash facing forward on a teal sofa with artwork behind.",
+    "width": 4894,
+    "height": 3269
+  },
+  {
+    "file": "center_medium_photo.jpg",
+    "roles": [
+      "inline-fallback"
+    ],
+    "alt": "Daniel Nash centered on a teal sofa, friendly expression.",
+    "width": 4894,
+    "height": 3269
+  },
+  {
+    "file": "wide_room_photo.jpg",
+    "roles": [
+      "divider"
+    ],
+    "alt": "Wide shot of Daniel in a teal living room with artwork and plants.",
+    "width": 4894,
+    "height": 3269
+  },
+  {
+    "file": "looking_right_photo.jpg",
+    "roles": [
+      "cta-left"
+    ],
+    "alt": "Daniel looking to the right with a thoughtful smile.",
+    "width": 4894,
+    "height": 3269
+  },
+  {
+    "file": "looking_left_photo.jpg",
+    "roles": [
+      "cta-right"
+    ],
+    "alt": "Daniel looking to the left with a relaxed smile.",
+    "width": 4894,
+    "height": 3269
+  },
+  {
+    "file": "thinking_medium_photo.jpg",
+    "roles": [
+      "insight"
+    ],
+    "alt": "Daniel resting his chin on his hand, thinking.",
+    "width": 4894,
+    "height": 3269
+  },
+  {
+    "file": "relaxed_medium_photo.jpg",
+    "roles": [
+      "casual"
+    ],
+    "alt": "Daniel leaning back on a teal sofa with hands behind his head.",
+    "width": 4894,
+    "height": 3269
+  }
+]
