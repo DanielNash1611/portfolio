@@ -1,33 +1,29 @@
-﻿'use client';
+"use client";
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 
-type Props = {
-  portraitSrc: string;
-};
-
-const contentAnimation = {
-  hidden: { opacity: 0, y: 20 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: "easeOut" }
-  }
-};
+type Props = { portraitSrc: string };
 
 export default function AboutInline({ portraitSrc }: Props): JSX.Element {
   const reduce = useReducedMotion();
+  const anim = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: reduce ? 0 : 0.35, ease: "easeOut" }
+    }
+  };
 
   return (
     <motion.section
-      variants={contentAnimation}
+      variants={anim}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "0px 0px -20% 0px" }}
       className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8"
       aria-labelledby="about-inline-title"
-      transition={reduce ? { duration: 0 } : undefined}
     >
       <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-5">
         <div className="md:col-span-3">
@@ -44,7 +40,7 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <a
-              href="/work"
+              href="/case-studies"
               className="inline-flex items-center rounded-full bg-[#2C4F52] px-5 py-2.5 text-white shadow transition hover:opacity-95 focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               aria-label="Explore case studies"
             >
@@ -59,8 +55,13 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
             </a>
           </div>
         </div>
+
         <div className="md:col-span-2">
-          <div className="relative ml-auto aspect-[4/5] w-full max-w-sm md:max-w-md overflow-hidden rounded-2xl shadow-md ring-1 ring-slate-200">
+          <div
+            className="relative ml-auto w-full max-w-sm md:max-w-md overflow-hidden
+                       rounded-2xl ring-1 ring-slate-200 shadow-md
+                       h-64 sm:h-72 md:h-80 lg:h-[420px] min-h-[256px]"
+          >
             <Image
               src={portraitSrc}
               alt="Daniel Nash portrait"
@@ -69,10 +70,7 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
               sizes="(max-width: 768px) 100vw, 480px"
               priority={false}
             />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/10"
-            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/10" />
             <p className="absolute bottom-3 left-3 rounded-full bg-white/75 px-3 py-1 text-xs text-slate-700 shadow ring-1 ring-slate-200">
               Composer • Product Leader • AI Advocate
             </p>
@@ -82,5 +80,3 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
     </motion.section>
   );
 }
-
-

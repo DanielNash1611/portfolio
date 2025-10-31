@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { getPortrait } from "@/components/Portrait";
-import FeaturedWork from "@/sections/FeaturedWork";\nimport HomeHero from "@/sections/HomeHero";\nimport HomeStats from "@/sections/HomeStats";\nimport AboutInline from "@/sections/AboutInline";\nimport NarrativeBridge from "@/sections/NarrativeBridge";
+import FeaturedWork from "@/sections/FeaturedWork";
+import HomeHero from "@/sections/HomeHero";
+import HomeStats from "@/sections/HomeStats";
+import AboutInline from "@/sections/AboutInline";
+import NarrativeBridge from "@/sections/NarrativeBridge";
 import HomeTestimonials from "@/sections/HomeTestimonials";
 import { siteOrigin } from "@/lib/site";
 
@@ -74,6 +78,3 @@ export default function HomePage(): JSX.Element {
     </div>
   );
 }
-
-
-
