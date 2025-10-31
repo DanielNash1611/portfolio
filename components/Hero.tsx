@@ -1,7 +1,10 @@
+'use client';
+
 import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { fadeSlide } from "@/lib/motion";
+
 type CTA = {
   label: string;
   href: string;
@@ -107,3 +110,9 @@ const Hero = ({
 };
 
 export default Hero;
+
+
+
+
+
+

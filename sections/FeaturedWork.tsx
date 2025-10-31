@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, useReducedMotion } from "framer-motion";
 import CaseCard from "@/components/CaseCard";
 import { featuredWork } from "@/data/featuredWork";

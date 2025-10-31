@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, useReducedMotion } from "framer-motion";
 import Stats from "@/components/Stats";
 import { fadeSlide } from "@/lib/motion";
@@ -15,7 +17,8 @@ const HomeStats = (): JSX.Element => {
           Real metrics from shipped experiences
         </h2>
         <p className="text-sm text-[#3A3D40]/80">
-          Results from experimentation, AI-driven enhancements, and cross-team delivery.
+          Results from experimentation, AI-driven enhancements, and cross-team
+          delivery.
         </p>
       </header>
       <Stats />

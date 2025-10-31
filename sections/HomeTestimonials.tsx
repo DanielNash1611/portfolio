@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, useReducedMotion } from "framer-motion";
 import Testimonials from "@/components/Testimonials";
 import { testimonials } from "@/data/testimonials";

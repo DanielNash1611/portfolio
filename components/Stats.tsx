@@ -1,7 +1,8 @@
+'use client';
+
 import clsx from "clsx";
 import { CircleHelp } from "lucide-react";
 import Tooltip from "@/components/Tooltip";
-
 export type StatItem = {
   value: string;
   label: string;
@@ -96,3 +97,9 @@ const Stats = ({ items = defaultStats, className }: StatsProps): JSX.Element => 
 };
 
 export default Stats;
+
+
+
+
+
+
