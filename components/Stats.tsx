@@ -83,7 +83,7 @@ const Stats = ({ items = defaultStats, className }: StatsProps): JSX.Element => 
                   )}
                 >
                   <span className="sr-only">
-                    How “{item.value}” was measured: {item.label}
+                    How "{item.value}" was measured: {item.label}
                   </span>
                   <CircleHelp className="h-4 w-4" aria-hidden="true" />
                 </button>
@@ -97,6 +97,7 @@ const Stats = ({ items = defaultStats, className }: StatsProps): JSX.Element => 
 };
 
 export default Stats;
+
 
 
 

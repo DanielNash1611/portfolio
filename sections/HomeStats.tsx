@@ -26,12 +26,12 @@ const HomeStats = (): JSX.Element => {
   );
 
   if (prefersReducedMotion) {
-    return <section className="container">{content}</section>;
+    return <section className="container mt-0 mb-10 md:mb-12">{content}</section>;
   }
 
   return (
     <motion.section
-      className="container"
+      className="container mt-0 mb-10 md:mb-12"
       variants={fadeSlide}
       initial="hidden"
       whileInView="show"
