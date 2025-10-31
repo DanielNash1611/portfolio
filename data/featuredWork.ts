@@ -28,11 +28,15 @@ export const featuredWork: FeaturedWorkItem[] = [
       height: 675,
       alt: "Mockups of a streamlined checkout interface with highlighted funnel metrics."
     },
-    chips: ["Reduced friction for 20M+ shoppers"]
+    chips: [
+      "Sets the bar for AI product strategy.",
+      "We need more Daniels.",
+      "Reduced friction for 20M+ shoppers"
+    ]
   },
   {
     slug: "launchmuse",
-    title: "LaunchMuse â€” AI fan engagement assistant",
+    title: "LaunchMuse — AI fan engagement assistant",
     description:
       "Incubated an AI copilot for independent artists that orchestrates release calendars, campaign ideas, and audience targeting.",
     href: "/products/launchmuse",
@@ -47,7 +51,7 @@ export const featuredWork: FeaturedWorkItem[] = [
   },
   {
     slug: "sound-synthesist",
-    title: "Sound Synthesist â€” generative audio playground",
+    title: "Sound Synthesist — generative audio playground",
     description:
       "Prototyped a modular system that blends GPT prompt orchestration with real-time synthesis to spark new musical ideas.",
     href: "/work/sound-synthesist",
