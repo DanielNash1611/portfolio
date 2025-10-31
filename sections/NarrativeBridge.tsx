@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { fadeSlide } from "@/lib/motion";
 
 const NarrativeBridge = (): JSX.Element => {
   const prefersReducedMotion = useReducedMotion();

@@ -1,8 +1,12 @@
+import { motion, useReducedMotion } from "framer-motion";
 import Stats from "@/components/Stats";
+import { fadeSlide } from "@/lib/motion";
 
 const HomeStats = (): JSX.Element => {
-  return (
-    <section className="container">
+  const prefersReducedMotion = useReducedMotion();
+
+  const content = (
+    <>
       <header className="mb-6 space-y-2 text-left sm:text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#2C4F52]/70">
           Proven outcomes
@@ -15,7 +19,23 @@ const HomeStats = (): JSX.Element => {
         </p>
       </header>
       <Stats />
-    </section>
+    </>
+  );
+
+  if (prefersReducedMotion) {
+    return <section className="container">{content}</section>;
+  }
+
+  return (
+    <motion.section
+      className="container"
+      variants={fadeSlide}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "0px 0px -20% 0px" }}
+    >
+      {content}
+    </motion.section>
   );
 };
 

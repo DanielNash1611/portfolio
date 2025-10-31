@@ -1,9 +1,13 @@
+import { motion, useReducedMotion } from "framer-motion";
 import Testimonials from "@/components/Testimonials";
 import { testimonials } from "@/data/testimonials";
+import { fadeSlide } from "@/lib/motion";
 
 const HomeTestimonials = (): JSX.Element => {
-  return (
-    <section className="container space-y-8">
+  const prefersReducedMotion = useReducedMotion();
+
+  const content = (
+    <>
       <header className="space-y-2 text-left sm:text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#2C4F52]/70">
           Testimonials
@@ -16,7 +20,23 @@ const HomeTestimonials = (): JSX.Element => {
         </p>
       </header>
       <Testimonials items={testimonials} />
-    </section>
+    </>
+  );
+
+  if (prefersReducedMotion) {
+    return <section className="container space-y-8">{content}</section>;
+  }
+
+  return (
+    <motion.section
+      className="container space-y-8"
+      variants={fadeSlide}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "0px 0px -20% 0px" }}
+    >
+      {content}
+    </motion.section>
   );
 };
 
