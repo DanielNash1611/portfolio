@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import SEOReviews from "@/components/SEOReviews";
 import SiteFooter from "@/components/SiteFooter";
 import portraits from "@/public/portraits/metadata.json";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
+        <SEOReviews />
         <Header />
         <main id="main" className="min-h-[60vh] scroll-mt-24 pt-24">
           {children}
