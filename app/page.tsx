@@ -25,8 +25,11 @@ const heroImagePath = heroPortrait
 export const metadata: Metadata = {
   title: "Home",
   description:
-    "Explore product leadership and music composition work from Daniel Nash, blending AI strategy with human-centered design.",
+    "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
   openGraph: {
+    title: "Daniel Nash — Senior AI Product Manager & Composer",
+    description:
+      "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
     images: heroPortrait
       ? [
           {
@@ -40,6 +43,9 @@ export const metadata: Metadata = {
       : [defaultOgImage]
   },
   twitter: {
+    title: "Daniel Nash — Senior AI Product Manager & Composer",
+    description:
+      "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
     images: [heroImagePath]
   }
 };

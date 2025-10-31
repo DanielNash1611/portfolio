@@ -21,17 +21,17 @@ const heroImagePath = heroPortrait
 export const metadata: Metadata = {
   metadataBase: new URL("https://danielnash.com"),
   title: {
-    template: "%s | Daniel Nash",
-    default: "Daniel Nash | Bridging Creativity & Strategy"
+    template: "%s — Daniel Nash",
+    default: "Daniel Nash — Senior AI Product Manager & Composer"
   },
   description:
-    "Portfolio of Daniel Nash - Senior AI product leader and composer crafting high-impact journeys across digital products and sound.",
+    "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
   openGraph: {
-    title: "Daniel Nash | Bridging Creativity & Strategy",
+    title: "Daniel Nash — Senior AI Product Manager & Composer",
     description:
-      "Explore the AI-driven product and music portfolio from Daniel Nash, spanning checkout redesigns to immersive sound experiments.",
+      "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
     url: "https://danielnash.com",
-    siteName: "Daniel Nash Portfolio",
+    siteName: "Daniel Nash",
     images: [
       heroPortrait
         ? {
@@ -48,9 +48,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daniel Nash | Bridging Creativity & Strategy",
+    title: "Daniel Nash — Senior AI Product Manager & Composer",
     description:
-      "Product portfolio and compositions by Daniel Nash, blending AI, design, and sound.",
+      "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
     images: [heroImagePath]
   }
 };
