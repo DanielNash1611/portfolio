@@ -12,7 +12,7 @@ const HomeTestimonials = (): JSX.Element => {
           What teammates say
         </h2>
         <p className="text-sm text-[#3A3D40]/80">
-          A few words from designers, engineers, and leaders I’ve worked with.
+          A few words from designers, engineers, and leaders I have worked with.
         </p>
       </header>
       <Testimonials items={testimonials} />
