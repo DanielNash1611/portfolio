@@ -1,4 +1,4 @@
-import { Github, Instagram, Linkedin, Spotify } from "lucide-react";
+import { Github, Instagram, Linkedin, Music2 } from "lucide-react";
 import clsx from "clsx";
 
 const socials = [
@@ -15,7 +15,7 @@ const socials = [
   {
     name: "Spotify",
     href: "https://open.spotify.com/artist/7AQPw7ZDSwdnCW9ciNW3U5",
-    icon: Spotify
+    icon: Music2
   },
   {
     name: "Instagram",
