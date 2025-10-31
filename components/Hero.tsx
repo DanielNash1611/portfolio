@@ -91,7 +91,7 @@ const Hero = ({
 
   if (shouldReduceMotion) {
     return (
-      <section className="relative overflow-hidden rounded-3xl border border-[#3A3D40]/15 bg-white/90 p-8 shadow-md ring-1 ring-slate-200 sm:p-12">
+      <section className="relative overflow-hidden rounded-3xl border border-[#3A3D40]/15 bg-white/90 p-8 shadow-md ring-1 ring-slate-200 sm:p-12 mb-8 md:mb-10">
         {content}
       </section>
     );
@@ -99,10 +99,11 @@ const Hero = ({
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-      className="relative overflow-hidden rounded-3xl border border-[#3A3D40]/15 bg-white/90 p-8 shadow-md ring-1 ring-slate-200 sm:p-12"
+      variants={fadeSlide}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "0px 0px -20% 0px" }}
+      className="relative overflow-hidden rounded-3xl border border-[#3A3D40]/15 bg-white/90 p-8 shadow-md ring-1 ring-slate-200 sm:p-12 mb-8 md:mb-10"
     >
       {content}
     </motion.section>
