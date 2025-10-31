@@ -21,11 +21,19 @@ export type CaseCardProps = {
   className?: string;
 };
 
-const tagClasses =
-  "inline-flex items-center rounded-full border border-[#2C4F52]/15 bg-[#F2E3D5]/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#2C4F52]";
-
 const chipClasses =
   "inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs text-[#2C4F52] ring-1 ring-[#2C4F52]/10";
+
+const getTagClasses = (tag: string): string => {
+  switch (tag) {
+    case "AI Personalization":
+      return "border-[#2C4F52]/25 bg-[#2C4F52]/10 text-[#2C4F52]";
+    case "Prototype":
+      return "border-[#D17A5F]/25 bg-[#D17A5F]/10 text-[#D17A5F]";
+    default:
+      return "border-[#3A3D40]/20 bg-[#3A3D40]/10 text-[#3A3D40]";
+  }
+};
 
 const CaseCard = ({
   title,
@@ -42,14 +50,14 @@ const CaseCard = ({
   return (
     <article
       className={clsx(
-        "group flex h-full flex-col overflow-hidden rounded-3xl border border-[#2C4F52]/12 bg-white/90 shadow-soft transition focus-within:-translate-y-1 focus-within:shadow-lg hover:-translate-y-1 hover:shadow-lg",
+        "group flex h-full flex-col overflow-hidden rounded-3xl bg-white/95 shadow-md ring-1 ring-[#2C4F52]/12 transition-transform duration-200 ease-out hover:-translate-y-[6px] hover:shadow-lg hover:ring-[#2C4F52]/25 focus-within:-translate-y-[6px]",
         className
       )}
     >
       <Link
         href={href}
         aria-label={cardLabel}
-        className="relative block overflow-hidden focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+        className="relative block aspect-[16/10] overflow-hidden focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
       >
         <Image
           src={media.src}
@@ -69,12 +77,23 @@ const CaseCard = ({
       <div className="flex flex-1 flex-col gap-4 p-6">
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
-            <span key={tag} className={tagClasses}>
+            <span
+              key={tag}
+              className={clsx(
+                "inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]",
+                getTagClasses(tag)
+              )}
+              title={tag}
+            >
               {tag}
             </span>
           ))}
           {status ? (
-            <span className={tagClasses} aria-label={`Status: ${status}`}>
+            <span
+              className="inline-flex items-center rounded-full border border-[#2C4F52]/15 bg-[#F2E3D5]/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#2C4F52]"
+              aria-label={`Status: ${status}`}
+              title={`Status: ${status}`}
+            >
               {status}
             </span>
           ) : null}
