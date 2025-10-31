@@ -5,6 +5,7 @@ import CaseCard from "@/components/CaseCard";
 import Portrait, { getPortrait } from "@/components/Portrait";
 import Stats from "@/components/Stats";
 import { featuredWork } from "@/data/featuredWork";
+import HomeTestimonials from "@/sections/HomeTestimonials";
 import { siteOrigin } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -119,6 +120,8 @@ export default function HomePage(): JSX.Element {
           ))}
         </div>
       </section>
+
+      <HomeTestimonials />
     </div>
   );
 }
