@@ -92,13 +92,13 @@ export default function HomePage(): JSX.Element {
       <div className="container pt-6">
         <div className="grid gap-10 lg:grid-cols-[1.15fr,0.85fr] lg:items-center">
           <Hero
-            title="Bridging Creativity & Strategy - Senior AI Product Manager & Composer"
+            title="Bridging Creativity & Strategy — Senior AI Product Manager & Composer"
             subtitle="I design AI-powered products and high-performing user journeys that convert."
             primaryCta={{ href: "/work", label: "Explore Product Work" }}
             secondaryCta={{
               href: "/music",
               label: "Listen to My Music",
-              variant: "secondary"
+              variant: "ghost"
             }}
           />
           <Portrait variant="hero" className="rounded-2xl shadow-xl" />

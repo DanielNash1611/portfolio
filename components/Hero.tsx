@@ -1,61 +1,83 @@
-import Link from "next/link";
 import clsx from "clsx";
-import Button from "@/components/Button";
+import Link from "next/link";
 
 type CTA = {
   label: string;
   href: string;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "ghost";
+  ariaLabel?: string;
 };
 
-interface HeroProps {
+type HeroProps = {
   title: string;
   subtitle: string;
   kicker?: string;
+  alignment?: "left" | "center";
   primaryCta: CTA;
   secondaryCta?: CTA;
-  alignment?: "left" | "center";
-}
+};
+
+const ctaStyles = {
+  primary:
+    "bg-[#2C4F52] text-[#F2E3D5] shadow-soft hover:bg-[#2C4F52]/90",
+  ghost:
+    "border border-[#2C4F52]/25 bg-transparent text-[#2C4F52] hover:border-[#2C4F52]/50 hover:bg-[#2C4F52]/5"
+} as const;
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F2E3D5]";
 
 const Hero = ({
   title,
   subtitle,
   kicker,
+  alignment = "left",
   primaryCta,
-  secondaryCta,
-  alignment = "left"
+  secondaryCta
 }: HeroProps): JSX.Element => {
-  const alignClass =
-    alignment === "center" ? "text-center mx-auto" : "text-left";
+  const alignmentClass =
+    alignment === "center" ? "mx-auto text-center" : "text-left";
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-brand-slate/10 bg-white/80 p-10 shadow-soft backdrop-blur">
-      <div className={clsx("mx-auto max-w-3xl space-y-6", alignClass)}>
+    <section className="relative overflow-hidden rounded-3xl border border-[#3A3D40]/15 bg-white/90 p-8 shadow-soft backdrop-blur-lg sm:p-12">
+      <div className={clsx("mx-auto max-w-3xl space-y-6", alignmentClass)}>
         {kicker ? (
-          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-teal/80">
+          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#2C4F52]/80">
             {kicker}
           </span>
         ) : null}
-        <h1 className="text-balance text-4xl font-semibold text-brand-teal md:text-5xl">
+        <h1 className="text-balance text-4xl font-semibold text-[#2C4F52] md:text-5xl">
           {title}
         </h1>
-        <p className="text-lg leading-relaxed text-brand-slate/80">{subtitle}</p>
+        <p className="text-lg leading-relaxed text-[#3A3D40]/85">{subtitle}</p>
         <div
           className={clsx(
-            "flex flex-wrap items-center gap-4",
+            "flex flex-wrap items-center gap-3",
             alignment === "center" ? "justify-center" : "justify-start"
           )}
         >
-          <Link href={primaryCta.href}>
-            <Button variant={primaryCta.variant ?? "primary"}>
-              {primaryCta.label}
-            </Button>
+          <Link
+            href={primaryCta.href}
+            aria-label={primaryCta.ariaLabel ?? primaryCta.label}
+            className={clsx(
+              "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition",
+              ctaStyles[primaryCta.variant ?? "primary"],
+              focusRing
+            )}
+          >
+            {primaryCta.label}
           </Link>
           {secondaryCta ? (
-            <Link href={secondaryCta.href}>
-              <Button variant={secondaryCta.variant ?? "secondary"}>
-                {secondaryCta.label}
-              </Button>
+            <Link
+              href={secondaryCta.href}
+              aria-label={secondaryCta.ariaLabel ?? secondaryCta.label}
+              className={clsx(
+                "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition",
+                ctaStyles[secondaryCta.variant ?? "ghost"],
+                focusRing
+              )}
+            >
+              {secondaryCta.label}
             </Link>
           ) : null}
         </div>
