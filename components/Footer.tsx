@@ -35,7 +35,7 @@ const Footer = (): JSX.Element => {
             href="mailto:hello@danielnash.com"
             className="inline-flex w-fit items-center gap-2 rounded-full border border-[#2C4F52]/20 bg-white/80 px-4 py-2 text-sm font-semibold text-[#2C4F52] transition hover:-translate-y-0.5 hover:border-[#2C4F52]/40 hover:text-[#2C4F52] focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F2E3D5]"
           >
-            Let's connect
+            Let&apos;s connect
             <span className="text-xs font-normal text-[#3A3D40]/80">
               hello@danielnash.com
             </span>

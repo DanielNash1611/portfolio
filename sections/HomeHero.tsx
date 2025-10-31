@@ -13,11 +13,11 @@ const HomeHero = (): JSX.Element => {
     <section className="container pt-6 pb-4">
       <div className="grid gap-10 lg:grid-cols-[1.1fr,0.9fr] lg:items-center">
         <Hero
-          title="Bridging Creativity & Strategy — Senior AI Product Manager & Composer"
+          title="Bridging Creativity & Strategy - Senior AI Product Manager & Composer"
           subtitle="I design AI-powered products and high-performing user journeys that convert."
           primaryCta={{
             href: "/work",
-            label: "Explore Product Work"
+            label: "Explore Case Studies"
           }}
           secondaryCta={{
             href: "/music",
@@ -44,7 +44,7 @@ const HomeHero = (): JSX.Element => {
             className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-start bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent p-4"
           >
             <span className="text-sm font-medium uppercase tracking-[0.2em] text-[#F2E3D5]">
-              Composer • Product Leader • AI Advocate
+              Composer - Product Leader - AI Advocate
             </span>
           </div>
         </div>
