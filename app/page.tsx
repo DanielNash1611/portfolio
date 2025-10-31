@@ -1,9 +1,9 @@
 ﻿import type { Metadata } from "next";
 import Script from "next/script";
 import Hero from "@/components/Hero";
-import StatTile from "@/components/StatTile";
 import CaseCard from "@/components/CaseCard";
 import Portrait, { getPortrait } from "@/components/Portrait";
+import Stats from "@/components/Stats";
 import { cases } from "@/data/cases";
 import { siteOrigin } from "@/lib/site";
 
@@ -41,25 +41,6 @@ export const metadata: Metadata = {
     images: [heroImagePath]
   }
 };
-
-const statData = [
-  {
-    value: 50,
-    suffix: "% faster",
-    label: "Checkout redesign completion time reduction"
-  },
-  {
-    value: 3,
-    suffix: "% conversion",
-    label: "Net lift in conversion through experimentation"
-  },
-  {
-    value: 16,
-    prefix: "$",
-    suffix: "M/yr impact",
-    label: "Incremental annualized revenue influence"
-  }
-];
 
 const featuredOrder = [
   "checkout-redesign",
@@ -111,11 +92,7 @@ export default function HomePage(): JSX.Element {
       />
 
       <section className="container">
-        <div className="grid gap-6 md:grid-cols-3">
-          {statData.map((stat) => (
-            <StatTile key={stat.label} {...stat} />
-          ))}
-        </div>
+        <Stats />
       </section>
 
       <Portrait
