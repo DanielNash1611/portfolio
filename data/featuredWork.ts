@@ -1,4 +1,4 @@
-export type FeaturedWorkItem = {
+ï»¿export type FeaturedWorkItem = {
   slug: string;
   title: string;
   description: string;
@@ -36,7 +36,7 @@ export const featuredWork: FeaturedWorkItem[] = [
   },
   {
     slug: "launchmuse",
-    title: "LaunchMuse — AI fan engagement assistant",
+    title: "LaunchMuse â€” AI fan engagement assistant",
     description:
       "Incubated an AI copilot for independent artists that orchestrates release calendars, campaign ideas, and audience targeting.",
     href: "/products/launchmuse",
@@ -51,7 +51,7 @@ export const featuredWork: FeaturedWorkItem[] = [
   },
   {
     slug: "sound-synthesist",
-    title: "Sound Synthesist — generative audio playground",
+    title: "Sound Synthesist â€” generative audio playground",
     description:
       "Prototyped a modular system that blends GPT prompt orchestration with real-time synthesis to spark new musical ideas.",
     href: "/work/sound-synthesist",
@@ -65,3 +65,4 @@ export const featuredWork: FeaturedWorkItem[] = [
     chips: ["Multi-agent creative workflow"]
   }
 ];
+
