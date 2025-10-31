@@ -1,3 +1,5 @@
+'use client';
+
 import { ExternalLink, Quote } from "lucide-react";
 import * as React from "react";
 import type { FC } from "react";
@@ -70,7 +72,7 @@ export const TestimonialCard: FC<Props> = ({ item, variant = "default" }) => {
                 href={profileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] rounded"
+                className="inline-flex items-center gap-1 rounded text-xs text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F]"
                 aria-label="View on LinkedIn"
                 title="View on LinkedIn"
               >
