@@ -6,10 +6,10 @@ const FeaturedWork = (): JSX.Element => {
     <section className="container space-y-8">
       <header className="space-y-2 text-left sm:text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#2C4F52]/70">
-          Featured Work
+          Case Studies
         </p>
         <h2 className="text-3xl font-semibold text-[#2C4F52] sm:text-4xl">
-          AI-heavy initiatives that shipped real outcomes
+          Case studies that blend AI, design, and experimentation
         </h2>
         <p className="text-sm text-[#3A3D40]/80">
           A sampling of product, experimentation, and music-tech launches that
