@@ -22,7 +22,7 @@ export type CaseCardProps = {
 };
 
 const tagClasses =
-  "inline-flex items-center rounded-full border border-[#2C4F52]/15 bg-[#F2E3D5]/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#2C4F52]/80";
+  "inline-flex items-center rounded-full border border-[#2C4F52]/15 bg-[#F2E3D5]/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#2C4F52]";
 
 const chipClasses =
   "inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs text-[#2C4F52] ring-1 ring-[#2C4F52]/10";
@@ -49,7 +49,7 @@ const CaseCard = ({
       <Link
         href={href}
         aria-label={cardLabel}
-        className="relative block overflow-hidden"
+        className="relative block overflow-hidden focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
       >
         <Image
           src={media.src}

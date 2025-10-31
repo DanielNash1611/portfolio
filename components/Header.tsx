@@ -53,7 +53,7 @@ export const Header = (): JSX.Element => {
                   linkBaseClasses,
                   isActive
                     ? "bg-[#2C4F52] text-[#F2E3D5]"
-                    : "text-[#2C4F52]/90 hover:text-[#2C4F52]"
+                    : "text-[#2C4F52] hover:bg-[#2C4F52]/10 hover:text-[#2C4F52]"
                 )}
                 aria-current={isActive ? "page" : undefined}
               >
@@ -103,7 +103,7 @@ export const Header = (): JSX.Element => {
                 >
                   <span>{link.label}</span>
                   {isActive ? (
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#DBBF96]">
+                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#F2E3D5]">
                       Active
                     </span>
                   ) : null}
