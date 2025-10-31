@@ -15,26 +15,35 @@ const toIsoDate = (date: string): string => {
   return parsed.toISOString().split("T")[0];
 };
 
-const reviews = testimonials.map((testimonial) => ({
-  "@type": "Review",
-  name: testimonial.short,
-  reviewBody: testimonial.medium,
-  datePublished: toIsoDate(testimonial.date),
-  author: {
-    "@type": "Person",
-    name: testimonial.name,
-    jobTitle: testimonial.title,
-    ...(testimonial.profileUrl ? { sameAs: [testimonial.profileUrl] } : {})
-  },
-  publisher: {
-    "@type": "Organization",
-    name:
-      testimonial.source === "LinkedIn"
-        ? "LinkedIn"
-        : "Personal site (direct testimonial)"
-  },
-  itemReviewed
-}));
+const reviews = testimonials.map((testimonial) => {
+  const avatar =
+    testimonial.avatarUrl ??
+    (testimonial.profileUrl && testimonial.profileUrl.includes("linkedin")
+      ? `https://unavatar.io/${encodeURIComponent(testimonial.profileUrl)}`
+      : undefined);
+
+  return {
+    "@type": "Review",
+    name: testimonial.short,
+    reviewBody: testimonial.medium,
+    datePublished: toIsoDate(testimonial.date),
+    author: {
+      "@type": "Person",
+      name: testimonial.name,
+      jobTitle: testimonial.title,
+      ...(testimonial.profileUrl ? { sameAs: [testimonial.profileUrl] } : {})
+    },
+    publisher: {
+      "@type": "Organization",
+      name:
+        testimonial.source === "LinkedIn"
+          ? "LinkedIn"
+          : "Personal site (direct testimonial)"
+    },
+    itemReviewed,
+    ...(avatar ? { image: avatar } : {})
+  };
+});
 
 const jsonLd = {
   "@context": "https://schema.org",
