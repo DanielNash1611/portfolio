@@ -109,7 +109,7 @@ const Testimonials = ({ items, max, className }: TestimonialsProps): JSX.Element
             onClick={scrollByPage(-1)}
             aria-controls={sliderId}
             aria-label="Previous testimonial"
-            className="pointer-events-auto ml-2 rounded-full bg-white/85 p-2 shadow-md ring-1 ring-slate-200 transition hover:bg-white hover:shadow-lg focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F]"
+            className="pointer-events-auto ml-2 rounded-full bg-white/85 p-2 shadow-md ring-1 ring-slate-200 transition hover:bg-white hover:shadow-lg focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             disabled={disablePrev}
           >
             <ChevronLeft
@@ -125,7 +125,7 @@ const Testimonials = ({ items, max, className }: TestimonialsProps): JSX.Element
             onClick={scrollByPage(1)}
             aria-controls={sliderId}
             aria-label="Next testimonial"
-            className="pointer-events-auto mr-2 rounded-full bg-white/85 p-2 shadow-md ring-1 ring-slate-200 transition hover:bg-white hover:shadow-lg focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F]"
+            className="pointer-events-auto mr-2 rounded-full bg-white/85 p-2 shadow-md ring-1 ring-slate-200 transition hover:bg-white hover:shadow-lg focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             disabled={disableNext}
           >
             <ChevronRight
