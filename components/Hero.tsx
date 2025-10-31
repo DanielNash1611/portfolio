@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 
 type CTA = {
@@ -19,9 +20,9 @@ type HeroProps = {
 
 const ctaStyles = {
   primary:
-    "bg-[#2C4F52] text-[#F2E3D5] shadow-soft hover:bg-[#2C4F52]/90",
+    "bg-[#2C4F52] text-[#F2E3D5] shadow-md hover:bg-[#2C4F52]/90",
   ghost:
-    "border border-[#2C4F52]/25 bg-transparent text-[#2C4F52] hover:border-[#2C4F52]/50 hover:bg-[#2C4F52]/5"
+    "border border-[#2C4F52]/40 bg-transparent text-[#2C4F52] hover:border-[#2C4F52]/60 hover:bg-[#2C4F52]/10"
 } as const;
 
 const focusRing =
@@ -38,51 +39,70 @@ const Hero = ({
   const alignmentClass =
     alignment === "center" ? "mx-auto text-center" : "text-left";
 
-  return (
-    <section className="relative overflow-hidden rounded-3xl border border-[#3A3D40]/15 bg-white/90 p-8 shadow-soft backdrop-blur-lg sm:p-12">
-      <div className={clsx("mx-auto max-w-3xl space-y-6", alignmentClass)}>
-        {kicker ? (
-          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#2C4F52]/80">
-            {kicker}
-          </span>
-        ) : null}
-        <h1 className="text-balance text-4xl font-semibold text-[#2C4F52] md:text-5xl">
-          {title}
-        </h1>
-        <p className="text-lg leading-relaxed text-[#3A3D40]/85">{subtitle}</p>
-        <div
+  const shouldReduceMotion = useReducedMotion();
+
+  const content = (
+    <div className={clsx("mx-auto max-w-3xl space-y-6", alignmentClass)}>
+      {kicker ? (
+        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#2C4F52]/80">
+          {kicker}
+        </span>
+      ) : null}
+      <h1 className="text-balance text-4xl font-semibold text-[#2C4F52] md:text-5xl">
+        {title}
+      </h1>
+      <p className="mt-6 text-lg leading-relaxed text-[#3A3D40]/85">{subtitle}</p>
+      <div
+        className={clsx(
+          "flex flex-wrap items-center gap-3",
+          alignment === "center" ? "justify-center" : "justify-start"
+        )}
+      >
+        <Link
+          href={primaryCta.href}
+          aria-label={primaryCta.ariaLabel ?? primaryCta.label}
           className={clsx(
-            "flex flex-wrap items-center gap-3",
-            alignment === "center" ? "justify-center" : "justify-start"
+            "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition",
+            ctaStyles[primaryCta.variant ?? "primary"],
+            focusRing
           )}
         >
+          {primaryCta.label}
+        </Link>
+        {secondaryCta ? (
           <Link
-            href={primaryCta.href}
-            aria-label={primaryCta.ariaLabel ?? primaryCta.label}
+            href={secondaryCta.href}
+            aria-label={secondaryCta.ariaLabel ?? secondaryCta.label}
             className={clsx(
               "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition",
-              ctaStyles[primaryCta.variant ?? "primary"],
+              ctaStyles[secondaryCta.variant ?? "ghost"],
               focusRing
             )}
           >
-            {primaryCta.label}
+            {secondaryCta.label}
           </Link>
-          {secondaryCta ? (
-            <Link
-              href={secondaryCta.href}
-              aria-label={secondaryCta.ariaLabel ?? secondaryCta.label}
-              className={clsx(
-                "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition",
-                ctaStyles[secondaryCta.variant ?? "ghost"],
-                focusRing
-              )}
-            >
-              {secondaryCta.label}
-            </Link>
-          ) : null}
-        </div>
+        ) : null}
       </div>
-    </section>
+    </div>
+  );
+
+  if (shouldReduceMotion) {
+    return (
+      <section className="relative overflow-hidden rounded-3xl border border-[#3A3D40]/15 bg-white/90 p-8 shadow-md ring-1 ring-slate-200 sm:p-12">
+        {content}
+      </section>
+    );
+  }
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className="relative overflow-hidden rounded-3xl border border-[#3A3D40]/15 bg-white/90 p-8 shadow-md ring-1 ring-slate-200 sm:p-12"
+    >
+      {content}
+    </motion.section>
   );
 };
 
