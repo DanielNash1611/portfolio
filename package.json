@@ -13,6 +13,7 @@
     "postinstall": "npm run images:meta && npm run images:build"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.26.28",
     "clsx": "^2.1.0",
     "framer-motion": "^11.18.2",
     "gray-matter": "^4.0.3",
