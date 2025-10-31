@@ -40,21 +40,21 @@ const CaseGridFilter = ({ items }: CaseGridFilterProps): JSX.Element => {
           const status = item.kpis?.find(
             (metric) => metric.label.toLowerCase() === "status"
           )?.value;
+          const destination = item.href ?? `/work/${item.slug}`;
           return (
             <CaseCard
               key={item.slug}
-              {...item}
+              title={item.title}
+              description={item.summary}
+              href={destination}
+              tags={item.tags}
               status={status}
-              ctaLabel={
-                item.href
-                  ? `Explore ${item.title.split("–")[0].trim()}`
-                  : undefined
-              }
-              ariaLabel={
-                item.href
-                  ? `Open ${item.title} product page`
-                  : undefined
-              }
+              media={{
+                src: item.heroImage,
+                width: 1200,
+                height: 675,
+                alt: `${item.title} case study preview artwork.`
+              }}
             />
           );
         })}

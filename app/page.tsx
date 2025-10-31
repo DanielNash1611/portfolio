@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 import CaseCard from "@/components/CaseCard";
 import Portrait, { getPortrait } from "@/components/Portrait";
 import Stats from "@/components/Stats";
-import { cases } from "@/data/cases";
+import { featuredWork } from "@/data/featuredWork";
 import { siteOrigin } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -42,16 +42,7 @@ export const metadata: Metadata = {
   }
 };
 
-const featuredOrder = [
-  "checkout-redesign",
-  "launchmuse",
-  "sound-synthesist"
-] as const;
-
 export default function HomePage(): JSX.Element {
-  const featuredCases = featuredOrder
-    .map((slug) => cases.find((item) => item.slug === slug))
-    .filter((item): item is (typeof cases)[number] => Boolean(item));
   const heroJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -114,26 +105,18 @@ export default function HomePage(): JSX.Element {
           </p>
         </header>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {featuredCases.map((item) => {
-            const status = item.kpis?.find(
-              (metric) => metric.label.toLowerCase() === "status"
-            )?.value;
-            const ctaLabel =
-              item.slug === "launchmuse"
-                ? "Explore LaunchMuse"
-                : item.href
-                ? `Explore ${item.title.split("-")[0].trim()}`
-                : undefined;
-            return (
-              <CaseCard
-                key={item.slug}
-                {...item}
-                status={status}
-                ctaLabel={ctaLabel}
-                ariaLabel={item.href ? `Open ${item.title} product page` : undefined}
-              />
-            );
-          })}
+          {featuredWork.map((item) => (
+            <CaseCard
+              key={item.slug}
+              title={item.title}
+              description={item.description}
+              href={item.href}
+              tags={item.tags}
+              status={item.status}
+              media={item.media}
+              chips={item.chips}
+            />
+          ))}
         </div>
       </section>
     </div>

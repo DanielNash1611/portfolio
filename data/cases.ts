@@ -36,11 +36,11 @@ export const cases: Case[] = [
   },
   {
     slug: "launchmuse",
-    title: "LaunchMuse – AI Fan Engagement Assistant",
+    title: "LaunchMuse — AI Fan Engagement Assistant",
     summary:
       "Real product: AI-assisted release planning, campaign generation, and audience insights.",
     tags: ["AI", "Music Tech", "Product"],
-    heroImage: "/images/launchmuse-hero.jpg",
+    heroImage: "/images/launchmuse-hero.svg",
     kpis: [
       { label: "Status", value: "Early Access" },
       { label: "Focus", value: "Campaigns • Insights • Timeline" }
