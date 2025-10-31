@@ -59,4 +59,25 @@ a:hover {
   .text-balance {
     text-wrap: balance;
   }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    background-color: theme("colors.brand.teal");
+    color: theme("colors.brand.cream");
+    transform: translateY(-200%);
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+    box-shadow: 0 12px 24px rgba(44, 79, 82, 0.25);
+  }
 }

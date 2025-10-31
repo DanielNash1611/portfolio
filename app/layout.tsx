@@ -1,6 +1,6 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
-import SiteHeader from "@/components/SiteHeader";
+import Header from "@/components/Header";
 import SiteFooter from "@/components/SiteFooter";
 import portraits from "@/public/portraits/metadata.json";
 
@@ -62,14 +62,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-brand-gradient text-brand-slate">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-xl focus:bg-brand-orange focus:px-4 focus:py-2 focus:text-white"
-        >
+        <a href="#main" className="skip-link">
           Skip to main content
         </a>
-        <SiteHeader />
-        <main id="main-content" className="min-h-[60vh] scroll-mt-24 pt-24">
+        <Header />
+        <main id="main" className="min-h-[60vh] scroll-mt-24 pt-24">
           {children}
         </main>
         <SiteFooter />
