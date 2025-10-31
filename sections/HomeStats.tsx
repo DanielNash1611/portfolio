@@ -7,7 +7,7 @@ const HomeStats = (): JSX.Element => {
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#2C4F52]/70">
           Proven outcomes
         </p>
-        <h2 className="text-3xl font-semibold text-[#2C4F52] sm:text-4xl">
+        <h2 className="text-3xl font-semibold tracking-tight text-[#2C4F52] sm:text-4xl">
           Real metrics from shipped experiences
         </h2>
         <p className="text-sm text-[#3A3D40]/80">

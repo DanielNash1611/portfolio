@@ -17,13 +17,18 @@ const Tooltip = ({
 }: TooltipProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const tooltipId = useId();
+  const srId = `${tooltipId}-sr`;
+
+  const describedBy = [children.props["aria-describedby"], tooltipId, srId]
+    .filter(Boolean)
+    .join(" ");
 
   const handleShow = () => setOpen(true);
   const handleHide = () => setOpen(false);
 
   const trigger = cloneElement(children, {
     ...children.props,
-    "aria-describedby": tooltipId,
+    "aria-describedby": describedBy,
     onFocus: (event) => {
       children.props.onFocus?.(event);
       handleShow();
@@ -45,11 +50,14 @@ const Tooltip = ({
   return (
     <span className="relative inline-flex">
       {trigger}
+      <span id={srId} className="sr-only">
+        {content}
+      </span>
       <span
         role="tooltip"
         id={tooltipId}
         className={clsx(
-          "pointer-events-none absolute z-50 min-w-[12rem] rounded-lg border border-[#2C4F52]/15 bg-[#F2E3D5] px-3 py-2 text-xs text-[#2C4F52] shadow-soft transition",
+          "pointer-events-none absolute z-50 min-w-[12rem] rounded-lg border border-[#2C4F52]/15 bg-[#F2E3D5] px-3 py-2 text-xs text-[#2C4F52] shadow-md transition",
           placement === "top" ? "bottom-full mb-2" : "top-full mt-2",
           open
             ? "translate-y-0 opacity-100"

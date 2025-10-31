@@ -1,6 +1,6 @@
+import clsx from "clsx";
 import { CircleHelp } from "lucide-react";
 import Tooltip from "@/components/Tooltip";
-import clsx from "clsx";
 
 export type StatItem = {
   value: string;
@@ -34,6 +34,18 @@ const defaultStats: StatItem[] = [
   }
 ];
 
+const accentRings = [
+  "ring-[#2C4F52]/30 hover:ring-[#2C4F52]/45",
+  "ring-[#3A3D40]/20 hover:ring-[#3A3D40]/35",
+  "ring-[#D17A5F]/30 hover:ring-[#D17A5F]/45"
+] as const;
+
+const iconAccents = [
+  "border-[#2C4F52]/35 text-[#2C4F52]",
+  "border-[#3A3D40]/30 text-[#3A3D40]",
+  "border-[#D17A5F]/35 text-[#D17A5F]"
+] as const;
+
 const Stats = ({ items = defaultStats, className }: StatsProps): JSX.Element => {
   return (
     <div
@@ -42,30 +54,43 @@ const Stats = ({ items = defaultStats, className }: StatsProps): JSX.Element => 
         className
       )}
     >
-      {items.map((item) => (
-        <article
-          key={item.label}
-          className="group relative overflow-hidden rounded-3xl border border-[#2C4F52]/12 bg-white/90 p-6 shadow-soft backdrop-blur transition hover:-translate-y-1 hover:shadow-lg"
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-3xl font-semibold text-[#2C4F52] sm:text-4xl">
-                {item.value}
-              </p>
-              <p className="mt-2 text-sm text-[#3A3D40]/80">{item.label}</p>
+      {items.map((item, index) => {
+        const accentClass = accentRings[index % accentRings.length];
+        const iconClass = iconAccents[index % iconAccents.length];
+
+        return (
+          <article
+            key={item.label}
+            className={clsx(
+              "group relative overflow-hidden rounded-3xl bg-white/95 p-6 shadow-md ring-1 transition-transform duration-200 ease-out backdrop-blur-sm hover:-translate-y-1.5 hover:shadow-lg",
+              accentClass
+            )}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-3xl font-semibold tracking-tight text-[#2C4F52] sm:text-4xl">
+                  {item.value}
+                </p>
+                <p className="mt-2 text-sm text-[#3A3D40]/85">{item.label}</p>
+              </div>
+              <Tooltip content={item.tooltip}>
+                <button
+                  type="button"
+                  className={clsx(
+                    "inline-flex h-9 w-9 items-center justify-center rounded-full border bg-white/90 transition focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                    iconClass
+                  )}
+                >
+                  <span className="sr-only">
+                    How “{item.value}” was measured: {item.label}
+                  </span>
+                  <CircleHelp className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </Tooltip>
             </div>
-            <Tooltip content={item.tooltip}>
-              <button
-                type="button"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#2C4F52]/20 bg-white text-[#2C4F52] opacity-70 transition hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-              >
-                <span className="sr-only">More about {item.label}</span>
-                <CircleHelp className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </Tooltip>
-          </div>
-        </article>
-      ))}
+          </article>
+        );
+      })}
     </div>
   );
 };
