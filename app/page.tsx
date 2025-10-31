@@ -3,6 +3,7 @@ import Script from "next/script";
 import Hero from "@/components/Hero";
 import CaseCard from "@/components/CaseCard";
 import Portrait, { getPortrait } from "@/components/Portrait";
+import SocialRow from "@/components/SocialRow";
 import Stats from "@/components/Stats";
 import { featuredWork } from "@/data/featuredWork";
 import HomeTestimonials from "@/sections/HomeTestimonials";
@@ -122,6 +123,10 @@ export default function HomePage(): JSX.Element {
       </section>
 
       <HomeTestimonials />
+
+      <section className="container">
+        <SocialRow />
+      </section>
     </div>
   );
 }
