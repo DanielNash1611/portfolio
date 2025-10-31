@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
@@ -60,13 +60,13 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
           </div>
         </div>
         <div className="md:col-span-2">
-          <div className="relative ml-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-2xl shadow-md ring-1 ring-slate-200">
+          <div className="relative ml-auto aspect-[4/5] w-full max-w-sm md:max-w-md overflow-hidden rounded-2xl shadow-md ring-1 ring-slate-200">
             <Image
               src={portraitSrc}
               alt="Daniel Nash portrait"
               fill
               className="object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 420px"
+              sizes="(max-width: 768px) 100vw, 480px"
               priority={false}
             />
             <div
@@ -82,3 +82,5 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
     </motion.section>
   );
 }
+
+
