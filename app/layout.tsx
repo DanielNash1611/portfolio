@@ -63,9 +63,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-brand-gradient text-brand-slate">
-        <a href="#main" className="skip-link">
-          Skip to main content
-        </a>
         <SEOReviews />
         <Header />
         <main id="main" className="min-h-[60vh] scroll-mt-24 pt-24">
