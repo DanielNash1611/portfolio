@@ -81,3 +81,18 @@ a:hover {
     box-shadow: 0 12px 24px rgba(44, 79, 82, 0.25);
   }
 }
+
+@keyframes tooltip-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-tooltip-fade {
+  animation: tooltip-fade 160ms ease-out;
+}

@@ -1,8 +1,8 @@
 'use client';
 
 import clsx from "clsx";
-import { CircleHelp } from "lucide-react";
-import Tooltip from "@/components/Tooltip";
+import { Info } from "lucide-react";
+import Tooltip from "@/components/ui/Tooltip";
 export type StatItem = {
   value: string;
   label: string;
@@ -63,7 +63,7 @@ const Stats = ({ items = defaultStats, className }: StatsProps): JSX.Element => 
           <article
             key={item.label}
             className={clsx(
-              "group relative overflow-hidden rounded-3xl bg-white/95 p-6 shadow-md ring-1 transition-transform duration-200 ease-out backdrop-blur-sm hover:-translate-y-1.5 hover:shadow-lg",
+              "group relative rounded-3xl bg-white/95 p-6 shadow-md ring-1 transition-transform duration-200 ease-out backdrop-blur-sm hover:-translate-y-1.5 hover:shadow-lg",
               accentClass
             )}
           >
@@ -74,18 +74,19 @@ const Stats = ({ items = defaultStats, className }: StatsProps): JSX.Element => 
                 </p>
                 <p className="mt-2 text-sm text-[#3A3D40]/85">{item.label}</p>
               </div>
-              <Tooltip content={item.tooltip}>
+              <Tooltip
+                placement="top"
+                content={<span>{item.tooltip}</span>}
+              >
                 <button
                   type="button"
                   className={clsx(
-                    "inline-flex h-9 w-9 items-center justify-center rounded-full border bg-white/90 transition focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                    "inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/90 text-[#2C4F52] transition hover:bg-white focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white",
                     iconClass
                   )}
+                  aria-label={`How ${item.value} was measured`}
                 >
-                  <span className="sr-only">
-                    How “{item.value}” was measured: {item.label}
-                  </span>
-                  <CircleHelp className="h-4 w-4" aria-hidden="true" />
+                  <Info className="h-4 w-4" aria-hidden="true" />
                 </button>
               </Tooltip>
             </div>
