@@ -1,8 +1,8 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SEOReviews from "@/components/SEOReviews";
-import SiteFooter from "@/components/SiteFooter";
 import portraits from "@/public/portraits/metadata.json";
 
 const defaultOgImage = {
@@ -71,7 +71,7 @@ export default function RootLayout({
         <main id="main" className="min-h-[60vh] scroll-mt-24 pt-24">
           {children}
         </main>
-        <SiteFooter />
+        <Footer />
       </body>
     </html>
   );
