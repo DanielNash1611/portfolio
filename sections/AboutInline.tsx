@@ -34,9 +34,10 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
             The person behind the outcomes
           </h2>
           <p className="mt-3 max-w-prose text-slate-700">
-            I build AI-powered products and experimentation programs that drive measurable impact.
-            My background as a composer keeps me relentlessly focused on craft and audience experience.
-            Recently: AI Platform & Strategy leadership, ChatGPT Enterprise rollout, and LaunchMuse prototype.
+            I build AI-powered products and scalable frameworks that drive measurable impact across
+            organizations - from a $2.7 M annual lift in Contact Center AI pilots and a 3% conversion gain
+            (~$16 M / yr) in e-commerce to company-wide enablement initiatives in AI strategy and Product
+            Management excellence through Jira Product Discovery.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <a
@@ -72,7 +73,7 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/10" />
             <p className="absolute bottom-3 left-3 rounded-full bg-white/75 px-3 py-1 text-xs text-slate-700 shadow ring-1 ring-slate-200">
-              Composer • Product Leader • AI Advocate
+              Composer / Product Leader / AI Advocate
             </p>
           </div>
         </div>

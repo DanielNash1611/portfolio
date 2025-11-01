@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { getPortrait } from "@/components/Portrait";
+import AboutInline from "@/sections/AboutInline";
 import FeaturedWork from "@/sections/FeaturedWork";
 import HomeHero from "@/sections/HomeHero";
+import ImpactHighlights from "@/sections/ImpactHighlights";
 import HomeStats from "@/sections/HomeStats";
-import AboutInline from "@/sections/AboutInline";
 import NarrativeBridge from "@/sections/NarrativeBridge";
 import HomeTestimonials from "@/sections/HomeTestimonials";
 import { siteOrigin } from "@/lib/site";
@@ -70,6 +71,7 @@ export default function HomePage(): JSX.Element {
         {JSON.stringify(heroJsonLd)}
       </Script>
       <HomeHero />
+      <ImpactHighlights />
       <HomeStats />
       <AboutInline portraitSrc="/portraits/hero_square_photo.jpg" />
       <FeaturedWork />
