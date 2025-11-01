@@ -4,9 +4,12 @@ import typography from "@tailwindcss/typography";
 const config: Config = {
   content: [
     "./app/**/*.{ts,tsx,mdx}",
+    "./pages/**/*.{ts,tsx,mdx}",
     "./components/**/*.{ts,tsx}",
+    "./sections/**/*.{ts,tsx}",
     "./content/**/*.{mdx,md}"
   ],
+  safelist: ["h-64","sm:h-72","md:h-80","lg:h-[420px]","min-h-[256px]"],
   theme: {
     container: {
       center: true,
