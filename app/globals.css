@@ -96,3 +96,7 @@ a:hover {
 .animate-tooltip-fade {
   animation: tooltip-fade 160ms ease-out;
 }
+
+:root {
+  --impact-bg: #F2E3D5; /* Cream */
+}

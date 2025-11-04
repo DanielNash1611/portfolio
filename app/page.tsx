@@ -4,8 +4,7 @@ import { getPortrait } from "@/components/Portrait";
 import AboutInline from "@/sections/AboutInline";
 import FeaturedWork from "@/sections/FeaturedWork";
 import HomeHero from "@/sections/HomeHero";
-import ImpactHighlights from "@/sections/ImpactHighlights";
-import HomeStats from "@/sections/HomeStats";
+import ImpactAtScale from "@/components/ImpactAtScale";
 import NarrativeBridge from "@/sections/NarrativeBridge";
 import HomeTestimonials from "@/sections/HomeTestimonials";
 import { siteOrigin } from "@/lib/site";
@@ -71,8 +70,7 @@ export default function HomePage(): JSX.Element {
         {JSON.stringify(heroJsonLd)}
       </Script>
       <HomeHero />
-      <ImpactHighlights />
-      <HomeStats />
+      <ImpactAtScale />
       <AboutInline portraitSrc="/portraits/hero_square_photo.jpg" />
       <FeaturedWork />
       <NarrativeBridge />

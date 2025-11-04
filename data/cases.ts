@@ -24,14 +24,20 @@ export const cases: Case[] = [
   },
   {
     slug: "sound-synthesist",
-    title: "Sound Synthesist — AI Composer Playground",
+    title: "Sound Synthesist — AI Gear Recommender for Musicians",
     summary:
-      "Built a real-time sound design demo blending OpenAI-powered prompts, vector search, and modular synthesis to spark creative exploration.",
-    tags: ["Prototype", "Music Tech", "AI"],
+      "An AI assistant that helps musicians uncover the gear, signal chains, and production techniques behind the sounds they love.",
+    tags: ["Product Leadership", "AI Strategy", "Rapid Prototyping", "Experimentation"],
     heroImage: "/images/synth-hero.svg",
     kpis: [
-      { label: "Prototype Velocity", value: "6 weeks" },
-      { label: "User Satisfaction", value: "4.7/5" }
+      {
+        label: "Prototype Velocity",
+        value: "4 hours — from concept to first working hackathon demo"
+      },
+      {
+        label: "Portfolio Demo Build",
+        value: "1 hour — rebuilt as a text-based web demo via Codex + ChatGPT"
+      }
     ]
   },
   {

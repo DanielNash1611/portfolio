@@ -42,6 +42,7 @@ const CaseStudyHeader = ({
       <div className="flex flex-wrap gap-2">
         <Badge variant="outline">Product Leadership</Badge>
         <Badge variant="outline">AI Strategy</Badge>
+        <Badge variant="outline">Rapid Prototyping</Badge>
         <Badge variant="outline">Experimentation</Badge>
       </div>
     </header>

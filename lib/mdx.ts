@@ -4,7 +4,6 @@ import { readFile } from "node:fs/promises";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import MetricCard from "@/components/MetricCard";
 import ProConList from "@/components/ProConList";
 import BeforeAfter from "@/components/BeforeAfter";
 
@@ -22,7 +21,6 @@ export async function getCaseMdx(slug: string) {
   return compileMDX<CaseFrontmatter>({
     source,
     components: {
-      MetricCard,
       ProConList,
       BeforeAfter
     },

@@ -1,51 +1,95 @@
----
-title: "Sound Synthesist — AI Composer Playground"
+﻿---
+title: "Sound Synthesist — AI Gear Recommender for Musicians"
 date: "2025-02-01"
-summary: "Experimenting with AI-guided sound design to help musicians iterate faster while staying in control."
+summary: "An AI assistant that helps musicians quickly discover the gear, signal chains, and production techniques behind the sounds they love. Built during Guitar Center's first ChatGPT Hackathon, it went from \"maybe too crazy\" to a working prototype in hours, won first place with the C-suite judging, and later inspired Guitar Center's Rig Advisor project."
 tags:
   - Prototype
   - Music Tech
   - AI
 ---
 
-## Concept
+## Case Study
 
-Sound Synthesist gives artists a promptable canvas: describe the vibe you want, and the system composes layered stems pulled from a curated sample graph. The interface exposes the generative logic so artists can remix, resample, or re-sequence without hitting a creative dead end.
+### Project Summary
+Built during Guitar Center’s first ChatGPT Hackathon, *Sound Synthesist* began as a moonshot idea—an AI assistant that could identify the gear, signal chain, and production approach behind any artist or genre. It went on to win **first place**, earning **C-suite recognition** and becoming the spark that led to Guitar Center’s official **Rig Advisor** initiative.
 
-## Approach
+---
 
-- Built a modular synthesis engine in TypeScript leveraging Web Audio nodes and lightweight DSP libraries.
-- Used OpenAI function calling to translate text prompts into modulatable parameters (tempo, timbre, envelopes).
-- Indexed public-domain stems with vector embeddings for timbral similarity.
-- Designed controls to keep the human in the loop: every AI action surfaces the parameters it touched with quick undo.
+### The Challenge
+Musicians often spend hours chasing tones online—jumping between videos, forums, and conflicting opinions.
 
-<div className="grid gap-4 md:grid-cols-3">
-  <MetricCard value="6 weeks" description="Time from concept to playable prototype." />
-  <MetricCard value="24 sessions" delta="Private beta" description="Early musicians interviewed to refine guardrails." />
-  <MetricCard value="92%" delta="Wanted to keep exploring" description="Usability score after guided testing." />
-</div>
+We asked: **Could AI act as a sound-design coach that guides you to the right gear and setup faster—without replacing the artistry?**
 
-## (Future) Live Demo
+---
 
-The live playground will return soon. Infrastructure hardening is underway so the demo can run with isolated credentials and rate limiting.
+### Approach
+Our **five-person cross-functional team** (Product Manager, engineer, data analyst, data engineer, QA) opened the hackathon by mapping all ideas on a **feasibility vs. impact** matrix.
 
-## Sources
+Ironically, *Sound Synthesist* landed in the *“low feasibility / high impact”* quadrant—so we initially deprioritized it and built two other prototypes first.
 
-- Public-domain jazz, orchestral, and ambient stems curated from Library of Congress collections.
-- User research transcripts and prompt audit logs (anonymized) to continue tuning safety filters.
+After those were working, I revisited the concept on a whim and tested it directly in ChatGPT using the base **GPT-4.1** model. To everyone’s surprise, it produced credible, contextual gear chains and setup advice, proving the idea was far more feasible than we assumed.
 
-<ProConList
-  pros={[
-    { title: "Transparent AI controls", description: "Explicit parameter mapping keeps artists in charge rather than the model improvising unchecked." },
-    { title: "Composable architecture", description: "Engine can be dropped into DAW plug-ins or hosted as a standalone web app." }
-  ]}
-  cons={[
-    { title: "Latency constraints", description: "On-device rendering remains a goal; current demo leverages small compute bursts in the cloud." },
-    { title: "Dataset provenance", description: "Requires ongoing diligence to ensure every sample stays within public-domain or licensed catalogs." }
-  ]} />
+Separately, I then built a **portfolio-friendly web demo** using **Codex + ChatGPT**, implementing the UI in my Next.js portfolio as a **text-based prototype**.
 
-## What’s Next
+---
 
-- Ship the hardened live demo with offline-capable rendering.
-- Release MIDI export and patch sharing.
-- Open-source the prompt-to-parameter mapper for community contributions.
+### Prototype & Results
+
+- **Prototype build time (portfolio demo):** 1 hour, built personally as a Product Manager using Codex and ChatGPT (not a full-time developer).
+- **Hackathon team:** 5 cross-functional members (PM, engineer, data analyst, data engineer, QA).
+- **Hackathon outcome:** 🏆 **1st place winner**, judged by the Guitar Center C-suite.
+- **Organizational impact:** Inspired the internal **Rig Advisor** project, later announced publicly by the CEO.
+- **AI adoption outcome:** Helped establish the **ChatGPT Champions** group and positioned me as a key leader for AI adoption across the organization.
+
+---
+
+### How It Works
+
+1. **Prompt input**  
+   The musician describes a tone, song, artist, or genre (e.g., “How do I sound like Ólafur Arnalds?”).
+
+2. **AI recommendation**  
+   ChatGPT returns suggested gear (amps, pedals, mics, plugins), a signal chain, and sound-design tips that shape that tone.
+
+3. **Smart follow-ups**  
+   The assistant asks clarifying questions such as:
+   - “Are you recording or playing live?”
+   - “Are you using single-coil or humbucker pickups?”
+   - “Are you working in a DAW or through an amp?”
+
+   These refine the recommendations to the musician’s actual context.
+
+4. **Education layer**  
+   Each response includes **why** certain gear or settings matter—so the user learns production principles instead of treating it as a black box.
+
+---
+
+### Technology
+
+- **Models:** ChatGPT (GPT-4.1, GPT-5) for conversational reasoning and gear recommendations.
+- **Integration:** Web search to pull in up-to-date specs and credible references for instruments, pedals, amps, and plugins.
+- **Frontend:** Next.js, TypeScript, and Tailwind CSS deployed on Vercel for the portfolio demo.
+- **Build approach:** As a Product Manager, I relied on **Codex and ChatGPT** to generate and refine the code, allowing me to ship a working demo quickly without blocking on engineering time.
+- **Scope:** The current demo is fully **text-based** and focuses on quality of guidance rather than audio rendering.
+
+---
+
+### Learnings
+
+- **Feasibility is sometimes hidden:** Ideas that look “high impact but low feasibility” on a whiteboard can become viable within hours once you prototype with AI.
+- **PMs can prototype with AI:** With Codex and ChatGPT, a Product Manager can build functional demos, validate concepts, and de-risk ideas before involving full engineering teams.
+- **Control beats magic:** Musicians value understanding and control—transparent explanations and follow-up questions made the experience more trustworthy than a purely “magic” answer.
+
+---
+
+### What’s Next
+
+- Ship a **public, hardened demo** using only public gear data and isolated, rate-limited API credentials.
+- Add **deep links to buy the gear** (or equivalent alternatives) for commerce exploration.
+- Explore **DAW integrations** so the assistant can live alongside the creative workflow.
+- Open-source the **prompt-to-gear mapping patterns** to contribute back to the music tech community.
+
+---
+
+### Summary
+*Sound Synthesist* transformed from a deprioritized idea into a **hackathon-winning prototype** that helped reshape how Guitar Center thinks about AI. Today, it lives on as an independently rebuilt demo on my portfolio site—showcasing how curiosity, creativity, and AI tools enable Product Managers to ship impactful prototypes quickly, even without a traditional engineering background.
