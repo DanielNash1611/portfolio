@@ -1,87 +1,72 @@
 ---
-title: "Checkout Redesign for Multi-Brand Retailer"
-date: "2025-01-12"
-summary: "Reduced checkout time, improved conversion, and established an experimentation engine for ongoing optimization."
+title: "Checkout Redesign"
+subtitle: "GuitarCenter.com"
+description: "Cut checkout time in half, improved conversion by 3%, and revitalized a decade-old experience."
+year: 2023
+role: "eCommerce Product Manager"
+company: "Guitar Center"
 tags:
-  - AI Product
+  - eCommerce
+  - Product Management
   - Experimentation
-  - Growth
+  - UX Design
+metrics:
+  - label: "Checkout Time"
+    value: "-50%"
+    description: "Twice as fast for median users"
+  - label: "Conversion Rate"
+    value: "+3%"
+    description: "Statistically significant lift"
+  - label: "Revenue Impact"
+    value: "$16M"
+    description: "Annualized based on conversion lift"
 ---
 
-## Problem
+## Overview
 
-Legacy checkout flows were fragmented across three brands, requiring duplicate address entry and lacking personalization. Session drop-offs spiked at payment selection and cart review due to latency and unclear copy. The executive sponsor needed a scalable redesign that could support AI-driven offers without increasing compliance risk.
+GuitarCenter.com's checkout flow hadn't been redesigned in over a decade. Over time it had grown slow, cluttered, and full of legacy patches that made it hard to use and harder to maintain.
 
-## Role
+As **eCommerce Product Manager**, I led the full redesign of the checkout experience, modernizing the flow, improving performance, and validating every change through A/B testing.
 
-As the Senior AI Product Manager, I led discovery, requirements, and delivery across product, design, and engineering. I owned roadmap definition, AI experimentation strategy, and executive stakeholder updates while partnering with data science and compliance counterparts.
+## The Problem
 
-## Insights
+The legacy checkout required multiple page loads, redundant address entry, and sequential API calls that slowed users down.  
+Customers frequently dropped off between shipping and payment, and survey feedback consistently mentioned friction and lack of clarity.
 
-- 62% of total delay surfaced between shipping and payment steps due to sequential API calls.
-- Customers exposed to contextual financing suggestions converted at 1.8× the baseline.
-- Mobile users abandoned at 2× the rate of desktop because form fields were not auto-formatting inputs.
+## Approach
 
-<ProConList
-  pros={[
-    { title: "Clear signal to prioritize payment latency", description: "Service calls could be batched and cached, shaving 5.2 seconds off the median flow." },
-    { title: "Experimentation-ready architecture", description: "A modular stepper allowed AI-generated offers, messaging, and sequencing to be tested without redeploying the core checkout." }
-  ]}
-  cons={[
-    { title: "Compliance guardrails", description: "Financial promotions required deterministic copy and audit trails, constraining AI content surfaces." },
-    { title: "Fragmented analytics", description: "Pre-existing instrumentation could not capture multi-step experiments, requiring a parallel analytics uplift." }
-  ]} />
-
-## Strategy
-
-We staged the initiative across three workstreams:
-
-1. **Experience Core** — rebuild checkout with responsive design, inline validation, and accessibility baked in.
-2. **AI Offer Engine** — orchestrate personalization via content slots controlled by experimentation toggles.
-3. **Experimentation Pod** — establish governance, KPI tracking, and insight cadence to sustain iteration.
-
-## Execution
-
-- Introduced a single-page architecture with progressive disclosure and inline save states.
-- Built a feature flag framework for AI-generated incentives, ensuring fallbacks existed for deterministic copy.
-- Established instrumentation to pipe core KPIs into a combined Looker + Amplitude dashboard.
-- Ran six sequential A/B tests covering copy, modular payment steps, and financing offer timing.
-
-<BeforeAfter
-  beforeSrc="/images/checkout-before.svg"
-  afterSrc="/images/checkout-after.svg"
-  beforeLabel="Legacy flow"
-  afterLabel="Unified flow"
-/>
+- **Customer-first redesign:** Partnered with UX, engineering, and analytics to identify and remove friction at every stage of the funnel.  
+- **Technical modernization:** Consolidated service calls, improved validation logic, and reduced latency through performance optimizations.  
+- **A/B testing & validation:** Rolled out controlled experiments to quantify improvements in speed, satisfaction, and conversion.  
+- **Stakeholder alignment:** Facilitated design reviews and executive updates across marketing, technology, and merchandising to secure buy-in and accelerate release.
 
 ## Results
 
-<div className="grid gap-4 md:grid-cols-3">
-  <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-    <p className="text-3xl font-semibold text-slate-900">-50%</p>
-    <p className="text-sm font-medium text-slate-600">5.2s faster</p>
-    <p className="mt-1 text-sm text-slate-600">Median time-to-checkout after consolidating API requests.</p>
-  </div>
-  <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-    <p className="text-3xl font-semibold text-slate-900">+3%</p>
-    <p className="text-sm font-medium text-slate-600">Statistically significant</p>
-    <p className="mt-1 text-sm text-slate-600">Conversion lift across flagship brand after six weeks of experimentation.</p>
-  </div>
-  <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-    <p className="text-3xl font-semibold text-slate-900">$16M</p>
-    <p className="text-sm font-medium text-slate-600">Annualized</p>
-    <p className="mt-1 text-sm text-slate-600">Projected incremental revenue uplift tied to conversion gains and order value.</p>
-  </div>
-</div>
+- **2x faster checkout time:** Median completion time cut in half.  
+- **+3% conversion lift:** Statistically significant result from live A/B testing.  
+- **$16M annualized revenue impact:** Calculated from conversion lift over the test period extrapolated to a full year.  
+- **Higher satisfaction:** Customers rated the new experience as cleaner, faster, and more trustworthy.
 
-| Variant | Conversion lift | Checkout duration | Notes |
-| --- | --- | --- | --- |
-| Control | – | 48s | Legacy multi-step flow |
-| AI Offer Timing | +1.1% | 42s | Personalized offers during review |
-| Unified Stepper | +3.0% | 24s | Consolidated shipping & payment |
+## Impact
 
-## Artifacts
+The redesign became one of Guitar Center's most successful digital initiatives of 2023, demonstrating the value of user-centered design, data-driven experimentation, and deep cross-functional collaboration.
 
-- Modular design system spec in Figma with accessibility annotations.
-- Dashboard templates for funnel metrics, experiment readouts, and error monitoring.
-- API contract documentation for payment services to support future AI prompts.
+## Strengths & Opportunities
+
+**Strengths**
+
+- Validated measurable business impact through statistically significant A/B testing  
+- Unified cross-functional collaboration between UX, engineering, and analytics  
+- Improved customer satisfaction and reduced checkout friction  
+
+**Opportunities**
+
+- Automate experiment setup and data collection for faster iteration  
+- Introduce personalized financing and shipping recommendations  
+- Explore predictive error handling to further streamline the experience  
+
+---
+
+**Role:** eCommerce Product Manager  
+**Scope:** Checkout Flow Redesign - GuitarCenter.com  
+**Year:** 2023
