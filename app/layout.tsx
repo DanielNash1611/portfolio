@@ -2,6 +2,7 @@
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import MainContainer from "@/components/MainContainer";
 import SEOReviews from "@/components/SEOReviews";
 import portraits from "@/public/portraits/metadata.json";
 
@@ -65,9 +66,7 @@ export default function RootLayout({
       <body className="antialiased bg-brand-gradient text-brand-slate">
         <SEOReviews />
         <Header />
-        <main id="main" className="min-h-[60vh] scroll-mt-24 pt-24">
-          {children}
-        </main>
+        <MainContainer>{children}</MainContainer>
         <Footer />
       </body>
     </html>

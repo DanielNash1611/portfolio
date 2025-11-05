@@ -45,6 +45,7 @@ export const Header = (): JSX.Element => {
 
   return (
     <header
+      data-site-header="true"
       data-scrolled={scrolled}
       className="sticky top-0 z-50 bg-transparent transition-all data-[scrolled=true]:backdrop-blur-md data-[scrolled=true]:bg-[rgba(242,227,213,0.7)] data-[scrolled=true]:ring-1 data-[scrolled=true]:ring-slate-200"
     >
