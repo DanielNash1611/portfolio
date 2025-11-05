@@ -47,7 +47,7 @@ export default function LaunchMusePage(): JSX.Element {
           LaunchMuse is an AI-native tool that helps artists, managers, and small labels plan six-week release campaigns for singles, EPs, and albums. It&apos;s designed to answer a simple question:
         </p>
         <blockquote className="border-l-4 border-brand-teal/40 pl-4 text-brand-slate/80 italic">
-          &quot;How can tell my story more effectively than, check out my release&quot;
+          &quot;How can tell my story more effectively than just saying to check out my release?&quot;
         </blockquote>
         <p className="text-brand-slate/80">
           As both a composer and an AI Product Manager, I wanted to validate a core hypothesis:
