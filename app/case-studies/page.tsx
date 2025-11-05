@@ -29,6 +29,7 @@ export default function CaseStudiesPage() {
             title={cs.title}
             summary={cs.summary}
             headlineMetrics={cs.headlineMetrics}
+            href={cs.href}
           />
         ))}
       </div>

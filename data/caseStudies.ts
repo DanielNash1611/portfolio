@@ -5,6 +5,7 @@ export type CaseStudy = {
   headlineMetrics?: Array<{ label: string; value: string }>;
   measuredMetrics?: Array<{ label: string; value: string; context?: string }>;
   body?: string;
+  href?: string;
 };
 
 export const CASE_STUDIES: CaseStudy[] = [
@@ -33,9 +34,9 @@ The redesigned flow removed ambiguous copy and surfaced dynamic AI-generated sup
   },
   {
     slug: "contact-center-ai",
-    title: "Contact Center AI pilot",
-    summary: "Agent assist and automated workflows.",
-    headlineMetrics: [{ label: "annual impact", value: "$2.7M/yr" }],
+    title: "Contact Center ChatGPT pilot",
+    summary: "Launched a six-month ChatGPT Enterprise pilot with a matched control group to quantify agent copilot impact.",
+    headlineMetrics: [{ label: "annualized impact", value: "$2.7M+" }],
     measuredMetrics: [
       { label: "Annualized revenue influence", value: "$2.7M+", context: "Pilot cohort extrapolated over 12 months" },
     ],
@@ -49,5 +50,26 @@ The redesigned flow removed ambiguous copy and surfaced dynamic AI-generated sup
 
 Measured outcomes demonstrate the upside of expanding generative AI assistance into additional contact center queues.
     `.trim(),
+    href: "/products/chatgpt-contact-center",
+  },
+  {
+    slug: "jira-product-discovery",
+    title: "Jira Product Discovery adoption",
+    summary: "Standardized prioritization and planning in Jira Product Discovery to align product, business, and technology partners.",
+    headlineMetrics: [
+      { label: "org adoption", value: "9 PMs" },
+      { label: "onboarding", value: "8 weeks" },
+    ],
+    href: "/case-studies/jira-product-discovery",
+  },
+  {
+    slug: "chatgpt-org-scale",
+    title: "Scaling ChatGPT across the organization",
+    summary: "Expanded ChatGPT Enterprise access, launched ChatGPT Champions, and established AI COE guardrails.",
+    headlineMetrics: [
+      { label: "hq licenses", value: "Hundreds+" },
+      { label: "contact center", value: "~350 agents" },
+    ],
+    href: "/products/chatgpt-org-scale",
   },
 ];

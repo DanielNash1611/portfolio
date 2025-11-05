@@ -11,9 +11,19 @@ export type CaseStudyCardProps = {
   summary: string;
   headlineMetrics?: MetricChip[]; // e.g., [{ label: "Conversion", value: "+3%" }]
   thumbnailUrl?: string;
+  href?: string;
 };
 
-export default function CaseStudyCard({ slug, title, summary, headlineMetrics, thumbnailUrl }: CaseStudyCardProps) {
+export default function CaseStudyCard({
+  slug,
+  title,
+  summary,
+  headlineMetrics,
+  thumbnailUrl,
+  href,
+}: CaseStudyCardProps) {
+  const destination = href ?? `/case-studies/${slug}`;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 8 }}
@@ -27,7 +37,7 @@ export default function CaseStudyCard({ slug, title, summary, headlineMetrics, t
       )}
       <div className="p-5">
         <h3 className="text-lg font-semibold tracking-tight text-slate-900">
-          <Link href={`/case-studies/${slug}`} className="hover:underline">
+          <Link href={destination} className="hover:underline">
             {title}
           </Link>
         </h3>

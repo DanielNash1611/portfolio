@@ -4,13 +4,20 @@ interface CaseStudyHeaderProps {
   title: string;
   subtitle: string;
   kpis?: { label: string; value: string }[];
+  tags?: string[];
 }
 
 const CaseStudyHeader = ({
   title,
   subtitle,
-  kpis
+  kpis,
+  tags
 }: CaseStudyHeaderProps): JSX.Element => {
+  const displayTags =
+    tags && tags.length > 0
+      ? tags
+      : ["Product Leadership", "AI Strategy", "Rapid Prototyping", "Experimentation"];
+
   return (
     <header className="space-y-6 rounded-3xl border border-brand-slate/15 bg-white/80 p-10 shadow-soft">
       <div className="space-y-2">
@@ -35,15 +42,16 @@ const CaseStudyHeader = ({
               <dd className="text-2xl font-semibold text-brand-teal">
                 {kpi.value}
               </dd>
-            </div>
-          ))}
-        </dl>
+          </div>
+        ))}
+      </dl>
       ) : null}
       <div className="flex flex-wrap gap-2">
-        <Badge variant="outline">Product Leadership</Badge>
-        <Badge variant="outline">AI Strategy</Badge>
-        <Badge variant="outline">Rapid Prototyping</Badge>
-        <Badge variant="outline">Experimentation</Badge>
+        {displayTags.map((tag) => (
+          <Badge key={tag} variant="outline">
+            {tag}
+          </Badge>
+        ))}
       </div>
     </header>
   );

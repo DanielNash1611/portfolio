@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Jira Product Discovery portfolio illustration</title>
+  <desc id="desc">Abstract boards and prioritization scores representing Jira Product Discovery alignment across teams.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F2E3D5"/>
+      <stop offset="100%" stop-color="#C7DED9"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F8F5F0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" rx="48"/>
+  <g transform="translate(140 120)">
+    <rect width="920" height="435" rx="36" fill="url(#card)" stroke="#2C4F52" stroke-opacity="0.08"/>
+    <g transform="translate(80 80)">
+      <rect width="220" height="260" rx="24" fill="#2C4F52" fill-opacity="0.08"/>
+      <rect x="24" y="36" width="172" height="16" rx="8" fill="#2C4F52" fill-opacity="0.35"/>
+      <rect x="24" y="68" width="140" height="14" rx="7" fill="#2C4F52" fill-opacity="0.22"/>
+      <rect x="24" y="104" width="120" height="14" rx="7" fill="#2C4F52" fill-opacity="0.18"/>
+      <rect x="24" y="172" width="172" height="16" rx="8" fill="#D17A5F" fill-opacity="0.6"/>
+      <rect x="24" y="208" width="140" height="14" rx="7" fill="#2C4F52" fill-opacity="0.2"/>
+    </g>
+    <g transform="translate(340 80)">
+      <rect width="240" height="80" rx="20" fill="#2C4F52" fill-opacity="0.08"/>
+      <rect x="20" y="24" width="120" height="16" rx="8" fill="#2C4F52" fill-opacity="0.3"/>
+      <rect x="20" y="50" width="180" height="14" rx="7" fill="#2C4F52" fill-opacity="0.2"/>
+    </g>
+    <g transform="translate(340 184)">
+      <rect width="360" height="180" rx="24" fill="#2C4F52" fill-opacity="0.08"/>
+      <rect x="28" y="32" width="180" height="16" rx="8" fill="#2C4F52" fill-opacity="0.3"/>
+      <rect x="28" y="64" width="220" height="14" rx="7" fill="#2C4F52" fill-opacity="0.2"/>
+      <rect x="28" y="122" width="280" height="48" rx="16" fill="#FFFFFF" stroke="#2C4F52" stroke-opacity="0.08"/>
+      <rect x="52" y="138" width="112" height="16" rx="8" fill="#2C4F52" fill-opacity="0.3"/>
+      <rect x="52" y="164" width="84" height="12" rx="6" fill="#D17A5F" fill-opacity="0.6"/>
+      <rect x="228" y="138" width="96" height="16" rx="8" fill="#2C4F52" fill-opacity="0.2"/>
+    </g>
+    <g transform="translate(736 96)">
+      <rect width="140" height="140" rx="28" fill="#FFFFFF" stroke="#2C4F52" stroke-opacity="0.08"/>
+      <circle cx="70" cy="56" r="28" fill="#D17A5F" fill-opacity="0.7"/>
+      <rect x="32" y="104" width="76" height="14" rx="7" fill="#2C4F52" fill-opacity="0.25"/>
+    </g>
+    <g transform="translate(736 268)">
+      <rect width="140" height="120" rx="24" fill="#FFFFFF" stroke="#2C4F52" stroke-opacity="0.08"/>
+      <rect x="28" y="36" width="84" height="14" rx="7" fill="#2C4F52" fill-opacity="0.25"/>
+      <rect x="28" y="66" width="60" height="14" rx="7" fill="#2C4F52" fill-opacity="0.2"/>
+      <rect x="28" y="96" width="100" height="8" rx="4" fill="#2C4F52" fill-opacity="0.12"/>
+    </g>
+    <path d="M300 120H340" stroke="#2C4F52" stroke-width="6" stroke-linecap="round" stroke-opacity="0.3"/>
+    <path d="M700 140H736" stroke="#2C4F52" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 10" stroke-opacity="0.4"/>
+    <path d="M700 312H736" stroke="#2C4F52" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 10" stroke-opacity="0.4"/>
+  </g>
+</svg>

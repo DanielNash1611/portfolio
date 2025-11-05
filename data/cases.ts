@@ -52,5 +52,46 @@ export const cases: Case[] = [
       { label: "Focus", value: "Campaigns • Insights • Timeline" }
     ],
     href: "/products/launchmuse"
+  },
+  {
+    slug: "jira-product-discovery",
+    title: "Jira Product Discovery (JPD) Adoption & Product Org Enablement",
+    summary:
+      "Standardized prioritization and planning in Jira Product Discovery, turning quarterly wishlists into a continuous partnership between product, business, and technology.",
+    tags: ["Product Operations", "Strategic Alignment", "Jira Product Discovery"],
+    heroImage: "/images/jpd-hero.svg",
+    kpis: [
+      { label: "Org Adoption", value: "9 PMs" },
+      { label: "Planning Cadence", value: "Rolling" },
+      { label: "Onboarding", value: "8 weeks" }
+    ],
+    href: "/case-studies/jira-product-discovery"
+  },
+  {
+    slug: "chatgpt-contact-center",
+    title: "Contact Center ChatGPT Pilot - AI Copilot for Agents",
+    summary:
+      "Designed and shipped a 6-month ChatGPT Enterprise pilot for Guitar Center's contact center, proving a $2.7M annualized impact.",
+    tags: ["AI Product Management", "ChatGPT Enterprise", "Contact Center"],
+    heroImage: "/images/chatgpt-contact-hero.svg",
+    kpis: [
+      { label: "Annualized Impact", value: "$2.7M+" },
+      { label: "Pilot Cohort", value: "15 agents" },
+      { label: "Duration", value: "6 months" }
+    ],
+    href: "/products/chatgpt-contact-center"
+  },
+  {
+    slug: "chatgpt-org-scale",
+    title: "Scaling ChatGPT Across the Organization",
+    summary:
+      "Scaled ChatGPT Enterprise from a focused pilot to hundreds of HQ users, launched ChatGPT Champions, and set the foundation for an AI COE.",
+    tags: ["AI Platform & Strategy", "Enablement", "Change Management"],
+    heroImage: "/images/chatgpt-org-hero.svg",
+    kpis: [
+      { label: "HQ Licenses", value: "Hundreds+" },
+      { label: "Contact Center", value: "~350 agents" }
+    ],
+    href: "/products/chatgpt-org-scale"
   }
 ];
