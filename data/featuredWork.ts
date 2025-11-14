@@ -95,11 +95,11 @@ export const featuredWork: FeaturedWorkItem[] = [
     chips: ["ChatGPT Champions program", "AI COE blueprint"]
   },
   {
-    slug: "sound-synthesist",
-    title: "Sound Synthesist - generative audio playground",
+    slug: "sound-seeker",
+    title: "Sound Seeker - generative audio playground",
     description:
       "Prototyped a modular system that blends GPT prompt orchestration with real-time synthesis to spark new musical ideas.",
-    href: "/work/sound-synthesist",
+    href: "/work/sound-seeker",
     tags: ["Prototype", "Generative AI", "Audio R&D"],
     media: {
       src: "/images/synth-hero.svg",

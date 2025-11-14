@@ -19,7 +19,7 @@ const loadingPhrases = [
   "Adjusting virtual faders...",
 ];
 
-export function SoundSynthesistWidget() {
+export function SoundSeekerWidget() {
   const [prompt, setPrompt] = useState("");
   const [result, setResult] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +40,7 @@ export function SoundSynthesistWidget() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!prompt.trim()) {
-      setError("Tell Sound Synthesist which tone, artist, or era to explore.");
+      setError("Tell Sound Seeker which tone, artist, or era to explore.");
       setResult("");
       return;
     }
@@ -51,7 +51,7 @@ export function SoundSynthesistWidget() {
     setPhraseIndex(0);
 
     try {
-      const response = await fetch("/api/sound-synthesist", {
+      const response = await fetch("/api/sound-seeker", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
@@ -70,7 +70,7 @@ export function SoundSynthesistWidget() {
       }
       setResult(textResult);
     } catch (err) {
-      console.error("Sound Synthesist request failed", err);
+      console.error("Sound Seeker request failed", err);
       setError("Network issue -- please try again in a moment.");
     } finally {
       setIsLoading(false);

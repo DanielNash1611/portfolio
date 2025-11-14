@@ -4,7 +4,7 @@ export type Case = {
   summary: string;
   tags: string[];
   heroImage: string;
-  kpis?: { label: string; value: string }[];
+  kpis?: { label: string; value: string; description?: string }[];
   href?: string;
 };
 
@@ -23,10 +23,10 @@ export const cases: Case[] = [
     ]
   },
   {
-    slug: "sound-synthesist",
-    title: "Sound Synthesist — AI Gear Recommender for Musicians",
+    slug: "sound-seeker",
+    title: "Sound Seeker — AI Gear Recommender for Musicians",
     summary:
-      "An AI assistant that helps musicians uncover the gear, signal chains, and production techniques behind the sounds they love.",
+      "Sound Seeker is an AI assistant that helps musicians uncover the gear, signal chains, and production techniques behind the sounds they love.",
     tags: ["Product Leadership", "AI Strategy", "Rapid Prototyping", "Experimentation"],
     heroImage: "/images/synth-hero.svg",
     kpis: [
@@ -37,6 +37,12 @@ export const cases: Case[] = [
       {
         label: "Portfolio Demo Build",
         value: "1 hour — rebuilt as a text-based web demo via Codex + ChatGPT"
+      },
+      {
+        // Mirrors the hero metric so the Project Summary cards also highlight the 87% reuse intent.
+        label: "Would use again",
+        value: "87%",
+        description: "Musicians in usability testing who said they would use Sound Seeker again."
       }
     ]
   },

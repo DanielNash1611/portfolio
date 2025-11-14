@@ -12,6 +12,15 @@ const nextConfig = {
   },
   eslint: {
     dirs: ["app", "components", "lib", "data"]
+  },
+  async redirects() {
+    return [
+      {
+        source: "/work/sound-synthesist",
+        destination: "/work/sound-seeker",
+        permanent: true
+      }
+    ];
   }
 };
 

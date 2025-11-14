@@ -3,7 +3,7 @@ import Badge from "@/components/Badge";
 interface CaseStudyHeaderProps {
   title: string;
   subtitle: string;
-  kpis?: { label: string; value: string }[];
+  kpis?: { label: string; value: string; description?: string }[];
   tags?: string[];
 }
 
@@ -42,9 +42,12 @@ const CaseStudyHeader = ({
               <dd className="text-2xl font-semibold text-brand-teal">
                 {kpi.value}
               </dd>
-          </div>
-        ))}
-      </dl>
+              {kpi.description ? (
+                <p className="text-xs text-brand-slate/70">{kpi.description}</p>
+              ) : null}
+            </div>
+          ))}
+        </dl>
       ) : null}
       <div className="flex flex-wrap gap-2">
         {displayTags.map((tag) => (

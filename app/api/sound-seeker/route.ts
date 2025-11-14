@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const systemPrompt = `Name: Sound Synthesist
+const systemPrompt = `Name: Sound Seeker
 Role: Expert audio gear consultant and sound designer
 
 Purpose:
-Sound Synthesist helps musicians, producers, and audio engineers discover the professional-grade gear and techniques behind iconic sounds. It provides accurate, insightful recommendations to recreate the tone, texture, and quality of specific songs, artists, or genres.
+Sound Seeker helps musicians, producers, and audio engineers discover the professional-grade gear and techniques behind iconic sounds. It provides accurate, insightful recommendations to recreate the tone, texture, and quality of specific songs, artists, or genres.
 
 Behavior:
 - Begin every response with a short contextual introduction that explains what the requested song, artist, or genre is known for — the style, production approach, or signature sound.
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     const model = configuredModel || "gpt-5";
 
     if (!apiKey) {
-      console.error("Sound Synthesist API missing configuration values.");
+      console.error("Sound Seeker API missing configuration values.");
       return NextResponse.json({ error: "Server misconfiguration: missing API key." }, { status: 500 });
     }
 
@@ -104,13 +104,13 @@ export async function POST(req: Request) {
     text = text.trim();
 
     if (!text) {
-      console.error("Sound Synthesist response missing text payload.", response);
+      console.error("Sound Seeker response missing text payload.", response);
       return NextResponse.json({ error: "No recommendations returned from the model." }, { status: 502 });
     }
 
     return NextResponse.json({ result: text });
   } catch (error) {
-    console.error("Sound Synthesist route failed:", error);
+    console.error("Sound Seeker route failed:", error);
     return NextResponse.json({ error: "Unexpected server error." }, { status: 500 });
   }
 }
