@@ -16,25 +16,6 @@
 
 export const featuredWork: FeaturedWorkItem[] = [
   {
-    slug: "checkout-redesign",
-    title: "Checkout transformation for a multi-brand retailer",
-    description:
-      "Led a cross-functional program to rebuild checkout with AI-driven personalization, experimentation at scale, and deep funnel telemetry.",
-    href: "/work/checkout-redesign",
-    tags: ["AI Personalization", "Experimentation", "Conversion"],
-    media: {
-      src: "/images/checkout-hero.svg",
-      width: 1200,
-      height: 675,
-      alt: "Mockups of a streamlined checkout interface with highlighted funnel metrics."
-    },
-    chips: [
-      "Sets the bar for AI product strategy.",
-      "We need more Daniels.",
-      "Reduced friction for 20M+ shoppers"
-    ]
-  },
-  {
     slug: "launchmuse",
     title: "LaunchMuse - AI fan engagement assistant",
     description:
@@ -50,19 +31,23 @@ export const featuredWork: FeaturedWorkItem[] = [
     status: "Early access"
   },
   {
-    slug: "jira-product-discovery",
-    title: "Jira Product Discovery adoption",
+    slug: "chatgpt-org-scale",
+    title: "Scaling ChatGPT across the organization",
     description:
-      "Unified prioritization and portfolio planning in Jira Product Discovery, turning quarterly wishlists into an ongoing partnership across product, business, and technology.",
-    href: "/case-studies/jira-product-discovery",
-    tags: ["Product Operations", "Strategic Alignment", "Jira Product Discovery"],
+      "Scaled ChatGPT Enterprise from a pilot to hundreds of HQ users, launched ChatGPT Champions, and laid the groundwork for an AI Center of Excellence.",
+    href: "/products/chatgpt-org-scale",
+    tags: ["AI Platform", "Enablement", "Change Management"],
     media: {
-      src: "/images/jpd-hero.svg",
+      src: "/images/chatgpt-org-hero.svg",
       width: 1200,
       height: 675,
-      alt: "Jira Product Discovery boards highlighting prioritization and alignment workflows."
+      alt: "Organizational AI enablement dashboard with training, champions, and governance callouts."
     },
-    chips: ["RICE scoring at scale", "8-week onboarding program"]
+    chips: [
+      "ChatGPT Champions program",
+      "AI COE blueprint",
+      "We need more Daniels."
+    ]
   },
   {
     slug: "chatgpt-contact-center",
@@ -80,34 +65,53 @@ export const featuredWork: FeaturedWorkItem[] = [
     chips: ["Matched-control experiment", "Safely used CRM context"]
   },
   {
-    slug: "chatgpt-org-scale",
-    title: "Scaling ChatGPT across the organization",
-    description:
-      "Scaled ChatGPT Enterprise from a pilot to hundreds of HQ users, launched ChatGPT Champions, and laid the groundwork for an AI Center of Excellence.",
-    href: "/products/chatgpt-org-scale",
-    tags: ["AI Platform", "Enablement", "Change Management"],
-    media: {
-      src: "/images/chatgpt-org-hero.svg",
-      width: 1200,
-      height: 675,
-      alt: "Organizational AI enablement dashboard with training, champions, and governance callouts."
-    },
-    chips: ["ChatGPT Champions program", "AI COE blueprint"]
-  },
-  {
     slug: "sound-seeker",
-    title: "Sound Seeker - generative audio playground",
+    title: "Sound Seeker – AI gear recommendation assistant",
     description:
-      "Prototyped a modular system that blends GPT prompt orchestration with real-time synthesis to spark new musical ideas.",
+      "Built an AI-powered copilot that helps musicians discover the right instruments and recording gear through conversational questions, curated recommendations, and explainable suggestions.",
     href: "/work/sound-seeker",
-    tags: ["Prototype", "Generative AI", "Audio R&D"],
+    tags: ["PROTOTYPE", "AI COPILOT", "GEAR DISCOVERY"],
     media: {
       src: "/images/synth-hero.svg",
       width: 1200,
       height: 675,
       alt: "Generative audio interface with colorful dials and waveform plots."
     },
-    chips: ["Multi-agent creative workflow"]
+    chips: ["Conversational gear discovery"]
+  },
+  {
+    slug: "jira-product-discovery",
+    title: "Jira Product Discovery adoption",
+    description:
+      "Unified prioritization and portfolio planning in Jira Product Discovery, turning quarterly wishlists into an ongoing partnership across product, business, and technology.",
+    href: "/case-studies/jira-product-discovery",
+    tags: ["Product Operations", "Strategic Alignment", "Jira Product Discovery"],
+    media: {
+      src: "/images/jpd-hero.svg",
+      width: 1200,
+      height: 675,
+      alt: "Jira Product Discovery boards highlighting prioritization and alignment workflows."
+    },
+    chips: ["RICE scoring at scale", "8-week onboarding program"]
+  },
+  {
+    slug: "checkout-redesign",
+    title: "Checkout transformation for a multi-brand retailer",
+    description:
+      "Led a cross-functional program to redesign checkout across a multi-brand retailer, cutting checkout time in half and improving conversion through experimentation and UX improvements.",
+    href: "/work/checkout-redesign",
+    tags: ["E-COMMERCE", "CHECKOUT", "CONVERSION"],
+    media: {
+      src: "/images/checkout-hero.svg",
+      width: 1200,
+      height: 675,
+      alt: "Mockups of a streamlined checkout interface with highlighted funnel metrics."
+    },
+    chips: [
+      "50% faster checkout flow",
+      "3% lift in conversion (~$16M/yr)",
+      "Multi-brand rollout"
+    ]
   }
 ];
 

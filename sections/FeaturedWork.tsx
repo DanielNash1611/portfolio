@@ -23,7 +23,7 @@ const FeaturedWork = (): JSX.Element => {
         </p>
       </header>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {featuredWork.map((item, index) => (
+        {featuredWork.map((item) => (
           <CaseCard
             key={item.slug}
             title={item.title}
@@ -33,7 +33,6 @@ const FeaturedWork = (): JSX.Element => {
             status={item.status}
             media={item.media}
             chips={item.chips}
-            className={index % 2 === 0 ? "" : "md:mt-4"}
           />
         ))}
       </div>

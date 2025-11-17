@@ -4,8 +4,8 @@ const HomeHero = (): JSX.Element => {
   return (
     <section className="container pt-6 pb-4">
       <Hero
-        title="Bridging Creativity & Strategy - Senior AI Product Manager & Composer"
-        subtitle="I design AI-powered products and high-performing user journeys that convert."
+        title="Building the Future of Creative AI — Product Leader & Composer"
+        subtitle="I lead teams to design and build AI-powered products that empower creators and transform user experiences."
         primaryCta={{
           href: "/work",
           label: "Explore Case Studies"

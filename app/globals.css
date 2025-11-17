@@ -100,3 +100,26 @@ a:hover {
 :root {
   --impact-bg: #F2E3D5; /* Cream */
 }
+
+.testimonial-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.testimonial-scroll::-webkit-scrollbar-track {
+  background: #F2E3D5;
+  border-radius: 9999px;
+}
+
+.testimonial-scroll::-webkit-scrollbar-thumb {
+  background: #2C4F52;
+  border-radius: 9999px;
+}
+
+.testimonial-scroll::-webkit-scrollbar-thumb:hover {
+  background: #3A3D40;
+}
+
+.testimonial-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #2C4F52 #F2E3D5;
+}

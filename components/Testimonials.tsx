@@ -87,7 +87,7 @@ const Testimonials = ({ items, max, className }: TestimonialsProps): JSX.Element
       <div
         id={sliderId}
         ref={containerRef}
-        className="flex gap-4 overflow-x-auto scroll-px-4 pb-4 snap-x snap-mandatory"
+        className="testimonial-scroll flex gap-4 overflow-x-auto scroll-px-4 pb-4 snap-x snap-mandatory"
         style={{ scrollbarGutter: "stable both-edges" }}
         role="group"
         aria-label="Testimonials slider"

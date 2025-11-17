@@ -10,21 +10,48 @@ export type Case = {
 
 export const cases: Case[] = [
   {
-    slug: "checkout-redesign",
-    title: "Checkout Redesign for Multi-Brand Retailer",
+    slug: "launchmuse",
+    title: "LaunchMuse – AI Fan Engagement Assistant",
     summary:
-      "Reimagined the omnichannel checkout experience across web and retail POS, delivering speed, clarity, and revenue lift through AI-led personalization.",
-    tags: ["AI Product", "Experimentation", "Growth"],
-    heroImage: "/images/checkout-hero.svg",
+      "Real product: AI-assisted release planning, campaign generation, and audience insights.",
+    tags: ["AI", "Music Tech", "Product"],
+    heroImage: "/images/launchmuse-hero.svg",
     kpis: [
-      { label: "Checkout Time", value: "-50%" },
-      { label: "Conversion", value: "+3%" },
-      { label: "Annual Revenue Impact", value: "$16M" }
-    ]
+      { label: "Status", value: "Early Access" },
+      { label: "Focus", value: "Campaigns – Insights – Timeline" }
+    ],
+    href: "/products/launchmuse"
+  },
+  {
+    slug: "chatgpt-org-scale",
+    title: "Scaling ChatGPT Across the Organization",
+    summary:
+      "Scaled ChatGPT Enterprise from a focused pilot to hundreds of HQ users, launched ChatGPT Champions, and set the foundation for an AI COE.",
+    tags: ["AI Platform & Strategy", "Enablement", "Change Management"],
+    heroImage: "/images/chatgpt-org-hero.svg",
+    kpis: [
+      { label: "HQ Licenses", value: "Hundreds+" },
+      { label: "Contact Center", value: "~350 agents" }
+    ],
+    href: "/products/chatgpt-org-scale"
+  },
+  {
+    slug: "chatgpt-contact-center",
+    title: "Contact Center ChatGPT Pilot – AI Copilot for Agents",
+    summary:
+      "Designed and shipped a 6-month ChatGPT Enterprise pilot for Guitar Center's contact center, proving a $2.7M annualized impact.",
+    tags: ["AI Product Management", "ChatGPT Enterprise", "Contact Center"],
+    heroImage: "/images/chatgpt-contact-hero.svg",
+    kpis: [
+      { label: "Annualized Impact", value: "$2.7M+" },
+      { label: "Pilot Cohort", value: "15 agents" },
+      { label: "Duration", value: "6 months" }
+    ],
+    href: "/products/chatgpt-contact-center"
   },
   {
     slug: "sound-seeker",
-    title: "Sound Seeker — AI Gear Recommender for Musicians",
+    title: "Sound Seeker – AI Gear Recommender for Musicians",
     summary:
       "Sound Seeker is an AI assistant that helps musicians uncover the gear, signal chains, and production techniques behind the sounds they love.",
     tags: ["Product Leadership", "AI Strategy", "Rapid Prototyping", "Experimentation"],
@@ -32,32 +59,18 @@ export const cases: Case[] = [
     kpis: [
       {
         label: "Prototype Velocity",
-        value: "4 hours — from concept to first working hackathon demo"
+        value: "4 hours – from concept to first working hackathon demo"
       },
       {
         label: "Portfolio Demo Build",
-        value: "1 hour — rebuilt as a text-based web demo via Codex + ChatGPT"
+        value: "1 hour – rebuilt as a text-based web demo via Codex + ChatGPT"
       },
       {
-        // Mirrors the hero metric so the Project Summary cards also highlight the 87% reuse intent.
         label: "Would use again",
         value: "87%",
         description: "Musicians in usability testing who said they would use Sound Seeker again."
       }
     ]
-  },
-  {
-    slug: "launchmuse",
-    title: "LaunchMuse — AI Fan Engagement Assistant",
-    summary:
-      "Real product: AI-assisted release planning, campaign generation, and audience insights.",
-    tags: ["AI", "Music Tech", "Product"],
-    heroImage: "/images/launchmuse-hero.svg",
-    kpis: [
-      { label: "Status", value: "Early Access" },
-      { label: "Focus", value: "Campaigns • Insights • Timeline" }
-    ],
-    href: "/products/launchmuse"
   },
   {
     slug: "jira-product-discovery",
@@ -74,30 +87,16 @@ export const cases: Case[] = [
     href: "/case-studies/jira-product-discovery"
   },
   {
-    slug: "chatgpt-contact-center",
-    title: "Contact Center ChatGPT Pilot - AI Copilot for Agents",
+    slug: "checkout-redesign",
+    title: "Checkout Redesign for Multi-Brand Retailer",
     summary:
-      "Designed and shipped a 6-month ChatGPT Enterprise pilot for Guitar Center's contact center, proving a $2.7M annualized impact.",
-    tags: ["AI Product Management", "ChatGPT Enterprise", "Contact Center"],
-    heroImage: "/images/chatgpt-contact-hero.svg",
+      "Reimagined the omnichannel checkout experience across web and retail POS, delivering speed, clarity, and revenue lift through AI-led personalization.",
+    tags: ["AI Product", "Experimentation", "Growth"],
+    heroImage: "/images/checkout-hero.svg",
     kpis: [
-      { label: "Annualized Impact", value: "$2.7M+" },
-      { label: "Pilot Cohort", value: "15 agents" },
-      { label: "Duration", value: "6 months" }
-    ],
-    href: "/products/chatgpt-contact-center"
-  },
-  {
-    slug: "chatgpt-org-scale",
-    title: "Scaling ChatGPT Across the Organization",
-    summary:
-      "Scaled ChatGPT Enterprise from a focused pilot to hundreds of HQ users, launched ChatGPT Champions, and set the foundation for an AI COE.",
-    tags: ["AI Platform & Strategy", "Enablement", "Change Management"],
-    heroImage: "/images/chatgpt-org-hero.svg",
-    kpis: [
-      { label: "HQ Licenses", value: "Hundreds+" },
-      { label: "Contact Center", value: "~350 agents" }
-    ],
-    href: "/products/chatgpt-org-scale"
+      { label: "Checkout Time", value: "-50%" },
+      { label: "Conversion", value: "+3%" },
+      { label: "Annual Revenue Impact", value: "$16M" }
+    ]
   }
 ];
