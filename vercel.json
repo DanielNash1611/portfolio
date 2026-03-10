@@ -1,3 +1,17 @@
 {
-  "cleanUrls": true
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "portfolio.musicofdanielnash.com"
+        }
+      ],
+      "destination": "https://www.danielnash.co/$1",
+      "permanent": true
+    }
+  ]
 }
