@@ -4,7 +4,7 @@ const itemReviewed = {
   "@type": "Person",
   name: "Daniel Nash",
   jobTitle: "Senior AI Product Manager & Composer",
-  url: "https://danielnash.com"
+  url: "https://danielnash.com",
 };
 
 const toIsoDate = (date: string): string => {
@@ -26,28 +26,28 @@ const reviews = testimonials.map((testimonial) => {
     "@type": "Review",
     name: testimonial.short,
     reviewBody: testimonial.medium,
-    datePublished: toIsoDate(testimonial.date),
     author: {
       "@type": "Person",
       name: testimonial.name,
       jobTitle: testimonial.title,
-      ...(testimonial.profileUrl ? { sameAs: [testimonial.profileUrl] } : {})
+      ...(testimonial.profileUrl ? { sameAs: [testimonial.profileUrl] } : {}),
     },
     publisher: {
       "@type": "Organization",
       name:
         testimonial.source === "LinkedIn"
           ? "LinkedIn"
-          : "Personal site (direct testimonial)"
+          : "Personal site (direct testimonial)",
     },
     itemReviewed,
-    ...(avatar ? { image: avatar } : {})
+    ...(testimonial.date ? { datePublished: toIsoDate(testimonial.date) } : {}),
+    ...(avatar ? { image: avatar } : {}),
   };
 });
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@graph": reviews
+  "@graph": reviews,
 };
 
 const SEOReviews = (): JSX.Element => {

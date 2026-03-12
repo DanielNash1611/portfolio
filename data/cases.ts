@@ -1,102 +1,215 @@
+import type { NarrativeId } from "@/data/positioning";
+
 export type Case = {
   slug: string;
   title: string;
   summary: string;
   tags: string[];
   heroImage: string;
+  roleLens: NarrativeId[];
+  bestFor: string;
+  cardType: "Case Study" | "Capability Teaser" | "Emerging Work";
   kpis?: { label: string; value: string; description?: string }[];
+  chips?: string[];
   href?: string;
 };
 
 export const cases: Case[] = [
   {
-    slug: "launchmuse",
-    title: "LaunchMuse – AI Fan Engagement Assistant",
+    slug: "checkout-redesign",
+    title: "Checkout transformation for a multi-brand retailer",
     summary:
-      "Real product: AI-assisted release planning, campaign generation, and audience insights.",
-    tags: ["AI", "Music Tech", "Product"],
-    heroImage: "/images/launchmuse-hero.svg",
+      "Led an end-to-end checkout redesign that simplified the customer journey, improved speed, and delivered measurable growth.",
+    tags: ["Commerce", "Experimentation", "Customer Experience"],
+    heroImage: "/images/checkout-hero.svg",
+    roleLens: ["senior-product-manager"],
+    bestFor: "Senior Product Manager",
+    cardType: "Case Study",
     kpis: [
-      { label: "Status", value: "Early Access" },
-      { label: "Focus", value: "Campaigns – Insights – Timeline" }
+      { label: "Annualized Impact", value: "~$16M" },
+      { label: "Conversion Lift", value: "~3.5%" },
+      { label: "Checkout Speed", value: "50% faster" },
     ],
-    href: "/products/launchmuse"
+    chips: [
+      "~$16M annualized impact",
+      "~3.5% conversion lift",
+      "50% faster checkout",
+    ],
+    href: "/work/checkout-redesign",
   },
   {
-    slug: "chatgpt-org-scale",
-    title: "Scaling ChatGPT Across the Organization",
+    slug: "returns-modernization",
+    title: "Returns workflow modernization",
     summary:
-      "Scaled ChatGPT Enterprise from a focused pilot to hundreds of HQ users, launched ChatGPT Champions, and set the foundation for an AI COE.",
-    tags: ["AI Platform & Strategy", "Enablement", "Change Management"],
-    heroImage: "/images/chatgpt-org-hero.svg",
+      "Modernized service operations by consolidating fragmented returns tooling and redesigning the workflow for speed, clarity, and lower operating overhead.",
+    tags: ["Operations", "Workflow Design", "Service Systems"],
+    heroImage: "/images/checkout-after.svg",
+    roleLens: ["senior-product-manager", "product-leader"],
+    bestFor: "Senior Product Manager and Product Leader",
+    cardType: "Capability Teaser",
     kpis: [
-      { label: "HQ Licenses", value: "Hundreds+" },
-      { label: "Contact Center", value: "~350 agents" }
+      { label: "Systems Simplified", value: "16 to 9" },
+      { label: "Annual Hours Saved", value: "~2,000" },
     ],
-    href: "/products/chatgpt-org-scale"
+    chips: ["16 systems reduced to 9", "~2,000 annual hours saved"],
   },
   {
     slug: "chatgpt-contact-center",
-    title: "Contact Center ChatGPT Pilot – AI Copilot for Agents",
+    title: "Contact Center ChatGPT pilot",
     summary:
-      "Designed and shipped a 6-month ChatGPT Enterprise pilot for Guitar Center's contact center, proving a $2.7M annualized impact.",
-    tags: ["AI Product Management", "ChatGPT Enterprise", "Contact Center"],
+      "Designed and shipped a controlled ChatGPT Enterprise pilot for the contact center, creating a measurable business case for broader AI rollout.",
+    tags: ["AI Workflow", "Contact Center", "Experimentation"],
     heroImage: "/images/chatgpt-contact-hero.svg",
+    roleLens: ["senior-product-manager", "builder-pm"],
+    bestFor: "Senior Product Manager and Builder PM",
+    cardType: "Case Study",
     kpis: [
-      { label: "Annualized Impact", value: "$2.7M+" },
+      { label: "Estimated Annual Lift", value: "~$2.7M" },
       { label: "Pilot Cohort", value: "15 agents" },
-      { label: "Duration", value: "6 months" }
+      { label: "Duration", value: "6 months" },
     ],
-    href: "/products/chatgpt-contact-center"
+    chips: [
+      "~$2.7M estimated annual lift",
+      "Controlled pilot design",
+      "Custom GPT workflows",
+    ],
+    href: "/products/chatgpt-contact-center",
   },
   {
-    slug: "sound-seeker",
-    title: "Sound Seeker – AI Gear Recommender for Musicians",
+    slug: "chatgpt-org-scale",
+    title: "Scaling ChatGPT across the organization",
     summary:
-      "Sound Seeker is an AI assistant that helps musicians uncover the gear, signal chains, and production techniques behind the sounds they love.",
-    tags: ["Product Leadership", "AI Strategy", "Rapid Prototyping", "Experimentation"],
-    heroImage: "/images/synth-hero.svg",
+      "Scaled ChatGPT Enterprise with enablement, champions, and governance so the organization could move from isolated experiments to repeatable adoption.",
+    tags: ["AI Rollout", "Enablement", "Governance"],
+    heroImage: "/images/chatgpt-org-hero.svg",
+    roleLens: ["senior-product-manager", "product-leader"],
+    bestFor: "Senior Product Manager and Product Leader",
+    cardType: "Case Study",
     kpis: [
-      {
-        label: "Prototype Velocity",
-        value: "4 hours – from concept to first working hackathon demo"
-      },
-      {
-        label: "Portfolio Demo Build",
-        value: "1 hour – rebuilt as a text-based web demo via Codex + ChatGPT"
-      },
-      {
-        label: "Would use again",
-        value: "87%",
-        description: "Musicians in usability testing who said they would use Sound Seeker again."
-      }
-    ]
+      { label: "Licensed Users", value: "~1,000" },
+      { label: "Daily Active Users", value: "~800" },
+      { label: "Program", value: "Champions + AI COE" },
+    ],
+    chips: [
+      "~1,000 licensed users",
+      "~800 daily active users",
+      "AI COE groundwork",
+    ],
+    href: "/products/chatgpt-org-scale",
   },
   {
     slug: "jira-product-discovery",
-    title: "Jira Product Discovery (JPD) Adoption & Product Org Enablement",
+    title: "Jira Product Discovery adoption",
     summary:
-      "Standardized prioritization and planning in Jira Product Discovery, turning quarterly wishlists into a continuous partnership between product, business, and technology.",
-    tags: ["Product Operations", "Strategic Alignment", "Jira Product Discovery"],
+      "Established a shared operating model for prioritization, planning, and PM onboarding with Jira Product Discovery as the strategy layer.",
+    tags: ["Product Ops", "Operating Model", "Enablement"],
     heroImage: "/images/jpd-hero.svg",
+    roleLens: ["product-leader"],
+    bestFor: "Product Leader",
+    cardType: "Case Study",
     kpis: [
-      { label: "Org Adoption", value: "9 PMs" },
-      { label: "Planning Cadence", value: "Rolling" },
-      { label: "Onboarding", value: "8 weeks" }
+      { label: "Core PM Adoption", value: "9 PMs" },
+      { label: "Onboarding Program", value: "8 weeks" },
     ],
-    href: "/case-studies/jira-product-discovery"
+    chips: [
+      "Jira Product Discovery adoption",
+      "8-week PM onboarding",
+      "Shared prioritization model",
+    ],
+    href: "/case-studies/jira-product-discovery",
   },
   {
-    slug: "checkout-redesign",
-    title: "Checkout Redesign for Multi-Brand Retailer",
+    slug: "ai-middle-layer",
+    title: "AI middle layer for workflows and connectors",
     summary:
-      "Reimagined the omnichannel checkout experience across web and retail POS, delivering speed, clarity, and revenue lift through AI-led personalization.",
-    tags: ["AI Product", "Experimentation", "Growth"],
-    heroImage: "/images/checkout-hero.svg",
+      "A builder story about creating the connective tissue between models, tools, retrieval, and human review so AI workflows can become real operating systems instead of isolated prompts.",
+    tags: ["AI Platform", "MCP", "RAG"],
+    heroImage: "/images/chatgpt-contact-hero.svg",
+    roleLens: ["builder-pm"],
+    bestFor: "Builder PM",
+    cardType: "Capability Teaser",
     kpis: [
-      { label: "Checkout Time", value: "-50%" },
-      { label: "Conversion", value: "+3%" },
-      { label: "Annual Revenue Impact", value: "$16M" }
-    ]
-  }
+      { label: "Focus", value: "MCP + connectors + retrieval" },
+      { label: "Stage", value: "Capability story" },
+    ],
+    chips: [
+      "MCP patterns",
+      "Connector orchestration",
+      "Human-in-the-loop workflow design",
+    ],
+  },
+  {
+    slug: "sound-seeker",
+    title: "Sound Seeker",
+    summary:
+      "A hackathon-winning AI concept rebuilt as an independent demo to show how a PM can prototype frontier product ideas quickly and credibly.",
+    tags: ["Prototype", "AI Product", "Music"],
+    heroImage: "/images/synth-hero.svg",
+    roleLens: ["builder-pm"],
+    bestFor: "Builder PM",
+    cardType: "Case Study",
+    chips: [
+      "Hackathon-winning concept",
+      "Rapid PM-led prototype",
+      "Independent public demo",
+    ],
+    href: "/work/sound-seeker",
+  },
+  {
+    slug: "launchmuse",
+    title: "LaunchMuse",
+    summary:
+      "An AI-native MVP for release planning that demonstrates product incubation, prompt system design, and workflow prototyping in a creator context.",
+    tags: ["Prototype", "AI Workflow", "Product Incubation"],
+    heroImage: "/images/launchmuse-hero.svg",
+    roleLens: ["builder-pm"],
+    bestFor: "Builder PM",
+    cardType: "Case Study",
+    kpis: [
+      { label: "Status", value: "Early access" },
+      { label: "Focus", value: "Release planning workflow" },
+    ],
+    chips: ["AI-native MVP", "Workflow design", "Emerging product incubation"],
+    href: "/products/launchmuse",
+  },
+  {
+    slug: "ai-coe-governance",
+    title: "AI COE and governance operating model",
+    summary:
+      "A leadership story about defining ownership, intake, guardrails, and operating rhythm so AI efforts scale with better decision quality instead of more chaos.",
+    tags: ["Governance", "Enablement", "Operating Model"],
+    heroImage: "/images/chatgpt-org-hero.svg",
+    roleLens: ["product-leader"],
+    bestFor: "Product Leader",
+    cardType: "Capability Teaser",
+    kpis: [
+      { label: "Focus", value: "Governance + enablement" },
+      { label: "Stage", value: "Capability story" },
+    ],
+    chips: [
+      "AI COE blueprint",
+      "Train-the-trainer model",
+      "Portfolio-level prioritization",
+    ],
+  },
+  {
+    slug: "immiatrics",
+    title: "Immiatrics",
+    summary:
+      "Emerging AI + science work exploring how product systems and AI can support scientific discovery in immunology research.",
+    tags: ["Emerging Work", "AI + Science", "Frontier AI"],
+    heroImage: "/images/chatgpt-org-hero.svg",
+    roleLens: ["builder-pm"],
+    bestFor: "Builder PM",
+    cardType: "Emerging Work",
+    kpis: [
+      { label: "Stage", value: "Emerging work" },
+      { label: "Focus", value: "AI + science" },
+    ],
+    chips: [
+      "Frontier applied AI",
+      "Immunology research context",
+      "Modest, early-stage exploration",
+    ],
+  },
 ];

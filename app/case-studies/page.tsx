@@ -4,20 +4,25 @@ import { CASE_STUDIES } from "@/data/caseStudies";
 
 export const metadata: Metadata = {
   title: "Case Studies",
-  description: "Measured case studies spanning AI strategy, experimentation, and enablement.",
+  description:
+    "Measured case studies spanning commerce, contact center, AI-enabled product work, and PM operating model improvements.",
 };
 
 export default function CaseStudiesPage() {
   return (
     <main className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
       <header className="max-w-3xl space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Case Studies</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+          Case Studies
+        </p>
         <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
-          Measured outcomes across AI, experimentation, and enablement
+          Measured outcomes across product execution, AI, and operating model
+          work
         </h1>
         <p className="text-base text-slate-600">
-          Explore a selection of programs and pilots with quantified impact. Each card spotlights the most relevant
-          measured results; dive into the case study for deeper context and implementation detail.
+          Explore a selection of programs and pilots with quantified impact.
+          These case studies complement the broader hiring-lens structure on the
+          main work page by surfacing the clearest measured proof points.
         </p>
       </header>
 

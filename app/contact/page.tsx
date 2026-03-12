@@ -6,7 +6,7 @@ import Portrait, { getPortrait } from "@/components/Portrait";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Send a note to collaborate on AI product initiatives, sound design projects, or speaking engagements."
+    "Send a note about Senior Product Manager, Builder PM, Product Leader, or select speaking opportunities.",
 };
 
 export default function ContactPage(): JSX.Element {
@@ -31,10 +31,11 @@ export default function ContactPage(): JSX.Element {
           Contact
         </p>
         <h1 className="text-4xl font-semibold text-brand-teal">
-          Let&apos;s collaborate
+          Let&apos;s connect
         </h1>
         <p className="text-brand-slate/80">
-          Share a few details about your project, team, or event. I reply within two business days.
+          Share a few details about the role, team, or project. I reply within
+          two business days.
         </p>
         <ContactForm />
       </section>
@@ -49,13 +50,22 @@ export default function ContactPage(): JSX.Element {
           placeholder
         )}
         <h2 className="text-lg font-semibold text-brand-teal">
-          Collaboration highlights
+          Common conversations
         </h2>
         <ul className="space-y-3 text-sm text-brand-slate/80">
-          <li>- AI product leadership & experimentation programs</li>
-          <li>- Creative technology prototypes and demos</li>
-          <li>- Music scoring, sound design, and installations</li>
-          <li>- Workshops and conference talks</li>
+          <li>
+            - Senior Product Manager roles across commerce, AI, and platform
+            work
+          </li>
+          <li>
+            - Builder PM conversations around prototypes, workflows, and
+            internal tools
+          </li>
+          <li>
+            - Product leadership opportunities focused on governance,
+            enablement, and PM practice
+          </li>
+          <li>- Select workshops, speaking, and music collaborations</li>
         </ul>
         <div className="space-y-1 text-sm text-brand-slate/70">
           <p>Based in Los Angeles (Pacific Time).</p>

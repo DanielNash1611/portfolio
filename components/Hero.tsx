@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
@@ -16,16 +16,16 @@ type HeroProps = {
   title: string;
   subtitle: string;
   kicker?: string;
+  impactLine?: string;
   alignment?: "left" | "center";
   primaryCta: CTA;
   secondaryCta?: CTA;
 };
 
 const ctaStyles = {
-  primary:
-    "bg-[#2C4F52] text-[#F2E3D5] shadow-md hover:bg-[#2C4F52]/90",
+  primary: "bg-[#2C4F52] text-[#F2E3D5] shadow-md hover:bg-[#2C4F52]/90",
   ghost:
-    "border border-[#2C4F52]/40 bg-transparent text-[#2C4F52] hover:border-[#2C4F52]/60 hover:bg-[#2C4F52]/10"
+    "border border-[#2C4F52]/40 bg-transparent text-[#2C4F52] hover:border-[#2C4F52]/60 hover:bg-[#2C4F52]/10",
 } as const;
 
 const focusRing =
@@ -35,9 +35,10 @@ const Hero = ({
   title,
   subtitle,
   kicker,
+  impactLine,
   alignment = "left",
   primaryCta,
-  secondaryCta
+  secondaryCta,
 }: HeroProps): JSX.Element => {
   const alignmentClass =
     alignment === "center" ? "mx-auto text-center" : "text-left";
@@ -54,11 +55,23 @@ const Hero = ({
       <h1 className="text-balance text-4xl font-semibold text-[#2C4F52] md:text-5xl">
         {title}
       </h1>
-      <p className="mt-6 text-lg leading-relaxed text-[#3A3D40]/85">{subtitle}</p>
+      <p className="mt-6 text-lg leading-relaxed text-[#3A3D40]/85">
+        {subtitle}
+      </p>
+      {impactLine ? (
+        <div
+          className={clsx(
+            "inline-flex w-fit items-center rounded-full border border-[#2C4F52]/15 bg-[#F2E3D5]/85 px-4 py-2 text-sm font-semibold text-[#2C4F52] shadow-sm ring-1 ring-white/60",
+            alignment === "center" ? "mx-auto" : "",
+          )}
+        >
+          {impactLine}
+        </div>
+      ) : null}
       <div
         className={clsx(
           "flex flex-wrap items-center gap-3",
-          alignment === "center" ? "justify-center" : "justify-start"
+          alignment === "center" ? "justify-center" : "justify-start",
         )}
       >
         <Link
@@ -67,7 +80,7 @@ const Hero = ({
           className={clsx(
             "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition",
             ctaStyles[primaryCta.variant ?? "primary"],
-            focusRing
+            focusRing,
           )}
         >
           {primaryCta.label}
@@ -79,7 +92,7 @@ const Hero = ({
             className={clsx(
               "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition",
               ctaStyles[secondaryCta.variant ?? "ghost"],
-              focusRing
+              focusRing,
             )}
           >
             {secondaryCta.label}
@@ -110,9 +123,3 @@ const Hero = ({
 };
 
 export default Hero;
-
-
-
-
-
-

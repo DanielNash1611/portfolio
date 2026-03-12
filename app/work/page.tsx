@@ -3,9 +3,9 @@ import CaseGridFilter from "@/components/CaseGridFilter";
 import { cases } from "@/data/cases";
 
 export const metadata: Metadata = {
-  title: "Product Portfolio",
+  title: "Work",
   description:
-    "Filter case studies across AI platforms, checkout redesign, and creative experimentation."
+    "Case studies and capability snapshots organized around Senior Product Manager, Builder PM, and Product Leader hiring narratives.",
 };
 
 export default function WorkPage(): JSX.Element {
@@ -16,12 +16,14 @@ export default function WorkPage(): JSX.Element {
           Portfolio
         </p>
         <h1 className="text-4xl font-semibold text-brand-teal">
-          Strategic product leadership across AI, commerce, and sound
+          Work organized for hiring intent
         </h1>
         <p className="max-w-2xl text-brand-slate/80">
-          Explore experimentation programs, AI platform initiatives, and
-          creative technology demos. Use the filters to focus on categories that
-          matter most to you.
+          This portfolio spans measurable business outcomes, systems and
+          platform thinking, customer experience transformation, AI-enabled
+          product development, and leadership through product practice. Use the
+          hiring-lens filters to focus on the version of my work most relevant
+          to the role.
         </p>
       </header>
       <CaseGridFilter items={cases} />

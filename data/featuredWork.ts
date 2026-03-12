@@ -1,8 +1,11 @@
-﻿export type FeaturedWorkItem = {
+import type { NarrativeId } from "@/data/positioning";
+
+export type FeaturedWorkItem = {
   slug: string;
+  featuredFor: NarrativeId[];
   title: string;
   description: string;
-  href: string;
+  href?: string;
   tags: string[];
   media: {
     src: string;
@@ -12,106 +15,130 @@
   };
   status?: string;
   chips?: string[];
+  bestFor: string;
 };
 
 export const featuredWork: FeaturedWorkItem[] = [
   {
-    slug: "launchmuse",
-    title: "LaunchMuse - AI fan engagement assistant",
-    description:
-      "Incubated an AI copilot for independent artists that orchestrates release calendars, campaign ideas, and audience targeting.",
-    href: "/products/launchmuse",
-    tags: ["AI Assistant", "Music Tech", "Product Incubation"],
-    media: {
-      src: "/images/launchmuse-hero.svg",
-      width: 1200,
-      height: 675,
-      alt: "LaunchMuse dashboard showing AI-generated release strategy cards."
-    },
-    status: "Early access"
-  },
-  {
-    slug: "chatgpt-org-scale",
-    title: "Scaling ChatGPT across the organization",
-    description:
-      "Scaled ChatGPT Enterprise from a pilot to hundreds of HQ users, launched ChatGPT Champions, and laid the groundwork for an AI Center of Excellence.",
-    href: "/products/chatgpt-org-scale",
-    tags: ["AI Platform", "Enablement", "Change Management"],
-    media: {
-      src: "/images/chatgpt-org-hero.svg",
-      width: 1200,
-      height: 675,
-      alt: "Organizational AI enablement dashboard with training, champions, and governance callouts."
-    },
-    chips: [
-      "ChatGPT Champions program",
-      "AI COE blueprint",
-      "We need more Daniels."
-    ]
-  },
-  {
-    slug: "chatgpt-contact-center",
-    title: "Contact Center ChatGPT pilot",
-    description:
-      "Launched a six-month ChatGPT Enterprise pilot for contact center agents that delivered a $2.7M annualized impact and unlocked full-scale rollout.",
-    href: "/products/chatgpt-contact-center",
-    tags: ["AI Copilot", "Contact Center", "Experimentation"],
-    media: {
-      src: "/images/chatgpt-contact-hero.svg",
-      width: 1200,
-      height: 675,
-      alt: "Contact center workspace with AI copilot summaries and revenue metrics."
-    },
-    chips: ["Matched-control experiment", "Safely used CRM context"]
-  },
-  {
-    slug: "sound-seeker",
-    title: "Sound Seeker – AI gear recommendation assistant",
-    description:
-      "Built an AI-powered copilot that helps musicians discover the right instruments and recording gear through conversational questions, curated recommendations, and explainable suggestions.",
-    href: "/work/sound-seeker",
-    tags: ["PROTOTYPE", "AI COPILOT", "GEAR DISCOVERY"],
-    media: {
-      src: "/images/synth-hero.svg",
-      width: 1200,
-      height: 675,
-      alt: "Generative audio interface with colorful dials and waveform plots."
-    },
-    chips: ["Conversational gear discovery"]
-  },
-  {
-    slug: "jira-product-discovery",
-    title: "Jira Product Discovery adoption",
-    description:
-      "Unified prioritization and portfolio planning in Jira Product Discovery, turning quarterly wishlists into an ongoing partnership across product, business, and technology.",
-    href: "/case-studies/jira-product-discovery",
-    tags: ["Product Operations", "Strategic Alignment", "Jira Product Discovery"],
-    media: {
-      src: "/images/jpd-hero.svg",
-      width: 1200,
-      height: 675,
-      alt: "Jira Product Discovery boards highlighting prioritization and alignment workflows."
-    },
-    chips: ["RICE scoring at scale", "8-week onboarding program"]
-  },
-  {
     slug: "checkout-redesign",
+    featuredFor: ["senior-product-manager"],
     title: "Checkout transformation for a multi-brand retailer",
     description:
-      "Led a cross-functional program to redesign checkout across a multi-brand retailer, cutting checkout time in half and improving conversion through experimentation and UX improvements.",
+      "Reworked the checkout experience end to end to improve clarity, reduce completion time, and deliver measurable growth through experimentation.",
     href: "/work/checkout-redesign",
-    tags: ["E-COMMERCE", "CHECKOUT", "CONVERSION"],
+    tags: ["Commerce", "Experimentation", "Customer Experience"],
     media: {
       src: "/images/checkout-hero.svg",
       width: 1200,
       height: 675,
-      alt: "Mockups of a streamlined checkout interface with highlighted funnel metrics."
+      alt: "Mockups of a streamlined checkout interface with highlighted funnel metrics.",
     },
     chips: [
-      "50% faster checkout flow",
-      "3% lift in conversion (~$16M/yr)",
-      "Multi-brand rollout"
-    ]
-  }
+      "~$16M annualized impact",
+      "~3.5% conversion lift",
+      "50% faster checkout",
+    ],
+    bestFor: "Senior Product Manager",
+  },
+  {
+    slug: "chatgpt-contact-center",
+    featuredFor: ["senior-product-manager", "builder-pm"],
+    title: "Contact Center ChatGPT pilot",
+    description:
+      "Designed a controlled AI pilot for the contact center, proving business value while shaping repeatable workflows and enterprise guardrails.",
+    href: "/products/chatgpt-contact-center",
+    tags: ["AI Workflow", "Contact Center", "Experimentation"],
+    media: {
+      src: "/images/chatgpt-contact-hero.svg",
+      width: 1200,
+      height: 675,
+      alt: "Contact center workspace with AI copilot summaries and pilot metrics.",
+    },
+    chips: [
+      "~$2.7M estimated annual lift",
+      "Controlled pilot design",
+      "Custom GPT workflows",
+    ],
+    bestFor: "Senior Product Manager and Builder PM",
+  },
+  {
+    slug: "chatgpt-org-scale",
+    featuredFor: ["senior-product-manager", "product-leader"],
+    title: "Scaling ChatGPT across the organization",
+    description:
+      "Scaled ChatGPT Enterprise with champions, enablement, and governance so AI adoption could move from isolated pilots to durable capability.",
+    href: "/products/chatgpt-org-scale",
+    tags: ["AI Rollout", "Governance", "Enablement"],
+    media: {
+      src: "/images/chatgpt-org-hero.svg",
+      width: 1200,
+      height: 675,
+      alt: "AI rollout illustration with enablement, governance, and adoption callouts.",
+    },
+    chips: [
+      "~1,000 licensed users",
+      "~800 daily active users",
+      "AI COE groundwork",
+    ],
+    bestFor: "Senior Product Manager and Product Leader",
+  },
+  {
+    slug: "jira-product-discovery",
+    featuredFor: ["product-leader"],
+    title: "Jira Product Discovery adoption",
+    description:
+      "Built the shared prioritization and onboarding system that gave PMs and partners a clearer operating rhythm.",
+    href: "/case-studies/jira-product-discovery",
+    tags: ["Product Ops", "Operating Model", "Enablement"],
+    media: {
+      src: "/images/jpd-hero.svg",
+      width: 1200,
+      height: 675,
+      alt: "Jira Product Discovery boards highlighting prioritization and planning workflows.",
+    },
+    chips: ["9 PMs adopted", "8-week onboarding", "Shared prioritization"],
+    bestFor: "Product Leader",
+  },
+  {
+    slug: "sound-seeker",
+    featuredFor: ["builder-pm"],
+    title: "Sound Seeker",
+    description:
+      "A hackathon-winning AI concept rebuilt as an independent prototype to demonstrate PM-led exploration, rapid prototyping, and frontier product instincts.",
+    href: "/work/sound-seeker",
+    tags: ["Prototype", "AI Product", "Music"],
+    media: {
+      src: "/images/synth-hero.svg",
+      width: 1200,
+      height: 675,
+      alt: "Generative audio interface with waveform plots and colorful controls.",
+    },
+    chips: [
+      "Hackathon-winning concept",
+      "Rapid PM-led prototype",
+      "Independent public demo",
+    ],
+    bestFor: "Builder PM",
+  },
+  {
+    slug: "immiatrics",
+    featuredFor: ["builder-pm"],
+    title: "Immiatrics",
+    description:
+      "Emerging AI + science work focused on how product systems and applied AI can support scientific discovery in immunology research.",
+    tags: ["Emerging Work", "AI + Science", "Frontier AI"],
+    media: {
+      src: "/images/chatgpt-org-hero.svg",
+      width: 1200,
+      height: 675,
+      alt: "Abstract research-inspired visualization representing AI systems in a scientific context.",
+    },
+    status: "Emerging work",
+    chips: [
+      "AI + science",
+      "Frontier applied AI",
+      "Modest, early-stage exploration",
+    ],
+    bestFor: "Builder PM",
+  },
 ];
-

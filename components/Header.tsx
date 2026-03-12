@@ -7,11 +7,11 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const navLinks = [
-  { href: "/work", label: "Case Studies" },
-  { href: "/sound-seeker", label: "Sound Seeker" },
-  { href: "/music", label: "Music" },
+  { href: "/work", label: "Work" },
+  { href: "/resume", label: "Resume" },
   { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" }
+  { href: "/contact", label: "Contact" },
+  { href: "/music", label: "Music" },
 ];
 
 const desktopLinkClasses =
@@ -64,7 +64,10 @@ export const Header = (): JSX.Element => {
         >
           Daniel Nash
         </Link>
-        <nav className="hidden items-center gap-3 md:flex" aria-label="Primary navigation">
+        <nav
+          className="hidden items-center gap-3 md:flex"
+          aria-label="Primary navigation"
+        >
           {navLinks.map((link) => {
             const isActive =
               link.href === "/"
@@ -78,7 +81,7 @@ export const Header = (): JSX.Element => {
                   desktopLinkClasses,
                   isActive
                     ? "font-semibold text-[#2C4F52] after:scale-x-100"
-                    : "font-medium text-[#2C4F52]/90 hover:text-[#2C4F52]"
+                    : "font-medium text-[#2C4F52]/90 hover:text-[#2C4F52]",
                 )}
                 aria-current={isActive ? "page" : undefined}
               >
@@ -95,7 +98,11 @@ export const Header = (): JSX.Element => {
           aria-expanded={mobileOpen}
           aria-controls="mobile-primary-nav"
         >
-          {mobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+          {mobileOpen ? (
+            <X className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          )}
         </button>
       </div>
       <nav
@@ -103,7 +110,7 @@ export const Header = (): JSX.Element => {
         aria-label="Mobile primary navigation"
         className={clsx(
           "border-t border-[#3A3D40]/10 bg-[#F2E3D5] px-4 py-4 shadow-sm transition md:hidden",
-          mobileOpen ? "block" : "hidden"
+          mobileOpen ? "block" : "hidden",
         )}
       >
         <ul className="flex flex-col gap-2">
@@ -121,7 +128,7 @@ export const Header = (): JSX.Element => {
                     mobileLinkClasses,
                     isActive
                       ? "bg-[#2C4F52] font-semibold text-[#F2E3D5]"
-                      : "bg-transparent font-medium text-[#2C4F52] hover:bg-[#2C4F52]/10"
+                      : "bg-transparent font-medium text-[#2C4F52] hover:bg-[#2C4F52]/10",
                   )}
                   aria-current={isActive ? "page" : undefined}
                 >

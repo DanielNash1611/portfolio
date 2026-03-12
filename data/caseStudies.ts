@@ -12,14 +12,23 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     slug: "checkout-velocity",
     title: "Checkout flow optimization",
-    summary: "Reduced friction through UX & A/B testing.",
+    summary:
+      "Reduced friction through UX redesign and A/B testing, improving conversion and completion speed.",
     headlineMetrics: [
-      { label: "conversion", value: "+3%" },
+      { label: "conversion", value: "~3.5%" },
       { label: "checkout time", value: "50% faster" },
     ],
     measuredMetrics: [
-      { label: "Conversion", value: "+3%", context: "A/B tested, 95%+ confidence" },
-      { label: "Completion time", value: "50% faster", context: "Median time vs. baseline" },
+      {
+        label: "Conversion",
+        value: "~3.5%",
+        context: "A/B tested lift from the redesigned checkout flow",
+      },
+      {
+        label: "Completion time",
+        value: "50% faster",
+        context: "Median time vs. baseline",
+      },
     ],
     body: `
 ## Checkout transformation
@@ -35,10 +44,15 @@ The redesigned flow removed ambiguous copy and surfaced dynamic AI-generated sup
   {
     slug: "contact-center-ai",
     title: "Contact Center ChatGPT pilot",
-    summary: "Launched a six-month ChatGPT Enterprise pilot with a matched control group to quantify agent copilot impact.",
-    headlineMetrics: [{ label: "annualized impact", value: "$2.7M+" }],
+    summary:
+      "Launched a six-month ChatGPT Enterprise pilot with a matched control group to quantify agent copilot impact.",
+    headlineMetrics: [{ label: "annualized impact", value: "~$2.7M" }],
     measuredMetrics: [
-      { label: "Annualized revenue influence", value: "$2.7M+", context: "Pilot cohort extrapolated over 12 months" },
+      {
+        label: "Annualized revenue influence",
+        value: "~$2.7M",
+        context: "Pilot cohort extrapolated over 12 months",
+      },
     ],
     body: `
 ## Scaling AI pilot impact
@@ -55,7 +69,8 @@ Measured outcomes demonstrate the upside of expanding generative AI assistance i
   {
     slug: "jira-product-discovery",
     title: "Jira Product Discovery adoption",
-    summary: "Standardized prioritization and planning in Jira Product Discovery to align product, business, and technology partners.",
+    summary:
+      "Standardized prioritization and planning in Jira Product Discovery to align product, business, and technology partners.",
     headlineMetrics: [
       { label: "org adoption", value: "9 PMs" },
       { label: "onboarding", value: "8 weeks" },
@@ -65,10 +80,11 @@ Measured outcomes demonstrate the upside of expanding generative AI assistance i
   {
     slug: "chatgpt-org-scale",
     title: "Scaling ChatGPT across the organization",
-    summary: "Expanded ChatGPT Enterprise access, launched ChatGPT Champions, and established AI COE guardrails.",
+    summary:
+      "Expanded ChatGPT Enterprise access, launched ChatGPT Champions, and established AI COE guardrails.",
     headlineMetrics: [
-      { label: "hq licenses", value: "Hundreds+" },
-      { label: "contact center", value: "~350 agents" },
+      { label: "licensed users", value: "~1,000" },
+      { label: "daily active users", value: "~800" },
     ],
     href: "/products/chatgpt-org-scale",
   },

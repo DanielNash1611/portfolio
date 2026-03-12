@@ -12,8 +12,8 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
     show: {
       opacity: 1,
       y: 0,
-      transition: { duration: reduce ? 0 : 0.35, ease: "easeOut" }
-    }
+      transition: { duration: reduce ? 0 : 0.35, ease: "easeOut" },
+    },
   };
 
   return (
@@ -31,21 +31,27 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
             id="about-inline-title"
             className="text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl"
           >
-            The person behind the outcomes
+            Product-first, with a creative edge
           </h2>
           <p className="mt-3 max-w-prose text-slate-700">
-            I build AI-powered products and scalable frameworks that drive measurable impact across
-            organizations - from a $2.7 M annual lift in Contact Center AI pilots and a 3% conversion gain
-            (~$16 M / yr) in e-commerce to company-wide enablement initiatives in AI strategy and Product
-            Management excellence through Jira Product Discovery.
+            I am a Senior Product Manager with experience across ecommerce,
+            contact center, platforms, and AI strategy. I ramp quickly, build
+            trust across functions, and stay close to the details that turn
+            product strategy into shipped outcomes.
+          </p>
+          <p className="mt-3 max-w-prose text-slate-700">
+            Music still matters to how I work. Composition sharpens systems
+            thinking, pattern recognition, storytelling, and empathy, so it
+            remains part of the portfolio as a differentiator rather than the
+            headline.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <a
-              href="/case-studies"
+              href="/about"
               className="inline-flex items-center rounded-full bg-[#2C4F52] px-5 py-2.5 text-white shadow transition hover:opacity-95 focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-              aria-label="Explore case studies"
+              aria-label="Read more about Daniel Nash"
             >
-              Explore case studies
+              Read the full story
             </a>
             <a
               href="/music"
@@ -73,7 +79,7 @@ export default function AboutInline({ portraitSrc }: Props): JSX.Element {
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/10" />
             <p className="absolute bottom-3 left-3 rounded-full bg-white/75 px-3 py-1 text-xs text-slate-700 shadow ring-1 ring-slate-200">
-              Composer / Product Leader / AI Advocate
+              Senior Product Manager / Composer
             </p>
           </div>
         </div>

@@ -10,7 +10,7 @@ const defaultOgImage = {
   url: "/og-default.svg",
   width: 1200,
   height: 630,
-  alt: "Abstract gradient in brand palette for Daniel Nash"
+  alt: "Abstract gradient in brand palette for Daniel Nash",
 };
 
 const heroPortrait =
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://danielnash.com"),
   title: {
     template: "%s — Daniel Nash",
-    default: "Daniel Nash — Senior AI Product Manager & Composer"
+    default: "Daniel Nash | Senior Product Manager",
   },
   description:
-    "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
+    "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy.",
   openGraph: {
-    title: "Daniel Nash — Senior AI Product Manager & Composer",
+    title: "Daniel Nash | Senior Product Manager",
     description:
-      "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
+      "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy.",
     url: "https://danielnash.com",
     siteName: "Daniel Nash",
     images: [
@@ -40,24 +40,24 @@ export const metadata: Metadata = {
             width: heroPortrait.width,
             height: heroPortrait.height,
             alt: heroPortrait.alt,
-            type: "image/jpeg"
+            type: "image/jpeg",
           }
-        : defaultOgImage
+        : defaultOgImage,
     ],
     locale: "en_US",
-    type: "website"
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daniel Nash — Senior AI Product Manager & Composer",
+    title: "Daniel Nash | Senior Product Manager",
     description:
-      "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
-    images: [heroImagePath]
-  }
+      "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy.",
+    images: [heroImagePath],
+  },
 };
 
 export default function RootLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {

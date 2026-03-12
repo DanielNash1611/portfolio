@@ -47,14 +47,15 @@ This structure is a guideline, not a hard rule. Adapt or omit sections when they
 
 export const runtime = "nodejs";
 
-const client = new OpenAI();
-
 export async function POST(req: Request) {
   try {
     const { prompt } = await req.json();
 
     if (typeof prompt !== "string" || prompt.trim().length === 0) {
-      return NextResponse.json({ error: "Missing or invalid prompt." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing or invalid prompt." },
+        { status: 400 },
+      );
     }
 
     const apiKey = process.env.OPENAI_API_KEY;
@@ -63,8 +64,13 @@ export async function POST(req: Request) {
 
     if (!apiKey) {
       console.error("Sound Seeker API missing configuration values.");
-      return NextResponse.json({ error: "Server misconfiguration: missing API key." }, { status: 500 });
+      return NextResponse.json(
+        { error: "Server misconfiguration: missing API key." },
+        { status: 500 },
+      );
     }
+
+    const client = new OpenAI({ apiKey });
 
     const response = await client.responses.create({
       model,
@@ -105,12 +111,18 @@ export async function POST(req: Request) {
 
     if (!text) {
       console.error("Sound Seeker response missing text payload.", response);
-      return NextResponse.json({ error: "No recommendations returned from the model." }, { status: 502 });
+      return NextResponse.json(
+        { error: "No recommendations returned from the model." },
+        { status: 502 },
+      );
     }
 
     return NextResponse.json({ result: text });
   } catch (error) {
     console.error("Sound Seeker route failed:", error);
-    return NextResponse.json({ error: "Unexpected server error." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Unexpected server error." },
+      { status: 500 },
+    );
   }
 }

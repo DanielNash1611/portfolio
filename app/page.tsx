@@ -7,6 +7,8 @@ import HomeHero from "@/sections/HomeHero";
 import ImpactAtScale from "@/components/ImpactAtScale";
 import NarrativeBridge from "@/sections/NarrativeBridge";
 import HomeTestimonials from "@/sections/HomeTestimonials";
+import ResumeAccess from "@/sections/ResumeAccess";
+import WhatIBuild from "@/sections/WhatIBuild";
 import { siteOrigin } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -16,20 +18,22 @@ const defaultOgImage = {
   url: "/og-default.svg",
   width: 1200,
   height: 630,
-  alt: "Abstract gradient in brand palette for Daniel Nash"
+  alt: "Abstract gradient in brand palette for Daniel Nash",
 };
 const heroImagePath = heroPortrait
   ? `/portraits/${heroPortrait.file}`
   : defaultOgImage.url;
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: {
+    absolute: "Daniel Nash | Senior Product Manager",
+  },
   description:
-    "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
+    "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy, with clear resume paths for Senior PM, Builder PM, and Product Leader roles.",
   openGraph: {
-    title: "Daniel Nash — Senior AI Product Manager & Composer",
+    title: "Daniel Nash | Senior Product Manager",
     description:
-      "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
+      "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy, with clear resume paths for Senior PM, Builder PM, and Product Leader roles.",
     images: heroPortrait
       ? [
           {
@@ -37,17 +41,17 @@ export const metadata: Metadata = {
             width: heroPortrait.width,
             height: heroPortrait.height,
             alt: heroPortrait.alt,
-            type: "image/jpeg"
-          }
+            type: "image/jpeg",
+          },
         ]
-      : [defaultOgImage]
+      : [defaultOgImage],
   },
   twitter: {
-    title: "Daniel Nash — Senior AI Product Manager & Composer",
+    title: "Daniel Nash | Senior Product Manager",
     description:
-      "AI product leader and composer building high-performing user journeys, experimentation programs, and music tech.",
-    images: [heroImagePath]
-  }
+      "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy, with clear resume paths for Senior PM, Builder PM, and Product Leader roles.",
+    images: [heroImagePath],
+  },
 };
 
 export default function HomePage(): JSX.Element {
@@ -58,10 +62,10 @@ export default function HomePage(): JSX.Element {
     image: [
       `${siteOrigin}/portraits/hero_square.avif`,
       `${siteOrigin}/portraits/hero_square.webp`,
-      `${siteOrigin}${heroImagePath}`
+      `${siteOrigin}${heroImagePath}`,
     ],
     url: siteOrigin,
-    jobTitle: "Senior AI Product Manager & Composer"
+    jobTitle: "Senior Product Manager",
   };
 
   return (
@@ -70,10 +74,12 @@ export default function HomePage(): JSX.Element {
         {JSON.stringify(heroJsonLd)}
       </Script>
       <HomeHero />
+      <WhatIBuild />
       <ImpactAtScale />
-      <AboutInline portraitSrc="/portraits/hero_square_photo.jpg" />
-      <FeaturedWork />
       <NarrativeBridge />
+      <FeaturedWork />
+      <ResumeAccess />
+      <AboutInline portraitSrc="/portraits/hero_square_photo.jpg" />
       <HomeTestimonials />
     </div>
   );
