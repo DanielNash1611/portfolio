@@ -3,7 +3,7 @@ import MotionDiv from "@/components/MotionDiv";
 export const metadata = {
   title: "Music | Daniel Nash",
   description:
-    "Selected music by Daniel Nash at the intersection of classical training, electronic texture, and rhythm."
+    "Selected music by Daniel Nash at the intersection of classical training, electronic texture, and rhythm.",
 };
 
 export default function MusicPage() {
@@ -71,9 +71,9 @@ export default function MusicPage() {
           loading="lazy"
         />
         <p className="text-sm text-slate-200/90">
-          Named after the spirits said to dwell within trees, <em>Kodama</em> drifts
-          between acoustic resonance and digital breath. It’s a meditation on
-          stillness—the sound of something alive but unseen.
+          Named after the spirits said to dwell within trees, <em>Kodama</em>{" "}
+          drifts between acoustic resonance and digital breath. It’s a
+          meditation on stillness—the sound of something alive but unseen.
         </p>
       </section>
 
@@ -112,8 +112,8 @@ export default function MusicPage() {
         />
         <p className="text-sm text-slate-200/90">
           A performance work for solo marimbist and projected video. The
-          pre-recorded track reverses over time so the live performer eventually plays{" "}
-          <em>with themself in reverse</em>—a dialogue between memory and
+          pre-recorded track reverses over time so the live performer eventually
+          plays <em>with themself in reverse</em>—a dialogue between memory and
           immediacy.
         </p>
       </section>

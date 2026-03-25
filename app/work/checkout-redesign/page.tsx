@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: frontmatter.title,
     description:
       frontmatter.summary ||
-      "Checkout redesign that accelerated transactions and drove conversion lift."
+      "Checkout redesign that accelerated transactions and drove conversion lift.",
   };
 }
 

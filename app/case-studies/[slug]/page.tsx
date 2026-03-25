@@ -1,7 +1,11 @@
 import { CASE_STUDIES } from "@/data/caseStudies";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
-export default function CaseStudyPage({ params }: { params: { slug: string } }) {
+export default function CaseStudyPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const cs = CASE_STUDIES.find((c) => c.slug === params.slug);
   if (!cs) return null;
 

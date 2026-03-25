@@ -1,58 +1,54 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
+import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import MainContainer from "@/components/MainContainer";
 import SEOReviews from "@/components/SEOReviews";
-import portraits from "@/public/portraits/metadata.json";
+import SiteFooter from "@/components/site/SiteFooter";
+import SiteHeader from "@/components/site/SiteHeader";
 
-const defaultOgImage = {
-  url: "/og-default.svg",
-  width: 1200,
-  height: 630,
-  alt: "Abstract gradient in brand palette for Daniel Nash",
-};
+const sans = Manrope({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
-const heroPortrait =
-  portraits.find((entry) => entry.roles.includes("hero")) ?? null;
-const heroImagePath = heroPortrait
-  ? `/portraits/${heroPortrait.file}`
-  : defaultOgImage.url;
+const serif = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://danielnash.com"),
   title: {
-    template: "%s — Daniel Nash",
-    default: "Daniel Nash | Senior Product Manager",
+    default: "Daniel Nash | AI Systems Product Leader",
+    template: "%s | Daniel Nash",
   },
   description:
-    "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy.",
+    "Portfolio for Daniel Nash, an AI Systems Product Leader / Senior Product Manager focused on turning emerging AI capabilities into production-ready products.",
   openGraph: {
-    title: "Daniel Nash | Senior Product Manager",
+    title: "Daniel Nash | AI Systems Product Leader",
     description:
-      "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy.",
+      "Portfolio for Daniel Nash, an AI Systems Product Leader / Senior Product Manager focused on turning emerging AI capabilities into production-ready products.",
     url: "https://danielnash.com",
     siteName: "Daniel Nash",
     images: [
-      heroPortrait
-        ? {
-            url: heroImagePath,
-            width: heroPortrait.width,
-            height: heroPortrait.height,
-            alt: heroPortrait.alt,
-            type: "image/jpeg",
-          }
-        : defaultOgImage,
+      {
+        url: "/og-default.svg",
+        width: 1200,
+        height: 630,
+        alt: "Abstract gradient in Daniel Nash portfolio brand palette.",
+      },
     ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daniel Nash | Senior Product Manager",
+    title: "Daniel Nash | AI Systems Product Leader",
     description:
-      "Senior Product Manager with experience across ecommerce, contact center, platforms, and AI strategy.",
-    images: [heroImagePath],
+      "Portfolio for Daniel Nash, an AI Systems Product Leader / Senior Product Manager focused on turning emerging AI capabilities into production-ready products.",
+    images: ["/og-default.svg"],
   },
 };
 
@@ -60,14 +56,14 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}): JSX.Element {
   return (
-    <html lang="en">
-      <body className="antialiased bg-brand-gradient text-brand-slate">
+    <html lang="en" className={`${sans.variable} ${serif.variable}`}>
+      <body>
         <SEOReviews />
-        <Header />
+        <SiteHeader />
         <MainContainer>{children}</MainContainer>
-        <Footer />
+        <SiteFooter />
       </body>
     </html>
   );

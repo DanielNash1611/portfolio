@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     if (!name || !email || !message) {
       return NextResponse.json(
         { ok: false, error: "Missing required fields." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     console.error("[contact:error]", error);
     return NextResponse.json(
       { ok: false, error: "Unable to process request." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

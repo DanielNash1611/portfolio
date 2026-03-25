@@ -11,8 +11,18 @@ export default function Head(): JSX.Element | null {
 
   return (
     <>
-      <link rel="preload" as="image" href={`${basePath}.avif`} type="image/avif" />
-      <link rel="preload" as="image" href={`${basePath}.webp`} type="image/webp" />
+      <link
+        rel="preload"
+        as="image"
+        href={`${basePath}.avif`}
+        type="image/avif"
+      />
+      <link
+        rel="preload"
+        as="image"
+        href={`${basePath}.webp`}
+        type="image/webp"
+      />
     </>
   );
 }

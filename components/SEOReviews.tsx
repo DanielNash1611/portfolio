@@ -1,56 +1,37 @@
-import { testimonials } from "@/data/testimonials";
+import { getRenderableTestimonials, siteConfig } from "@/content/portfolio";
 
 const itemReviewed = {
   "@type": "Person",
-  name: "Daniel Nash",
-  jobTitle: "Senior AI Product Manager & Composer",
+  name: siteConfig.name,
+  jobTitle: siteConfig.title,
   url: "https://danielnash.com",
 };
 
-const toIsoDate = (date: string): string => {
-  const parsed = new Date(date);
-  if (Number.isNaN(parsed.getTime())) {
-    return date;
-  }
-  return parsed.toISOString().split("T")[0];
-};
-
-const reviews = testimonials.map((testimonial) => {
-  const avatar =
-    testimonial.avatarUrl ??
-    (testimonial.profileUrl && testimonial.profileUrl.includes("linkedin")
-      ? `https://unavatar.io/${encodeURIComponent(testimonial.profileUrl)}`
-      : undefined);
-
-  return {
-    "@type": "Review",
-    name: testimonial.short,
-    reviewBody: testimonial.medium,
-    author: {
-      "@type": "Person",
-      name: testimonial.name,
-      jobTitle: testimonial.title,
-      ...(testimonial.profileUrl ? { sameAs: [testimonial.profileUrl] } : {}),
-    },
-    publisher: {
-      "@type": "Organization",
-      name:
-        testimonial.source === "LinkedIn"
-          ? "LinkedIn"
-          : "Personal site (direct testimonial)",
-    },
-    itemReviewed,
-    ...(testimonial.date ? { datePublished: toIsoDate(testimonial.date) } : {}),
-    ...(avatar ? { image: avatar } : {}),
-  };
-});
+const reviews = getRenderableTestimonials().map((testimonial) => ({
+  "@type": "Review",
+  name: testimonial.quote,
+  reviewBody: testimonial.context ?? testimonial.quote,
+  author: {
+    "@type": "Person",
+    name: testimonial.name,
+    jobTitle: testimonial.title,
+  },
+  publisher: {
+    "@type": "Organization",
+    name:
+      testimonial.source === "LinkedIn"
+        ? "LinkedIn"
+        : "Personal site (direct testimonial)",
+  },
+  itemReviewed,
+}));
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": reviews,
 };
 
-const SEOReviews = (): JSX.Element => {
+export default function SEOReviews(): JSX.Element {
   return (
     <script
       type="application/ld+json"
@@ -58,6 +39,4 @@ const SEOReviews = (): JSX.Element => {
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
   );
-};
-
-export default SEOReviews;
+}

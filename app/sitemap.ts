@@ -1,5 +1,10 @@
 import type { MetadataRoute } from "next";
-import { cases } from "@/data/cases";
+import {
+  creativeEntries,
+  productEntries,
+  thinkingEntries,
+  workEntries,
+} from "@/content/portfolio";
 
 const baseUrl = "https://danielnash.com";
 
@@ -7,22 +12,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
     "/work",
-    "/music",
+    "/products",
+    "/thinking",
+    "/creative",
     "/about",
-    "/contact"
+    "/resume",
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
-    priority: 0.8
+    priority: route === "" ? 1 : 0.8,
   }));
 
-  const caseRoutes = cases.map((item) => ({
-    url: `${baseUrl}/work/${item.slug}`,
+  const contentRoutes = [
+    ...workEntries.map((entry) => entry.href),
+    ...productEntries.map((entry) => entry.href),
+    ...thinkingEntries.map((entry) => entry.href),
+    ...creativeEntries.map((entry) => entry.href),
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
-    priority: 0.7
+    priority: 0.7,
   }));
 
-  return [...staticRoutes, ...caseRoutes];
+  return [...staticRoutes, ...contentRoutes];
 }

@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: frontmatter.title,
     description:
       frontmatter.summary ||
-      "Standardized prioritization and planning in Jira Product Discovery, turning quarterly wishlists into a continuous partnership between product, business, and technology."
+      "Standardized prioritization and planning in Jira Product Discovery, turning quarterly wishlists into a continuous partnership between product, business, and technology.",
   };
 }
 

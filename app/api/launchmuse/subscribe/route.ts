@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
 
-const emailPattern =
-  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const allowedRoles = new Set(["Artist", "Manager", "Label", "Other"]);
 
@@ -14,7 +13,7 @@ export async function POST(request: NextRequest) {
   if (!token || !formId || !siteBaseUrl) {
     return NextResponse.json(
       { ok: false, error: "Server configuration error." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -31,7 +30,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { ok: false, error: "Invalid JSON payload." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -44,29 +43,26 @@ export async function POST(request: NextRequest) {
   if (!email || !emailPattern.test(email)) {
     return NextResponse.json(
       { ok: false, error: "A valid email is required." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (company.length > 0) {
     return NextResponse.json(
       { ok: false, error: "Submission rejected." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (role && !allowedRoles.has(role)) {
     return NextResponse.json(
       { ok: false, error: "Invalid role selection." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   const hutk = cookies().get("hubspotutk")?.value;
-  const forwardedFor = headers()
-    .get("x-forwarded-for")
-    ?.split(",")[0]
-    ?.trim();
+  const forwardedFor = headers().get("x-forwarded-for")?.split(",")[0]?.trim();
   const ipAddress = forwardedFor || request.ip || undefined;
 
   const hubspotPayload: Record<string, unknown> = {
@@ -77,15 +73,15 @@ export async function POST(request: NextRequest) {
       ...(role ? [{ name: "lm_role", value: role }] : []),
       {
         name: "consent_to_communicate",
-        value: consent ? "true" : "false"
-      }
+        value: consent ? "true" : "false",
+      },
     ],
     context: {
       hutk,
       pageUri: `${siteBaseUrl.replace(/\/$/, "")}/products/launchmuse`,
       pageName: "LaunchMuse – Early Access",
-      ipAddress
-    }
+      ipAddress,
+    },
   };
 
   try {
@@ -95,10 +91,10 @@ export async function POST(request: NextRequest) {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(hubspotPayload)
-      }
+        body: JSON.stringify(hubspotPayload),
+      },
     );
 
     if (!hubspotResponse.ok) {
@@ -112,7 +108,7 @@ export async function POST(request: NextRequest) {
       }
       return NextResponse.json(
         { ok: false, error: errorMessage },
-        { status: hubspotResponse.status }
+        { status: hubspotResponse.status },
       );
     }
 
@@ -121,7 +117,7 @@ export async function POST(request: NextRequest) {
     console.error("[launchmuse:subscribe]", error);
     return NextResponse.json(
       { ok: false, error: "Unable to submit to HubSpot." },
-      { status: 502 }
+      { status: 502 },
     );
   }
 }

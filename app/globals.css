@@ -4,6 +4,13 @@
 
 :root {
   color-scheme: light;
+  --color-teal: #2c4f52;
+  --color-orange: #d17a5f;
+  --color-tan: #dbbf96;
+  --color-cream: #f2e3d5;
+  --color-background: #f7f5f2;
+  --color-background-soft: #f6f1ec;
+  --color-slate: #3a3d40;
 }
 
 html {
@@ -11,17 +18,35 @@ html {
 }
 
 body {
-  @apply font-sans text-brand-slate bg-brand-cream;
   min-height: 100vh;
-  background-image:
-    linear-gradient(160deg, #f2e3d5 0%, #dbbf96 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
-  background-size: cover, 200px 200px;
-  background-attachment: fixed;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: var(--color-slate);
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(44, 79, 82, 0.04),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at right 20%,
+      rgba(44, 79, 82, 0.025),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(209, 122, 95, 0.03),
+      transparent 26%
+    ),
+    linear-gradient(
+      180deg,
+      #faf9f7 0%,
+      var(--color-background) 42%,
+      var(--color-background-soft) 100%
+    );
 }
 
 * {
-  border-color: theme("colors.brand.slate");
+  border-color: rgba(58, 61, 64, 0.16);
 }
 
 a {
@@ -29,29 +54,22 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
+::selection {
+  background: rgba(209, 122, 95, 0.22);
+  color: var(--color-slate);
 }
 
 :focus-visible {
-  outline: 2px solid theme("colors.brand.orange");
+  outline: 2px solid var(--color-orange);
   outline-offset: 3px;
 }
 
 @layer base {
   h1,
-  h2 {
-    @apply font-serif text-brand-teal tracking-tight;
-  }
-
+  h2,
   h3,
   h4 {
-    @apply font-semibold;
-  }
-
-  ::selection {
-    background-color: theme("colors.brand.orange");
-    color: white;
+    font-family: var(--font-serif), Georgia, serif;
   }
 }
 
@@ -60,66 +78,56 @@ a:hover {
     text-wrap: balance;
   }
 
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .text-safe {
+    overflow-wrap: anywhere;
+  }
+
+  .clamp-2 {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .clamp-3 {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .clamp-4 {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  .metric-value {
+    font-variant-numeric: tabular-nums;
+  }
+
   .skip-link {
     position: absolute;
     left: 1rem;
     top: 1rem;
-    z-index: 50;
+    z-index: 60;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
+    justify-content: center;
     border-radius: 9999px;
-    background-color: theme("colors.brand.teal");
-    color: theme("colors.brand.cream");
-    transform: translateY(-200%);
-    transition: transform 150ms ease, box-shadow 150ms ease;
+    background: var(--color-teal);
+    color: var(--color-cream);
+    padding: 0.8rem 1.2rem;
+    transform: translateY(-180%);
+    transition: transform 160ms ease;
   }
 
   .skip-link:focus-visible {
     transform: translateY(0);
-    box-shadow: 0 12px 24px rgba(44, 79, 82, 0.25);
   }
-}
-
-@keyframes tooltip-fade {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-tooltip-fade {
-  animation: tooltip-fade 160ms ease-out;
-}
-
-:root {
-  --impact-bg: #F2E3D5; /* Cream */
-}
-
-.testimonial-scroll::-webkit-scrollbar {
-  height: 8px;
-}
-
-.testimonial-scroll::-webkit-scrollbar-track {
-  background: #F2E3D5;
-  border-radius: 9999px;
-}
-
-.testimonial-scroll::-webkit-scrollbar-thumb {
-  background: #2C4F52;
-  border-radius: 9999px;
-}
-
-.testimonial-scroll::-webkit-scrollbar-thumb:hover {
-  background: #3A3D40;
-}
-
-.testimonial-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: #2C4F52 #F2E3D5;
 }

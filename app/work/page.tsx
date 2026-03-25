@@ -1,32 +1,37 @@
 import type { Metadata } from "next";
-import CaseGridFilter from "@/components/CaseGridFilter";
-import { cases } from "@/data/cases";
+import CaseStudyCard from "@/components/site/CaseStudyCard";
+import Container from "@/components/site/Container";
+import MotionReveal from "@/components/site/MotionReveal";
+import PageHero from "@/components/site/PageHero";
+import { workEntries } from "@/content/portfolio";
 
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Case studies and capability snapshots organized around Senior Product Manager, Builder PM, and Product Leader hiring narratives.",
+    "Selected case studies covering real-world AI systems, platform thinking, workflow modernization, and measurable business impact.",
 };
 
 export default function WorkPage(): JSX.Element {
   return (
-    <div className="container space-y-10 py-10">
-      <header className="space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-teal/70">
-          Portfolio
-        </p>
-        <h1 className="text-4xl font-semibold text-brand-teal">
-          Work organized for hiring intent
-        </h1>
-        <p className="max-w-2xl text-brand-slate/80">
-          This portfolio spans measurable business outcomes, systems and
-          platform thinking, customer experience transformation, AI-enabled
-          product development, and leadership through product practice. Use the
-          hiring-lens filters to focus on the version of my work most relevant
-          to the role.
-        </p>
-      </header>
-      <CaseGridFilter items={cases} />
-    </div>
+    <Container className="space-y-8 pt-6">
+      <PageHero
+        eyebrow="Work"
+        title="Case studies in turning AI capabilities into production-ready systems"
+        description="This work spans enterprise adoption, agent workflows, retrieval and system layers, workflow modernization, and measurable business impact. Each case study is structured to make the operating logic easy to scan."
+        metrics={[
+          { label: "Coverage", value: "AI + systems + operations" },
+          { label: "Style", value: "Strategic and hands-on" },
+          { label: "Signal", value: "Production reality, not demos" },
+        ]}
+      />
+
+      <div className="grid gap-6 xl:grid-cols-3">
+        {workEntries.map((entry, index) => (
+          <MotionReveal key={entry.slug} delay={index * 0.05}>
+            <CaseStudyCard entry={entry} />
+          </MotionReveal>
+        ))}
+      </div>
+    </Container>
   );
 }
