@@ -128,10 +128,10 @@ export const featuredWork: FeaturedWorkItem[] = [
       "Emerging AI + science work focused on how product systems and applied AI can support scientific discovery in immunology research.",
     tags: ["Emerging Work", "AI + Science", "Frontier AI"],
     media: {
-      src: "/images/chatgpt-org-hero.svg",
-      width: 1200,
-      height: 675,
-      alt: "Abstract research-inspired visualization representing AI systems in a scientific context.",
+      src: "/images/immunology-scout-screenshot.png",
+      width: 1536,
+      height: 1024,
+      alt: "Immunology Scout screenshot showing a scientific literature search and synthesis interface.",
     },
     status: "Emerging work",
     chips: [

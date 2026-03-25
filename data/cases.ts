@@ -161,7 +161,7 @@ export const cases: Case[] = [
     summary:
       "An AI-native MVP for release planning that demonstrates product incubation, prompt system design, and workflow prototyping in a creator context.",
     tags: ["Prototype", "AI Workflow", "Product Incubation"],
-    heroImage: "/images/launchmuse-hero.svg",
+    heroImage: "/images/launchmuse-screenshot.png",
     roleLens: ["builder-pm"],
     bestFor: "Builder PM",
     cardType: "Case Study",
@@ -198,7 +198,7 @@ export const cases: Case[] = [
     summary:
       "Emerging AI + science work exploring how product systems and AI can support scientific discovery in immunology research.",
     tags: ["Emerging Work", "AI + Science", "Frontier AI"],
-    heroImage: "/images/chatgpt-org-hero.svg",
+    heroImage: "/images/immunology-scout-screenshot.png",
     roleLens: ["builder-pm"],
     bestFor: "Builder PM",
     cardType: "Emerging Work",

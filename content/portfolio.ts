@@ -746,9 +746,9 @@ export const productEntries: ProductEntry[] = [
       "An AI-native product for release planning that helps artists turn a launch date into a structured six-week campaign.",
     description:
       "A live product story that demonstrates problem framing, AI-native workflow design, and rapid execution from product manager to shipped prototype.",
-    heroImage: "/images/launchmuse-hero.svg",
+    heroImage: "/images/launchmuse-screenshot.png",
     heroImageAlt:
-      "LaunchMuse hero visual representing music release planning and campaign orchestration.",
+      "LaunchMuse campaign wizard screenshot showing the product's release planning flow.",
     tags: ["AI-native MVP", "Creator Tools", "Workflow Design", "Music Tech"],
     featuredMetrics: [
       {
@@ -802,17 +802,11 @@ export const productEntries: ProductEntry[] = [
     ],
     visuals: [
       {
-        title: "LaunchMuse hero",
+        title: "LaunchMuse campaign wizard",
         description:
-          "Existing product art is already strong enough to anchor the page while future screenshots are added.",
-        image: "/images/launchmuse-hero.svg",
-        alt: "Illustration for LaunchMuse, an AI-assisted release planning product.",
-      },
-      {
-        title: "Product screenshot placeholder",
-        description:
-          "The page is structured to support real product screenshots, workflow captures, or a Loom later.",
-        todo: "TODO: Add 2-3 screenshots of the campaign generator or output timeline.",
+          "The live product flow shows how artists move from release context into a guided campaign planning workflow.",
+        image: "/images/launchmuse-screenshot.png",
+        alt: "LaunchMuse screenshot showing the campaign wizard description step.",
       },
     ],
     actions: [
@@ -839,9 +833,9 @@ export const productEntries: ProductEntry[] = [
       "An emerging AI product concept exploring how research teams can move faster from literature overload to useful hypotheses and next-step questions.",
     description:
       "A high-signal early-stage concept that shows how product thinking can translate frontier AI into scientific discovery workflows.",
-    heroImage: "/images/chatgpt-org-hero.svg",
+    heroImage: "/images/immunology-scout-screenshot.png",
     heroImageAlt:
-      "Abstract visualization representing AI-assisted scientific discovery and research synthesis.",
+      "Immunology Scout screenshot showing a literature scouting workflow for immunology research.",
     tags: ["AI + Science", "Research Workflow", "Emerging Product"],
     featuredMetrics: [
       {
@@ -897,10 +891,11 @@ export const productEntries: ProductEntry[] = [
     ],
     visuals: [
       {
-        title: "Research workflow placeholder",
+        title: "Immunology Scout retrieval workflow",
         description:
-          "The page is ready for a future storyboard, cited-results screenshot, or sanitized prototype flow.",
-        todo: "TODO: Add a public-safe artifact once the concept is mature enough to share.",
+          "The interface frames retrieval, synthesis, and scoped query inputs as a research workbench instead of a generic chatbot.",
+        image: "/images/immunology-scout-screenshot.png",
+        alt: "Immunology Scout interface showing a search-and-synthesis workflow.",
       },
     ],
     actions: [
