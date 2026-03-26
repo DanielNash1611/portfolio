@@ -5,7 +5,7 @@ const HomeHero = (): JSX.Element => {
     <section className="container pt-6 pb-4">
       <Hero
         kicker="Senior Product Manager"
-        title="Senior Product Manager building AI-enabled products, platforms, and customer experiences."
+        title="I build AI products that deliver meaningful impact"
         subtitle="I lead end-to-end product work across commerce, contact center, service operations, platforms, and AI strategy, turning ambiguity into clear roadmaps, measurable outcomes, and shipped products through strong cross-functional execution."
         impactLine="Selected proof: ~$16M checkout impact, ~$2.7M AI pilot lift, and ~1,000 licensed users / ~800 DAU."
         primaryCta={{

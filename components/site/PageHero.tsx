@@ -12,6 +12,8 @@ type PageHeroProps = {
   metrics?: Metric[];
   image?: string;
   imageAlt?: string;
+  imageClassName?: string;
+  imageExpandable?: boolean;
   compact?: boolean;
 };
 
@@ -24,6 +26,8 @@ export default function PageHero({
   metrics,
   image,
   imageAlt,
+  imageClassName,
+  imageExpandable,
   compact = false,
 }: PageHeroProps): JSX.Element {
   const actionClassName =
@@ -145,6 +149,9 @@ export default function PageHero({
             fallbackTitle={title}
             sizes="(min-width: 1024px) 380px, 100vw"
             className="min-h-[280px] rounded-[1.75rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/80"
+            imageClassName={clsx("object-cover", imageClassName)}
+            expandable={imageExpandable}
+            expandLabel={`Expand ${title} hero image`}
           >
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(247,245,242,0)_40%,rgba(58,61,64,0.18)_100%)]" />
           </MediaFrame>

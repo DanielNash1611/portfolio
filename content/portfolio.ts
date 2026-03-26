@@ -35,6 +35,14 @@ export type VisualAsset = {
   image?: string;
   alt?: string;
   todo?: string;
+  placement?: "execution" | "scale" | "sidebar";
+  imageFit?: "cover" | "contain";
+  expandable?: boolean;
+};
+
+export type ExecutionStep = {
+  title: string;
+  body: string;
 };
 
 export type TradeoffOption = {
@@ -56,16 +64,28 @@ export type WorkEntry = {
   heroImage: string;
   heroImageAlt: string;
   tags: string[];
+  heroMetricsPlacement?: "hero" | "snapshot";
+  heroDetails?: string[];
+  heroQuestions?: string[];
   featuredMetrics: Metric[];
+  overview?: string[];
   context: string[];
   problem: string[];
   strategicInsight: string[];
   optionsAndTradeoffs: TradeoffOption[];
-  execution: string[];
+  execution: Array<string | ExecutionStep>;
   impact: Metric[];
+  results?: string[];
+  scaledBeyondPilot?: string[];
   reflection: string[];
+  artifactSectionTitle?: string;
+  artifactSectionDescription?: string;
   visuals: VisualAsset[];
   testimonialIds: string[];
+  recommendationsTitle?: string;
+  recommendationsDescription?: string;
+  ctaTitle?: string;
+  ctaDescription?: string;
   featured?: boolean;
 };
 
@@ -79,6 +99,8 @@ export type ProductEntry = {
   description: string;
   heroImage: string;
   heroImageAlt: string;
+  heroImageClassName?: string;
+  heroImageExpandable?: boolean;
   tags: string[];
   featuredMetrics: Metric[];
   problem: string[];
@@ -166,9 +188,9 @@ export const siteConfig = {
 export const homeContent = {
   hero: {
     eyebrow: "AI Product Leadership",
-    title: "I turn emerging AI into product systems people actually adopt.",
+    title: "Building AI products that deliver meaningful impact",
     description:
-      "I work where product strategy, systems design, and hands-on building meet, turning new AI capability into workflows, platform patterns, and operating models teams can trust at scale.",
+      "I turn new AI capability into practical products, workflows, and use cases that teams use, trust, and scale.",
     primaryAction: {
       href: "/work",
       label: "Explore selected work",
@@ -365,23 +387,32 @@ export const workEntries: WorkEntry[] = [
     slug: "chatgpt-enterprise",
     href: "/work/chatgpt-enterprise",
     title: "ChatGPT Enterprise from pilot to operating model",
-    eyebrow: "Selected Work",
+    eyebrow: "Senior Product Manager, AI Platform Strategy",
     summary:
-      "Led enterprise AI from pilot to scale at Guitar Center, growing ChatGPT Enterprise from roughly ~150 users / ~40 DAU to ~1,000 users / ~800 DAU while building reusable workflows, governance, and cross-functional trust for production adoption.",
+      "I led ChatGPT Enterprise from a controlled pilot to scaled operating model at Guitar Center, proving measurable value in the contact center, then expanding adoption from roughly ~150 licensed users / ~40 DAU to ~1,000 users / ~800 DAU through workflow design, governance, enablement, and cross-functional trust.",
     description:
       "A recruiter-friendly story about taking AI from early promise into real production environments with measurable impact.",
     role: "Senior Product Manager, Contact Center & AI Strategy",
     company: "The Guitar Center Company",
-    timeframe: "2024-2025",
-    heroImage: "/images/chatgpt-contact-hero.svg",
+    timeframe: "2024-2026",
+    heroImage: "/images/chatgpt-enterprise/hero-operating-model.png",
     heroImageAlt:
-      "Illustration of an AI-assisted contact-center workflow with summary panels and pilot metrics.",
+      "Sanitized ChatGPT Enterprise hero visual showing the path from pilot to operating model with discovery, governance, pilot, scale, champions, OpenAI GTM partnership, and executive support.",
     tags: [
       "ChatGPT Enterprise",
       "AI Strategy",
       "Experimentation",
       "Workflow Design",
       "Change Leadership",
+    ],
+    heroMetricsPlacement: "snapshot",
+    heroDetails: [
+      "This was not a broad “roll out AI everywhere” initiative. It was a deliberately scoped product-led experiment inside a revenue-critical environment, designed to answer two questions:",
+      "The answer to both was yes.",
+    ],
+    heroQuestions: [
+      "Can AI improve frontline performance in a measurable way?",
+      "Can it be introduced in a way leadership will trust enough to scale?",
     ],
     featuredMetrics: [
       {
@@ -403,125 +434,183 @@ export const workEntries: WorkEntry[] = [
           "Daily usage grew because the rollout emphasized reusable workflows, training, and governance.",
       },
     ],
+    overview: [
+      "At the time, generative AI interest was rising across the company, but leadership needed more than enthusiasm. The bar was not novelty. The bar was a safe, measurable, credible implementation that could demonstrate business value without creating governance risk.",
+      "The contact center was the right proving ground. It had clear workflow friction, measurable business outcomes, and high enough operational visibility that results would matter. Agents were spending time on pre-call preparation, drafting, and context switching across systems. If AI could improve that environment in a controlled way, it could become the foundation for a broader operating model.",
+    ],
     context: [
-      "The contact center had clear workflow friction: agents spent time on pre-call preparation, email drafting, and context switching across systems.",
-      "Generative AI interest was growing, but leadership needed more than enthusiasm. The bar was a safe pilot with real business outcomes, not a novelty demo.",
-      "This work started inside a high-leverage operational environment, then became the proving ground for broader enterprise AI adoption.",
+      "This work started inside a high-leverage operational environment rather than as a centralized innovation exercise. The contact center had visible friction in day-to-day work: agents needed faster access to context, better support for on-brand communication, and less time lost to repetitive preparation and switching between tools. At the same time, any implementation had to preserve human judgment and respect governance boundaries.",
+      "Leadership also needed more than anecdotal success stories. For enterprise AI to become credible, it needed to show measurable improvement in both revenue and efficiency, not just excitement from early adopters. That requirement shaped the pilot from the beginning.",
     ],
     problem: [
-      "Without a controlled pilot, AI adoption risked becoming a mix of anecdotes, isolated power users, and unclear security practices.",
-      "Agents needed faster access to relevant context and on-brand communication support, but any workflow had to respect governance constraints and preserve human judgment.",
-      "Leadership needed evidence that AI could improve revenue and efficiency at the same time.",
+      "The real risk was not missing the AI wave. It was adopting it badly.",
+      "Without a controlled pilot, AI usage could have fragmented into isolated power users, inconsistent prompting behavior, weak governance practices, and no clear business case.",
+      "Meanwhile, agents still needed help with workflow friction that directly affected speed, quality, and commercial outcomes. Leadership needed evidence that AI could improve performance in a meaningful way while remaining safe and manageable to scale.",
     ],
     strategicInsight: [
-      "The winning move was not 'roll out ChatGPT everywhere.' It was to pick a workflow-rich environment where value could be measured, then design the pilot like a product experiment with guardrails.",
-      "That meant pairing frontline co-design with clear business metrics, a matched control group, and a practical operating model for safe usage.",
-      "Once the business case existed, scale became a product management problem: enablement, champions, rollout sequencing, and decision-quality guardrails.",
+      "The winning move was not broad access.",
+      "The better strategy was to start in an environment where workflow friction was high, outcomes were measurable, and human judgment still mattered. So instead of treating ChatGPT Enterprise like a generic productivity tool, I framed it as a product experiment inside a revenue-critical operating system.",
+      "That meant pairing frontline co-design with a matched control group, clearly defined business metrics, practical governance boundaries, and a rollout path that could evolve from pilot to broader adoption. Once the proof point existed, scale became a product management problem: enablement, champions, sequencing, and trust.",
     ],
     optionsAndTradeoffs: [
       {
         option: "Open broad access immediately",
         tradeoff:
-          "Fast adoption, but weak governance and low confidence in actual business impact.",
+          "Fastest path to raw adoption, but weak governance, low measurement confidence, and limited ability to distinguish real value from enthusiasm.",
       },
       {
-        option: "Treat AI as a long, centralized research effort",
+        option: "Treat AI as a long centralized research effort",
         tradeoff:
-          "Safe on paper, but too slow to build momentum or show value to operating teams.",
+          "Safer on paper, but too slow to create operating momentum and too detached from frontline workflow reality.",
       },
       {
         option:
           "Run a controlled pilot with measured outcomes, then scale with enablement and governance",
         tradeoff:
-          "More upfront design work, but the clearest path to trust, executive buy-in, and durable expansion.",
+          "This was the chosen path. It required more upfront design work, but it gave the company the clearest route to trust, executive buy-in, and durable expansion.",
         selected: true,
       },
     ],
     execution: [
-      "Partnered with supervisors and agents to identify the highest-friction jobs-to-be-done and translate them into purpose-built GPT workflows.",
-      "Worked across Legal, Security, Engineering, enterprise systems, and Operations to define acceptable data handling, review steps, and usage boundaries.",
-      "Designed measurement using a pilot cohort and matched control group with metrics centered on Revenue Per Call, Items Per Transaction, Average Order Value, and efficiency signals.",
-      "Created training assets, reusable prompting patterns, and a champions-style expansion model so the organization could scale from one team to many.",
-      "Socialized results in executive language: concrete business value, repeatable rollout patterns, and a clear case for broader ChatGPT Enterprise investment.",
+      {
+        title: "Identified the right workflow opportunities",
+        body: "I partnered with supervisors and frontline agents to identify the highest-friction jobs to be done, then translated those into purpose-built GPT-supported workflows. The goal was not general AI usage. It was targeted support in moments where time, clarity, and consistency mattered most.",
+      },
+      {
+        title: "Built trust through governance design",
+        body: "I worked across Legal, Security, Engineering, enterprise systems, and Operations to define acceptable data handling, review steps, and usage boundaries. This mattered because enterprise AI adoption only becomes real when the guardrails are practical enough for teams to use and credible enough for leadership to support.",
+      },
+      {
+        title: "Structured the pilot around measurable proof",
+        body: "The pilot was designed with a cohort and matched control group, using metrics centered on Revenue Per Call, Items Per Transaction, Average Order Value, and supporting efficiency signals. That measurement model turned the initiative from an AI experiment into a business case.",
+      },
+      {
+        title: "Designed the enablement system, not just the workflows",
+        body: "I created training assets, reusable prompting patterns, and the early grassroots version of ChatGPT Champions so the organization could scale from one team to many. This piece is strategically important: the value did not come only from model access, but from making the workflows repeatable, the adoption pattern teachable, and the community around it strong enough to spread good practice.",
+      },
+      {
+        title: "Socialized results in executive language",
+        body: "I translated the pilot into a leadership-ready narrative: concrete business value, repeatable rollout mechanics, and a credible path to broader investment.",
+      },
     ],
     impact: [
       {
         label: "Business impact",
-        value: "~$2.7M annualized lift",
+        value: "~$2.7M",
         detail:
-          "Pilot agents outperformed control across revenue and efficiency measures.",
+          "Annualized pilot impact from the six-month test with a matched control group.",
       },
       {
-        label: "Adoption at scale",
-        value: "~150 -> ~1,000 users / ~40 -> ~800 DAU",
+        label: "Scaled adoption",
+        value: "~150 -> ~1,000",
         detail:
-          "The initial proof point became the foundation for enterprise rollout.",
+          "Licensed users expanded from the initial pilot footprint into broad company adoption.",
       },
       {
         label: "Operating model",
-        value: "Champions + guardrails",
+        value: "~40 -> ~800 DAU",
         detail:
-          "The rollout became credible because usage patterns and governance were designed together.",
+          "Daily usage grew because rollout emphasized reusable workflows, training, governance, and trust.",
       },
+    ],
+    results: [
+      "The pilot proved two things at once.",
+      "First, AI could create measurable value in a frontline workflow. Second, adoption would scale when enablement and guardrails were designed as part of the product rather than added later.",
+      "The initial six-month pilot produced an annualized impact estimate of ~$2.7M, with pilot agents outperforming a matched control group across revenue and efficiency indicators. That proof point became the basis for expanding ChatGPT Enterprise from roughly ~150 licensed users / ~40 DAU to ~1,000 users / ~800 DAU across the company.",
+    ],
+    scaledBeyondPilot: [
+      "The most important outcome was not just the pilot result. It was the operating model that came out of it.",
+      "The rollout became scalable because usage patterns and governance were designed together. What emerged was a reusable system for enterprise AI adoption: workflow discovery, governance, measured pilots, enablement, feedback loops, and clear boundaries for use.",
+      "What scaled beyond the pilot was not just usage, but the system around it. Alongside workflows and governance, I helped build the human adoption layer through a grassroots ChatGPT Champions model that surfaced strong use cases, spread practical best practices, and created momentum across teams. Over time, that effort gained broader cross-functional structure, partnership with OpenAI GTMs, and C-suite sponsorship, helping turn early momentum into a broader enterprise capability.",
     ],
     reflection: [
-      "Enterprise AI programs succeed when product leaders design for adoption, trust, and workflow fit, not just model access.",
-      "This case reinforced a pattern I keep returning to: the fastest way to scale AI is to make one operating environment measurably better first.",
-      "TODO: Add a sanitized artifact showing the pilot scorecard or training flow once one is cleared for public use.",
+      "This case reinforced a pattern I believe in strongly: enterprise AI does not scale because access is available. It scales because one operating environment becomes measurably better first.",
+      "Product leaders have an outsized role in that transition. The job is not just picking tools. It is designing the conditions for trust: workflow fit, measurable outcomes, governance that teams can actually work within, and an adoption model that can spread without falling apart.",
+      "That is what turned this from a pilot into an operating model.",
     ],
+    artifactSectionTitle: "Selected artifacts",
+    artifactSectionDescription:
+      "Sanitized exhibits from workflow discovery and the operating model that helped ChatGPT Enterprise scale with trust.",
     visuals: [
       {
-        title: "Pilot workflow snapshot",
+        title: "Frontline ideation that shaped early GPT workflows",
         description:
-          "Current public visual uses existing portfolio art as a stand-in for the AI-assisted contact-center workflow.",
-        image: "/images/chatgpt-contact-hero.svg",
-        alt: "Stylized workflow panels representing an AI copilot for contact-center agents.",
-        todo: "Replace with a sanitized screenshot or diagram of the pilot flow when available.",
+          "Sanitized excerpt from a structured ideation session with contact center stakeholders. The team started with free brainstorming, then built on the strongest concepts through collaborative expansion and lightweight voting. The session helped surface several of the early workflow opportunities that shaped the rollout, including Gear Companion, a GPT I created to recommend complementary products customers often needed alongside a primary purchase, such as accessories for a digital keyboard. Gear Companion went on to become one of the most-used GPT workflows after launch.",
+        image: "/images/chatgpt-enterprise/frontline-ideation.png",
+        alt: "Sanitized ideation board showing brainstorming, idea expansion, team signal, and an early Gear Companion workflow concept.",
+        placement: "execution",
+        imageFit: "contain",
+        expandable: true,
       },
       {
-        title: "Rollout system",
+        title: "Enterprise AI operating model",
         description:
-          "A second visual would ideally show the champion model, training system, and governance handoffs.",
-        todo: "TODO: Add a public-safe operating model diagram for the enterprise rollout.",
+          "Sanitized view of the operating model that helped ChatGPT Enterprise move from pilot to scale. The rollout combined use-case discovery, governance, measured pilots, enablement, and feedback loops so adoption could grow without losing trust. This system made it possible to move from an initial proof point in the contact center to broader enterprise usage.",
+        image: "/images/chatgpt-enterprise/enterprise-ai-operating-model.png",
+        alt: "Sanitized enterprise AI operating model showing discovery, governance, pilot, scale, feedback, and supporting layers for guidance, trusted data, enablement, and adoption.",
+        placement: "scale",
+        imageFit: "contain",
+        expandable: true,
+      },
+      {
+        title: "Grassroots champions model that scaled into enterprise support",
+        description:
+          "Sanitized view of the adoption model that helped ChatGPT Enterprise scale beyond the initial pilot. I started the ChatGPT Champions program grassroots to share workflows, surface strong use cases, and build trust across teams. As adoption grew, the effort gained cross-functional structure, partnership with OpenAI GTMs, and C-suite sponsorship, helping turn early momentum into a broader enterprise capability.",
+        image: "/images/chatgpt-enterprise/grassroots-champions-model.png",
+        alt: "Sanitized champions model showing functional champions, local use cases, peer enablement, cross-functional alignment, OpenAI GTM partnership, and executive sponsorship.",
+        placement: "scale",
+        imageFit: "contain",
+        expandable: true,
       },
     ],
     testimonialIds: ["zac-bogart", "sumanth-cherukuri"],
+    recommendationsTitle: "How collaborators described this work",
+    recommendationsDescription:
+      "A few recommendation excerpts that reinforce the same pattern from adjacent perspectives: strong business partnership, reusable workflow design, and the ability to turn AI experimentation into credible organizational change.",
+    ctaTitle: "Want the deeper walkthrough?",
+    ctaDescription:
+      "I’m happy to share more about the pilot structure, the metrics logic, the operating model, or how the cross-functional alignment worked behind the scenes.",
     featured: true,
   },
   {
     slug: "ai-platform-mcp",
     href: "/work/ai-platform-mcp",
     title: "From AI experiments to platform foundations",
-    eyebrow: "Selected Work",
+    eyebrow: "Senior Product Manager, AI Platform Strategy",
     summary:
-      "Designed the system layer behind production AI: agent workflows, retrieval across structured and unstructured data, integration patterns, governance, and an MCP-shaped approach to product infrastructure.",
+      "A strategy story about how an early customer-facing AI prototype and UX validation shaped my thinking around reusable systems, workflow-based adoption, and platform direction.",
     description:
-      "A platform strategy story about turning scattered AI experiments into production-ready systems that improve over time.",
+      "A strategy story about how an early customer-facing AI prototype and UX validation shaped my thinking around reusable systems, workflow-based adoption, and platform direction.",
     role: "Senior Product Manager, AI Platform Strategy",
-    company: "Enterprise AI / Emerging Platform Work",
+    company: "Enterprise AI / Platform",
     timeframe: "2024-2026",
-    heroImage: "/images/chatgpt-org-hero.svg",
+    heroImage: "/images/sound-synthesist/product-visual.png",
     heroImageAlt:
-      "Illustration of an enterprise AI enablement and governance system with adoption and workflow callouts.",
-    tags: ["AI Platform", "MCP", "Connectors", "Governance", "System Design"],
+      "Product visual for the Sound Synthesist custom GPT experience for Guitar Center customers.",
+    tags: [
+      "AI Platform Strategy",
+      "Prototype Validation",
+      "Workflow Design",
+      "System Thinking",
+    ],
     featuredMetrics: [
       {
-        label: "Platform focus",
-        value: "Reusable AI systems",
+        label: "ORIGIN POINT",
+        value: "Validated AI concept",
         detail:
-          "The core design problem was orchestration, not just prompting.",
+          "A hackathon-winning prototype showed that the customer problem was real.",
       },
       {
-        label: "Adoption pattern",
-        value: "Workflow-based adoption",
+        label: "CUSTOMER SIGNAL",
+        value: "87% would use again",
         detail:
-          "Patterns were designed so multiple teams could adopt them without starting from zero.",
+          "Follow-up UX research showed strong reuse intent and positive sentiment.",
       },
       {
-        label: "Execution style",
-        value: "Platform-led iteration",
+        label: "STRATEGIC SHIFT",
+        value: "From one-off prototypes to repeatable AI systems",
         detail:
-          "Quality and reliability improve when workflows include retrieval, feedback, and explicit evaluation loops.",
+          "The strongest lesson was about reusable systems, workflow fit, and durable adoption.",
       },
     ],
     context: [

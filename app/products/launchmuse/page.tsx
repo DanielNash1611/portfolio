@@ -17,9 +17,18 @@ export default function LaunchMusePage(): JSX.Element {
     notFound();
   }
 
+  const launchMuseEntry = {
+    ...entry,
+    heroImage: "/images/launchmuse-product-hero.png",
+    heroImageAlt:
+      "LaunchMuse campaign plan screen showing a detailed release story and weekly plan.",
+    heroImageClassName: "object-top",
+    heroImageExpandable: true,
+  };
+
   return (
     <Container className="space-y-8 pt-6">
-      <ProductTemplate entry={entry} />
+      <ProductTemplate entry={launchMuseEntry} />
     </Container>
   );
 }

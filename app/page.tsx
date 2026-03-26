@@ -41,7 +41,7 @@ const creativePortrait = getPortrait("casual");
 
 export default function HomePage(): JSX.Element {
   return (
-    <div className="space-y-20 pb-20 md:space-y-24 md:pb-24">
+    <div className="space-y-14 pb-20 md:space-y-16 md:pb-24">
       <Container className="pt-6">
         <HeroSection
           eyebrow={homeContent.hero.eyebrow}
@@ -52,7 +52,7 @@ export default function HomePage(): JSX.Element {
         />
       </Container>
 
-      <Container>
+      <Container className="-mt-4 md:-mt-6">
         <MotionReveal>
           <MetricStrip metrics={homeContent.metrics} variant="compact" />
         </MotionReveal>

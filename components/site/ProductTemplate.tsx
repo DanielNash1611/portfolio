@@ -24,6 +24,8 @@ export default function ProductTemplate({
         metrics={entry.featuredMetrics}
         image={entry.heroImage}
         imageAlt={entry.heroImageAlt}
+        imageClassName={entry.heroImageClassName}
+        imageExpandable={entry.heroImageExpandable}
       />
 
       <MetricStrip metrics={entry.featuredMetrics} />
