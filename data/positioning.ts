@@ -49,8 +49,8 @@ export const NARRATIVES: Narrative[] = [
       "Best fit for broad-market Senior Product Manager roles spanning commerce, platforms, operations, and AI-enabled customer experiences.",
     proofPoints: [
       "~$16M annualized impact from checkout redesign",
-      "~3.5% conversion lift and 50% faster checkout",
-      "16 systems reduced to 9 in returns modernization",
+      "~3% conversion lift and 30% faster checkout",
+      "12-week launch with minimal service disruption",
       "~$2.7M estimated annual lift from a Contact Center ChatGPT pilot",
     ],
     workHref: "/work#senior-product-manager",
@@ -138,15 +138,15 @@ export const APPROVED_METRICS: ApprovedMetric[] = [
     label: "Checkout redesign",
     value: "~$16M annualized impact",
     detail:
-      "Driven by a ~3.5% conversion lift and 50% faster checkout in a redesigned ecommerce flow.",
+      "Estimated from a post-launch A/B test after a 12-week checkout redesign.",
     narrativeIds: ["senior-product-manager"],
   },
   {
     id: "checkout-speed",
     label: "Faster checkout",
-    value: "50% faster",
+    value: "30% faster",
     detail:
-      "Reduced friction across the checkout experience while improving completion speed and clarity.",
+      "Full checkout time dropped from 3:00 to 2:03 while the redesigned flow became easier to scan.",
     narrativeIds: ["senior-product-manager"],
   },
   {

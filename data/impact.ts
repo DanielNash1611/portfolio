@@ -24,16 +24,16 @@ export const UNIFIED_IMPACT_METRICS: UnifiedImpactMetric[] = [
     value: checkoutImpact?.value ?? "~$16M annualized impact",
     support:
       checkoutImpact?.detail ??
-      "Driven by a ~3.5% conversion lift and 50% faster checkout in a redesigned ecommerce flow.",
+      "Estimated from a post-launch A/B test after a 12-week checkout redesign.",
     intent: "revenue",
   },
   {
     id: checkoutSpeed?.id ?? "checkout-speed",
     category: "Customer experience",
-    value: checkoutSpeed?.value ?? "50% faster",
+    value: checkoutSpeed?.value ?? "30% faster",
     support:
       checkoutSpeed?.detail ??
-      "Reduced friction across the checkout experience while improving completion speed and clarity.",
+      "Full checkout time dropped from 3:00 to 2:03 while the redesigned flow became easier to scan.",
     intent: "cx",
   },
   {

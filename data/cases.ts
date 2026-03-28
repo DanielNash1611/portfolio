@@ -17,25 +17,25 @@ export type Case = {
 export const cases: Case[] = [
   {
     slug: "checkout-redesign",
-    title: "Checkout transformation for a multi-brand retailer",
+    title: "Better execution, faster checkout, measurable growth",
     summary:
-      "Led an end-to-end checkout redesign that simplified the customer journey, improved speed, and delivered measurable growth.",
+      "A high-stakes checkout redesign that succeeded not just because of the experience changes, but because better product, UX, and engineering collaboration led to stronger decisions during build, a cleaner launch, and measurable lift.",
     tags: ["Commerce", "Experimentation", "Customer Experience"],
-    heroImage: "/images/checkout-hero.svg",
+    heroImage: "/images/checkout-redesign/checkout-after.png",
     roleLens: ["senior-product-manager"],
     bestFor: "Senior Product Manager",
     cardType: "Case Study",
     kpis: [
       { label: "Annualized Impact", value: "~$16M" },
-      { label: "Conversion Lift", value: "~3.5%" },
-      { label: "Checkout Speed", value: "50% faster" },
+      { label: "Checkout Speed", value: "30% faster" },
+      { label: "Delivery Outcome", value: "12-week launch" },
     ],
     chips: [
       "~$16M annualized impact",
-      "~3.5% conversion lift",
-      "50% faster checkout",
+      "30% faster checkout",
+      "12-week launch, minimal disruption",
     ],
-    href: "/work/checkout-redesign",
+    href: "/work/oms-transformation",
   },
   {
     slug: "returns-modernization",

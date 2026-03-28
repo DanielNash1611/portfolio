@@ -11,35 +11,36 @@ export type CaseStudy = {
 export const CASE_STUDIES: CaseStudy[] = [
   {
     slug: "checkout-velocity",
-    title: "Checkout flow optimization",
+    title: "Checkout redesign",
     summary:
-      "Reduced friction through UX redesign and A/B testing, improving conversion and completion speed.",
+      "A high-stakes checkout redesign that improved speed, validated conversion lift, and showed how better execution quality can shape delivery outcomes.",
     headlineMetrics: [
-      { label: "conversion", value: "~3.5%" },
-      { label: "checkout time", value: "50% faster" },
+      { label: "annualized impact", value: "~$16M" },
+      { label: "checkout time", value: "30% faster" },
     ],
     measuredMetrics: [
       {
         label: "Conversion",
-        value: "~3.5%",
-        context: "A/B tested lift from the redesigned checkout flow",
+        value: "~3%",
+        context: "Post-launch A/B testing validated measurable lift",
       },
       {
         label: "Completion time",
-        value: "50% faster",
-        context: "Median time vs. baseline",
+        value: "3:00 to 2:03",
+        context: "Follow-up usability testing across real checkout tasks",
       },
     ],
     body: `
-## Checkout transformation
+## Checkout redesign
 
 <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-  <p className="text-3xl font-semibold text-slate-900">+3% conversion</p>
-  <p className="mt-1 text-sm text-slate-600">AB tested metric across a 30-day experiment window.</p>
+  <p className="text-3xl font-semibold text-slate-900">~$16M annualized upside</p>
+  <p className="mt-1 text-sm text-slate-600">Estimated from the post-launch A/B test instead of assumptions alone.</p>
 </div>
 
-The redesigned flow removed ambiguous copy and surfaced dynamic AI-generated support options, which reduced drop-off and time to checkout completion.
+The redesigned flow simplified a dense multi-step experience, cut checkout time by roughly 30%, and launched in 12 weeks with minimal service disruption.
     `.trim(),
+    href: "/work/oms-transformation",
   },
   {
     slug: "contact-center-ai",

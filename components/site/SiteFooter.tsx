@@ -15,6 +15,9 @@ export default function SiteFooter(): JSX.Element {
             workflow modernization, and product systems that translate strategy
             into measurable outcomes.
           </p>
+          <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--color-slate)]/52">
+            Built with Codex
+          </p>
         </div>
 
         <div className="space-y-3">

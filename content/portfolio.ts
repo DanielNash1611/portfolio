@@ -245,7 +245,7 @@ export const homeContent = {
       },
     ],
   },
-  featuredWork: ["chatgpt-enterprise", "ai-platform-mcp", "oms-transformation"],
+  featuredWork: ["chatgpt-enterprise", "ai-platform-mcp", "checkout-redesign"],
   featuredProducts: ["launchmuse", "immunology-scout", "ai-agents-lab"],
   featuredThinking: ["ai-strategy", "product-philosophy"],
   featuredTestimonials: [
@@ -700,126 +700,119 @@ export const workEntries: WorkEntry[] = [
     featured: true,
   },
   {
-    slug: "oms-transformation",
+    slug: "checkout-redesign",
     href: "/work/oms-transformation",
-    title: "OMS transformation across checkout and returns",
+    title: "Better execution, faster checkout, measurable growth",
     eyebrow: "Selected Work",
     summary:
-      "Modernized the order journey across customer-facing checkout and service-facing returns operations, improving conversion, reducing friction, and simplifying the system landscape behind the scenes.",
+      "Reduced checkout time by roughly 30%, delivered in 12 weeks, and contributed to an estimated ~$16M in annualized revenue impact through a post-launch A/B test.",
     description:
-      "A systems-thinking case study that combines UX, experimentation, and operational modernization into one business outcome story.",
-    role: "Product Manager, Commerce & Service Operations",
+      "A high-stakes checkout redesign that succeeded not just because of the experience changes, but because better product, UX, and engineering collaboration led to stronger decisions during build, a cleaner launch, and measurable lift.",
+    role: "Senior Product Manager, Commerce",
     company: "The Guitar Center Company",
-    timeframe: "2023-2024",
-    heroImage: "/images/checkout-hero.svg",
+    timeframe: "2023",
+    heroImage: "/images/checkout-redesign/checkout-after.png",
     heroImageAlt:
-      "Mockups of a streamlined ecommerce checkout with supporting outcome metrics.",
+      "Redesigned checkout experience showing a cleaner delivery step and simplified order summary.",
     tags: [
-      "Order Management",
       "Commerce",
-      "Operations",
       "Experimentation",
       "Cross-functional Leadership",
+      "UX Delivery",
     ],
     featuredMetrics: [
       {
         label: "Annualized impact",
         value: "~$16M",
-        detail: "Driven by a statistically significant conversion lift.",
+        detail: "Estimated from the post-launch A/B test.",
       },
       {
         label: "Checkout speed",
-        value: "50% faster",
-        detail: "Median checkout completion time was cut in half.",
+        value: "30% faster",
+        detail: "Full checkout time dropped from 3:00 to 2:03.",
       },
       {
-        label: "Systems simplified",
-        value: "16 -> 9",
-        detail:
-          "Returns and order workflows were consolidated to reduce operational drag.",
+        label: "Delivery outcome",
+        value: "12-week launch",
+        detail: "Minimal service disruption after release.",
       },
     ],
+    heroDetails: [
+      "This was more than a redesign story. It was a product leadership story about improving how the team executed: giving developers enough context to make strong decisions, keeping UX involved during development, and delivering a high-stakes launch with almost no service disruption.",
+    ],
     context: [
-      "The customer order journey and the service order journey were both carrying legacy complexity.",
-      "Checkout had grown cluttered over years of patching, while returns and service workflows required teams to bounce across too many systems to complete basic work.",
-      "Viewed separately, these looked like different problems. Viewed as one order-management story, they represented a broader opportunity to remove friction across the whole lifecycle.",
+      "Checkout was one of the highest-stakes parts of the customer journey. Improving it had meaningful upside, but any issues at launch could immediately affect customers, revenue, and operations.",
+      "The challenge was not just to redesign the flow. It was to deliver a significantly better experience quickly and safely, while making sure the team could navigate real implementation constraints without degrading the outcome.",
     ],
     problem: [
-      "Customers experienced slow, unclear checkout steps that increased drop-off and lowered completion confidence.",
-      "Operators dealt with fragmented returns tooling that created wasted time, inconsistent workflows, and avoidable context switching.",
-      "The business needed both top-line and operational improvements without waiting for a full replatform.",
+      "The existing checkout had become dense, dated, and harder to scan, which added friction to one of the most sensitive revenue moments on the site.",
+      "The team also needed a delivery model that could handle feasibility tradeoffs without losing the intent of the redesign once development started.",
     ],
     strategicInsight: [
-      "Treating checkout and returns as isolated projects would have solved symptoms, not the system.",
-      "The better move was to focus on the highest-friction order-management moments across customer experience and service operations, then modernize them with the same principles: simplify, validate, and remove unnecessary steps.",
-      "That framing made it easier to align stakeholders who cared about revenue, service efficiency, engineering complexity, and customer experience all at once.",
+      "Better execution here meant improving the quality of decisions during build, not just shipping a prettier flow.",
+      "Developers build better when they are given enough context to think, and design stays stronger when UX remains involved after handoff.",
     ],
     optionsAndTradeoffs: [
       {
-        option: "Patch the existing experiences incrementally",
+        option: "Treat design as a traditional handoff",
         tradeoff:
-          "Low immediate cost, but keeps the system architecture and workflow burden intact.",
+          "Moves quickly at first, but feasibility issues often turn into weaker implementation compromises.",
       },
       {
-        option: "Wait for a full end-to-end replatform",
+        option: "Keep UX and engineering tightly engaged during build",
         tradeoff:
-          "Potentially cleaner in theory, but too slow and risky for the business outcomes needed now.",
-      },
-      {
-        option:
-          "Target the highest-friction journeys with focused transformation work",
-        tradeoff:
-          "Requires strong prioritization and cross-functional orchestration, but unlocks measurable value sooner.",
+          "Requires more active collaboration, but produces stronger in-flight decisions and less rework.",
         selected: true,
       },
     ],
     execution: [
-      "Led a checkout redesign that simplified flow structure, removed confusing steps, improved performance, and validated changes through experimentation.",
-      "Partnered with UX, engineering, analytics, marketing, and operations to align on the most consequential improvements and rollout decisions.",
-      "Used A/B testing and measurable outcome tracking to keep the work grounded in business value rather than subjective preference.",
-      "Extended the systems-thinking lens into returns modernization, consolidating fragmented tooling and redesigning workflows for speed and clarity.",
-      "Kept stakeholder communication tight so the work remained credible both as a customer-experience improvement and as an operational simplification effort.",
+      "Aligned product, UX, and engineering around the stakes of the redesign so implementation decisions stayed tied to business and user outcomes.",
+      "Made sure developers had enough context to make stronger product decisions during implementation rather than relying on literal requirements alone.",
+      "Kept UX actively involved during development so feasibility issues could become live tradeoff conversations instead of isolated engineering compromises.",
+      "Rolled the redesign out in 12 weeks and kept the release unusually clean for such a sensitive journey.",
     ],
     impact: [
       {
-        label: "Revenue impact",
-        value: "~$16M annualized",
-        detail: "Based on roughly ~3.5% conversion lift after redesign.",
+        label: "Checkout speed",
+        value: "30% faster",
+        detail: "Follow-up usability testing showed a drop from 3:00 to 2:03.",
       },
       {
-        label: "Customer experience",
-        value: "50% faster checkout",
-        detail:
-          "Completion times improved materially while the journey became easier to understand.",
+        label: "Conversion lift",
+        value: "~3%",
+        detail: "Measured through post-launch A/B testing.",
       },
       {
-        label: "Operational efficiency",
-        value: "~2,000 annual hours saved",
-        detail:
-          "Returns modernization reduced tool sprawl and unnecessary workflow switching.",
+        label: "Annualized impact",
+        value: "~$16M",
+        detail: "Estimated from the validated conversion lift.",
       },
     ],
     reflection: [
-      "This is one of the clearest examples of how product management can connect experience quality with operating leverage.",
-      "Recruiters often see checkout redesigns and operational systems work as separate categories. In practice, both require the same muscles: prioritization, systems thinking, and cross-functional execution.",
-      "TODO: Add a public-safe OMS architecture slide or returns workflow artifact if one becomes available.",
+      "This project reinforced a product principle I still carry forward: better outcomes do not come from trying to control every decision.",
+      "They come from creating enough shared context that the right people can make strong decisions at the right moment.",
+      "In this case, that led to a better customer experience, a smoother launch, and measurable growth.",
     ],
     visuals: [
       {
-        title: "Checkout before / after",
+        title: "Before & After",
         description:
-          "Existing portfolio assets already show a strong visual shorthand for the checkout transformation.",
-        image: "/images/checkout-after.svg",
-        alt: "Illustration of a cleaner checkout experience after redesign.",
+          "Real checkout screenshots showing how the redesign simplified the experience.",
+        image: "/images/checkout-redesign/checkout-after.png",
+        alt: "Redesigned checkout screen used in the public case study.",
+        expandable: true,
       },
       {
-        title: "Returns workflow placeholder",
+        title: "Context-rich implementation ticket",
         description:
-          "The case is ready for a second visual showing systems consolidation or the redesigned service workflow.",
-        todo: "TODO: Add sanitized returns modernization screenshots or workflow diagram.",
+          "Representative Jira ticket showing user need, expected behavior, and business rationale in one place.",
+        image: "/images/checkout-redesign/jira-ticket.png",
+        alt: "Jira ticket screenshot showing context-rich product writing for implementation.",
+        imageFit: "contain",
+        expandable: true,
       },
     ],
-    testimonialIds: ["christopher-pruneau", "david-lawrence"],
+    testimonialIds: ["christopher-pruneau", "matt-winick"],
     featured: true,
   },
 ];
