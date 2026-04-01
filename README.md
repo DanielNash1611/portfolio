@@ -18,6 +18,9 @@ Copy `.env.example` to `.env.local` and provide values:
 - `HUBSPOT_PRIVATE_APP_TOKEN` - Private app token with **forms** scope.
 - `HUBSPOT_FORM_ID` - HubSpot form ID that receives LaunchMuse waitlist submissions.
 - `SITE_BASE_URL` - Deployed site URL (e.g., `https://danielnash.com`).
+- `RESEND_API_KEY` - Resend API key used by the portfolio contact form.
+- `CONTACT_TO_EMAIL` - Private inbox that receives contact submissions.
+- `CONTACT_FROM_EMAIL` - Verified sender used by Resend, ideally on a domain you control.
 
 ## HubSpot Setup
 
@@ -27,6 +30,17 @@ Copy `.env.example` to `.env.local` and provide values:
    - `lm_role` (single-line text or dropdown) - used to store the LaunchMuse role selection.
    - `consent_to_communicate` (single checkbox) - set to `"true"` or `"false"` from the waitlist form.
 3. Confirm the private app token has permission to submit to Marketing Forms API (`marketing` scope).
+
+## Contact Form Delivery
+
+The main portfolio contact page posts to `/api/contact`, which validates the payload, applies lightweight anti-spam checks, and forwards the message with Resend.
+
+Recommended setup:
+
+1. Verify a sending domain in Resend.
+2. Set `CONTACT_FROM_EMAIL` to an address on that domain, such as `Portfolio Contact <contact@yourdomain.com>`.
+3. Set `CONTACT_TO_EMAIL` to your private inbox.
+4. Add the same values to your deployment environment variables before shipping.
 
 ## Scripts
 

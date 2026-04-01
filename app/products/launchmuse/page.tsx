@@ -9,7 +9,7 @@ const entry = getProductEntry("launchmuse");
 export const metadata: Metadata = {
   title: "LaunchMuse",
   description:
-    "AI-native release planning product and live alpha built by Daniel Nash.",
+    "Focused AI-native product that helps artists turn the meaning behind a release into a cohesive six-week narrative.",
 };
 
 export default function LaunchMusePage(): JSX.Element {

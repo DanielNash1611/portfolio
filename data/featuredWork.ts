@@ -25,13 +25,13 @@ export const featuredWork: FeaturedWorkItem[] = [
     title: "Better execution, faster checkout, measurable growth",
     description:
       "A high-stakes checkout redesign that succeeded not just because of the experience changes, but because better product, UX, and engineering collaboration led to stronger decisions during build, a cleaner launch, and measurable lift.",
-    href: "/work/oms-transformation",
+    href: "/work/checkout-redesign",
     tags: ["Commerce", "Experimentation", "Customer Experience"],
     media: {
-      src: "/images/checkout-redesign/checkout-after.png",
-      width: 3022,
-      height: 1516,
-      alt: "Redesigned Guitar Center checkout screen showing a cleaner, easier-to-scan delivery step.",
+      src: "/images/checkout-redesign/checkout-header.png",
+      width: 1536,
+      height: 1024,
+      alt: "Checkout redesign header illustration showing delivery, order summary, and payment visuals.",
     },
     chips: [
       "~$16M annualized impact",
@@ -102,10 +102,10 @@ export const featuredWork: FeaturedWorkItem[] = [
   {
     slug: "sound-seeker",
     featuredFor: ["builder-pm"],
-    title: "Sound Seeker",
+    title: "Sound Seeker live demo",
     description:
-      "A hackathon-winning AI concept rebuilt as an independent prototype to demonstrate PM-led exploration, rapid prototyping, and frontier product instincts.",
-    href: "/work/sound-seeker",
+      "A public-facing rebuild of the hackathon concept, now embedded as a supporting artifact inside the platform foundations case study.",
+    href: "/work/ai-platform-mcp#sound-seeker-live-demo",
     tags: ["Prototype", "AI Product", "Music"],
     media: {
       src: "/images/synth-hero.svg",
@@ -116,7 +116,7 @@ export const featuredWork: FeaturedWorkItem[] = [
     chips: [
       "Hackathon-winning concept",
       "Rapid PM-led prototype",
-      "Independent public demo",
+      "Embedded supporting artifact",
     ],
     bestFor: "Builder PM",
   },
@@ -125,7 +125,7 @@ export const featuredWork: FeaturedWorkItem[] = [
     featuredFor: ["builder-pm"],
     title: "Immiatrics",
     description:
-      "Emerging AI + science work focused on how product systems and applied AI can support scientific discovery in immunology research.",
+      "Paper-and-patent scouting concept for immunology teams, framed as a trustworthy grounding layer for novelty checks and next-step hypothesis development.",
     tags: ["Emerging Work", "AI + Science", "Frontier AI"],
     media: {
       src: "/images/immunology-scout-screenshot.png",

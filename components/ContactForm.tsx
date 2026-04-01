@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Button from "@/components/Button";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -8,6 +8,11 @@ type Status = "idle" | "loading" | "success" | "error";
 const ContactForm = (): JSX.Element => {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState<string>("");
+  const [startedAt, setStartedAt] = useState<string>("");
+
+  useEffect(() => {
+    setStartedAt(Date.now().toString());
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -21,22 +26,32 @@ const ContactForm = (): JSX.Element => {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
+      const result = (await response.json().catch(() => null)) as
+        | { ok?: boolean; error?: string }
+        | null;
 
-      if (!response.ok) {
-        throw new Error("Something went wrong.");
+      if (!response.ok || !result?.ok) {
+        throw new Error(
+          result?.error ?? "Sorry, there was an issue sending your message.",
+        );
       }
 
       setStatus("success");
       setMessage("Thanks for reaching out! I’ll be in touch soon.");
       event.currentTarget.reset();
+      setStartedAt(Date.now().toString());
     } catch (error) {
       console.error(error);
       setStatus("error");
-      setMessage("Sorry, there was an issue sending your message. Try again?");
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Sorry, there was an issue sending your message. Try again?",
+      );
     }
   };
 
@@ -46,6 +61,20 @@ const ContactForm = (): JSX.Element => {
       onSubmit={handleSubmit}
       aria-describedby={message ? "form-status" : undefined}
     >
+      <input type="hidden" name="startedAt" value={startedAt} />
+      <div
+        className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
+        aria-hidden="true"
+      >
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div className="space-y-2">
         <label className="text-sm font-medium text-brand-teal" htmlFor="name">
           Name
@@ -56,6 +85,7 @@ const ContactForm = (): JSX.Element => {
           type="text"
           required
           autoComplete="name"
+          maxLength={120}
           className="w-full rounded-2xl border border-brand-slate/20 bg-white px-4 py-3 text-brand-slate shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
         />
       </div>
@@ -69,6 +99,7 @@ const ContactForm = (): JSX.Element => {
           type="email"
           required
           autoComplete="email"
+          maxLength={320}
           className="w-full rounded-2xl border border-brand-slate/20 bg-white px-4 py-3 text-brand-slate shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
         />
       </div>
@@ -84,6 +115,8 @@ const ContactForm = (): JSX.Element => {
           name="message"
           rows={5}
           required
+          minLength={10}
+          maxLength={5000}
           className="w-full rounded-2xl border border-brand-slate/20 bg-white px-4 py-3 text-brand-slate shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
         />
       </div>

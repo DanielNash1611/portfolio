@@ -7,10 +7,14 @@
     "build": "npm run images:meta && next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test:portfolio-guide": "tsx --test __tests__/portfolio-guide/*.test.ts",
+    "eval:portfolio-guide": "tsx scripts/run-portfolio-guide-evals.ts",
+    "eval:portfolio-guide:local": "tsx scripts/run-portfolio-guide-evals.ts --provider-mode local-answer-no-judge --assistant-model gpt-oss:20b",
+    "eval:portfolio-guide:local-judge": "tsx scripts/run-portfolio-guide-evals.ts --provider-mode local-answer-local-judge --assistant-model gpt-oss:20b --judge-model qwen2.5:14b",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mdx}\"",
     "images:meta": "tsx scripts/read-image-meta.ts",
-    "images:build": "tsx scripts/make-derivatives.ts",
-    "postinstall": "npm run images:meta && npm run images:build"
+    "images:build": "tsx scripts/make-derivatives.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",

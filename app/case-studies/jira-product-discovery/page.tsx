@@ -2,10 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Button from "@/components/Button";
 import CaseStudyHeader from "@/components/CaseStudyHeader";
+import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import { cases } from "@/data/cases";
 import { getCaseMdx } from "@/lib/mdx";
+import {
+  getPageContextByPath,
+  getPortfolioContext,
+} from "@/lib/portfolio-guide/context";
 
 const slug = "jira-product-discovery";
+const pageContext = getPageContextByPath("/case-studies/jira-product-discovery");
+const portfolioContext = getPortfolioContext();
 
 export async function generateMetadata(): Promise<Metadata> {
   const { frontmatter } = await getCaseMdx(slug);
@@ -37,6 +44,13 @@ export default async function JiraProductDiscoveryPage(): Promise<JSX.Element> {
         kpis={caseData?.kpis}
         tags={caseData?.tags}
       />
+      {pageContext ? (
+        <PortfolioGuide
+          pageContext={pageContext}
+          portfolioContext={portfolioContext}
+          tone="legacy"
+        />
+      ) : null}
       <article className="prose prose-lg max-w-none space-y-8 rounded-3xl border border-brand-slate/10 bg-white/80 p-10 text-brand-slate shadow-soft prose-headings:font-serif prose-headings:text-brand-teal">
         {content}
       </article>

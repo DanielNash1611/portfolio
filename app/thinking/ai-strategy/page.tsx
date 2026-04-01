@@ -7,9 +7,10 @@ import { getThinkingEntry } from "@/content/portfolio";
 const entry = getThinkingEntry("ai-strategy");
 
 export const metadata: Metadata = {
-  title: "AI Strategy",
+  title: entry?.title ?? "AI Strategy",
   description:
-    "Daniel Nash on why AI strategy is really adoption design, not just model selection.",
+    entry?.summary ??
+    "Daniel Nash on why enterprise AI succeeds through workflow fit, trust, enablement, and the systems around the model.",
 };
 
 export default function AiStrategyPage(): JSX.Element {

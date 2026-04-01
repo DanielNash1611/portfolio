@@ -50,7 +50,7 @@ export default function SiteFooter(): JSX.Element {
               LinkedIn
             </a>
             <br />
-            <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+            <Link href={siteConfig.contactHref}>Contact form</Link>
             <br />
             <a
               href={siteConfig.githubUrl}

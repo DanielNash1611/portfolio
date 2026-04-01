@@ -1,10 +1,15 @@
-import { SoundSeekerWidget } from "@/components/sound-seeker/SoundSeekerWidget";
-import type { ProductEntry } from "@/content/portfolio";
+import ExampleCampaignOutputSection from "@/components/launchmuse/ExampleCampaignOutputSection";
+import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import ContentSection from "@/components/site/ContentSection";
 import CTASection from "@/components/site/CTASection";
 import MetricStrip from "@/components/site/MetricStrip";
 import PageHero from "@/components/site/PageHero";
 import VisualPlaceholder from "@/components/site/VisualPlaceholder";
+import { siteConfig, type ProductEntry } from "@/content/portfolio";
+import {
+  getPageContextByPath,
+  getPortfolioContext,
+} from "@/lib/portfolio-guide/context";
 
 type ProductTemplateProps = {
   entry: ProductEntry;
@@ -13,6 +18,10 @@ type ProductTemplateProps = {
 export default function ProductTemplate({
   entry,
 }: ProductTemplateProps): JSX.Element {
+  const pageContext = getPageContextByPath(entry.href);
+  const portfolioContext = getPortfolioContext();
+  const isLaunchMuse = entry.slug === "launchmuse";
+
   return (
     <div className="space-y-8">
       <PageHero
@@ -28,24 +37,29 @@ export default function ProductTemplate({
         imageExpandable={entry.heroImageExpandable}
       />
 
+      {pageContext ? (
+        <PortfolioGuide
+          pageContext={pageContext}
+          portfolioContext={portfolioContext}
+        />
+      ) : null}
+
       <MetricStrip metrics={entry.featuredMetrics} />
 
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="space-y-8">
+        <div className={isLaunchMuse ? "space-y-10 md:space-y-12" : "space-y-8"}>
           <ContentSection
             title="Problem"
             description="The user pain or workflow friction this product is designed to address."
           >
-            <ul className="space-y-4">
-              {entry.problem.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-[1.25rem] bg-[color:var(--color-cream)]/72 px-5 py-4 text-base leading-7 text-[color:var(--color-slate)]/72"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
+            {entry.problem.map((item) => (
+              <p
+                key={item}
+                className="text-base leading-7 text-[color:var(--color-slate)]/74"
+              >
+                {item}
+              </p>
+            ))}
           </ContentSection>
 
           <ContentSection
@@ -62,6 +76,22 @@ export default function ProductTemplate({
               </p>
             ))}
           </ContentSection>
+
+          {entry.whyThisMatters?.length ? (
+            <ContentSection
+              title="Why this matters"
+              description="Why this product wedge matters beyond simple content planning."
+            >
+              {entry.whyThisMatters.map((item) => (
+                <p
+                  key={item}
+                  className="text-base leading-7 text-[color:var(--color-slate)]/74"
+                >
+                  {item}
+                </p>
+              ))}
+            </ContentSection>
+          ) : null}
 
           <ContentSection
             title="Product experience"
@@ -89,15 +119,24 @@ export default function ProductTemplate({
             </div>
           </ContentSection>
 
-          {entry.embeddedExperience === "sound-seeker" ? (
+          {entry.evaluationAndTrust?.length ? (
             <ContentSection
-              title="Live prototype"
-              description="A working demo that makes the lab's builder story tangible."
-              tone="contrast"
+              title="Evaluation & trust"
+              description="How quality was defined, tested, and improved in a high-stakes domain."
+              tone="muted"
             >
-              <SoundSeekerWidget />
+              {entry.evaluationAndTrust.map((item) => (
+                <p
+                  key={item}
+                  className="text-base leading-7 text-[color:var(--color-slate)]/74"
+                >
+                  {item}
+                </p>
+              ))}
             </ContentSection>
           ) : null}
+
+          {isLaunchMuse ? <ExampleCampaignOutputSection /> : null}
 
           <ContentSection
             title="What I learned"
@@ -114,19 +153,38 @@ export default function ProductTemplate({
               ))}
             </ul>
           </ContentSection>
+
+          {entry.buildStory?.length ? (
+            <ContentSection
+              title="Build story"
+              description="How the product moved from concept to working MVP and why that matters."
+              tone="muted"
+            >
+              {entry.buildStory.map((item) => (
+                <p
+                  key={item}
+                  className="text-base leading-7 text-[color:var(--color-slate)]/74"
+                >
+                  {item}
+                </p>
+              ))}
+            </ContentSection>
+          ) : null}
         </div>
 
         <div className="space-y-8">
-          <ContentSection
-            title="Visuals"
-            description="Current visuals plus placeholders for screenshots or embeds."
-          >
-            <div className="grid gap-4">
-              {entry.visuals.map((asset) => (
-                <VisualPlaceholder key={asset.title} asset={asset} />
-              ))}
-            </div>
-          </ContentSection>
+          {isLaunchMuse ? null : (
+            <ContentSection
+              title="Visuals"
+              description="Current visuals plus placeholders for screenshots or embeds."
+            >
+              <div className="grid gap-4">
+                {entry.visuals.map((asset) => (
+                  <VisualPlaceholder key={asset.title} asset={asset} />
+                ))}
+              </div>
+            </ContentSection>
+          )}
         </div>
       </div>
 
@@ -134,14 +192,13 @@ export default function ProductTemplate({
         title="Interested in the build, prototype process, or product logic?"
         description="These pages are intentionally structured so the product story is easy to discuss with recruiters, founders, or future teammates."
         primaryAction={{
-          href: "https://www.linkedin.com/in/daniel-a-nash/",
+          href: siteConfig.linkedinUrl,
           label: "Connect on LinkedIn",
           external: true,
         }}
         secondaryAction={{
-          href: "mailto:hello@danielnash.com",
-          label: "Email me",
-          external: true,
+          href: siteConfig.contactHref,
+          label: "Send a message",
         }}
       />
     </div>

@@ -9,7 +9,7 @@ const entry = getProductEntry("immunology-scout");
 export const metadata: Metadata = {
   title: "Immunology Scout",
   description:
-    "Emerging AI + science product concept exploring literature scouting and hypothesis support in immunology.",
+    "Paper-and-patent scouting product concept for immunology teams, designed for grounded evidence review, novelty checks, and next-step hypothesis support.",
 };
 
 export default function ImmunologyScoutPage(): JSX.Element {

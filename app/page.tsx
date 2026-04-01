@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Portrait, { getPortrait } from "@/components/Portrait";
+import RoleIntentGuide from "@/components/portfolio/RoleIntentGuide";
 import CaseStudyCard from "@/components/site/CaseStudyCard";
 import Container from "@/components/site/Container";
 import CTASection from "@/components/site/CTASection";
@@ -18,6 +19,10 @@ import {
   getWorkEntry,
   homeContent,
 } from "@/content/portfolio";
+import {
+  getAllCanonicalPageContexts,
+  getPortfolioContext,
+} from "@/lib/portfolio-guide/context";
 
 export const metadata: Metadata = {
   title: "Daniel Nash | AI Systems Product Leader",
@@ -38,6 +43,10 @@ const featuredThinking = homeContent.featuredThinking
   .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
 
 const creativePortrait = getPortrait("casual");
+const pageCatalog = getAllCanonicalPageContexts();
+const portfolioContext = getPortfolioContext();
+const featuredProjectSlugs =
+  portfolioContext.featuredProjects?.map((project) => project.slug) ?? [];
 
 export default function HomePage(): JSX.Element {
   return (
@@ -55,6 +64,15 @@ export default function HomePage(): JSX.Element {
       <Container className="-mt-4 md:-mt-6">
         <MotionReveal>
           <MetricStrip metrics={homeContent.metrics} variant="compact" />
+        </MotionReveal>
+      </Container>
+
+      <Container>
+        <MotionReveal>
+          <RoleIntentGuide
+            pageCatalog={pageCatalog}
+            featuredProjectSlugs={featuredProjectSlugs}
+          />
         </MotionReveal>
       </Container>
 

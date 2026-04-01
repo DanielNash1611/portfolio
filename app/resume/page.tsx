@@ -84,9 +84,8 @@ export default function ResumePage(): JSX.Element {
           external: true,
         }}
         secondaryAction={{
-          href: `mailto:${siteConfig.email}`,
-          label: "Email me",
-          external: true,
+          href: siteConfig.contactHref,
+          label: "Send a message",
         }}
       />
     </Container>

@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
+import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import Container from "@/components/site/Container";
 import ContentSection from "@/components/site/ContentSection";
 import MediaFrame from "@/components/site/MediaFrame";
 import SoundSynthesistSystemDiagram from "@/components/site/SoundSynthesistSystemDiagram";
+import { SoundSeekerWidget } from "@/components/sound-seeker/SoundSeekerWidget";
+import TestimonialsSection from "@/components/site/TestimonialsSection";
+import { getTestimonialsByIds } from "@/content/portfolio";
+import {
+  getPageContextByPath,
+  getPortfolioContext,
+} from "@/lib/portfolio-guide/context";
 
 export const metadata: Metadata = {
   title: "From AI experiments to platform foundations",
@@ -73,6 +81,13 @@ const learnings = [
   "Reusable patterns matter more than one-off novelty",
   "Strong ideas need the right system around them to last",
 ];
+
+const relatedTestimonials = getTestimonialsByIds([
+  "sean-richardson",
+  "daniel-das",
+]);
+const pageContext = getPageContextByPath("/work/ai-platform-mcp");
+const portfolioContext = getPortfolioContext();
 
 function StoryHero(): JSX.Element {
   return (
@@ -178,6 +193,13 @@ export default function AiPlatformMcpPage(): JSX.Element {
     <Container className="space-y-8 pt-6 pb-16">
       <StoryHero />
 
+      {pageContext ? (
+        <PortfolioGuide
+          pageContext={pageContext}
+          portfolioContext={portfolioContext}
+        />
+      ) : null}
+
       <ContentSection
         eyebrow="Where this started"
         title="A prototype that proved customers cared"
@@ -252,6 +274,38 @@ export default function AiPlatformMcpPage(): JSX.Element {
           </p>
         </div>
       </ContentSection>
+
+      <section id="sound-seeker-live-demo">
+        <ContentSection
+          eyebrow="Supporting artifact"
+          title="Sound Seeker live demo"
+          description="A public-facing rebuild of the hackathon concept, included here as a working artifact inside the broader platform story."
+        >
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:items-start">
+            <div className="space-y-4">
+              <p className="text-base leading-7 text-[color:var(--color-slate)]/72">
+                To make the hackathon concept more tangible, I rebuilt the
+                original idea as a public-facing prototype. The demo shows how
+                an AI assistant can help musicians move from a tonal reference
+                to a concrete rig and signal chain, while making the
+                interaction pattern visible to others exploring what these
+                systems could become.
+              </p>
+              <p className="text-base leading-7 text-[color:var(--color-slate)]/72">
+                In this context, the demo serves as a working artifact of the
+                concept that helped spark broader thinking around platform
+                potential.
+              </p>
+              <div className="rounded-[1.25rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/88 px-4 py-4 text-sm leading-6 text-[color:var(--color-slate)]/68">
+                This is a public-safe rebuild of the interaction pattern, not
+                the original internal implementation.
+              </div>
+            </div>
+
+            <SoundSeekerWidget />
+          </div>
+        </ContentSection>
+      </section>
 
       <ContentSection
         eyebrow="Platform lens"
@@ -398,6 +452,13 @@ export default function AiPlatformMcpPage(): JSX.Element {
           early value can become something repeatable and durable.
         </p>
       </ContentSection>
+
+      <TestimonialsSection
+        eyebrow="Recommendations"
+        title="How collaborators described this work"
+        description="Two adjacent perspectives that reinforce the same pattern: translating early AI momentum into practical systems, stronger guardrails, and credible cross-functional execution."
+        testimonials={relatedTestimonials}
+      />
     </Container>
   );
 }

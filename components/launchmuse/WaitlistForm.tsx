@@ -151,7 +151,7 @@ const WaitlistForm = (): JSX.Element => {
     } catch (error) {
       console.error(error);
       const message =
-        "Unexpected error. Please try again or email hello@danielnash.com.";
+        "Unexpected error. Please try again shortly or use the contact form.";
       setErrors((prev) => ({ ...prev, general: message }));
       setToast({ message, variant: "error" });
     } finally {

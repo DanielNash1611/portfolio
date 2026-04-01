@@ -1,11 +1,19 @@
-import type { WorkEntry } from "@/content/portfolio";
-import { getTestimonialsByIds } from "@/content/portfolio";
+import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import ContentSection from "@/components/site/ContentSection";
 import CTASection from "@/components/site/CTASection";
 import MetricStrip from "@/components/site/MetricStrip";
 import PageHero from "@/components/site/PageHero";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
 import VisualPlaceholder from "@/components/site/VisualPlaceholder";
+import {
+  getTestimonialsByIds,
+  siteConfig,
+  type WorkEntry,
+} from "@/content/portfolio";
+import {
+  getPageContextByPath,
+  getPortfolioContext,
+} from "@/lib/portfolio-guide/context";
 
 type CaseStudyTemplateProps = {
   entry: WorkEntry;
@@ -15,6 +23,8 @@ export default function CaseStudyTemplate({
   entry,
 }: CaseStudyTemplateProps): JSX.Element {
   const relatedTestimonials = getTestimonialsByIds(entry.testimonialIds);
+  const pageContext = getPageContextByPath(entry.href);
+  const portfolioContext = getPortfolioContext();
   const heroMetrics =
     entry.heroMetricsPlacement === "hero" || entry.heroMetricsPlacement == null
       ? entry.featuredMetrics
@@ -43,6 +53,13 @@ export default function CaseStudyTemplate({
         image={entry.heroImage}
         imageAlt={entry.heroImageAlt}
       />
+
+      {pageContext ? (
+        <PortfolioGuide
+          pageContext={pageContext}
+          portfolioContext={portfolioContext}
+        />
+      ) : null}
 
       {entry.heroDetails?.length || entry.heroQuestions?.length ? (
         <ContentSection tone="plain" className="space-y-5">
@@ -338,14 +355,13 @@ export default function CaseStudyTemplate({
           "I’m happy to share the operating model, the metrics logic, or how the org alignment actually worked behind the scenes."
         }
         primaryAction={{
-          href: "https://www.linkedin.com/in/daniel-a-nash/",
+          href: siteConfig.linkedinUrl,
           label: "Connect on LinkedIn",
           external: true,
         }}
         secondaryAction={{
-          href: "mailto:hello@danielnash.com",
-          label: "Email me",
-          external: true,
+          href: siteConfig.contactHref,
+          label: "Send a message",
         }}
       />
     </div>

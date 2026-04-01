@@ -34,8 +34,9 @@ export default function ContactPage(): JSX.Element {
           Let&apos;s connect
         </h1>
         <p className="text-brand-slate/80">
-          Share a few details about the role, team, or project. I reply within
-          two business days.
+          Share a few details about the role, team, or project. Messages go
+          through a protected contact form, and I reply within two business
+          days.
         </p>
         <ContactForm />
       </section>

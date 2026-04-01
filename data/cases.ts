@@ -21,7 +21,7 @@ export const cases: Case[] = [
     summary:
       "A high-stakes checkout redesign that succeeded not just because of the experience changes, but because better product, UX, and engineering collaboration led to stronger decisions during build, a cleaner launch, and measurable lift.",
     tags: ["Commerce", "Experimentation", "Customer Experience"],
-    heroImage: "/images/checkout-redesign/checkout-after.png",
+    heroImage: "/images/checkout-redesign/checkout-header.png",
     roleLens: ["senior-product-manager"],
     bestFor: "Senior Product Manager",
     cardType: "Case Study",
@@ -35,7 +35,7 @@ export const cases: Case[] = [
       "30% faster checkout",
       "12-week launch, minimal disruption",
     ],
-    href: "/work/oms-transformation",
+    href: "/work/checkout-redesign",
   },
   {
     slug: "returns-modernization",
@@ -140,9 +140,9 @@ export const cases: Case[] = [
   },
   {
     slug: "sound-seeker",
-    title: "Sound Seeker",
+    title: "Sound Seeker live demo",
     summary:
-      "A hackathon-winning AI concept rebuilt as an independent demo to show how a PM can prototype frontier product ideas quickly and credibly.",
+      "A public-facing rebuild of the hackathon concept, now positioned as a supporting artifact inside the platform foundations case study.",
     tags: ["Prototype", "AI Product", "Music"],
     heroImage: "/images/synth-hero.svg",
     roleLens: ["builder-pm"],
@@ -151,9 +151,9 @@ export const cases: Case[] = [
     chips: [
       "Hackathon-winning concept",
       "Rapid PM-led prototype",
-      "Independent public demo",
+      "Embedded supporting artifact",
     ],
-    href: "/work/sound-seeker",
+    href: "/work/ai-platform-mcp#sound-seeker-live-demo",
   },
   {
     slug: "launchmuse",

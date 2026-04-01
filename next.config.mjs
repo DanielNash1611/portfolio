@@ -17,7 +17,7 @@ const nextConfig = {
     return [
       {
         source: "/work/sound-synthesist",
-        destination: "/work/sound-seeker",
+        destination: "/work/ai-platform-mcp#sound-seeker-live-demo",
         permanent: true,
       },
       {
@@ -36,13 +36,18 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/work/checkout-redesign",
-        destination: "/work/oms-transformation",
+        source: "/work/oms-transformation",
+        destination: "/work/checkout-redesign",
         permanent: true,
       },
       {
         source: "/work/sound-seeker",
-        destination: "/products/ai-agents-lab",
+        destination: "/work/ai-platform-mcp#sound-seeker-live-demo",
+        permanent: true,
+      },
+      {
+        source: "/products/ai-agents-lab",
+        destination: "/products/oms-chatgpt-app",
         permanent: true,
       },
     ];

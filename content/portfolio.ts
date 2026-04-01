@@ -105,15 +105,17 @@ export type ProductEntry = {
   featuredMetrics: Metric[];
   problem: string[];
   solution: string[];
+  whyThisMatters?: string[];
   productExperience: Array<{
     title: string;
     description: string;
   }>;
+  evaluationAndTrust?: string[];
   learnings: string[];
+  buildStory?: string[];
   visuals: VisualAsset[];
   actions?: ActionLink[];
   featured?: boolean;
-  embeddedExperience?: "sound-seeker";
 };
 
 export type ThinkingEntry = {
@@ -123,6 +125,8 @@ export type ThinkingEntry = {
   eyebrow: string;
   summary: string;
   description: string;
+  cardTitle?: string;
+  cardDescription?: string;
   readTime: string;
   tags: string[];
   keyIdeas: string[];
@@ -169,7 +173,7 @@ export const siteConfig = {
   name: "Daniel Nash",
   title: "AI Systems Product Leader / Senior Product Manager",
   location: "Los Angeles, California",
-  email: "hello@danielnash.com",
+  contactHref: "/contact",
   linkedinUrl: "https://www.linkedin.com/in/daniel-a-nash/",
   recommendationsUrl:
     "https://www.linkedin.com/in/daniel-a-nash/details/recommendations/?detailScreenTabIndex=0",
@@ -246,7 +250,7 @@ export const homeContent = {
     ],
   },
   featuredWork: ["chatgpt-enterprise", "ai-platform-mcp", "checkout-redesign"],
-  featuredProducts: ["launchmuse", "immunology-scout", "ai-agents-lab"],
+  featuredProducts: ["launchmuse", "immunology-scout", "oms-chatgpt-app"],
   featuredThinking: ["ai-strategy", "product-philosophy"],
   featuredTestimonials: [
     "zac-bogart",
@@ -271,9 +275,8 @@ export const homeContent = {
       external: true,
     },
     secondaryAction: {
-      href: `mailto:${siteConfig.email}`,
-      label: "Email me",
-      external: true,
+      href: siteConfig.contactHref,
+      label: "Send a message",
     },
   },
 };
@@ -330,6 +333,20 @@ export const testimonials: TestimonialEntry[] = [
     context:
       "Technical partner who called out executive alignment and translation of complex AI ideas into practical direction.",
     source: "Direct",
+    featured: true,
+  },
+  {
+    id: "sean-richardson",
+    quote:
+      "Daniel has been a tremendous partner across the many different initiatives we've worked together on.",
+    name: "Sean Richardson",
+    title: "Information Security Manager",
+    company: "The Guitar Center Company",
+    relationship:
+      "Security partner across enterprise AI adoption and data protection work",
+    context:
+      "Sean described Daniel as an insightful, collaborative problem solver who was at the forefront of Guitar Center's early AI efforts while helping craft processes that enabled business efficiency and kept data protected.",
+    source: "LinkedIn",
     featured: true,
   },
   {
@@ -696,12 +713,12 @@ export const workEntries: WorkEntry[] = [
         todo: "TODO: Add a real workflow artifact when public-safe assets exist.",
       },
     ],
-    testimonialIds: ["sumanth-cherukuri", "daniel-das"],
+    testimonialIds: ["sean-richardson", "daniel-das"],
     featured: true,
   },
   {
     slug: "checkout-redesign",
-    href: "/work/oms-transformation",
+    href: "/work/checkout-redesign",
     title: "Better execution, faster checkout, measurable growth",
     eyebrow: "Selected Work",
     summary:
@@ -711,9 +728,9 @@ export const workEntries: WorkEntry[] = [
     role: "Senior Product Manager, Commerce",
     company: "The Guitar Center Company",
     timeframe: "2023",
-    heroImage: "/images/checkout-redesign/checkout-after.png",
+    heroImage: "/images/checkout-redesign/checkout-header.png",
     heroImageAlt:
-      "Redesigned checkout experience showing a cleaner delivery step and simplified order summary.",
+      "Checkout redesign header illustration showing delivery, order summary, and payment visuals.",
     tags: [
       "Commerce",
       "Experimentation",
@@ -825,9 +842,9 @@ export const productEntries: ProductEntry[] = [
     eyebrow: "Live Product",
     status: "Open alpha",
     summary:
-      "An AI-native product for release planning that helps artists turn a launch date into a structured six-week campaign.",
+      "A focused AI-native product that helps artists turn the meaning behind a release into a cohesive six-week narrative.",
     description:
-      "A live product story that demonstrates problem framing, AI-native workflow design, and rapid execution from product manager to shipped prototype.",
+      "A live product case study about narrative-driven release planning, sharp product scoping, and how quickly a PM can now move from concept to working software.",
     heroImage: "/images/launchmuse-screenshot.png",
     heroImageAlt:
       "LaunchMuse campaign wizard screenshot showing the product's release planning flow.",
@@ -841,46 +858,58 @@ export const productEntries: ProductEntry[] = [
       },
       {
         label: "Product stance",
-        value: "Focused MVP",
-        detail: "The product solves one painful job before expanding scope.",
+        value: "Narrative-first wedge",
+        detail:
+          "The product stays narrow and solves one painful job well: shaping a release into a coherent story.",
       },
       {
         label: "Current status",
         value: "Live alpha",
-        detail: "A working version is available for real-world exploration.",
+        detail:
+          "A working version is available for real-world exploration and iteration.",
       },
     ],
     problem: [
-      "Independent artists and small teams often treat release planning like a second job built out of spreadsheets, reminders, and last-minute scrambling.",
-      "The hard part is not only creating content. It is sequencing a coherent story across channels and milestones over several weeks.",
-      "That planning overhead steals time and energy from the actual creative work.",
+      'Independent artists do not just struggle with promotion. They struggle with telling a coherent story around a release. Most launches end up collapsing into a single post that says some version of "my new song is out," even when the work behind it carries weeks or months of meaning, process, emotion, and intent.',
+      "Turning that meaning into a structured campaign across multiple weeks and platforms is hard. The story gets spread across notes, reminders, half-finished captions, and last-minute decisions, which makes the campaign feel fragmented and reactive instead of intentional.",
+      "The result is familiar: engagement spikes around release day, then disappears quickly because nothing is holding the narrative together before or after the drop. Planning the story becomes a second job. The more time artists spend figuring out how to talk about their work, the less time they spend actually creating it.",
     ],
     solution: [
-      "LaunchMuse focuses on a narrow but high-leverage problem: generate a practical six-week campaign around a release date.",
-      "The product takes release context and returns a structured plan with milestone timing, content themes, and channel-aware suggestions.",
-      "Instead of pretending to be a full-suite marketing platform, it acts like a planning copilot that helps artists get unstuck quickly.",
+      "LaunchMuse is intentionally narrow. It helps artists turn a release into a cohesive six-week story rather than asking them to stitch one together post by post.",
+      "The product takes release context, then generates a structured campaign with narrative themes across each phase, timing across channels, and content ideas that reflect what the release is actually about.",
+      "This is not trying to be a full marketing suite. It acts more like a storytelling copilot that helps artists express the meaning behind their work without getting buried in planning overhead.",
+    ],
+    whyThisMatters: [
+      "Strong releases are not just announced. They are experienced. When the story around a release unfolds with some cohesion, fans have more ways to connect before the music arrives, not just after it is already out.",
+      "That changes the shape of engagement. Anticipation builds earlier, the work feels more meaningful and memorable, and the release stops feeling like an isolated post fighting for attention in a crowded feed.",
+      "LaunchMuse helps shift a release from scattered promotion into a connected narrative, while giving artists more time back for the work that matters most: making the music itself.",
     ],
     productExperience: [
       {
         title: "Input the release context",
         description:
-          "Artists describe the release type, timing, and story they want to tell.",
+          "Artists describe the release timing, type, and story they want to tell.",
       },
       {
         title: "Generate a structured campaign",
         description:
-          "LaunchMuse returns a practical six-week plan spanning pre-release, launch week, and follow-through.",
+          "LaunchMuse returns a six-week plan with story arcs, content themes, and timing across channels.",
       },
       {
         title: "Refine with iteration",
         description:
-          "The output is designed to be adapted, regenerated, or narrowed based on genre, platform, or audience fit.",
+          "The artist can adapt, regenerate, or narrow the plan based on platform, tone, audience, or creative direction.",
       },
     ],
     learnings: [
-      "AI-native product design works best when the workflow is narrow, real, and frequent enough to matter.",
-      "Being close to the user problem as a creator made it easier to cut scope aggressively without losing the emotional core of the product.",
-      "PM-led prototyping with AI is a credible way to validate whether a product deserves more investment.",
+      'AI-native products work best when the workflow is narrow, real, and frequent enough to matter. LaunchMuse became stronger when I treated it less like "AI for music marketing" and more like one focused job: help an artist shape a release story they would otherwise struggle to plan consistently.',
+      'Prompt scaffolding is product design. Output quality depended not just on the model, but on how release context, narrative structure, sequencing, and constraints were framed so the campaign felt coherent instead of generically "helpful."',
+      "PM-led prototyping with AI is now a real validation advantage. This product moved from idea to working MVP fast enough that the concept could be tested while the product questions were still fresh, which is a meaningful shift from how slowly early validation used to happen.",
+    ],
+    buildStory: [
+      "LaunchMuse was developed as part of the Maven AI Product Management Bootcamp with Marily Nika, where there was also a pitching and contest component among participants. That context helped sharpen the product story early, but the stronger signal was how quickly the idea could be turned into something real.",
+      "The product evolved through multiple stages: it was first explored in v0, then iterated in Opal, and then built end to end in Codex. The full MVP came together in about 10 hours, alongside a first-time setup of the surrounding builder stack including GitHub, the Vercel environment, and the deployment workflow.",
+      "The significance is not simply that I learned new tools. It is that a PM can now move from concept to working product far faster than traditional workflows allowed, especially when the scope is sharp and the validation question is clear. This project reinforced that product leaders who can scope sharply and prototype quickly can validate ideas far earlier than traditional workflows allow.",
     ],
     visuals: [
       {
@@ -898,9 +927,8 @@ export const productEntries: ProductEntry[] = [
         external: true,
       },
       {
-        href: `mailto:${siteConfig.email}`,
+        href: siteConfig.contactHref,
         label: "Ask about the build",
-        external: true,
       },
     ],
     featured: true,
@@ -912,9 +940,9 @@ export const productEntries: ProductEntry[] = [
     eyebrow: "Emerging Product",
     status: "Concept in progress",
     summary:
-      "An emerging AI product concept exploring how research teams can move faster from literature overload to useful hypotheses and next-step questions.",
+      "A paper-and-patent scouting product concept for immunology teams, designed to ground questions, surface novelty signals, and support next-step hypotheses.",
     description:
-      "A high-signal early-stage concept that shows how product thinking can translate frontier AI into scientific discovery workflows.",
+      "An early-stage research grounding product combining literature and patent signals for trustworthy immunology exploration.",
     heroImage: "/images/immunology-scout-screenshot.png",
     heroImageAlt:
       "Immunology Scout screenshot showing a literature scouting workflow for immunology research.",
@@ -928,48 +956,57 @@ export const productEntries: ProductEntry[] = [
       },
       {
         label: "Core job",
-        value: "Research signal finding",
+        value: "Paper + patent scouting",
         detail:
-          "Help researchers move through literature, evidence, and next-step framing faster.",
+          "Help teams move from scattered evidence to grounded novelty checks and sharper next-step questions.",
       },
       {
         label: "Trust requirement",
-        value: "High-confidence use case",
+        value: "Traceable workflow",
         detail:
-          "Citations, transparency, and human review are non-negotiable in scientific workflows.",
+          "Citations, transparency, and human review are non-negotiable in scientific research workflows.",
       },
     ],
     problem: [
-      "Scientific teams face an overwhelming volume of papers, pathways, and weak signals that are difficult to synthesize quickly.",
-      "The bottleneck is rarely just information access. It is turning scattered evidence into a useful map of what matters next.",
-      "General-purpose AI tools can summarize text, but that alone does not create a trustworthy research workflow.",
+      "Scientific teams are overwhelmed by papers, pathways, weak signals, and adjacent prior art across fast-moving therapeutic areas.",
+      "The challenge is not just finding information. It is determining what matters, what may already exist, and what is worth pursuing next without losing momentum to manual synthesis and novelty checking.",
+      "Generic AI summarization can compress text, but that alone is insufficient for a trustworthy research workflow. Teams still need cited evidence, patent awareness, and a clear boundary between grounded signals and scientific judgment.",
     ],
     solution: [
-      "Immunology Scout is framed as a workflow product, not a magic answer engine.",
-      "The concept focuses on literature scouting, evidence clustering, hypothesis framing, and handoff into human scientific judgment.",
-      "The design bias is toward clarity, citations, and traceability so the product can be useful without pretending to replace expertise.",
+      'Immunology Scout is intentionally scoped as a research grounding layer rather than a broad "AI for science" platform.',
+      "The current wedge is paper + patent exploration: combine scientific literature and prior-art signals so teams can see what is known, what is uncertain, and where genuine opportunity may exist.",
+      "Patent-aware exploration helps researchers pressure-test novelty, understand competitive context, and avoid duplicating work that may already be claimed or crowded.",
+      "Outputs are structured to support hypothesis refinement, competitive analysis, and future downstream workflows such as simulation and experimental planning systems, while keeping human scientific reasoning in the loop.",
     ],
     productExperience: [
       {
-        title: "Start with a research question",
+        title: "Start with a focused research question",
         description:
-          "The user anchors the workflow around a specific immune pathway, marker, therapy area, or scientific uncertainty.",
+          "The workflow begins with a specific immune pathway, marker, therapy area, or scientific uncertainty so the search stays grounded in a real research question.",
       },
       {
-        title: "Review evidence clusters",
+        title: "Review evidence and novelty signals",
         description:
-          "The system surfaces related themes, conflicting signals, and promising directions to investigate further.",
+          "The product surfaces literature themes, conflicting signals, related patents, and potential whitespace with citations and traceability visible for review.",
       },
       {
-        title: "Shape the next step",
+        title: "Shape next-step hypotheses and directions",
         description:
-          "Outputs are designed to support hypothesis refinement, literature triage, and team discussion rather than replace scientific reasoning.",
+          "Outputs are designed for hypothesis refinement, literature triage, scientific discussion, and downstream planning rather than replacing scientific reasoning.",
       },
     ],
+    evaluationAndTrust: [
+      "This was the first project where I built formal evals. Because I was not the domain expert, I worked with a scientific collaborator to define what a useful, trustworthy output should actually contain.",
+      "Structured expert feedback became the basis for a lightweight evaluation set: what evidence should be cited, where claims needed tighter boundaries, and what would make the product genuinely useful to a researcher instead of merely polished.",
+      "That process surfaced a critical issue early: the system could hallucinate patent references, which is unacceptable in a workflow meant to support novelty checking and competitive understanding.",
+      "Once those failures were visible and measurable, iteration became much more disciplined. Later versions enabled tighter automated feedback loops, but the larger lesson was product-oriented: in high-stakes domains, trust comes from repeated loops between domain expertise, evaluation, traceability, and system behavior.",
+    ],
     learnings: [
-      "High-stakes AI products earn trust through traceability and humility, not just fluency.",
-      "The product opportunity in science often lives in workflow compression and signal clarity rather than full automation.",
-      "Keeping the public narrative modest matters when the work is promising but still emerging.",
+      "Trust in high-stakes AI products is earned through traceability, humility, and evaluation, not just fluent answers.",
+      "When the builder is not the subject-matter expert, domain-expert-informed evaluation is essential for defining quality and catching failure modes early.",
+      "In scientific workflows, compressing synthesis and novelty checking is often more valuable than trying to automate judgment end to end.",
+      "Strong science product opportunities can start with grounding and signal clarity before expanding into more ambitious downstream systems.",
+      "Modest public framing matters when the product is promising but still emerging.",
     ],
     visuals: [
       {
@@ -990,99 +1027,125 @@ export const productEntries: ProductEntry[] = [
     featured: true,
   },
   {
-    slug: "ai-agents-lab",
-    href: "/products/ai-agents-lab",
-    title: "AI Agents Lab",
-    eyebrow: "Prototype Lab",
-    status: "Live experiments",
+    slug: "oms-chatgpt-app",
+    href: "/products/oms-chatgpt-app",
+    title: "OMS ChatGPT App",
+    eyebrow: "Product Artifact",
+    status: "Live prototype",
     summary:
-      "A product lab for rapid AI experiments, including Sound Seeker and other agent-oriented workflows that make ideas tangible before full productization.",
+      "A prototype ChatGPT App that enables users to interact with Order Management Systems through a conversational interface, handling workflows like order lookup and cancellation with built-in guardrails.",
     description:
-      "This page packages builder energy without turning the portfolio into a toybox: real prototypes, clear framing, and explicit lessons for product leadership.",
-    heroImage: "/images/synth-hero.svg",
+      "Conversational OMS prototype showing how AI can support order lookup and cancellation inside enterprise workflows with clear safeguards and user control.",
+    heroImage: "/images/oms-chatgpt-app/web-prototype-stylized.png",
     heroImageAlt:
-      "Generative audio and interface illustration representing experimental AI products.",
-    tags: ["Rapid Prototyping", "AI Agents", "Builder PM", "Live Demo"],
+      "Stylized presentation of the OMS ChatGPT App web prototype used as a hero asset.",
+    heroImageClassName: "object-cover object-top",
+    heroImageExpandable: true,
+    tags: [
+      "Enterprise Workflow",
+      "Conversational AI",
+      "AI Agents",
+      "Prototype",
+    ],
     featuredMetrics: [
       {
-        label: "Prototype style",
-        value: "PM-led prototyping",
+        label: "Environment",
+        value: "Simulated OMS data",
         detail:
-          "Built quickly to validate workflows and user value before full engineering investment.",
+          "The prototype uses mock order data so the workflow can be explored without exposing PII.",
       },
       {
-        label: "Anchor demo",
-        value: "SoundSeeker demo",
+        label: "Workflow scope",
+        value: "Lookup + cancellation",
         detail:
-          "A hackathon-winning concept rebuilt as a public prototype using OpenAI APIs.",
+          "Focused on two concrete OMS jobs where guardrails and user confirmation matter.",
       },
       {
-        label: "Role in portfolio",
-        value: "Builder proof point",
+        label: "Design priority",
+        value: "Trust and control",
         detail:
-          "Shows speed, range, and the ability to make abstract ideas concrete.",
+          "Reasoning, confirmation, and clear user control were treated as first-class product requirements.",
       },
     ],
     problem: [
-      "Many AI ideas stall because they stay in slides or strategy docs for too long.",
-      "Teams need a faster way to pressure-test whether an experience is compelling before it becomes a roadmap commitment.",
-      "Recruiters also need proof that the 'builder' identity is real, not just aspirational.",
+      "OMS workflows are often fragmented across multiple tools, slow to execute, and difficult to automate safely because of PII constraints.",
+      "Early AI efforts also tended to live either as standalone experiences or as small helpers inside existing workflows, without a clear pattern for AI interacting directly with internal systems through conversation.",
+      "This prototype explored whether a conversational interface could make common OMS tasks faster and clearer without making the workflow feel reckless or opaque.",
     ],
     solution: [
-      "AI Agents Lab turns promising workflow ideas into working artifacts quickly enough to learn from them.",
-      "The flagship example is Sound Seeker: an AI assistant that helps musicians move from a tonal reference to a concrete rig and signal chain.",
-      "The lab approach is intentionally pragmatic: prototype the workflow, learn what creates trust, then decide what deserves to harden into a product.",
+      "OMS ChatGPT App is a conversational AI interface for Order Management workflows, designed to make common support and operations tasks faster, clearer, and safer to execute.",
+      "The prototype focuses on high-signal tasks like order lookup and cancellation, with confirmation steps, visible reasoning, and built-in guardrails instead of hidden automation.",
+      "It was designed to live inside an AI environment employees were already using, making the interaction pattern feel close to real work instead of like a disconnected experiment.",
+    ],
+    whyThisMatters: [
+      "The prototype represented an early example of a more direct pattern for conversational interaction with internal systems.",
+      "It helped shift thinking from AI as a standalone tool toward AI as an active participant in real workflows, while staying disciplined about safety, clarity, and human control.",
     ],
     productExperience: [
       {
-        title: "Explore the live Sound Seeker demo",
+        title: "Retrieve order details through natural language",
         description:
-          "Users describe a song, artist, or sonic target and receive a rig recommendation with follow-up reasoning.",
+          "Users can ask for order information conversationally instead of navigating across multiple OMS screens.",
       },
       {
-        title: "See the product pattern",
+        title: "Execute guarded cancellations",
         description:
-          "Each experiment emphasizes workflow design, trust, and user control rather than shallow AI theatrics.",
+          "Cancellation flows require confirmation and make safeguards visible before any action is taken.",
       },
       {
-        title: "Translate experiments into strategy",
+        title: "See reasoning and stay in control",
         description:
-          "The point of the lab is not novelty. It is de-risking concepts and generating evidence for where product investment should go next.",
+          "The interaction is designed to explain what the system is doing and preserve user agency throughout the workflow.",
       },
     ],
+    evaluationAndTrust: [
+      "The prototype uses simulated data to respect the sensitivity of OMS systems and avoid exposing PII.",
+      "It represents a functional concept rather than a production deployment, with the goal of validating interaction patterns instead of replacing existing systems.",
+      "Designed to explore how AI agents can safely operate within enterprise workflows.",
+    ],
     learnings: [
-      "Prototypes are most useful when they reveal product questions, not just technical possibility.",
-      "AI pair-programming meaningfully expands what product leaders can make tangible on their own.",
-      "Users trust AI experiences more when the system explains itself and asks clarifying questions instead of over-claiming certainty.",
+      "AI can operate within enterprise constraints when designed intentionally.",
+      "Prototypes can unlock faster alignment than strategy documents alone.",
+      "Product leaders can de-risk platform investments through hands-on builds.",
+    ],
+    buildStory: [
+      "The prototype created enough alignment to move from a promising interaction concept into more serious exploration of production viability.",
+      "Follow-on work included evaluating SSO integration for secure access, defining PII-safe interaction patterns, building an internal MCP server to support agent workflows, and exploring a production-oriented architecture that paired Java for team alignment with a Python wrapper around the Agents SDK.",
     ],
     visuals: [
       {
-        title: "Sound Seeker prototype",
+        title: "Order lookup inside ChatGPT",
         description:
-          "Existing hero art is paired with a live widget to demonstrate the prototype directly on the page.",
-        image: "/images/synth-hero.svg",
-        alt: "Experimental product visual for an AI-powered music recommendation interface.",
+          "Natural-language lookup returns a structured order view with order status, shipping details, totals, and expandable items.",
+        image: "/images/oms-chatgpt-app/order-items-chatgpt.png",
+        alt: "OMS ChatGPT App order summary view inside ChatGPT showing order details and expanded line items.",
+        expandable: true,
       },
       {
-        title: "Future lab demos",
+        title: "Cancellation with guardrails",
         description:
-          "This area is reserved for additional prototypes, screenshots, or Looms as the lab expands.",
-        todo: "TODO: Add one or two more public experiments to deepen the builder signal.",
+          "The confirmation state makes the risk explicit, requires a deliberate phrase, and keeps the user in control before submission.",
+        image: "/images/oms-chatgpt-app/cancellation-guardrails-chatgpt.png",
+        alt: "OMS ChatGPT App cancellation confirmation flow inside ChatGPT showing warning text and explicit confirmation controls.",
+        expandable: true,
+      },
+      {
+        title: "Completed state after action",
+        description:
+          "After confirmation, the assistant shows the updated order state clearly instead of hiding the result behind a generic success message.",
+        image: "/images/oms-chatgpt-app/cancelled-state-chatgpt.png",
+        alt: "OMS ChatGPT App order summary after cancellation showing the updated cancelled state.",
+        expandable: true,
       },
     ],
     actions: [
       {
-        href: "/work/ai-platform-mcp",
-        label: "See the platform strategy behind the lab",
-      },
-      {
-        href: siteConfig.linkedinUrl,
-        label: "Talk about builder PM roles",
+        href: "https://omschatgptapp.vercel.app",
+        label: "Live prototype (simulated environment)",
         external: true,
       },
     ],
     featured: true,
-    embeddedExperience: "sound-seeker",
   },
 ];
 
@@ -1090,39 +1153,78 @@ export const thinkingEntries: ThinkingEntry[] = [
   {
     slug: "ai-strategy",
     href: "/thinking/ai-strategy",
-    title: "AI strategy is adoption design, not model shopping",
+    title: "AI doesn’t fail because of the model. It fails in the workflow.",
     eyebrow: "Thinking",
     summary:
-      "Enterprise AI succeeds when product leaders design for workflow fit, trust, and operating rhythm, not just access to the newest model.",
+      "Enterprise AI succeeds when product leaders focus less on model debates and more on workflow fit, trust, enablement, and the systems that make adoption real.",
     description:
-      "A concise point of view on what makes AI programs actually stick inside organizations.",
+      "A practical enterprise AI point of view shaped by leading adoption in a real company, where workflow fit, trust, champions, governance, and the middle layer mattered more than model hype.",
+    cardTitle: "AI doesn’t fail because of the model",
+    cardDescription:
+      "Most enterprise AI plans make the model choice feel like the big decision. In practice, the harder work is workflow fit, trust, champions, governance, and the middle layer that makes AI usable inside real systems.",
     readTime: "4 min read",
     tags: ["AI Strategy", "Operating Model", "Product Leadership"],
     keyIdeas: [
-      "Pilot where the workflow is real and measurable.",
-      "Treat enablement and governance as product work, not compliance afterthoughts.",
-      "Design the middle layer between models and business systems.",
+      "Start with a workflow, not a model decision.",
+      "Adoption needs champions, trust, and an operating rhythm.",
+      "The real product is the system around the model.",
     ],
     sections: [
       {
-        title: "The mistake most teams make",
+        title: "Most AI strategies fail before they start",
         body: [
-          "Too many AI conversations start with the model. That is usually the least differentiated part of the strategy.",
-          "The hard part is adoption design: where the workflow lives, what gets measured, who trusts the output, and how the organization learns what is worth scaling.",
+          "Most AI strategies fail before they start because they turn a technology choice into the strategy. Teams spend weeks comparing model quality, vendor roadmaps, and benchmark scores before they have identified the actual work that needs to improve.",
+          "In enterprise settings, that is backwards. The model matters, but it is rarely the main reason something succeeds or fails. The real questions are where AI fits in the workflow, what people will trust, how risk is handled, and what has to be true for usage to become repeatable instead of theatrical.",
         ],
       },
       {
-        title: "What changes the outcome",
+        title: "What starting with the model actually means",
         body: [
-          "Start with a workflow where value can be observed quickly and safely. Design the rollout like a product experiment, not a software procurement exercise.",
-          "Then build the surrounding system: prompt patterns, training, champions, review steps, and a shared language for when a use case should evolve into something more durable.",
+          "Starting with the model is not just arguing about GPT versus Claude. It is the broader habit of making the technology choice the center of the strategy before the workflow, measurement plan, trust requirements, and operating model are clear.",
+          "That approach feels concrete, but it usually postpones the harder product decisions. Models can be swapped. Bad workflow fit, weak review design, fuzzy ownership, and missing adoption systems are much harder to repair after people have already formed habits around the wrong setup.",
+        ],
+      },
+      {
+        title: "Start with real work",
+        body: [
+          "When I helped lead early ChatGPT rollout work in the contact center, the starting question was simple: where are agents spending time, where is quality inconsistent, and what could we improve safely inside a real workflow?",
+          "That led us toward concrete jobs like pre-call preparation, drafting, and other context-heavy tasks with clear operational value. Starting there made the pilot measurable, grounded, and safe enough to learn from. Small pilots are useful when they reveal something durable: which moments benefit from AI, where human review has to stay, what prompt patterns hold up, and which workflows are actually worth scaling.",
+        ],
+      },
+      {
+        title: "Adoption is the product",
+        body: [
+          "Shipping access is not the same as shipping adoption. Usage grows when people trust the output, understand the boundaries, and can see how AI helps them do real work faster or better.",
+          "As ChatGPT Champions Lead, I treated enablement as part of the product, not as launch support. That meant reusable prompting patterns, training, examples, feedback loops, and a champions network that helped strong workflows spread across the organization. Champions were not a side program. They were part of how adoption became real.",
+        ],
+      },
+      {
+        title: "Governance belongs in the design",
+        body: [
+          "In real enterprise AI work, governance is not an afterthought. Legal review, security boundaries, data handling rules, approval paths, and risk tiers all shape what the system can responsibly do.",
+          "The goal is not to add control for its own sake. It is to design guardrails that are clear enough for leadership to trust and practical enough for teams to use. If governance lives outside the workflow, people route around it. If it is part of the workflow, scale gets much more realistic.",
+        ],
+      },
+      {
+        title: "The real product layer",
+        body: [
+          "The most important AI product work usually sits in the middle layer between the model and the business system. This is where prompt patterns, tooling, integrations, context handling, permissions, feedback loops, and review processes come together.",
+          "The model generates an output. The middle layer determines whether that output has the right context, reaches the right tool, follows the right review path, and lands inside a workflow a business can actually rely on.",
+          "That is why enterprise AI work starts to look much closer to systems product work than prompt experimentation. The product is not the model alone. The product is the system around the model. If that layer is weak, even a strong model produces brittle adoption. If that layer is well designed, model improvements become much easier to absorb.",
         ],
       },
       {
         title: "My operating principle",
         body: [
-          "AI strategy is strongest when it connects business outcomes, workflow design, and architecture without over-indexing on any one of them.",
-          "That is why I care so much about pilots, connectors, and operating models. They are how AI stops being a deck and starts becoming a capability.",
+          "I keep coming back to the same sequence: start with the business outcome, map the workflow, then design the system around the model.",
+          "The model still matters. It is just not the center of gravity. If the workflow is weak, trust is low, or the operating layer is missing, a better model will not save the rollout.",
+        ],
+      },
+      {
+        title: "What actually sticks",
+        body: [
+          "Enterprise AI becomes real when the work gets better, the boundaries are clear, and people know how to use the system with confidence.",
+          "The model can win the demo. The workflow decides whether anything actually sticks.",
         ],
       },
     ],
@@ -1131,39 +1233,41 @@ export const thinkingEntries: ThinkingEntry[] = [
   {
     slug: "product-philosophy",
     href: "/thinking/product-philosophy",
-    title: "Product leadership is systems design with accountability",
+    title: "Product leadership is systems design",
     eyebrow: "Thinking",
     summary:
-      "Good product leadership is not just roadmap taste. It is the ability to improve how decisions get made, how teams work, and how strategy becomes execution.",
+      "A point of view on why product leadership starts with decision systems, and how that belief became a practical operating model.",
     description:
-      "A short philosophy piece on product management as operating-system design.",
-    readTime: "5 min read",
-    tags: ["Product Philosophy", "Systems Thinking", "Leadership"],
+      "An editorial case study on why the operating model is part of the product outcome.",
+    cardDescription:
+      "An essay on product leadership as systems design, with operating-model artifacts used as proof.",
+    readTime: "7 min read",
+    tags: ["Product Leadership", "Operating Model", "Systems Design"],
     keyIdeas: [
-      "The team's operating model is part of the product outcome.",
-      "Clarity is a product capability, not just a communication skill.",
-      "Creative practice makes ambiguity easier to structure.",
+      "Product leadership is about how decisions get made, not just roadmap taste.",
+      "The operating model is part of the product outcome.",
+      "Making the system visible is what lets teams improve it intentionally.",
     ],
     sections: [
       {
-        title: "What product leadership really owns",
+        title: "Belief",
         body: [
-          "Strong product leaders own more than a backlog. They shape the quality of decisions across strategy, delivery, and cross-functional trust.",
-          "If planning is chaotic, priorities are opaque, or teams cannot see how work connects to outcomes, that is a product problem too.",
+          "Product leadership is not primarily about roadmap judgment. It is about designing how decisions get made, how tradeoffs are evaluated, and how work connects to outcomes.",
+          "When those systems stay implicit, product quality becomes inconsistent and overly dependent on individual PM skill.",
         ],
       },
       {
-        title: "Why systems thinking matters",
+        title: "Practice",
         body: [
-          "The best PMs recognize that customer experience, internal workflow, and org design often sit inside the same system.",
-          "That is why my work has stretched across checkout flows, returns tooling, enterprise AI adoption, and PM enablement. The surface changes, but the product muscles are consistent.",
+          "I believe the operating model is part of the product outcome, so this work focused on making the system visible across lifecycle, prioritization, review cadence, sprint rhythm, and roadmapping.",
+          "The goal was not more process. It was clearer, more comparable decision-making that could scale across teams.",
         ],
       },
       {
-        title: "The creative edge",
+        title: "Reflection",
         body: [
-          "Composition trained me to hear structure, pacing, tension, and release. Those are product skills too.",
-          "In practice, that means I care about coherence: the arc of a meeting, the shape of a roadmap, and the feel of a product experience once it is finally in someone's hands.",
+          "The result was not just cleaner execution. It was better organizational judgment, with shared language for prioritization, alignment, and impact.",
+          "That is the core of how I think about product leadership: make the system visible so it can be improved intentionally.",
         ],
       },
     ],

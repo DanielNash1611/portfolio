@@ -95,6 +95,23 @@ export const testimonials: Testimonial[] = [
     pageTargets: ["home"],
   },
   {
+    id: "sean-richardson",
+    name: "Sean Richardson",
+    title: "Information Security Manager",
+    relationship:
+      "Worked cross-functionally on enterprise AI adoption and security process design",
+    roleLabel: "Security Partner",
+    date: "Nov 17, 2025",
+    short:
+      "Daniel has been a tremendous partner across the many different initiatives we've worked together on.",
+    medium:
+      "Sean described Daniel as an insightful and collaborative problem solver who was hungry to take on new challenges. As Guitar Center began leveraging AI, he called Daniel out as being at the forefront of those efforts and helping craft processes that enabled business efficiency while keeping company data protected.",
+    source: "LinkedIn",
+    profileUrl: linkedinRecommendationsUrl,
+    featured: true,
+    narrativeTags: ["builder-pm", "product-leader"],
+  },
+  {
     id: "david-lawrence",
     name: "David Lawrence",
     title: "Retail Executive & Operator",

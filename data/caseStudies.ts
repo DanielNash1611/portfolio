@@ -40,7 +40,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 
 The redesigned flow simplified a dense multi-step experience, cut checkout time by roughly 30%, and launched in 12 weeks with minimal service disruption.
     `.trim(),
-    href: "/work/oms-transformation",
+    href: "/work/checkout-redesign",
   },
   {
     slug: "contact-center-ai",
