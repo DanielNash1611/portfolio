@@ -4,7 +4,7 @@ const itemReviewed = {
   "@type": "Person",
   name: siteConfig.name,
   jobTitle: siteConfig.title,
-  url: "https://danielnash.com",
+  url: "https://www.danielnash.co",
 };
 
 const reviews = getRenderableTestimonials().map((testimonial) => ({

@@ -171,7 +171,7 @@ export type ResumeVariant = {
 
 export const siteConfig = {
   name: "Daniel Nash",
-  title: "AI Systems Product Leader / Senior Product Manager",
+  title: "AI Product Leader / Senior Product Manager",
   location: "Los Angeles, California",
   contactHref: "/contact",
   linkedinUrl: "https://www.linkedin.com/in/daniel-a-nash/",
@@ -1279,45 +1279,37 @@ export const creativeEntries: CreativeEntry[] = [
   {
     slug: "eeg-music",
     href: "/creative/eeg-music",
-    title: "EEG music experiments",
-    eyebrow: "Creative Technology",
+    title: "Farraginous",
+    eyebrow: "Creative Technology / Original Composition",
     summary:
-      "An evolving creative-tech exploration into translating biological signals into musical systems, composition rules, and product ideas.",
+      "An experimental composition and video about mixed identity, shaped by hybrid tuning systems and biometric signals.",
     description:
-      "A forward-looking page that connects experimental music, human signals, and creative technology without pulling focus from the product narrative.",
-    tags: ["EEG", "Creative Tech", "Experimental Music"],
-    heroImage: "/images/synth-hero.svg",
+      "A focused case study on Farraginous: a 2021 composition and video for the Center for Latter-day Saint Arts about mixed identity, tuning systems, and biometric-driven experimentation.",
+    tags: ["Identity", "Tuning", "Biometrics"],
+    heroImage: "/images/farraginous/installation-view.jpg",
     heroImageAlt:
-      "Abstract waveform illustration suggesting a connection between signals and musical output.",
+      "Installation view with Farraginous on display in the exhibition.",
     sections: [
       {
-        title: "Why this exists",
+        title: "Overview",
         body: [
-          "I am interested in creative systems where human signals shape musical structure instead of acting as a novelty input.",
-          "That interest sits at the intersection of composition, experimentation, and product thinking: what kind of interface helps people experience a signal as something expressive and interpretable?",
+          "Farraginous is one of my most personal creative works: an experimental composition and video that translates the feeling of living in-between into sound.",
+          "Created for the Center for Latter-day Saint Arts, the piece brings together a melody rooted in Chinese tuning, harmony shaped by Western Just Intonation, and biometric-driven experimentation to explore mixed identity, alienation, and the strange beauty of not fitting neatly into a single category.",
         ],
       },
       {
-        title: "What I am exploring",
+        title: "Why I made it",
         body: [
-          "The current direction is intentionally lightweight: signal mapping, compositional constraints, and questions about what kind of interaction feels meaningful instead of gimmicky.",
-          "This page is structured to hold future artifacts such as clips, process notes, visualizations, or a public-safe prototype.",
+          "I grew up half Taiwanese and half white in the United States, often feeling close to both worlds without being fully claimed by either. Farraginous came from that tension.",
+          "I did not want to make a piece that only explained the idea intellectually. I wanted the music itself to carry that feeling. The tuning systems do not fully resolve into a single frame. The sound world stays beautiful, but unstable. The result is a piece about identity, misreading, and the middle space.",
         ],
       },
       {
         title: "Why it belongs in the portfolio",
         body: [
-          "The value is not that I built a neuroscience startup on the side. It is that this kind of experiment reveals how I think about systems, interfaces, and translating ambiguity into something people can actually engage with.",
-          "TODO: Add an embed, image sequence, or process write-up when the artifact is ready to share publicly.",
+          "This project belongs here not just as a piece of music, but as an example of how I think. Farraginous reflects the same instincts that shape my product work: translating ambiguous inputs into meaningful systems, designing around human signals, and using structure to turn complexity into something people can feel.",
+          "It is a creative work, but it reveals the same systems thinking, experimentation, and narrative intent that drive the rest of my portfolio.",
         ],
-      },
-    ],
-    visuals: [
-      {
-        title: "Artifact placeholder",
-        description:
-          "Reserved for a future video, screenshot, or signal-to-sound visualization.",
-        todo: "TODO: Add EEG experiment media when a public-safe artifact exists.",
       },
     ],
     featured: true,
@@ -1390,21 +1382,22 @@ export const creativeEntries: CreativeEntry[] = [
 ];
 
 export const aboutContent = {
-  title: "AI systems product leader, systems thinker, and hands-on builder",
+  title:
+    "AI Product Leader building practical products, workflows, and systems",
   summary:
-    "I build and scale real-world AI systems, from early prototypes to enterprise adoption. Over the last nine years, my work has moved across ecommerce, contact center, workflow modernization, product enablement, and enterprise AI, but the through-line is consistent: turning emerging capabilities into systems that actually work in production.",
+    "I work across product strategy, workflow modernization, enterprise AI adoption, and system design, turning new AI capability into real-world products and operating models that teams use, trust, and scale.",
   paragraphs: [
-    "At Guitar Center, I have led AI initiatives from pilot to scale, growing ChatGPT Enterprise from roughly ~150 users / ~40 DAU to ~1,000 users / ~800 DAU. That work included reusable AI workflows, enterprise governance, and close partnership across Legal, Security, Engineering, and Operations.",
-    "I have also built and shipped systems directly: designing agent-based workflows, integrating retrieval across structured and unstructured data, and using eval-driven iteration to improve quality and reliability over time.",
-    "Recently, I have been building multi-agent research workflows in immunology, exploring how AI can accelerate scientific discovery while still respecting domain trust, incentives, and feedback design.",
-    "I do my best work in environments that value both building and thinking, where product managers are expected to understand the system, not just the roadmap. Music remains part of the story because it sharpens narrative sense, systems awareness, and craft.",
+    "My work usually starts the same way: find the leverage point in a system, then turn emerging capability into something operationally useful.",
+    "That has taken me across ecommerce, contact center, workflow modernization, and enterprise AI. At Guitar Center, I helped scale ChatGPT Enterprise from roughly ~150 licensed users / ~40 DAU to ~1,000 users / ~800 DAU by pairing reusable workflows with governance, enablement, and close partnership across Legal, Security, Engineering, and Operations.",
+    "I stay close to the build because better AI product decisions come from understanding the system, not just the roadmap. My work has included agent-based workflows, retrieval across structured and unstructured data, and eval-driven iteration to improve quality, trust, and reliability over time.",
+    "I also keep a hands-on builder practice through AI-native product and research experiments, including multi-agent research workflows in immunology. Music remains part of the story because it sharpens narrative sense, systems awareness, and craft. It supports the product work rather than competing with it.",
   ],
   principles: [
-    "Start with the workflow, not the demo.",
-    "Measure outcomes in business language whenever possible.",
-    "Design system layers, retrieval, and governance as part of the product, not after it.",
-    "Use evaluation loops, feedback systems, and incentives to improve quality over time.",
-    "Prototype when it raises decision quality or helps a system become real faster.",
+    "Start with the workflow, not the model.",
+    "Stay close enough to the system to make better product decisions.",
+    "Tie the work to business outcomes, adoption signals, and operational reality.",
+    "Design retrieval, governance, and review paths as part of the product.",
+    "Use evals, feedback loops, and prototypes to improve quality and decision-making over time.",
   ],
 };
 

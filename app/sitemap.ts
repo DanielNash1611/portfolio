@@ -6,7 +6,7 @@ import {
   workEntries,
 } from "@/content/portfolio";
 
-const baseUrl = "https://danielnash.com";
+const baseUrl = "https://www.danielnash.co";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [

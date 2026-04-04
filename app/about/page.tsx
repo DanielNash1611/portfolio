@@ -16,28 +16,40 @@ const aboutPortrait = getPortrait("about-header");
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About Daniel Nash: AI Systems Product Leader / Senior Product Manager with a builder mindset and creative background.",
+    "About Daniel Nash, an AI Product Leader / Senior Product Manager focused on practical AI products, workflow modernization, and enterprise adoption.",
 };
 
 export default function AboutPage(): JSX.Element {
   return (
-    <Container className="space-y-8 pt-6">
+    <Container className="space-y-10 pt-6 md:space-y-12">
       <PageHero
-        eyebrow="About"
+        eyebrow="About Daniel Nash"
         title={aboutContent.title}
         description={aboutContent.summary}
         metrics={[
-          { label: "Base", value: siteConfig.location },
-          { label: "Focus", value: "AI, product systems, measurable impact" },
-          { label: "Differentiator", value: "Creative builder mindset" },
+          {
+            label: "Role",
+            value: "AI Product Leader",
+            detail: "Senior Product Manager who stays close to the system.",
+          },
+          {
+            label: "Focus",
+            value: "Enterprise AI adoption",
+            detail: "Workflow modernization, trust, governance, and measurable outcomes.",
+          },
+          {
+            label: "Scope",
+            value: "Products, workflows, systems",
+            detail: "Across ecommerce, contact center, and enterprise AI adoption.",
+          },
         ]}
       />
 
-      <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="space-y-8">
+      <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+        <div className="space-y-10">
           <ContentSection
             title="The through-line"
-            description="How the portfolio hangs together across different kinds of work."
+            description="The domains change, but the product logic underneath is consistent."
           >
             {aboutContent.paragraphs.map((paragraph) => (
               <p
@@ -51,7 +63,7 @@ export default function AboutPage(): JSX.Element {
 
           <ContentSection
             title="How I work"
-            description="The operating principles I keep returning to."
+            description="The operating principles that shape how I build, ship, and scale."
             tone="muted"
           >
             <ul className="space-y-4">
@@ -77,15 +89,15 @@ export default function AboutPage(): JSX.Element {
       </section>
 
       <TestimonialsSection
-        eyebrow="LinkedIn recommendations"
-        title="Full recommendation set"
-        description="Actual recommendation content is already wired into the content layer. Placeholder entries also exist in the same file so it is obvious where to paste future LinkedIn recommendations."
+        eyebrow="Recommendations"
+        title="More recommendations from leaders and technical partners"
+        description="These excerpts reinforce the same signal as the work itself: business impact, strategic clarity, and strong cross-functional trust."
         testimonials={getRenderableTestimonials()}
       />
 
       <CTASection
-        title="The quickest way to continue the conversation"
-        description="If the mix of strategic product leadership, AI systems thinking, and builder energy feels relevant, send a note on LinkedIn or by email."
+        title="If you're hiring for AI product leadership, let's talk"
+        description="I'm most useful in conversations with hiring managers, recruiters, founders, and collaborators who need AI capability translated into practical products, workflows, and systems. If that sounds relevant, reach out on LinkedIn or through the contact form."
         primaryAction={{
           href: siteConfig.linkedinUrl,
           label: "Connect on LinkedIn",

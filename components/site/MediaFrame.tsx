@@ -14,6 +14,7 @@ type MediaFrameProps = {
   imageClassName?: string;
   fallbackTitle?: string;
   priority?: boolean;
+  unoptimized?: boolean;
   expandable?: boolean;
   expandLabel?: string;
   children?: ReactNode;
@@ -27,6 +28,7 @@ export default function MediaFrame({
   imageClassName,
   fallbackTitle,
   priority = false,
+  unoptimized = false,
   expandable = false,
   expandLabel = "Expand image",
   children,
@@ -62,6 +64,7 @@ export default function MediaFrame({
 
   const showImage = Boolean(src) && !hasError;
   const isSvg = src?.endsWith(".svg") ?? false;
+  const shouldBypassOptimization = unoptimized || isSvg;
 
   return (
     <>
@@ -73,7 +76,7 @@ export default function MediaFrame({
           fill
           priority={priority}
           sizes={sizes}
-          unoptimized={isSvg}
+          unoptimized={shouldBypassOptimization}
           className={clsx("object-cover", imageClassName)}
           onError={() => setHasError(true)}
         />
@@ -134,7 +137,7 @@ export default function MediaFrame({
               alt={alt}
               fill
               sizes="100vw"
-              unoptimized={isSvg}
+              unoptimized={shouldBypassOptimization}
               className="object-contain"
               priority
             />

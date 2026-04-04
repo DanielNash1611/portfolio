@@ -25,9 +25,9 @@ import {
 } from "@/lib/portfolio-guide/context";
 
 export const metadata: Metadata = {
-  title: "Daniel Nash | AI Systems Product Leader",
+  title: "Daniel Nash | AI Product Leader",
   description:
-    "Premium portfolio for Daniel Nash, an AI Systems Product Leader / Senior Product Manager focused on turning emerging AI capabilities into production-ready products.",
+    "Premium portfolio for Daniel Nash, an AI Product Leader / Senior Product Manager focused on turning new AI capability into practical products, workflows, and systems that teams use, trust, and scale.",
 };
 
 const featuredWork = homeContent.featuredWork

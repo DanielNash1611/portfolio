@@ -19,13 +19,13 @@ const serif = Fraunces({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://danielnash.com"),
+  metadataBase: new URL("https://www.danielnash.co"),
   title: {
-    default: "Daniel Nash | AI Systems Product Leader",
+    default: "Daniel Nash | AI Product Leader",
     template: "%s | Daniel Nash",
   },
   description:
-    "Portfolio for Daniel Nash, an AI Systems Product Leader / Senior Product Manager focused on turning emerging AI capabilities into production-ready products.",
+    "Portfolio for Daniel Nash, an AI Product Leader / Senior Product Manager focused on turning new AI capability into practical products, workflows, and systems that teams use, trust, and scale.",
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -40,10 +40,10 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "Daniel Nash | AI Systems Product Leader",
+    title: "Daniel Nash | AI Product Leader",
     description:
-      "Portfolio for Daniel Nash, an AI Systems Product Leader / Senior Product Manager focused on turning emerging AI capabilities into production-ready products.",
-    url: "https://danielnash.com",
+      "Portfolio for Daniel Nash, an AI Product Leader / Senior Product Manager focused on turning new AI capability into practical products, workflows, and systems that teams use, trust, and scale.",
+    url: "https://www.danielnash.co",
     siteName: "Daniel Nash",
     images: [
       {
@@ -58,9 +58,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daniel Nash | AI Systems Product Leader",
+    title: "Daniel Nash | AI Product Leader",
     description:
-      "Portfolio for Daniel Nash, an AI Systems Product Leader / Senior Product Manager focused on turning emerging AI capabilities into production-ready products.",
+      "Portfolio for Daniel Nash, an AI Product Leader / Senior Product Manager focused on turning new AI capability into practical products, workflows, and systems that teams use, trust, and scale.",
     images: ["/og-default.svg"],
   },
 };
