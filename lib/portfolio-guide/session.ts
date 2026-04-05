@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  GUIDE_INTERACTION_SESSION_STORAGE_KEY,
   GUIDE_SESSION_STORAGE_KEY,
   GUIDE_SESSION_VERSION,
+  GUIDE_VISITOR_STORAGE_KEY,
   MAX_MESSAGES_PER_PAGE,
   MAX_TAG_SIGNALS,
   MAX_TRACKED_PROMPTS,
@@ -33,6 +35,8 @@ const VALID_SENIORITY = [
 ] as const;
 
 let memorySessionState: GuideSessionState = createEmptyGuideSessionState();
+let memoryVisitorId: string | null = null;
+let memoryInteractionSessionId: string | null = null;
 
 function cloneState(state: GuideSessionState): GuideSessionState {
   return JSON.parse(JSON.stringify(state)) as GuideSessionState;
@@ -153,7 +157,7 @@ function normalizeGuidedRecommendations(
   return recommendations.length > 0 ? recommendations : undefined;
 }
 
-function getStorage(): StorageLike | null {
+function getSessionStorage(): StorageLike | null {
   if (typeof window === "undefined") {
     return null;
   }
@@ -163,6 +167,33 @@ function getStorage(): StorageLike | null {
   } catch {
     return null;
   }
+}
+
+function getLocalStorage(): StorageLike | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
+function generateOpaqueId(prefix: string): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return `${prefix}_${crypto.randomUUID()}`;
+  }
+
+  return `${prefix}_${Date.now().toString(36)}_${Math.random()
+    .toString(36)
+    .slice(2, 10)}`;
+}
+
+function normalizeStoredId(value: string | null): string | null {
+  const normalized = value?.trim();
+  return normalized ? normalized : null;
 }
 
 export function createEmptyGuideSessionState(): GuideSessionState {
@@ -236,7 +267,69 @@ function normalizeStoredState(input: unknown): GuideSessionState {
   };
 }
 
-export function readGuideSessionState(storage = getStorage()): GuideSessionState {
+function ensureStoredId(
+  storage: StorageLike | null,
+  storageKey: string,
+  prefix: string,
+  readMemoryValue: () => string | null,
+  writeMemoryValue: (value: string) => void,
+): string {
+  const existingStorageValue = normalizeStoredId(storage?.getItem(storageKey) ?? null);
+  if (existingStorageValue) {
+    return existingStorageValue;
+  }
+
+  const existingMemoryValue = normalizeStoredId(readMemoryValue());
+  if (existingMemoryValue) {
+    if (storage) {
+      storage.setItem(storageKey, existingMemoryValue);
+    }
+    return existingMemoryValue;
+  }
+
+  const nextValue = generateOpaqueId(prefix);
+  if (storage) {
+    storage.setItem(storageKey, nextValue);
+  } else {
+    writeMemoryValue(nextValue);
+  }
+  return nextValue;
+}
+
+export function ensureGuideVisitorId(storage = getLocalStorage()): string {
+  return ensureStoredId(
+    storage,
+    GUIDE_VISITOR_STORAGE_KEY,
+    "pgv",
+    () => memoryVisitorId,
+    (value) => {
+      memoryVisitorId = value;
+    },
+  );
+}
+
+export function ensureGuideInteractionSessionId(
+  storage = getSessionStorage(),
+): string {
+  return ensureStoredId(
+    storage,
+    GUIDE_INTERACTION_SESSION_STORAGE_KEY,
+    "pgs",
+    () => memoryInteractionSessionId,
+    (value) => {
+      memoryInteractionSessionId = value;
+    },
+  );
+}
+
+export function resetGuideIdentityForTests(): void {
+  memoryVisitorId = null;
+  memoryInteractionSessionId = null;
+}
+
+export function readGuideSessionState(
+  storage = getSessionStorage(),
+): GuideSessionState {
   if (!storage) {
     return cloneState(memorySessionState);
   }
@@ -256,7 +349,7 @@ export function readGuideSessionState(storage = getStorage()): GuideSessionState
 
 export function writeGuideSessionState(
   state: GuideSessionState,
-  storage = getStorage(),
+  storage = getSessionStorage(),
 ): GuideSessionState {
   const normalized = normalizeStoredState(state);
 

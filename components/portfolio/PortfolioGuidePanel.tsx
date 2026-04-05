@@ -237,13 +237,14 @@ export default function PortfolioGuidePanel({
         <div className="flex items-center justify-between gap-3">
           <p
             className={clsx(
-              "text-xs",
+              "max-w-md text-xs leading-5",
               tone === "site"
                 ? "text-[color:var(--color-slate)]/52"
                 : "text-brand-slate/56",
             )}
           >
-            Press Ctrl/Cmd + Enter to send.
+            Questions may be stored to improve the guide. Please don&apos;t include
+            sensitive information. Press Ctrl/Cmd + Enter to send.
           </p>
           <button
             type="submit"

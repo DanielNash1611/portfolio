@@ -62,6 +62,15 @@ export type GuidedRecommendation = {
   priority: number;
 };
 
+export type GuideInteractionSource = "chip" | "input" | "follow-up";
+
+export type GuideInteractionMeta = {
+  source: GuideInteractionSource;
+  visitorId: string;
+  sessionId: string;
+  turnIndex: number;
+};
+
 export type RelatedPage = {
   slug: string;
   title: string;
@@ -150,6 +159,7 @@ export type CopilotRequest = {
   pageContext: PageContext;
   portfolioContext: PortfolioContext;
   sessionContext: SessionContext;
+  interactionMeta?: GuideInteractionMeta;
   conversation?: CopilotConversationMessage[];
   debug?: boolean;
 };

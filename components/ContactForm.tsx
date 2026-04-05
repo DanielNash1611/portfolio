@@ -19,7 +19,8 @@ const ContactForm = (): JSX.Element => {
     setStatus("loading");
     setMessage("");
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
     try {
@@ -30,9 +31,10 @@ const ContactForm = (): JSX.Element => {
         },
         body: JSON.stringify(payload),
       });
-      const result = (await response.json().catch(() => null)) as
-        | { ok?: boolean; error?: string }
-        | null;
+      const result = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        error?: string;
+      } | null;
 
       if (!response.ok || !result?.ok) {
         throw new Error(
@@ -42,7 +44,7 @@ const ContactForm = (): JSX.Element => {
 
       setStatus("success");
       setMessage("Thanks for reaching out! I’ll be in touch soon.");
-      event.currentTarget.reset();
+      form.reset();
       setStartedAt(Date.now().toString());
     } catch (error) {
       console.error(error);
@@ -106,6 +108,24 @@ const ContactForm = (): JSX.Element => {
       <div className="space-y-2">
         <label
           className="text-sm font-medium text-brand-teal"
+          htmlFor="subject"
+        >
+          Subject
+          <span className="ml-2 text-xs font-normal text-brand-slate/60">
+            Optional
+          </span>
+        </label>
+        <input
+          id="subject"
+          name="subject"
+          type="text"
+          maxLength={200}
+          className="w-full rounded-2xl border border-brand-slate/20 bg-white px-4 py-3 text-brand-slate shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
+        />
+      </div>
+      <div className="space-y-2">
+        <label
+          className="text-sm font-medium text-brand-teal"
           htmlFor="message"
         >
           Message
@@ -131,8 +151,8 @@ const ContactForm = (): JSX.Element => {
               status === "success"
                 ? "text-brand-teal"
                 : status === "error"
-                ? "text-brand-orange"
-                : "text-brand-slate/80"
+                  ? "text-brand-orange"
+                  : "text-brand-slate/80"
             }`}
             role="status"
           >

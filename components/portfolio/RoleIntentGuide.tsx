@@ -118,7 +118,10 @@ export default function RoleIntentGuide({
               Tell the site what you&apos;re looking for and I&apos;ll guide you to the most relevant work.
             </h2>
             <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/68 md:text-base">
-              Enter a title, short brief, or pasted job description. This stays optional, browser-only, and is used only to tailor what the portfolio guide highlights during this session.
+              Enter a title, short brief, or pasted job description. This stays
+              optional and is used to tailor what the portfolio guide
+              highlights. If you later ask the guide a question, that role
+              context may be stored with the prompt to improve the guide.
             </p>
           </div>
         </div>

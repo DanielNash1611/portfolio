@@ -1,6 +1,8 @@
 import type { InterestTag } from "@/lib/portfolio-guide/types";
 
 export const GUIDE_SESSION_STORAGE_KEY = "portfolio-guide:v1";
+export const GUIDE_VISITOR_STORAGE_KEY = "portfolio-guide:visitor-id";
+export const GUIDE_INTERACTION_SESSION_STORAGE_KEY = "portfolio-guide:session-id";
 export const GUIDE_SESSION_VERSION = 2;
 export const MAX_VISITED_PAGES = 12;
 export const MAX_TRACKED_PROMPTS = 20;

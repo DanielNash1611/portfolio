@@ -1,141 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  type ContactPayload,
+  emailPattern,
+  getClientIp,
+  getUserAgent,
+  isAllowedOrigin,
+  maxEmailLength,
+  maxMessageLength,
+  maxNameLength,
+  maxSubjectLength,
+  minFormFillTimeMs,
+  normalizeField,
+} from "@/lib/contact";
+import { sendContactNotification } from "@/lib/contactNotification";
+import { checkAndRecordContactRateLimit } from "@/lib/contactRateLimit";
+import {
+  type SavedContactSubmission,
+  saveContactSubmission,
+} from "@/lib/contactSubmissions";
 
-const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+const missingRelationErrorCode = "42P01";
+const contactSetupHint =
+  "missing contact form database tables; run `npm run db:migrate` or apply `migrations/002_contact_form.sql` in Neon";
 
-const contactRateLimitWindowMs = 15 * 60 * 1000;
-const maxContactRequestsPerWindow = 5;
-const minFormFillTimeMs = 1500;
-const maxNameLength = 120;
-const maxEmailLength = 320;
-const maxMessageLength = 5000;
-
-const requestTimestampsByIp = new Map<string, number[]>();
-
-type ContactPayload = {
-  name?: unknown;
-  email?: unknown;
-  message?: unknown;
-  website?: unknown;
-  startedAt?: unknown;
-};
-
-function normalizeField(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
+function isMissingRelationError(
+  error: unknown,
+): error is { code: string; message?: string } {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code?: unknown }).code === missingRelationErrorCode
+  );
 }
 
-function getClientIp(request: NextRequest): string {
-  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
-}
-
-function isAllowedOrigin(request: NextRequest): boolean {
-  const origin = request.headers.get("origin");
-
-  if (!origin) {
-    return process.env.NODE_ENV !== "production";
-  }
-
-  const allowedOrigins = new Set<string>([request.nextUrl.origin]);
-  const siteBaseUrl = process.env.SITE_BASE_URL;
-
-  if (siteBaseUrl) {
-    try {
-      allowedOrigins.add(new URL(siteBaseUrl).origin);
-    } catch {
-      // Ignore malformed deployment configuration and fall back to request origin.
-    }
-  }
-
-  if (process.env.NODE_ENV !== "production") {
-    allowedOrigins.add("http://localhost:3000");
-    allowedOrigins.add("http://127.0.0.1:3000");
-  }
-
-  return allowedOrigins.has(origin);
-}
-
-function isRateLimited(ipAddress: string): boolean {
-  if (!ipAddress) {
-    return false;
-  }
-
-  const now = Date.now();
-  const recentRequests = (
-    requestTimestampsByIp.get(ipAddress) ?? []
-  ).filter((timestamp) => now - timestamp < contactRateLimitWindowMs);
-
-  if (recentRequests.length >= maxContactRequestsPerWindow) {
-    requestTimestampsByIp.set(ipAddress, recentRequests);
-    return true;
-  }
-
-  recentRequests.push(now);
-  requestTimestampsByIp.set(ipAddress, recentRequests);
-  return false;
-}
-
-async function sendContactNotification({
-  name,
-  email,
-  message,
-}: {
-  name: string;
-  email: string;
-  message: string;
-}): Promise<void> {
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const contactToEmail = process.env.CONTACT_TO_EMAIL;
-  const contactFromEmail = process.env.CONTACT_FROM_EMAIL;
-
-  if (!resendApiKey || !contactToEmail || !contactFromEmail) {
-    if (process.env.NODE_ENV !== "production") {
-      console.info("[contact:dev]", {
-        configured: false,
-        senderEmail: email,
-      });
-      return;
-    }
-
-    throw new Error("Missing contact email configuration.");
-  }
-
-  const resendResponse = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${resendApiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: contactFromEmail,
-      to: [contactToEmail],
-      reply_to: email,
-      subject: `Portfolio contact from ${name}`,
-      text: [
-        "New portfolio contact submission",
-        "",
-        `From: ${name} <${email}>`,
-        `Submitted: ${new Date().toISOString()}`,
-        "",
-        "Message:",
-        message,
-      ].join("\n"),
-    }),
-  });
-
-  if (resendResponse.ok) {
+function logContactDatabaseError(context: string, error: unknown) {
+  if (isMissingRelationError(error)) {
+    console.error(`[contact:${context}] ${contactSetupHint}`, error);
     return;
   }
 
-  let errorMessage = "Unable to deliver contact message.";
-
-  try {
-    const data = await resendResponse.json();
-    errorMessage =
-      data?.message ?? data?.error?.message ?? data?.error ?? errorMessage;
-  } catch {
-    // Ignore parse failures and use the generic message.
-  }
-
-  throw new Error(errorMessage);
+  console.error(`[contact:${context}]`, error);
 }
 
 export async function POST(request: NextRequest) {
@@ -159,11 +64,13 @@ export async function POST(request: NextRequest) {
 
   const name = normalizeField(payload.name);
   const email = normalizeField(payload.email);
+  const subject = normalizeField(payload.subject);
   const message = normalizeField(payload.message);
   const website = normalizeField(payload.website);
   const startedAtRaw = normalizeField(payload.startedAt);
   const startedAt = Number(startedAtRaw);
   const clientIp = getClientIp(request);
+  const userAgent = getUserAgent(request);
 
   if (website) {
     return NextResponse.json({ ok: true });
@@ -180,13 +87,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (isRateLimited(clientIp)) {
-    return NextResponse.json(
-      { ok: false, error: "Too many messages sent. Please try again shortly." },
-      { status: 429 },
-    );
-  }
-
   if (name.length < 2 || name.length > maxNameLength) {
     return NextResponse.json(
       { ok: false, error: "Please enter your name." },
@@ -194,13 +94,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (
-    !email ||
-    email.length > maxEmailLength ||
-    !emailPattern.test(email)
-  ) {
+  if (!email || email.length > maxEmailLength || !emailPattern.test(email)) {
     return NextResponse.json(
       { ok: false, error: "Please enter a valid email address." },
+      { status: 400 },
+    );
+  }
+
+  if (subject.length > maxSubjectLength) {
+    return NextResponse.json(
+      { ok: false, error: "Please shorten the subject line." },
       { status: 400 },
     );
   }
@@ -216,13 +119,52 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    await sendContactNotification({ name, email, message });
-    return NextResponse.json({ ok: true });
+    const rateLimitResult = await checkAndRecordContactRateLimit({
+      ip: clientIp,
+    });
+
+    if (rateLimitResult.limited) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Too many messages sent. Please try again shortly.",
+        },
+        { status: 429 },
+      );
+    }
   } catch (error) {
-    console.error("[contact:error]", error);
+    logContactDatabaseError("rate_limit_error", error);
     return NextResponse.json(
       { ok: false, error: "Unable to send your message right now." },
-      { status: 502 },
+      { status: 500 },
     );
   }
+
+  let savedSubmission: SavedContactSubmission;
+
+  try {
+    savedSubmission = await saveContactSubmission({
+      name,
+      email,
+      subject: subject || null,
+      message,
+      ip: clientIp,
+      fingerprint: null,
+      userAgent,
+    });
+  } catch (error) {
+    logContactDatabaseError("persistence_error", error);
+    return NextResponse.json(
+      { ok: false, error: "Unable to send your message right now." },
+      { status: 500 },
+    );
+  }
+
+  try {
+    await sendContactNotification(savedSubmission);
+  } catch (error) {
+    console.error("[contact:notification_error]", error);
+  }
+
+  return NextResponse.json({ ok: true });
 }

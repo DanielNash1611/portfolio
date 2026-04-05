@@ -28,14 +28,13 @@ The Portfolio Guide is a compact inline `Ask about this work` feature for canoni
 1. The server page builds `pageContext` from the canonical route and `portfolioContext` from shared site content.
 2. The homepage role-intent module can normalize a title/brief/JD into `visitorIntent`, rank a deterministic `recommendedPath`, and persist both to `sessionStorage`.
 3. The client guide records session behavior in the same shared browser session: visited pages, clicked prompts, asked questions, inferred tags, visitor intent, recommended path, and per-page transcripts.
-4. On interaction, the client sends `message`, `pageContext`, `portfolioContext`, `sessionContext`, and a trimmed recent conversation to `/api/portfolio-copilot`.
-5. The route computes related-page candidates with both page similarity and role-intent weighting, calls the model with a grounded system prompt, validates the JSON response, and filters any invalid tags or page suggestions.
+4. On interaction, the client sends `message`, `pageContext`, `portfolioContext`, `sessionContext`, `interactionMeta`, and a trimmed recent conversation to `/api/portfolio-copilot`.
+5. The route computes related-page candidates with both page similarity and role-intent weighting, logs the prompt to Neon with anonymous visitor/session IDs, calls the model with a grounded system prompt, validates the JSON response, and filters any invalid tags or page suggestions.
 6. The client stores the answer in the current page’s session transcript and updates the subtle session-aware extra chip.
 
 ## Storage Approach
 
-- MVP storage is browser-only with `sessionStorage`.
-- The stored state contains:
+- Session tailoring still uses browser storage:
   - `visitedPages`
   - `clickedPrompts`
   - `askedQuestions`
@@ -45,7 +44,13 @@ The Portfolio Guide is a compact inline `Ask about this work` feature for canoni
   - `lastVisitedAt`
   - `tagSignals`
   - `conversationsBySlug`
-- If `sessionStorage` is unavailable, the guide falls back to in-memory state for the current tab so the page still works.
+- Anonymous interaction logging now uses Neon:
+  - user prompt text only
+  - anonymous `visitorId` from `localStorage`
+  - anonymous `sessionId` from `sessionStorage`
+  - prompt source, page slug, role intent, tag signals, visited pages, and response status
+  - response summary fields such as latency and answer length, but not the assistant answer body
+- If browser storage is unavailable, the guide falls back to in-memory IDs and session state for the current tab so the page still works.
 
 ## How Page Metadata Works
 
@@ -87,9 +92,11 @@ The Portfolio Guide is a compact inline `Ask about this work` feature for canoni
 3. Add a keyed guide overlay entry in `content/projects/portfolio-guide.ts` with any guide-only fields that are missing.
 4. Mount the guide on the page and pass the route path into `getPageContextByPath`.
 
-## Future Persistent Storage
+## Local And Production Environments
 
-If this moves to Neon or another database later, keep the current `PageContext`, `PortfolioContext`, and `/api/portfolio-copilot` contract intact. Replace only the browser session helpers with a server-backed session store keyed by an anonymous session identifier, and continue treating the page/portfolio metadata as the grounding source of truth.
+- Local development should point `DATABASE_URL` and `DATABASE_URL_UNPOOLED` at the Neon `development` branch, with `APP_ENV=local` and `DATABASE_BRANCH_NAME=development`.
+- Production should point the same variables at the Neon `production` branch, with `APP_ENV=production` and `DATABASE_BRANCH_NAME=production`.
+- Runtime app traffic should use the pooled URL. Migrations and reporting should use the unpooled URL when available.
 
 ## Local Setup
 

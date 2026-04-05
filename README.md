@@ -17,10 +17,24 @@ Copy `.env.example` to `.env.local` and provide values:
 
 - `HUBSPOT_PRIVATE_APP_TOKEN` - Private app token with **forms** scope.
 - `HUBSPOT_FORM_ID` - HubSpot form ID that receives LaunchMuse waitlist submissions.
-- `SITE_BASE_URL` - Deployed site URL (e.g., `https://danielnash.com`).
+- `SITE_BASE_URL` - Deployed site URL (e.g., `https://www.danielnash.co`).
+- `DATABASE_URL` - Neon connection string used by the portfolio contact form and other server-side storage.
 - `RESEND_API_KEY` - Resend API key used by the portfolio contact form.
 - `CONTACT_TO_EMAIL` - Private inbox that receives contact submissions.
 - `CONTACT_FROM_EMAIL` - Verified sender used by Resend, ideally on a domain you control.
+
+## Neon Setup
+
+The portfolio uses Neon for lightweight persistence, including anonymous Portfolio Guide signals and accepted contact submissions.
+
+Recommended setup:
+
+1. Local development:
+   - Set `.env.local` with your Neon connection string.
+   - Run `npm run db:migrate` after configuring `DATABASE_URL`.
+2. Production:
+   - Set the same variables in your deployment environment.
+   - Run `npm run db:migrate` against the production database before relying on the contact form.
 
 ## HubSpot Setup
 
@@ -33,14 +47,26 @@ Copy `.env.example` to `.env.local` and provide values:
 
 ## Contact Form Delivery
 
-The main portfolio contact page posts to `/api/contact`, which validates the payload, applies lightweight anti-spam checks, and forwards the message with Resend.
+The main portfolio contact page posts to `/api/contact`, which validates the payload, applies the built-in honeypot + form-fill timing trap, uses Neon to store accepted submissions, applies a simple Neon-backed per-IP rate limit, and forwards an email notification with Resend.
 
 Recommended setup:
 
 1. Verify a sending domain in Resend.
 2. Set `CONTACT_FROM_EMAIL` to an address on that domain, such as `Portfolio Contact <contact@yourdomain.com>`.
-3. Set `CONTACT_TO_EMAIL` to your private inbox.
-4. Add the same values to your deployment environment variables before shipping.
+3. Set `CONTACT_TO_EMAIL` to your private inbox in local and deployment env vars. Keep the actual Gmail address out of tracked files.
+4. Set `DATABASE_URL` in local and deployment env vars.
+5. Run `npm run db:migrate` so the contact form tables exist before shipping.
+6. Set `SITE_BASE_URL` to your live canonical URL before shipping so origin checks match production.
+7. Restart the local dev server after changing env vars.
+
+The contact schema lives in [`migrations/002_contact_form.sql`](/Users/danielnash/Code/DanielNash/Portfolio/portfolio/migrations/002_contact_form.sql).
+
+Rate limiting is intentionally simple:
+
+- Each request that passes validation records an attempt in `contact_rate_limits`.
+- If an IP has already recorded 5 attempts in the last 60 minutes, the route returns `429`.
+- Turnstile and Upstash were intentionally removed from this contact flow to keep the stack easier to maintain on a low-traffic personal site.
+- If Neon is connected but those tables do not exist yet, the server now logs a direct setup hint pointing to `npm run db:migrate` and the migration file above.
 
 ## Scripts
 
@@ -48,6 +74,9 @@ Recommended setup:
 - `npm run build` - Production build (runs type check & lint).
 - `npm run start` - Start the production server after build.
 - `npm run lint` - Lint the project.
+- `npm run db:migrate` - Apply SQL migrations using `DATABASE_URL` (or `DATABASE_URL_UNPOOLED` if you already use it elsewhere).
+- `npm run db:check` - Verify the Neon connection and interaction table state.
+- `npm run report:portfolio-guide-signals -- --since 30d --env production` - Summarize saved guide prompt signals.
 - `npm run images:meta` - Rebuild portrait metadata (width/height/alt) from source photos.
 - `npm run images:build` - Generate AVIF/WebP portrait derivatives and avatar thumbs.
 

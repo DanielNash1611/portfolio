@@ -14,6 +14,8 @@ import {
 import { getSessionAwarePrompt, inferInterestTags } from "@/lib/portfolio-guide/infer-tags";
 import {
   appendConversationMessages,
+  ensureGuideInteractionSessionId,
+  ensureGuideVisitorId,
   getConversationForPage,
   readGuideSessionState,
   recordPageVisit,
@@ -142,6 +144,10 @@ export default function PortfolioGuide({
     setExtraPrompt(getSessionAwarePrompt(nextState, pageContext.slug));
     setVisitorIntent(nextState.visitorIntent ?? null);
 
+    const pageConversation = getConversationForPage(nextState, pageContext.slug);
+    const turnIndex =
+      pageConversation.filter((entry) => entry.role === "user").length + 1;
+
     try {
       const response = await fetch("/api/portfolio-copilot", {
         method: "POST",
@@ -161,7 +167,13 @@ export default function PortfolioGuide({
             recommendedPath: nextState.recommendedPath,
             lastVisitedAt: nextState.lastVisitedAt,
           },
-          conversation: getConversationForPage(nextState, pageContext.slug)
+          interactionMeta: {
+            source,
+            visitorId: ensureGuideVisitorId(),
+            sessionId: ensureGuideInteractionSessionId(),
+            turnIndex,
+          },
+          conversation: pageConversation
             .slice(-MAX_CONVERSATION_CONTEXT_MESSAGES)
             .map((entry) => ({
               role: entry.role,
