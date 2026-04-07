@@ -20,8 +20,9 @@ export type ResumeTrack = {
   audience: string;
   focus: string;
   resumeHref: string;
-  placeholderPath: string;
-  placeholderNote: string;
+  downloadHref: string;
+  filePath: string;
+  availabilityNote: string;
 };
 
 export type ApprovedMetric = {
@@ -101,10 +102,11 @@ export const RESUME_TRACKS: ResumeTrack[] = [
     focus:
       "Balances growth, operations, experimentation, and cross-functional execution with explicit business outcomes.",
     resumeHref: "/resume#senior-product-manager",
-    placeholderPath:
+    downloadHref: "/resumes/daniel-nash-senior-product-manager-resume.pdf",
+    filePath:
       "/public/resumes/daniel-nash-senior-product-manager-resume.pdf",
-    placeholderNote:
-      "Add the PDF at public/resumes/daniel-nash-senior-product-manager-resume.pdf to enable a direct download.",
+    availabilityNote:
+      "Live PDF is available now for recruiter handoff or direct download.",
   },
   {
     id: "builder-pm",
@@ -114,9 +116,10 @@ export const RESUME_TRACKS: ResumeTrack[] = [
     focus:
       "Highlights AI pilots, internal tools, prototyping speed, platform thinking, and emerging product work.",
     resumeHref: "/resume#builder-pm",
-    placeholderPath: "/public/resumes/daniel-nash-builder-pm-resume.pdf",
-    placeholderNote:
-      "Add the PDF at public/resumes/daniel-nash-builder-pm-resume.pdf to enable a direct download.",
+    downloadHref: "/resumes/daniel-nash-builder-pm-resume.pdf",
+    filePath: "/public/resumes/daniel-nash-builder-pm-resume.pdf",
+    availabilityNote:
+      "Live PDF is available now for builder-focused and AI product conversations.",
   },
   {
     id: "product-leader",
@@ -126,9 +129,10 @@ export const RESUME_TRACKS: ResumeTrack[] = [
     focus:
       "Highlights PM practice, roadmap leadership, AI governance, decision quality, and org-scale enablement.",
     resumeHref: "/resume#product-leader",
-    placeholderPath: "/public/resumes/daniel-nash-product-leader-resume.pdf",
-    placeholderNote:
-      "Add the PDF at public/resumes/daniel-nash-product-leader-resume.pdf to enable a direct download.",
+    downloadHref: "/resumes/daniel-nash-product-leader-resume.pdf",
+    filePath: "/public/resumes/daniel-nash-product-leader-resume.pdf",
+    availabilityNote:
+      "Live PDF is available now for leadership and product operating model roles.",
   },
 ];
 

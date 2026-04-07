@@ -167,6 +167,7 @@ export type ResumeVariant = {
   audience: string;
   filename: string;
   note: string;
+  focusAreas: string[];
 };
 
 export const siteConfig = {
@@ -1403,12 +1404,17 @@ export const aboutContent = {
 
 export const resumeVariants: ResumeVariant[] = [
   {
-    id: "ai-product-leader",
-    title: "AI Product Leader",
+    id: "product-leader",
+    title: "Product Leader",
     audience:
-      "Best for AI platform, enterprise AI, and staff-level PM conversations.",
-    filename: "daniel-nash-ai-product-leader-resume.pdf",
-    note: "TODO: Add the PDF to public/resumes to activate download and embedding.",
+      "Best for PM leadership, AI transformation, operating model, and portfolio strategy conversations.",
+    filename: "daniel-nash-product-leader-resume.pdf",
+    note: "Emphasizes enterprise AI governance, PM enablement, operating cadence, and portfolio-level decision quality.",
+    focusAreas: [
+      "AI transformation and governance",
+      "PM org enablement",
+      "Operating model and portfolio strategy",
+    ],
   },
   {
     id: "senior-product-manager",
@@ -1416,7 +1422,12 @@ export const resumeVariants: ResumeVariant[] = [
     audience:
       "Best for broad-market product roles spanning growth, commerce, operations, and customer experience.",
     filename: "daniel-nash-senior-product-manager-resume.pdf",
-    note: "Existing filename is already documented in public/resumes/README.md.",
+    note: "Balances measurable business impact with end-to-end ownership across commerce, service workflows, and AI-enabled products.",
+    focusAreas: [
+      "Customer journeys and commerce",
+      "Workflow modernization",
+      "AI-enabled execution",
+    ],
   },
   {
     id: "builder-pm",
@@ -1424,7 +1435,12 @@ export const resumeVariants: ResumeVariant[] = [
     audience:
       "Best for builder-focused roles emphasizing prototypes, AI workflows, and incubation.",
     filename: "daniel-nash-builder-pm-resume.pdf",
-    note: "TODO: Add or refresh this version if you want a more explicit builder narrative.",
+    note: "Leans into prototypes, agentic workflows, grounded retrieval, and PM-led product building.",
+    focusAreas: [
+      "0-to-1 AI products",
+      "Prototypes and demos",
+      "Workflow systems and evals",
+    ],
   },
 ];
 

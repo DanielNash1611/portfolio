@@ -42,9 +42,9 @@ const ResumeAccess = (): JSX.Element => {
               {track.focus}
             </p>
             <div className="rounded-2xl border border-dashed border-[#2C4F52]/20 bg-[#F2E3D5]/55 p-4 text-sm text-[#2C4F52]/80">
-              <p>{track.placeholderNote}</p>
+              <p>{track.availabilityNote}</p>
               <p className="mt-2 font-mono text-xs text-[#2C4F52]/65">
-                Expected file: {track.placeholderPath}
+                File: {track.filePath}
               </p>
             </div>
             <div className="mt-auto flex flex-wrap gap-3">
@@ -52,7 +52,13 @@ const ResumeAccess = (): JSX.Element => {
                 href={track.resumeHref}
                 className="inline-flex items-center rounded-full bg-[#2C4F52] px-4 py-2 text-sm font-semibold text-[#F2E3D5] transition hover:bg-[#2C4F52]/90 focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
-                Open resume notes
+                View resume page
+              </Link>
+              <Link
+                href={track.downloadHref}
+                className="inline-flex items-center rounded-full bg-[#2C4F52] px-4 py-2 text-sm font-semibold text-[#F2E3D5] transition hover:bg-[#2C4F52]/90 focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              >
+                Download PDF
               </Link>
               <Link
                 href="/contact"

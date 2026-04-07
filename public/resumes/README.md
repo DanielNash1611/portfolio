@@ -1,6 +1,6 @@
-Add resume PDFs here to activate direct download links for the resume track cards.
+Resume PDFs live here for direct download from the site.
 
-Expected filenames:
+Current filenames:
 
 - `daniel-nash-senior-product-manager-resume.pdf`
 - `daniel-nash-builder-pm-resume.pdf`
