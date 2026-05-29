@@ -10,9 +10,31 @@ export const metadata: Metadata = {
     "Download Daniel Nash resume variants for Senior Product Manager, Builder PM, and Product Leader conversations.",
 };
 
+const resumeProfileJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": "https://www.danielnash.co/resume#profilepage",
+  url: "https://www.danielnash.co/resume",
+  name: "Daniel Nash Resume",
+  description:
+    "Resume page for Daniel Nash, a Senior AI Product Manager and AI product leader.",
+  mainEntity: {
+    "@id": "https://www.danielnash.co/#person",
+  },
+  relatedLink: [
+    "https://www.danielnash.co/resume/generate",
+    "https://www.danielnash.co/contact",
+  ],
+};
+
 export default function ResumePage(): JSX.Element {
   return (
     <Container className="space-y-8 pt-6">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(resumeProfileJsonLd) }}
+      />
       <PageHero
         eyebrow="Resume"
         title="Resume assets organized for different conversations"

@@ -1,5 +1,6 @@
 import {
   aboutContent,
+  getWorkEntry,
   homeContent,
   productEntries,
   siteConfig,
@@ -12,13 +13,17 @@ import {
 import { portfolioGuideMetadata } from "@/content/projects/portfolio-guide";
 import { CASE_STUDIES } from "@/data/caseStudies";
 import { cases } from "@/data/cases";
-import { NARRATIVES } from "@/data/positioning";
+import { NARRATIVES, type NarrativeId } from "@/data/positioning";
+import { testimonials } from "@/data/testimonials";
 import type {
   PageArtifact,
   PageAuthoredSection,
   PageContext,
   PageEvidenceHighlight,
+  PageRecommendationContext,
   PortfolioContext,
+  RecommendationEvidenceLevel,
+  RecommendationSummary,
 } from "@/lib/portfolio-guide/types";
 
 type CanonicalSource = "work" | "product" | "legacy-case" | "thinking";
@@ -658,5 +663,127 @@ export function getPortfolioContext(): PortfolioContext {
       ),
       interestTags: pageContext.interestTags,
     })),
+  };
+}
+
+function toRecommendationSummary(
+  testimonial: (typeof testimonials)[number],
+  evidenceLevel: RecommendationEvidenceLevel,
+  options: { linkedProjectIds?: string[] } = {},
+): RecommendationSummary {
+  return {
+    id: testimonial.id,
+    name: testimonial.name,
+    title: testimonial.title,
+    relationshipCapacity: testimonial.relationshipCapacity,
+    source: testimonial.source,
+    short: testimonial.short,
+    full: testimonial.full,
+    narrativeTags: testimonial.narrativeTags,
+    evidenceLevel,
+    ...(testimonial.date ? { date: testimonial.date } : {}),
+    ...(testimonial.profileUrl ? { profileUrl: testimonial.profileUrl } : {}),
+    ...(options.linkedProjectIds && options.linkedProjectIds.length > 0
+      ? { linkedProjectIds: options.linkedProjectIds }
+      : {}),
+    ...(testimonial.projectRelevance
+      ? { projectRelevance: testimonial.projectRelevance }
+      : {}),
+  };
+}
+
+const RECOMMENDATION_BROADER_LIMIT = 4;
+const RECOMMENDATION_PROJECT_LINKED_LIMIT = 4;
+
+function getRenderedTestimonialIds(slug: string | undefined): string[] {
+  if (!slug) {
+    return [];
+  }
+  const workEntry = getWorkEntry(slug);
+  return workEntry?.testimonialIds ?? [];
+}
+
+export function selectRecommendationsForPage(
+  pageContext: PageContext | undefined,
+): PageRecommendationContext {
+  const slug = pageContext?.slug;
+  const renderedIds = new Set(getRenderedTestimonialIds(slug));
+
+  const currentPage = testimonials
+    .filter((testimonial) => renderedIds.has(testimonial.id))
+    .map((testimonial) => toRecommendationSummary(testimonial, "current_page"));
+
+  const projectLinkedSeen = new Set(currentPage.map((rec) => rec.id));
+  const projectLinked: RecommendationSummary[] = [];
+  if (slug) {
+    for (const testimonial of testimonials) {
+      if (projectLinkedSeen.has(testimonial.id)) {
+        continue;
+      }
+      const projectIds = testimonial.projectIds ?? [];
+      if (!projectIds.includes(slug)) {
+        continue;
+      }
+      projectLinked.push(
+        toRecommendationSummary(testimonial, "project_linked", {
+          linkedProjectIds: projectIds,
+        }),
+      );
+      projectLinkedSeen.add(testimonial.id);
+      if (projectLinked.length >= RECOMMENDATION_PROJECT_LINKED_LIMIT) {
+        break;
+      }
+    }
+  }
+
+  const handled = new Set<string>([
+    ...currentPage.map((rec) => rec.id),
+    ...projectLinked.map((rec) => rec.id),
+  ]);
+  const targetTags = new Set<NarrativeId>(pageContext?.roleLens ?? []);
+
+  let broaderCandidates: RecommendationSummary[];
+  if (targetTags.size === 0) {
+    broaderCandidates = testimonials
+      .filter((testimonial) => !handled.has(testimonial.id))
+      .filter((testimonial) => testimonial.featured)
+      .slice(0, RECOMMENDATION_BROADER_LIMIT)
+      .map((testimonial) => toRecommendationSummary(testimonial, "broader"));
+  } else {
+    broaderCandidates = testimonials
+      .map((testimonial, index) => {
+        const overlap = testimonial.narrativeTags.filter((tag) =>
+          targetTags.has(tag),
+        ).length;
+        return { testimonial, index, overlap };
+      })
+      .filter((entry) => entry.overlap > 0 && !handled.has(entry.testimonial.id))
+      .sort((a, b) => {
+        if (b.overlap !== a.overlap) {
+          return b.overlap - a.overlap;
+        }
+        const aFeatured = a.testimonial.featured ? 1 : 0;
+        const bFeatured = b.testimonial.featured ? 1 : 0;
+        if (bFeatured !== aFeatured) {
+          return bFeatured - aFeatured;
+        }
+        return a.index - b.index;
+      })
+      .slice(0, RECOMMENDATION_BROADER_LIMIT)
+      .map((entry) => toRecommendationSummary(entry.testimonial, "broader"));
+
+    if (broaderCandidates.length === 0) {
+      broaderCandidates = testimonials
+        .filter((testimonial) => !handled.has(testimonial.id))
+        .filter((testimonial) => testimonial.featured)
+        .slice(0, RECOMMENDATION_BROADER_LIMIT)
+        .map((testimonial) => toRecommendationSummary(testimonial, "broader"));
+    }
+  }
+
+  return {
+    currentPage,
+    projectLinked,
+    broader: broaderCandidates,
   };
 }

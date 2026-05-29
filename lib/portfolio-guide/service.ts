@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { selectRecommendationsForPage } from "@/lib/portfolio-guide/context";
 import { getRelatedPages } from "@/lib/portfolio-guide/related";
 import {
   buildPortfolioGuideInput,
@@ -37,6 +38,14 @@ export type PortfolioGuideGenerationResult = {
   normalizationStatus: "normalized-json" | "raw-fallback";
   provider: PortfolioGuideProviderInfo;
 };
+
+const RESUME_GENERATOR_PATH = "/resume/generate";
+const RESUME_GENERATOR_FOLLOW_UPS = [
+  "Generate a resume for my role",
+  "Compare Daniel to this job description",
+  "Show the strongest proof points",
+  "Contact Daniel",
+] as const;
 
 function normalizeText(text: string): string {
   return text
@@ -110,6 +119,34 @@ function isConnectionsQuestion(question: string): boolean {
   );
 }
 
+function isDirectResumeRequest(question: string): boolean {
+  return /\b(?:resume|cv)\b/i.test(question) &&
+    /\b(?:role|job|jd|job description|specific|tailor|tailored|custom|generate|get|download|look at|send|pdf)\b/i.test(
+      question,
+    );
+}
+
+function isRoleFitOrJobDescriptionQuestion(question: string): boolean {
+  return (
+    isDirectResumeRequest(question) ||
+    /\b(?:is daniel (?:a )?fit|daniel fit|fit for (?:this|the) (?:role|job)|can daniel do|can he do|does daniel have .*experience|ai product experience|job description|jd\b|compare daniel to|compare .* (?:jd|job description|role|job)|what resume should i look at|which resume should i look at)\b/i.test(
+      question,
+    )
+  );
+}
+
+function isEvidenceOrOwnershipOnlyQuestion(question: string): boolean {
+  return (
+    !isRoleFitOrJobDescriptionQuestion(question) &&
+    (isOwnershipQuestion(question) ||
+      isSeniorityQuestion(question) ||
+      isImpliedNotProvenQuestion(question) ||
+      /\b(?:strongest signals|evidence|proof|signals on this page|what did .* responsible|responsib)\b/i.test(
+        question,
+      ))
+  );
+}
+
 function hasExplicitLimit(answer: string): boolean {
   return /\b(does not|doesn't|did not|didn't)\b.*\b(specify|say|rank|define|provide|mention|quantify)\b|\bno\b.*\b(figure|ranking|counts?)\b|\bnot explicit\b/i.test(
     answer,
@@ -160,6 +197,76 @@ function softenOwnershipClaims(answer: string, subjectName: string): string {
 
 function ensureTrailingPeriod(text: string): string {
   return /[.!?]$/.test(text) ? text : `${text}.`;
+}
+
+function includesResumeGeneratorPath(answer: string): boolean {
+  return normalizeText(answer).includes(RESUME_GENERATOR_PATH);
+}
+
+function removeResumeGenerationCompletionClaims(answer: string): string {
+  return answer
+    .replace(
+      /\b(?:i|i've|we|we've|the bot|portfolio guide)\s+(?:generated|created|built|made|rendered|emailed|downloaded)\b[^.!?]*(?:resume|pdf)[.!?]?/gi,
+      `The generator flow at ${RESUME_GENERATOR_PATH} can create the role-specific PDF resume after a job description is submitted.`,
+    )
+    .replace(
+      /\b(?:your|the)\s+(?:role-specific\s+)?(?:resume|pdf)\s+(?:is|has been)\s+(?:ready|generated|created|rendered|emailed|downloaded)[.!?]?/gi,
+      `A role-specific PDF resume is only ready after the generator flow runs.`,
+    );
+}
+
+function uniqueFollowUps(items: Array<string | undefined>, limit = 4): string[] {
+  const seen = new Set<string>();
+  const results: string[] = [];
+
+  for (const item of items) {
+    const value = item?.trim();
+    if (!value) {
+      continue;
+    }
+
+    const key = normalizeText(value);
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    results.push(value);
+    if (results.length >= limit) {
+      break;
+    }
+  }
+
+  return results;
+}
+
+function isResumeGeneratorFollowUp(label: string): boolean {
+  const normalized = normalizeText(label);
+
+  return (
+    normalized.includes("generate a resume") ||
+    normalized.includes("role-specific resume") ||
+    normalized.includes("resume for my role") ||
+    normalized.includes("compare daniel to this job description") ||
+    normalized.includes(RESUME_GENERATOR_PATH)
+  );
+}
+
+function addResumeGeneratorFollowUps(
+  existing: string[] | undefined,
+): string[] {
+  return uniqueFollowUps([
+    ...RESUME_GENERATOR_FOLLOW_UPS,
+    ...(existing ?? []),
+  ]);
+}
+
+function removeResumeGeneratorFollowUps(
+  existing: string[] | undefined,
+): string[] | undefined {
+  const filtered = existing?.filter((item) => !isResumeGeneratorFollowUp(item));
+
+  return filtered && filtered.length > 0 ? filtered : undefined;
 }
 
 function normalizeReasonForAnswer(reason: string): string {
@@ -248,6 +355,14 @@ function pickDistinctDetails(
   return results;
 }
 
+function summarizeRecommendation(
+  rec: { name: string; title: string; short: string },
+): string {
+  const firstTitleSegment = rec.title.split(/[,|·]/)[0].trim();
+  const titleClause = firstTitleSegment ? ` (${firstTitleSegment})` : "";
+  return `${rec.name}${titleClause}: "${rec.short.replace(/^["“]|["”]$/g, "")}"`;
+}
+
 function buildSeniorityAnswer(request: CopilotRequest): string | undefined {
   const signals = pickDistinctDetails(
     [
@@ -259,8 +374,11 @@ function buildSeniorityAnswer(request: CopilotRequest): string | undefined {
     2,
   );
   const unknown = request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
+  const recommendations = request.portfolioContext.recommendations;
+  const currentRec = recommendations?.currentPage[0];
+  const projectRec = recommendations?.projectLinked[0];
 
-  if (signals.length === 0 && !unknown) {
+  if (signals.length === 0 && !unknown && !currentRec && !projectRec) {
     return undefined;
   }
 
@@ -268,6 +386,18 @@ function buildSeniorityAnswer(request: CopilotRequest): string | undefined {
 
   if (signals.length > 0) {
     parts.push(`Signals on the page: ${signals.join(" ")}`);
+  }
+
+  if (currentRec) {
+    parts.push(
+      `Direct evidence on this page — ${summarizeRecommendation(currentRec)}`,
+    );
+  }
+
+  if (projectRec) {
+    parts.push(
+      `Direct recommendation tied to this project — ${summarizeRecommendation(projectRec)}`,
+    );
   }
 
   if (unknown) {
@@ -371,6 +501,10 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   let answer = normalizedAnswer;
   let suggestedFollowUps = response.suggestedFollowUps;
   let relatedPages = response.relatedPages;
+  const shouldSuggestResumeGenerator = isRoleFitOrJobDescriptionQuestion(
+    request.message,
+  );
+  const directResumeRequest = isDirectResumeRequest(request.message);
 
   if (
     mentionTerm &&
@@ -463,6 +597,22 @@ export function applyPortfolioGuideResponseGuardrails(input: {
     }
   }
 
+  answer = removeResumeGenerationCompletionClaims(answer);
+
+  if (directResumeRequest) {
+    if (!includesResumeGeneratorPath(answer)) {
+      answer = `${ensureTrailingPeriod(answer)} For a role-specific PDF resume, use ${RESUME_GENERATOR_PATH}; paste the job description in the generator flow, not in a URL.`;
+    } else if (!/\bpaste\b/i.test(answer)) {
+      answer = `${ensureTrailingPeriod(answer)} Paste the job description in the generator flow, not in a URL.`;
+    }
+  }
+
+  if (shouldSuggestResumeGenerator) {
+    suggestedFollowUps = addResumeGeneratorFollowUps(suggestedFollowUps);
+  } else if (isEvidenceOrOwnershipOnlyQuestion(request.message)) {
+    suggestedFollowUps = removeResumeGeneratorFollowUps(suggestedFollowUps);
+  }
+
   return {
     ...response,
     answer,
@@ -491,7 +641,17 @@ export async function generatePortfolioGuideResponse(
     request.portfolioContext,
     request.sessionContext,
   );
-  const promptInput = buildPortfolioGuideInput(request, relatedPages);
+  const recommendations =
+    request.portfolioContext.recommendations ??
+    selectRecommendationsForPage(request.pageContext);
+  const enrichedRequest: CopilotRequest = {
+    ...request,
+    portfolioContext: {
+      ...request.portfolioContext,
+      recommendations,
+    },
+  };
+  const promptInput = buildPortfolioGuideInput(enrichedRequest, relatedPages);
   const response = await client.responses.create({
     model,
     reasoning: { effort: reasoningEffort },
@@ -517,7 +677,7 @@ export async function generatePortfolioGuideResponse(
       relatedPages,
     } satisfies CopilotResponse);
   const guardedResponse = applyPortfolioGuideResponseGuardrails({
-    request,
+    request: enrichedRequest,
     response: normalizedResponse,
     fallbackRelatedPages: relatedPages,
   });

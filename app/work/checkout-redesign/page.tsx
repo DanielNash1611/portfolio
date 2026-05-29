@@ -11,7 +11,8 @@ import MediaFrame from "@/components/site/MediaFrame";
 import PageHero from "@/components/site/PageHero";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
 import UsabilityResultsBlock from "@/components/site/UsabilityResultsBlock";
-import { getTestimonialsByIds, getWorkEntry } from "@/content/portfolio";
+import { getWorkEntry } from "@/content/portfolio";
+import { getTestimonialsByIds } from "@/data/testimonials";
 import {
   getPageContextByPath,
   getPortfolioContext,

@@ -1,21 +1,52 @@
-import { getRenderableTestimonials, siteConfig } from "@/content/portfolio";
+import { siteConfig } from "@/content/portfolio";
+import { testimonials } from "@/data/testimonials";
 
 const itemReviewed = {
   "@type": "Person",
+  "@id": "https://www.danielnash.co/#person",
   name: siteConfig.name,
   jobTitle: siteConfig.title,
   url: "https://www.danielnash.co",
 };
 
-const reviews = getRenderableTestimonials().map((testimonial) => ({
+const personSchema = {
+  ...itemReviewed,
+  jobTitle: "Senior AI Product Manager / AI Product Leader",
+  sameAs: [siteConfig.linkedinUrl, siteConfig.githubUrl],
+  knowsAbout: [
+    "AI product management",
+    "AI product strategy",
+    "Enterprise AI adoption",
+    "Product leadership",
+    "Workflow automation",
+    "0-to-1 product development",
+  ],
+};
+
+const resumeGeneratorSchema = {
+  "@type": "WebApplication",
+  "@id": "https://www.danielnash.co/resume/generate#webapplication",
+  name: "Daniel Nash Role-Specific Resume Generator",
+  url: "https://www.danielnash.co/resume/generate",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description:
+    "Recruiter-facing tool for generating a role-specific PDF resume from a pasted job description.",
+  creator: {
+    "@id": "https://www.danielnash.co/#person",
+  },
+};
+
+const reviews = testimonials.map((testimonial) => ({
   "@type": "Review",
-  name: testimonial.quote,
-  reviewBody: testimonial.context ?? testimonial.quote,
+  name: testimonial.short,
+  reviewBody: testimonial.full,
   author: {
     "@type": "Person",
     name: testimonial.name,
     jobTitle: testimonial.title,
   },
+  ...(testimonial.date ? { datePublished: testimonial.date } : {}),
   publisher: {
     "@type": "Organization",
     name:
@@ -28,7 +59,7 @@ const reviews = getRenderableTestimonials().map((testimonial) => ({
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@graph": reviews,
+  "@graph": [personSchema, resumeGeneratorSchema, ...reviews],
 };
 
 export default function SEOReviews(): JSX.Element {

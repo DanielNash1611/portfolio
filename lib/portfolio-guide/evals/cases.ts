@@ -17,6 +17,128 @@ const REGEX_27M = {
 
 export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
   {
+    id: "ai-platform-role-fit-suggests-generator",
+    title: "Role-fit question suggests resume generator without losing grounding",
+    summary:
+      "Checks that role-fit answers stay grounded in current-page evidence while offering the resume generator as an action.",
+    category: "answerable",
+    answerability: "answerable",
+    pageSlug: "ai-platform-mcp",
+    question: "Is Daniel a fit for this AI Product Manager role?",
+    sessionContext: {
+      visitorIntent: {
+        rawInput: "AI Product Manager",
+        normalizedTitle: "AI Product Manager",
+        seniority: "pm",
+        roleLenses: ["builder-pm", "senior-product-manager"],
+        focusAreas: ["ai-product"],
+        emphasis: ["technical-depth"],
+      },
+    },
+    deterministicChecks: [
+      {
+        answerMustIncludeAnyGroups: [
+          [
+            { value: "hackathon" },
+            { value: "prototype" },
+            { value: "87%" },
+            { value: "would use it again" },
+          ],
+          [
+            { value: "workflow patterns" },
+            { value: "platform" },
+            { value: "reusable" },
+            { value: "MCP" },
+          ],
+        ],
+        answerMustExclude: [
+          { value: "generated a resume" },
+          { value: "resume is ready" },
+          REGEX_16M,
+          REGEX_27M,
+        ],
+        maxSentences: 5,
+      },
+      {
+        target: "suggestedFollowUps",
+        answerMustIncludeAll: [{ value: "Generate a resume for my role" }],
+      },
+    ],
+    judgeExpectations: [
+      "Use current-page evidence such as the prototype, 87% validation signal, or reusable platform/workflow patterns.",
+      "Treat /resume/generate as an action, not evidence.",
+      "Do not claim a resume has already been generated.",
+    ],
+  },
+  {
+    id: "ai-platform-direct-resume-request",
+    title: "Direct role-specific resume request points to generator",
+    summary:
+      "Checks that the bot directs role-specific resume requests to /resume/generate without putting JD content in URLs.",
+    category: "answerable",
+    answerability: "answerable",
+    pageSlug: "ai-platform-mcp",
+    question: "Can I get a resume for this role?",
+    deterministicChecks: [
+      {
+        answerMustIncludeAll: [{ value: "/resume/generate" }],
+        answerMustExclude: [
+          { value: "generated a resume" },
+          { value: "resume is ready" },
+          { value: "jobDescription=", type: "regex" },
+          { value: "\\?jd=", type: "regex" },
+        ],
+        maxSentences: 5,
+      },
+      {
+        target: "suggestedFollowUps",
+        answerMustIncludeAll: [{ value: "Generate a resume for my role" }],
+      },
+    ],
+    judgeExpectations: [
+      "Point to /resume/generate for a role-specific PDF resume.",
+      "Say the job description should be pasted in the generator flow, not encoded in a URL.",
+      "Do not claim generation happened.",
+    ],
+  },
+  {
+    id: "checkout-evidence-does-not-overpromote-generator",
+    title: "Evidence question does not over-promote resume generator",
+    summary:
+      "Checks that a pure evidence question remains evidence-first and does not push the generator CTA.",
+    category: "answerable",
+    answerability: "answerable",
+    pageSlug: "checkout-redesign",
+    question: "What are the strongest proof points on this page?",
+    deterministicChecks: [
+      {
+        answerMustIncludeAnyGroups: [
+          [REGEX_16M, { value: "30% faster" }, { value: "~3% conversion" }],
+          [
+            { value: "12-week" },
+            { value: "jira ticket" },
+            { value: "a/b testing" },
+            { value: "minimal service disruption" },
+          ],
+        ],
+        answerMustExclude: [{ value: "/resume/generate" }, REGEX_87_PERCENT],
+        maxSentences: 6,
+      },
+      {
+        target: "suggestedFollowUps",
+        answerMustExclude: [
+          { value: "Generate a resume" },
+          { value: "/resume/generate" },
+          { value: "Compare Daniel to this job description" },
+        ],
+      },
+    ],
+    judgeExpectations: [
+      "Answer with checkout evidence only.",
+      "Do not push the generator for a pure proof-point question.",
+    ],
+  },
+  {
     id: "ai-platform-summary",
     title: "AI platform page summary stays grounded",
     summary:

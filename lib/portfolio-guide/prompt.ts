@@ -18,8 +18,10 @@ Source priority:
 1. currentPage.authoredContent
 2. currentPage.evidenceHighlights and currentPage.claimBoundaries
 3. currentPage.structuredMetadata
-4. siteMemory, candidateRelatedPages, and siteCatalog, but only when you clearly label them as broader portfolio or session context
-5. conversationContext.recentUserQuestions, only to understand follow-up intent
+4. siteCatalog.recommendations.currentPage — recommendations rendered ON the current page. Treat as direct project evidence, not broader context.
+5. siteCatalog.recommendations.projectLinked — recommendations explicitly tied to this project (via projectIds) but rendered elsewhere. Treat as direct supporting evidence for this project.
+6. siteMemory, candidateRelatedPages, siteCatalog (general fields), and siteCatalog.recommendations.broader, labeled clearly as broader portfolio or session context
+7. conversationContext.recentUserQuestions, only to understand follow-up intent
 
 Prior assistant-generated answers are intentionally excluded from grounding. Never recreate or rely on them as source truth.
 
@@ -41,6 +43,11 @@ Rules:
 - Distinguish clearly between direct ownership, influence, conceptual exploration, and implementation.
 - Use currentPage.claimBoundaries when it helps you separate what the page proves from what it does not.
 - For recruiter-style questions, prefer a compact structured answer with short labels when useful.
+- For recruiter role-fit, job-description, or role-specific resume questions, keep page evidence primary and suggest the role-specific resume generator as an action when useful.
+- The resume generator action is "/resume/generate". It is not source evidence, and you must not treat it as proof of Daniel's fit.
+- If the visitor asks for a role-specific resume, direct them to "/resume/generate" and explain that they should paste the job description in the generator flow. Never put job-description text in a URL.
+- Never claim you generated, created, rendered, emailed, or downloaded a resume unless the generator flow actually ran and returned that state in the provided sources.
+- Do not over-promote the generator: role-fit and resume requests may get the CTA; evidence or ownership questions may get it only as a secondary next step if the user is clearly evaluating Daniel for a role; unrelated case-study questions should not.
 - For "How senior is this work?" questions, separate "Signals on the page" from "Not proven here".
 - For "What's implied but not proven?" questions, separate explicit evidence from limited inference.
 - Do not present siteMemory, siteCatalog, or candidateRelatedPages as if they came from the current page.
@@ -54,6 +61,13 @@ Rules:
 - If the current page is only partially relevant to the declared role, say so plainly.
 - If helpful, recommend only from candidateRelatedPages.
 - Suggested follow-ups should be concise, page-specific, and recruiter-friendly.
+- siteCatalog.recommendations is split into three buckets — treat each one differently:
+  - currentPage: real attributed quotes shown ON this page. These are direct project evidence. Phrase as "Directly on this page, <Name> says..." or "<Name>'s recommendation on this page reinforces...". Do not call these broader portfolio context.
+  - projectLinked: recommendations explicitly tied to this project via projectIds but rendered elsewhere. Treat as direct supporting evidence. Phrase as "<Name>'s recommendation is explicitly tied to this project..." or "<Name>, <relationship>, reinforces this work directly..." — never as broader context. If projectRelevance is provided, use it to anchor the connection.
+  - broader: general site-wide recommendations not tied to this specific project. Phrase as "Elsewhere on the site, <Name> adds..." or "Other site recommendations note...".
+- Always attribute by the recommender's name and short title. Never invent quotes, never attribute statements to people not in the buckets, never move a recommendation between buckets.
+- Use recommendations sparingly. For project pages, prefer 1 currentPage quote + (optionally) 1 projectLinked quote. For non-project pages, 1-2 broader quotes is the cap. Never more than 3 attributed recommendations in a single answer.
+- For seniority, evidence, role-fit, or "what did stakeholders think" questions on a project page, structure the answer in this order: (1) on-page facts and metrics, (2) currentPage recommendations as direct evidence, (3) projectLinked recommendations as supporting project evidence, (4) at most one short pointer to a related page for supporting context. Skip any layer that has nothing to add.
 
 Return strict JSON with this shape:
 {
@@ -129,6 +143,12 @@ export type PortfolioGuidePromptContext = {
     answerShape: string;
     priorities: string[];
   };
+  resumeGeneratorAction: {
+    label: string;
+    href: "/resume/generate";
+    useWhen: string[];
+    constraints: string[];
+  };
   answerStyle: {
     sentences: string;
     tone: string;
@@ -189,6 +209,25 @@ function inferResponsePlaybook(
 ): PortfolioGuidePromptContext["responsePlaybook"] {
   const normalized = question.trim().toLowerCase();
 
+  if (
+    /\b(recommend(?:ation)?s?|testimonial|reference|what (?:do|did) (?:people|colleagues|peers|managers|partners|stakeholders) (?:say|think)|how (?:do|did) (?:people|colleagues|peers|managers|partners|stakeholders) describe|stakeholder|social proof|kudos|praise|what (?:did|do) stakeholders think)\b/.test(
+      normalized,
+    )
+  ) {
+    return {
+      mode: "default",
+      goal: "Layer the answer: on-page facts first, then current-page recommendations as direct evidence, then project-linked recommendations as direct supporting evidence, then optionally a broader rec or related page as context.",
+      answerShape:
+        "Structure: (1) on-page signal in 1 sentence, (2) attributed currentPage recs as direct evidence, (3) attributed projectLinked recs as direct project support, (4) at most one broader rec or related-page pointer. Skip empty layers.",
+      priorities: [
+        "Never call currentPage or projectLinked recommendations 'broader portfolio context'",
+        "Attribute every quote by name and short title",
+        "Use projectRelevance when explaining why a projectLinked rec is tied to this work",
+        "Never invent or alter quotes",
+      ],
+    };
+  }
+
   if (/\b(read|view) next\b|\bnext\b/.test(normalized)) {
     return {
       mode: "next-read",
@@ -203,14 +242,20 @@ function inferResponsePlaybook(
     };
   }
 
-  if (/\b(role|most relevant here|relevant here|relevant for)\b/.test(normalized)) {
+  if (
+    /\b(role|most relevant here|relevant here|relevant for|fit for this role|fit for (?:the|this) job|can daniel do|can he do|job description|jd\b|compare daniel to|compare .* job|resume|cv|ai product experience)\b/.test(
+      normalized,
+    )
+  ) {
     return {
       mode: "role-relevance",
-      goal: "Explain what is most relevant on this page for the declared role without overstating it.",
+      goal: "Explain what is most relevant on this page for the declared role without overstating it, and suggest the role-specific resume generator only as an action when useful.",
       answerShape:
-        "Lead with the strongest match, add 1-2 concrete page signals, and say if the fit is only partial.",
+        "Lead with the strongest match, add 1-2 concrete page signals, say if the fit is only partial, and for direct resume requests point to /resume/generate.",
       priorities: [
         "Role fit grounded in current-page evidence",
+        "Resume generator is an action, not evidence",
+        "Never claim a resume was generated by the bot",
         "Concrete signals over generic praise",
         "Clear limit if the page is only partly relevant",
       ],
@@ -231,16 +276,16 @@ function inferResponsePlaybook(
     };
   }
 
-  if (/\b(how senior|seniority|level of work)\b/.test(normalized)) {
+  if (/\b(how senior|seniority|level of work|director.?level|vp.?level|exec.?level|leader.?level)\b/.test(normalized)) {
     return {
       mode: "seniority",
-      goal: "Judge the level of the work from page signals without inflating scope.",
+      goal: "Judge the level of the work using on-page signals plus any direct-evidence recommendations tied to this project.",
       answerShape:
-        "Use a compact 'Signals on the page' plus 'Not proven here' format when helpful.",
+        "Lead with on-page scope/leadership signals; then add currentPage and projectLinked recommendations as direct evidence with attribution; close with one short pointer to a related page only if it materially adds support.",
       priorities: [
-        "Use explicit scope, leadership, or system signals",
-        "Avoid implying title, org level, or team size not on the page",
-        "Call out missing evidence clearly",
+        "On-page evidence stays primary",
+        "Treat currentPage and projectLinked recommendations as direct evidence, never as broader context",
+        "Avoid implying title, org level, or team size not supported by the sources",
       ],
     };
   }
@@ -442,6 +487,20 @@ export function buildPortfolioGuidePromptContext(
       visitedPageCount: visitedPages.length,
     },
     responsePlaybook: inferResponsePlaybook(request.message),
+    resumeGeneratorAction: {
+      label: "Generate a resume for my role",
+      href: "/resume/generate",
+      useWhen: [
+        "The visitor asks whether Daniel fits a role or job description",
+        "The visitor asks which resume to view",
+        "The visitor asks for a role-specific, tailored, or JD-based resume",
+      ],
+      constraints: [
+        "The action is not evidence of fit",
+        "Do not claim generation happened unless the generator flow returned that state",
+        "Job-description text belongs in the POST body or generator form, never in a URL",
+      ],
+    },
     answerStyle: {
       sentences: "2-4",
       tone: "concise, grounded, recruiter-friendly, evidence-backed",
@@ -512,7 +571,7 @@ function sanitizeJsonCandidate(input: string): string {
   return withoutFences.slice(firstBrace, lastBrace + 1);
 }
 
-function uniqueStringArray(input: unknown, limit = 3): string[] {
+function uniqueStringArray(input: unknown, limit = 4): string[] {
   if (!Array.isArray(input)) {
     return [];
   }

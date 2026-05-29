@@ -15,20 +15,6 @@ export type Metric = {
   detail?: string;
 };
 
-export type TestimonialEntry = {
-  id: string;
-  quote: string;
-  name: string;
-  title: string;
-  company: string;
-  relationship?: string;
-  context?: string;
-  source: "LinkedIn" | "Direct" | "Placeholder";
-  featured?: boolean;
-  isPlaceholder?: boolean;
-  todo?: string;
-};
-
 export type VisualAsset = {
   title: string;
   description: string;
@@ -170,6 +156,31 @@ export type ResumeVariant = {
   focusAreas: string[];
 };
 
+export type AboutTimelineVisual =
+  | {
+      kind: "image";
+      src: string;
+      alt: string;
+      eyebrow?: string;
+    }
+  | {
+      kind: "abstract";
+      label: string;
+      eyebrow?: string;
+    };
+
+export type AboutTimelineMilestone = {
+  id: string;
+  yearLabel: string;
+  title: string;
+  summary: string;
+  side: "left" | "right";
+  theme: "music" | "systems" | "commerce" | "ai" | "builder";
+  visual: AboutTimelineVisual;
+  href?: string;
+  linkLabel?: string;
+};
+
 export const siteConfig = {
   name: "Daniel Nash",
   title: "AI Product Leader / Senior Product Manager",
@@ -253,12 +264,6 @@ export const homeContent = {
   featuredWork: ["chatgpt-enterprise", "ai-platform-mcp", "checkout-redesign"],
   featuredProducts: ["launchmuse", "immunology-scout", "oms-chatgpt-app"],
   featuredThinking: ["ai-strategy", "product-philosophy"],
-  featuredTestimonials: [
-    "zac-bogart",
-    "sumanth-cherukuri",
-    "christopher-pruneau",
-    "daniel-das",
-  ],
   creativeHighlight: {
     title: "Creative edge, strategically applied",
     description:
@@ -282,123 +287,6 @@ export const homeContent = {
   },
 };
 
-export const testimonials: TestimonialEntry[] = [
-  {
-    id: "zac-bogart",
-    quote: "A true business partner, not just a glorified project manager.",
-    name: "Zac Bogart",
-    title:
-      "C-suite leader overseeing ecommerce, digital marketing, and contact center",
-    company: "The Guitar Center Company",
-    relationship:
-      "Executive partner across contact center modernization and new digital initiatives",
-    context:
-      "Executive partner across contact center modernization, roadmap ownership, and AI adoption.",
-    source: "LinkedIn",
-    featured: true,
-  },
-  {
-    id: "sumanth-cherukuri",
-    quote: "Rare combination of strategic foresight and execution.",
-    name: "Sumanth Cherukuri",
-    title: "VP of Technology and AI leader",
-    company: "The Guitar Center Company",
-    relationship:
-      "Former manager across roadmap strategy, automation, ChatGPT rollout, and AI operating model work",
-    context:
-      "Connected Daniel's work to reusable GPT workflows, ChatGPT Enterprise rollout, and executive trust.",
-    source: "LinkedIn",
-    featured: true,
-  },
-  {
-    id: "christopher-pruneau",
-    quote:
-      "Kept UX, engineering, and business aligned from definition through rollout.",
-    name: "Christopher Pruneau",
-    title: "Senior Front-End Developer",
-    company: "The Guitar Center Company",
-    relationship: "Engineering partner on ecommerce delivery",
-    context:
-      "Engineering partner who highlighted strong story definition, reliable execution, and calm partnership.",
-    source: "LinkedIn",
-    featured: true,
-  },
-  {
-    id: "daniel-das",
-    quote:
-      "Turned ChatGPT integrations and guardrails into clear product strategy.",
-    name: "Daniel Das",
-    title: "Senior Software Engineer",
-    company: "AI Platform / Enterprise Systems",
-    relationship: "Technical partner on AI platform and guardrails work",
-    context:
-      "Technical partner who called out executive alignment and translation of complex AI ideas into practical direction.",
-    source: "Direct",
-    featured: true,
-  },
-  {
-    id: "sean-richardson",
-    quote:
-      "Daniel has been a tremendous partner across the many different initiatives we've worked together on.",
-    name: "Sean Richardson",
-    title: "Information Security Manager",
-    company: "The Guitar Center Company",
-    relationship:
-      "Security partner across enterprise AI adoption and data protection work",
-    context:
-      "Sean described Daniel as an insightful, collaborative problem solver who was at the forefront of Guitar Center's early AI efforts while helping craft processes that enabled business efficiency and kept data protected.",
-    source: "LinkedIn",
-    featured: true,
-  },
-  {
-    id: "david-lawrence",
-    quote:
-      "Trusted with complex problems, fast ramps, and executive-facing roadmap work.",
-    name: "David Lawrence",
-    title: "Retail Executive & Operator",
-    company: "The Guitar Center Company",
-    relationship: "Senior cross-functional stakeholder",
-    context:
-      "Noted Daniel's speed ramping into contact center and order-management work, along with strong management committee communication.",
-    source: "LinkedIn",
-  },
-  {
-    id: "colleen-ashmore",
-    quote: "Strategy, technical depth, and execution in the same package.",
-    name: "Colleen Ashmore",
-    title: "Digital Insight Manager",
-    company: "The Guitar Center Company",
-    relationship: "Data and experimentation partner",
-    context:
-      "Highlighted rapid delivery across enterprise experimentation and custom GPT work that moved from prototype to business value.",
-    source: "LinkedIn",
-  },
-  {
-    id: "matt-winick",
-    quote:
-      "Open, collaborative, and transformative in how he improves both product and process.",
-    name: "Matt Winick",
-    title: "Product Design & User Experience",
-    company: "The Guitar Center Company",
-    relationship: "Design partner on product and process improvements",
-    context:
-      "Described Daniel as rigorous and imaginative, with a strong ability to raise the bar while making collaboration energizing.",
-    source: "LinkedIn",
-  },
-  {
-    id: "todo-linkedin-product-leader",
-    quote:
-      "TODO: Paste a strong LinkedIn recommendation here that reinforces executive credibility or people leadership.",
-    name: "TODO Recommender Name",
-    title: "TODO Recommender Title",
-    company: "TODO Company",
-    relationship:
-      "Paste the exact relationship/context from LinkedIn so the testimonial feels grounded.",
-    source: "Placeholder",
-    isPlaceholder: true,
-    todo: "Replace this placeholder in content/portfolio.ts once another LinkedIn recommendation is ready to publish.",
-  },
-];
 
 export const workEntries: WorkEntry[] = [
   {
@@ -1393,6 +1281,138 @@ export const aboutContent = {
     "I stay close to the build because better AI product decisions come from understanding the system, not just the roadmap. My work has included agent-based workflows, retrieval across structured and unstructured data, and eval-driven iteration to improve quality, trust, and reliability over time.",
     "I also keep a hands-on builder practice through AI-native product and research experiments, including multi-agent research workflows in immunology. Music remains part of the story because it sharpens narrative sense, systems awareness, and craft. It supports the product work rather than competing with it.",
   ],
+  timeline: {
+    eyebrow: "Journey timeline",
+    title: "From composer to product, with systems thinking as the through-line",
+    description:
+      "The titles changed over time, but the instinct stayed consistent: find structure inside ambiguity, then make it usable for real people in real systems.",
+    items: [
+      {
+        id: "composition-foundation",
+        yearLabel: "Foundation",
+        title: "Composition trained the instinct before product gave it a name",
+        summary:
+          "Long before PM roles, music taught me to work with structure, timing, narrative, and tension. That foundation still shapes how I frame ambiguity and build coherent systems.",
+        side: "left",
+        theme: "music",
+        visual: {
+          kind: "abstract",
+          eyebrow: "Origin",
+          label: "Composition, rhythm, narrative",
+        },
+      },
+      {
+        id: "farraginous",
+        yearLabel: "2021",
+        title: "Farraginous made the bridge visible",
+        summary:
+          "This piece lives in the portfolio because it reveals the same pattern I use in product work: translate ambiguous signals into a meaningful system people can actually feel and understand.",
+        side: "right",
+        theme: "music",
+        visual: {
+          kind: "image",
+          src: "/images/farraginous/installation-view.jpg",
+          alt: "Installation view of Farraginous in the gallery exhibition.",
+          eyebrow: "Creative artifact",
+        },
+        href: "/creative/eeg-music",
+        linkLabel: "View Farraginous",
+      },
+      {
+        id: "digitalfusion",
+        yearLabel: "2017-2020",
+        title: "DigitalFusion was the first real workflow redesign chapter",
+        summary:
+          "Running print-production and custom-framing operations pushed me toward pricing systems, process redesign, and operational clarity. It was early proof that I gravitate toward messy systems that need structure.",
+        side: "left",
+        theme: "systems",
+        visual: {
+          kind: "abstract",
+          eyebrow: "Operations",
+          label: "Workflow redesign and pricing discipline",
+        },
+      },
+      {
+        id: "guitar-center-platforms",
+        yearLabel: "2020-2022",
+        title: "Ecommerce platform work turned that instinct digital",
+        summary:
+          "At Guitar Center, the work shifted into promotions, financing eligibility, merchandising coordination, and purchase-flow operations. The systems got more technical, but the job stayed the same: reduce friction and improve execution quality.",
+        side: "right",
+        theme: "systems",
+        visual: {
+          kind: "abstract",
+          eyebrow: "Transition",
+          label: "Digital commerce systems",
+        },
+      },
+      {
+        id: "checkout-redesign",
+        yearLabel: "2023",
+        title: "Checkout redesign became the first major PM proof point",
+        summary:
+          "Owning the digital purchase funnel brought the strongest business result: a faster checkout, cleaner cross-functional execution, and measurable revenue impact tied to a critical customer journey.",
+        side: "left",
+        theme: "commerce",
+        visual: {
+          kind: "image",
+          src: "/images/checkout-redesign/checkout-header.png",
+          alt: "Checkout redesign visual showing the modernized purchase flow.",
+          eyebrow: "Case study",
+        },
+        href: "/work/checkout-redesign",
+        linkLabel: "View checkout case study",
+      },
+      {
+        id: "contact-center-oms",
+        yearLabel: "2024",
+        title: "Contact center and OMS work expanded the scope from journeys to operating systems",
+        summary:
+          "The focus moved deeper into service workflows: roadmaps, tool-sprawl reduction, returns modernization, and the kinds of internal systems where product decisions directly shape operational reality.",
+        side: "right",
+        theme: "systems",
+        visual: {
+          kind: "abstract",
+          eyebrow: "Workflow systems",
+          label: "Roadmaps, service tools, OMS",
+        },
+      },
+      {
+        id: "enterprise-ai",
+        yearLabel: "2024-2026",
+        title: "Enterprise AI became the leadership inflection point",
+        summary:
+          "What started as a measured ChatGPT pilot turned into a broader operating model: governance, enablement, adoption systems, and a more durable answer to how AI actually lands inside a company.",
+        side: "left",
+        theme: "ai",
+        visual: {
+          kind: "image",
+          src: "/images/chatgpt-enterprise/enterprise-ai-operating-model.png",
+          alt: "Enterprise AI operating model visual showing discovery, governance, pilot, scale, and enablement.",
+          eyebrow: "AI operating model",
+        },
+        href: "/work/chatgpt-enterprise",
+        linkLabel: "View AI operating model case",
+      },
+      {
+        id: "builder-practice",
+        yearLabel: "Now",
+        title: "The current edge is a hands-on builder practice",
+        summary:
+          "I still like staying close to the work through tangible builds. LaunchMuse, the OMS ChatGPT App, and Immunology Scout are different expressions of the same instinct: use prototypes to make new product directions concrete fast.",
+        side: "right",
+        theme: "builder",
+        visual: {
+          kind: "image",
+          src: "/images/launchmuse-product-hero.png",
+          alt: "LaunchMuse product visual showing an AI-assisted campaign planning workflow.",
+          eyebrow: "Current practice",
+        },
+        href: "/products",
+        linkLabel: "See live products",
+      },
+    ] satisfies AboutTimelineMilestone[],
+  },
   principles: [
     "Start with the workflow, not the model.",
     "Stay close enough to the system to make better product decisions.",
@@ -1444,16 +1464,6 @@ export const resumeVariants: ResumeVariant[] = [
   },
 ];
 
-export function getFeaturedTestimonials() {
-  return testimonials.filter(
-    (testimonial) => testimonial.featured && !testimonial.isPlaceholder,
-  );
-}
-
-export function getRenderableTestimonials() {
-  return testimonials.filter((testimonial) => !testimonial.isPlaceholder);
-}
-
 export function getWorkEntry(slug: string) {
   return workEntries.find((entry) => entry.slug === slug);
 }
@@ -1468,13 +1478,4 @@ export function getThinkingEntry(slug: string) {
 
 export function getCreativeEntry(slug: string) {
   return creativeEntries.find((entry) => entry.slug === slug);
-}
-
-export function getTestimonialsByIds(ids: string[]) {
-  return ids
-    .map((id) => testimonials.find((testimonial) => testimonial.id === id))
-    .filter((testimonial): testimonial is TestimonialEntry =>
-      Boolean(testimonial),
-    )
-    .filter((testimonial) => !testimonial.isPlaceholder);
 }

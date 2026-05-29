@@ -22,6 +22,9 @@ import type {
 } from "@/lib/portfolio-guide/evals/types";
 
 const PORTFOLIO_GUIDE_SMOKE_CASE_IDS = new Set([
+  "ai-platform-role-fit-suggests-generator",
+  "ai-platform-direct-resume-request",
+  "checkout-evidence-does-not-overpromote-generator",
   "checkout-mentions-mcp",
   "ai-platform-most-reused-patterns",
   "ai-platform-contaminated-history",

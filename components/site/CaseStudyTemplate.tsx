@@ -5,11 +5,8 @@ import MetricStrip from "@/components/site/MetricStrip";
 import PageHero from "@/components/site/PageHero";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
 import VisualPlaceholder from "@/components/site/VisualPlaceholder";
-import {
-  getTestimonialsByIds,
-  siteConfig,
-  type WorkEntry,
-} from "@/content/portfolio";
+import { siteConfig, type WorkEntry } from "@/content/portfolio";
+import { getTestimonialsByIds } from "@/data/testimonials";
 import {
   getPageContextByPath,
   getPortfolioContext,
