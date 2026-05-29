@@ -269,15 +269,14 @@ export const homeContent = {
     title:
       "Looking for a product leader who can understand the system, not just the roadmap?",
     description:
-      "I do my best work in environments that value both building and thinking. Review the work, then reach out if that matches the kind of product leadership you need.",
+      "Want the most relevant version of my resume? Upload a job description and generate a role-specific PDF resume, or reach out directly if you’d rather talk through the role.",
     primaryAction: {
-      href: siteConfig.linkedinUrl,
-      label: "Connect on LinkedIn",
-      external: true,
+      href: "/resume/generate",
+      label: "Generate tailored resume",
     },
     secondaryAction: {
       href: siteConfig.contactHref,
-      label: "Send a message",
+      label: "Contact Daniel",
     },
   },
 };
