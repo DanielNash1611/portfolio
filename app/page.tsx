@@ -13,12 +13,12 @@ import ProductCard from "@/components/site/ProductCard";
 import SectionHeader from "@/components/site/SectionHeader";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
 import {
-  getFeaturedTestimonials,
   getProductEntry,
   getThinkingEntry,
   getWorkEntry,
   homeContent,
 } from "@/content/portfolio";
+import { featuredTestimonials } from "@/data/testimonials";
 import {
   getAllCanonicalPageContexts,
   getPortfolioContext,
@@ -166,7 +166,11 @@ export default function HomePage(): JSX.Element {
             eyebrow="Recommendations"
             title="Selected recommendations from leaders and technical partners"
             description="Short excerpts that reinforce the same signal as the work itself: business impact, strategic clarity, and strong cross-functional trust."
-            testimonials={getFeaturedTestimonials()}
+            testimonials={featuredTestimonials}
+            footerLink={{
+              href: "/about#recommendations",
+              label: "View all recommendations",
+            }}
           />
         </MotionReveal>
       </Container>

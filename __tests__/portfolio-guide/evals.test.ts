@@ -354,6 +354,107 @@ test("response guardrails rebuild next-read answers from safe related-page metad
   );
 });
 
+test("response guardrails add generator follow-ups for role-fit questions only as actions", () => {
+  const pageContext = getPageContextBySlug("ai-platform-mcp");
+  assert.ok(pageContext, "expected ai platform page context");
+
+  const guarded = applyPortfolioGuideResponseGuardrails({
+    request: {
+      message: "Is Daniel a fit for this AI Product Manager role?",
+      pageContext,
+      portfolioContext: getPortfolioContext(),
+      sessionContext: {
+        visitedPages: ["ai-platform-mcp"],
+        clickedPrompts: [],
+        askedQuestions: ["Is Daniel a fit for this AI Product Manager role?"],
+        inferredInterestTags: ["platform"],
+      },
+    },
+    response: {
+      answer:
+        "The page supports a fit signal through the hackathon-winning prototype and reusable platform patterns.",
+      suggestedFollowUps: ["What did Daniel own?"],
+      relatedPages: [],
+    },
+    fallbackRelatedPages: [],
+  });
+
+  assert.deepEqual(guarded.suggestedFollowUps, [
+    "Generate a resume for my role",
+    "Compare Daniel to this job description",
+    "Show the strongest proof points",
+    "Contact Daniel",
+  ]);
+  assert.doesNotMatch(guarded.answer, /generated a resume/i);
+});
+
+test("response guardrails point direct resume requests to the generator path", () => {
+  const pageContext = getPageContextBySlug("ai-platform-mcp");
+  assert.ok(pageContext, "expected ai platform page context");
+
+  const guarded = applyPortfolioGuideResponseGuardrails({
+    request: {
+      message: "Can I get a resume for this role?",
+      pageContext,
+      portfolioContext: getPortfolioContext(),
+      sessionContext: {
+        visitedPages: ["ai-platform-mcp"],
+        clickedPrompts: [],
+        askedQuestions: ["Can I get a resume for this role?"],
+        inferredInterestTags: ["platform"],
+      },
+    },
+    response: {
+      answer:
+        "I've generated a role-specific PDF resume for you from this page.",
+      relatedPages: [],
+    },
+    fallbackRelatedPages: [],
+  });
+
+  assert.match(guarded.answer, /\/resume\/generate/);
+  assert.match(guarded.answer, /paste the job description/i);
+  assert.doesNotMatch(guarded.answer, /I've generated/i);
+  assert.deepEqual(guarded.suggestedFollowUps, [
+    "Generate a resume for my role",
+    "Compare Daniel to this job description",
+    "Show the strongest proof points",
+    "Contact Daniel",
+  ]);
+});
+
+test("response guardrails remove generator follow-ups from pure evidence questions", () => {
+  const pageContext = getPageContextBySlug("checkout-redesign");
+  assert.ok(pageContext, "expected checkout page context");
+
+  const guarded = applyPortfolioGuideResponseGuardrails({
+    request: {
+      message: "What are the strongest proof points on this page?",
+      pageContext,
+      portfolioContext: getPortfolioContext(),
+      sessionContext: {
+        visitedPages: ["checkout-redesign"],
+        clickedPrompts: [],
+        askedQuestions: ["What are the strongest proof points on this page?"],
+        inferredInterestTags: ["pm-leadership"],
+      },
+    },
+    response: {
+      answer:
+        "The strongest proof points are the ~$16M annualized impact, faster checkout, and A/B testing evidence.",
+      suggestedFollowUps: [
+        "Generate a resume for my role",
+        "Compare Daniel to this job description",
+        "What did Daniel own?",
+      ],
+      relatedPages: [],
+    },
+    fallbackRelatedPages: [],
+  });
+
+  assert.deepEqual(guarded.suggestedFollowUps, ["What did Daniel own?"]);
+});
+
 test("eval runner combines deterministic and judge results into a failing suite", async () => {
   const evalCase = portfolioGuideEvalCases.find(
     (candidate) => candidate.id === "checkout-mentions-mcp",

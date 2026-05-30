@@ -115,6 +115,45 @@ export type PageContext = {
   authoredSections?: PageAuthoredSection[];
 };
 
+export type RecommendationEvidenceLevel =
+  | "current_page"
+  | "project_linked"
+  | "broader";
+
+export type RecommendationSummary = {
+  id: string;
+  name: string;
+  title: string;
+  relationshipCapacity: string;
+  source: "LinkedIn" | "Direct";
+  short: string;
+  full: string;
+  narrativeTags: NarrativeId[];
+  date?: string;
+  profileUrl?: string;
+  evidenceLevel: RecommendationEvidenceLevel;
+  /**
+   * When evidenceLevel is "project_linked", the project slug(s) this rec is
+   * tied to. Lets the model say "tied to this project" rather than implying
+   * the rec is rendered on the page.
+   */
+  linkedProjectIds?: string[];
+  /**
+   * Optional one-liner explaining why this recommendation maps to the
+   * current project. Surfaced verbatim in the prompt context.
+   */
+  projectRelevance?: string;
+};
+
+export type PageRecommendationContext = {
+  /** Recommendations the page actually renders today (direct evidence). */
+  currentPage: RecommendationSummary[];
+  /** Recommendations explicitly tied to this project via projectIds but not rendered on the page. */
+  projectLinked: RecommendationSummary[];
+  /** Tag-matched recommendations from elsewhere on the site, kept as supporting context. */
+  broader: RecommendationSummary[];
+};
+
 export type PortfolioContext = {
   portfolioSubject?: PortfolioSubject;
   bioSummary?: string;
@@ -137,6 +176,7 @@ export type PortfolioContext = {
     evidenceHighlights?: string[];
     interestTags?: InterestTag[];
   }>;
+  recommendations?: PageRecommendationContext;
 };
 
 export type SessionContext = {

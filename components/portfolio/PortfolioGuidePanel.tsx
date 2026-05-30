@@ -32,6 +32,23 @@ function handleTextareaKeyDown(
   }
 }
 
+function getFollowUpActionHref(followUp: string): string | null {
+  const normalized = followUp.trim().toLowerCase();
+
+  if (
+    normalized === "generate a resume for my role" ||
+    normalized === "compare daniel to this job description"
+  ) {
+    return "/resume/generate";
+  }
+
+  if (normalized === "contact daniel") {
+    return "/contact";
+  }
+
+  return null;
+}
+
 export default function PortfolioGuidePanel({
   messages,
   draft,
@@ -122,21 +139,30 @@ export default function PortfolioGuidePanel({
 
               {message.role === "assistant" && message.suggestedFollowUps?.length ? (
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {message.suggestedFollowUps.map((followUp) => (
-                    <button
-                      key={followUp}
-                      type="button"
-                      onClick={() => onFollowUp(followUp)}
-                      className={clsx(
-                        "inline-flex rounded-full border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                        tone === "site"
-                          ? "border-[color:var(--color-teal)]/12 bg-white text-[color:var(--color-teal)] hover:bg-[color:var(--color-background)] focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-[color:var(--color-cream)]"
-                          : "border-brand-teal/15 bg-white text-brand-teal hover:bg-brand-teal/5 focus-visible:ring-brand-orange focus-visible:ring-offset-white",
-                      )}
-                    >
-                      {followUp}
-                    </button>
-                  ))}
+                  {message.suggestedFollowUps.map((followUp) => {
+                    const actionHref = getFollowUpActionHref(followUp);
+                    const className = clsx(
+                      "inline-flex rounded-full border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                      tone === "site"
+                        ? "border-[color:var(--color-teal)]/12 bg-white text-[color:var(--color-teal)] hover:bg-[color:var(--color-background)] focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-[color:var(--color-cream)]"
+                        : "border-brand-teal/15 bg-white text-brand-teal hover:bg-brand-teal/5 focus-visible:ring-brand-orange focus-visible:ring-offset-white",
+                    );
+
+                    return actionHref ? (
+                      <Link key={followUp} href={actionHref} className={className}>
+                        {followUp}
+                      </Link>
+                    ) : (
+                      <button
+                        key={followUp}
+                        type="button"
+                        onClick={() => onFollowUp(followUp)}
+                        className={className}
+                      >
+                        {followUp}
+                      </button>
+                    );
+                  })}
                 </div>
               ) : null}
             </div>

@@ -6,7 +6,7 @@ import MediaFrame from "@/components/site/MediaFrame";
 import SoundSynthesistSystemDiagram from "@/components/site/SoundSynthesistSystemDiagram";
 import { SoundSeekerWidget } from "@/components/sound-seeker/SoundSeekerWidget";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
-import { getTestimonialsByIds } from "@/content/portfolio";
+import { getTestimonialsByIds } from "@/data/testimonials";
 import {
   getPageContextByPath,
   getPortfolioContext,

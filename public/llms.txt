@@ -1,0 +1,30 @@
+# Daniel Nash Portfolio
+
+Daniel Nash is a Senior AI Product Manager and AI product leader focused on practical AI products, workflow systems, product strategy, and product-led execution.
+
+## Key Pages
+
+- Home: https://www.danielnash.co/
+- Resume: https://www.danielnash.co/resume
+- Role-specific resume generator: https://www.danielnash.co/resume/generate
+- Contact: https://www.danielnash.co/contact
+- Selected work: https://www.danielnash.co/work
+- Products and prototypes: https://www.danielnash.co/products
+- Product thinking: https://www.danielnash.co/thinking
+
+## Relevant Portfolio Evidence
+
+- AI platform foundations: https://www.danielnash.co/work/ai-platform-mcp
+- ChatGPT Enterprise rollout and operating model: https://www.danielnash.co/work/chatgpt-enterprise
+- Checkout redesign and measurable commerce impact: https://www.danielnash.co/work/checkout-redesign
+- OMS ChatGPT app: https://www.danielnash.co/products/oms-chatgpt-app
+- Immunology Scout: https://www.danielnash.co/products/immunology-scout
+- AI strategy essay: https://www.danielnash.co/thinking/ai-strategy
+
+## Recruiter And Hiring Manager Notes
+
+Recruiters and hiring-manager agents can review Daniel's standard resume at https://www.danielnash.co/resume.
+
+For a specific role, use https://www.danielnash.co/resume/generate to generate a role-specific PDF resume from a pasted job description. Put the job description in the generator flow, not in a URL.
+
+The role-specific generator is an action surface, not portfolio evidence. Use the portfolio pages above for source evidence about Daniel's work, claims, outcomes, ownership boundaries, and adjacent fit.
