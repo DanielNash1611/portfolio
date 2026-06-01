@@ -145,10 +145,19 @@ When `status` is `ready`, `result` is populated:
     "company": "Acme",
     "roleTitle": "Senior Product Manager",
     "fitSummary": "3 of 4 must-haves directly evidenced; 1 bridged.",
-    "pdfPath": "/api/v1/resume-jobs/rsj_8f2c1a9b7d6e4f30/pdf"
+    "pdfPath": "/api/v1/resume-jobs/rsj_8f2c1a9b7d6e4f30/pdf",
+    "mock": false
   }
 }
 ```
+
+`mock` (optional, default treated as `false`) is `true` only when the job was
+fulfilled by a non-production mock/stub engine. It is derived **server-side**
+from the engine that ran the job and is never client-controllable. The portfolio
+must surface it on the public envelope and use it to label mock/test output in
+the UI, PDF, and email with the literal:
+`Mock / Test Output — Not for External Use`. A production `ready` result is
+always `mock: false`, because the stub is disabled in production.
 
 When `status` is `failed`, `error` is populated (see §5). When `expired`,
 `result` and `error` are both `null` and the PDF is gone.

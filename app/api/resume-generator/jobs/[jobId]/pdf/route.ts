@@ -29,7 +29,7 @@ export async function GET(
       return errorResponse(
         503,
         "unavailable",
-        "The resume generator is temporarily unavailable.",
+        error.message,
       );
     }
     console.error("[resume-generator:pdf]", error);

@@ -1,9 +1,8 @@
 // Server-side proxy to the ResumeCustomizer internal engine (contract §2).
 //
 // SERVER-ONLY. This module injects the bearer token and talks to the internal
-// `/api/v1/*` API. It must never be imported by client components. When the
-// engine isn't configured it transparently falls back to the in-memory mock
-// (mockEngine.ts) so the public API and UX work end-to-end during development.
+// `/api/v1/*` API. It must never be imported by client components. The in-memory
+// mock engine is only available through an explicit non-production env flag.
 //
 // Callers (the public route handlers) receive internal-shaped envelopes and are
 // responsible for translating them into the public envelope, including
@@ -29,6 +28,19 @@ export class EngineUnavailableError extends Error {
   }
 }
 
+function assertEngineConfigured(
+  config: ReturnType<typeof getResumeEngineConfig>,
+): void {
+  if (config.mockMode) {
+    return;
+  }
+  if (!config.configured || !config.baseUrl || !config.token) {
+    throw new EngineUnavailableError(
+      "Resume generation is unavailable because the real resume engine is not configured.",
+    );
+  }
+}
+
 function authHeaders(token: string): HeadersInit {
   return {
     Authorization: `Bearer ${token}`,
@@ -44,6 +56,7 @@ export async function createEngineJob(
   if (config.mockMode) {
     return mockCreateJob(req);
   }
+  assertEngineConfigured(config);
 
   let response: Response;
   try {
@@ -81,6 +94,7 @@ export async function getEngineJob(
   if (config.mockMode) {
     return mockGetJob(jobId);
   }
+  assertEngineConfigured(config);
 
   let response: Response;
   try {
@@ -116,6 +130,7 @@ export async function getEnginePdf(jobId: string): Promise<InternalPdfResult> {
   if (config.mockMode) {
     return mockGetPdf(jobId);
   }
+  assertEngineConfigured(config);
 
   let response: Response;
   try {

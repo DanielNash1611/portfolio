@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   createResumeJob,
@@ -12,6 +12,7 @@ import {
 import {
   RESUME_FILE_MAX_BYTES,
   RESUME_JD_MAX_CHARS,
+  RESUME_MOCK_LABEL,
   RESUME_PROGRESS_ORDER,
   RESUME_STATUS_LABELS,
   type JobStatusResponse,
@@ -75,6 +76,35 @@ export default function ResumeGenerator(): JSX.Element {
   const [emailMessage, setEmailMessage] = useState<string>("");
 
   const abortRef = useRef<AbortController | null>(null);
+  const emailTriggeredRef = useRef(false);
+
+  const handleEmailDelivery = useCallback(async (): Promise<void> => {
+    if (!jobId) {
+      return;
+    }
+    setEmailState("sending");
+    setEmailMessage("");
+    try {
+      const result = await requestEmailDelivery(jobId, {
+        recipientEmail: recipientEmail.trim(),
+        ccDaniel,
+      });
+      setEmailState("done");
+      setEmailMessage(
+        result.message ??
+          (result.emailed
+            ? "Sent. Check your inbox."
+            : "Request received."),
+      );
+    } catch (error) {
+      setEmailState("error");
+      setEmailMessage(
+        error instanceof Error
+          ? error.message
+          : "We couldn't send the email. Your download is still available.",
+      );
+    }
+  }, [ccDaniel, jobId, recipientEmail]);
 
   // Drive polling whenever we have an active, non-terminal job.
   useEffect(() => {
@@ -106,12 +136,27 @@ export default function ResumeGenerator(): JSX.Element {
     return () => controller.abort();
   }, [jobId]);
 
+  useEffect(() => {
+    if (
+      status?.status !== "ready" ||
+      deliveryMode !== "email" ||
+      emailState !== "idle" ||
+      emailTriggeredRef.current
+    ) {
+      return;
+    }
+
+    emailTriggeredRef.current = true;
+    void handleEmailDelivery();
+  }, [deliveryMode, emailState, handleEmailDelivery, status?.status]);
+
   function resetToForm(): void {
     abortRef.current?.abort();
     setJobId(null);
     setStatus(null);
     setEmailState("idle");
     setEmailMessage("");
+    emailTriggeredRef.current = false;
   }
 
   async function handleFile(
@@ -185,6 +230,7 @@ export default function ResumeGenerator(): JSX.Element {
 
     setSubmitting(true);
     try {
+      emailTriggeredRef.current = false;
       const created = await createResumeJob({
         jobDescription: {
           text: trimmed,
@@ -213,34 +259,6 @@ export default function ResumeGenerator(): JSX.Element {
       setFormError({ title: errorTitleForCode(code), message });
     } finally {
       setSubmitting(false);
-    }
-  }
-
-  async function handleEmailDelivery(): Promise<void> {
-    if (!jobId) {
-      return;
-    }
-    setEmailState("sending");
-    setEmailMessage("");
-    try {
-      const result = await requestEmailDelivery(jobId, {
-        recipientEmail: recipientEmail.trim(),
-        ccDaniel,
-      });
-      setEmailState("done");
-      setEmailMessage(
-        result.message ??
-          (result.emailed
-            ? "Sent. Check your inbox."
-            : "Request received."),
-      );
-    } catch (error) {
-      setEmailState("error");
-      setEmailMessage(
-        error instanceof Error
-          ? error.message
-          : "We couldn't send the email. Your download is still available.",
-      );
     }
   }
 
@@ -379,6 +397,7 @@ function ResumeForm(props: ResumeFormProps): JSX.Element {
 
   return (
     <form
+      method="post"
       onSubmit={props.onSubmit}
       className="space-y-6 rounded-[1.75rem] border border-black/6 bg-white/84 p-6 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:p-8"
     >
@@ -698,6 +717,18 @@ function ReadyPanel({
 
   return (
     <div className="space-y-6 rounded-[1.75rem] border border-black/6 bg-white/84 p-6 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:p-8">
+      {result.mock ? (
+        <div
+          role="alert"
+          className="rounded-2xl border border-amber-400 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900"
+        >
+          {RESUME_MOCK_LABEL}
+          <span className="mt-1 block text-xs font-normal text-amber-800">
+            This came from a non-production mock/stub engine and is not a real
+            tailored resume. Configure the real engine for recruiter-ready output.
+          </span>
+        </div>
+      ) : null}
       <div className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[color:var(--color-teal)]/68">
           Ready
@@ -744,7 +775,7 @@ function ReadyPanel({
             {emailState === "sending"
               ? "Sending…"
               : emailState === "done"
-                ? "Request sent"
+                ? "Email sent"
                 : "Email me this resume"}
           </button>
           {emailMessage ? (

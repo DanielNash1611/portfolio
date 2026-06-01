@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
       return errorResponse(
         503,
         "unavailable",
-        "The resume generator is temporarily unavailable. Please try again soon.",
+        error.message,
         true,
       );
     }

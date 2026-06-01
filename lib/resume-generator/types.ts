@@ -126,7 +126,19 @@ export type ResumeJobResult = {
   fitSummary?: string;
   company?: string;
   roleTitle?: string;
+  /**
+   * True when this result was produced by a non-production mock/stub engine.
+   * Comes from server/result metadata only — never from user input or a query
+   * param — so the UI and email can label mock/test output (see RESUME_MOCK_LABEL).
+   */
+  mock?: boolean;
 };
+
+/**
+ * The exact label that must appear on any mock/test output (UI, PDF, result
+ * metadata, email) so it can never be mistaken for a recruiter-ready resume.
+ */
+export const RESUME_MOCK_LABEL = "Mock / Test Output — Not for External Use";
 
 /** Public status envelope. Contract §3.2 / §2.2. */
 export type JobStatusResponse = {
@@ -151,11 +163,6 @@ export type EmailDeliveryResponse = {
   ok: boolean;
   emailed: boolean;
   ccDaniel: boolean;
-  /**
-   * True when the request was accepted but actual delivery is owned by a
-   * separate workstream (Thread E) and not yet wired up.
-   */
-  pending?: boolean;
   message?: string;
   error?: string;
 };

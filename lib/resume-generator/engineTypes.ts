@@ -38,6 +38,12 @@ export type InternalJobResult = {
   fitSummary?: string;
   /** Internal download path, e.g. /api/v1/resume-jobs/{id}/pdf. */
   pdfPath: string;
+  /**
+   * True when the engine that produced this result was a non-production mock/
+   * stub. Derived server-side by ResumeCustomizer (or the portfolio mock
+   * engine); never client-controllable. Used to label mock/test output.
+   */
+  mock?: boolean;
 };
 
 export type InternalJobEnvelope = {

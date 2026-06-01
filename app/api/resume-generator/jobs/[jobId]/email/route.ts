@@ -6,9 +6,15 @@ import {
   maxEmailLength,
 } from "@/lib/contact";
 import {
+  getEnginePdf,
   getEngineJob,
   EngineUnavailableError,
 } from "@/lib/resume-generator/engineClient";
+import {
+  sendGeneratedResumeEmail,
+  ResumeEmailConfigurationError,
+  ResumeEmailSendError,
+} from "@/lib/resume-generator/emailDelivery";
 import { checkResumeRateLimit } from "@/lib/resume-generator/rateLimit";
 import type {
   EmailDeliveryRequest,
@@ -19,11 +25,6 @@ export const dynamic = "force-dynamic";
 
 // POST /api/resume-generator/jobs/{jobId}/email  (contract §3.4)
 //
-// PLACEHOLDER. Email delivery via Resend is owned by a separate workstream
-// (Thread E). This route validates the request shape, confirms the job is
-// ready, and enforces the opt-in `ccDaniel` default, but does NOT send mail.
-// It returns `{ ok: true, emailed: false, pending: true }` so the UI can
-// acknowledge the request while keeping the no-email download path primary.
 export async function POST(
   request: NextRequest,
   { params }: { params: { jobId: string } },
@@ -79,14 +80,20 @@ export async function POST(
     );
   }
 
-  // Confirm the job exists and is ready before acknowledging delivery.
+  // Confirm the job exists and is ready before fetching/attaching the PDF.
   let envelope;
   try {
     envelope = await getEngineJob(params.jobId);
   } catch (error) {
     if (error instanceof EngineUnavailableError) {
       return NextResponse.json(
-        { ok: false, emailed: false, ccDaniel, error: "unavailable" },
+        {
+          ok: false,
+          emailed: false,
+          ccDaniel,
+          error: "unavailable",
+          message: error.message,
+        },
         { status: 503 },
       );
     }
@@ -116,18 +123,80 @@ export async function POST(
     );
   }
 
-  // TODO (Thread E): fetch the PDF from the engine, attach it, and send via
-  // Resend using CONTACT_FROM_EMAIL. CC CONTACT_TO_EMAIL only when ccDaniel is
-  // true; otherwise include contact links (portfolio /contact + mailto) in the
-  // body (contract decision #8).
+  let pdf;
+  try {
+    pdf = await getEnginePdf(params.jobId);
+  } catch (error) {
+    if (error instanceof EngineUnavailableError) {
+      return NextResponse.json(
+        {
+          ok: false,
+          emailed: false,
+          ccDaniel,
+          error: "unavailable",
+          message: error.message,
+        },
+        { status: 503 },
+      );
+    }
+    console.error("[resume-generator:email:pdf]", error);
+    return NextResponse.json(
+      { ok: false, emailed: false, ccDaniel, error: "engine_failed" },
+      { status: 502 },
+    );
+  }
+
+  if (!pdf.ok) {
+    const status = pdf.status === "not_ready" ? 409 : pdf.status === "expired" ? 410 : 404;
+    return NextResponse.json(
+      { ok: false, emailed: false, ccDaniel, error: pdf.status },
+      { status },
+    );
+  }
+
+  const contactUrl = new URL("/contact", request.nextUrl.origin).toString();
+
+  try {
+    await sendGeneratedResumeEmail({
+      recipientEmail,
+      ccDaniel,
+      mock: envelope.result?.mock === true,
+      note: typeof body.note === "string" ? body.note : undefined,
+      pdf: {
+        bytes: pdf.bytes,
+        filename: pdf.filename,
+      },
+      job: {
+        jobId: envelope.jobId,
+        company: envelope.result?.company,
+        roleTitle: envelope.result?.roleTitle,
+        fitSummary: envelope.result?.fitSummary,
+      },
+      contactUrl,
+    });
+  } catch (error) {
+    if (
+      error instanceof ResumeEmailConfigurationError ||
+      error instanceof ResumeEmailSendError
+    ) {
+      return NextResponse.json(
+        { ok: false, emailed: false, ccDaniel, error: "email_send_failed" },
+        { status: 502 },
+      );
+    }
+    console.error("[resume-generator:email:send]", error);
+    return NextResponse.json(
+      { ok: false, emailed: false, ccDaniel, error: "email_send_failed" },
+      { status: 502 },
+    );
+  }
+
   const response: EmailDeliveryResponse = {
     ok: true,
-    emailed: false,
-    pending: true,
+    emailed: true,
     ccDaniel,
-    message:
-      "Your request was received. Email delivery is being finalized — your download is ready now.",
+    message: "Sent. Check your inbox.",
   };
 
-  return NextResponse.json(response, { status: 202 });
+  return NextResponse.json(response, { status: 200 });
 }

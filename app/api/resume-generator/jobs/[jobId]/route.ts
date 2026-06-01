@@ -29,7 +29,7 @@ export async function GET(
       return errorResponse(
         503,
         "unavailable",
-        "The resume generator is temporarily unavailable.",
+        error.message,
       );
     }
     console.error("[resume-generator:status]", error);
@@ -58,6 +58,7 @@ export async function GET(
           fitSummary: envelope.result.fitSummary,
           company: envelope.result.company,
           roleTitle: envelope.result.roleTitle,
+          mock: envelope.result.mock === true,
         }
       : null,
   };
