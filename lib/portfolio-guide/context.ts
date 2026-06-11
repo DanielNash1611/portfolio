@@ -85,6 +85,12 @@ const CANONICAL_PROJECTS: CanonicalProject[] = [
     source: "thinking",
   },
   {
+    slug: "the-side-of-ai-i-want-to-be-on",
+    href: "/thinking/the-side-of-ai-i-want-to-be-on",
+    title: "The Side of AI I Want to Be On",
+    source: "thinking",
+  },
+  {
     slug: "product-philosophy",
     href: "/thinking/product-philosophy",
     title: "Product leadership is systems design",
@@ -99,7 +105,9 @@ function normalizePathname(pathname: string): string {
   }
 
   const normalized =
-    pathOnly !== "/" && pathOnly.endsWith("/") ? pathOnly.slice(0, -1) : pathOnly;
+    pathOnly !== "/" && pathOnly.endsWith("/")
+      ? pathOnly.slice(0, -1)
+      : pathOnly;
 
   return normalized || "/";
 }
@@ -120,7 +128,11 @@ function uniqueStrings(items: Array<string | undefined>): string[] {
   return results;
 }
 
-function metricToString(metric: { label: string; value: string; detail?: string }): string {
+function metricToString(metric: {
+  label: string;
+  value: string;
+  detail?: string;
+}): string {
   return metric.detail
     ? `${metric.label}: ${metric.value} (${metric.detail})`
     : `${metric.label}: ${metric.value}`;
@@ -163,7 +175,9 @@ function formatTradeoff(option: {
     : `${option.option}: ${option.tradeoff}`;
 }
 
-function formatExecutionItem(item: string | { title: string; body: string }): string {
+function formatExecutionItem(
+  item: string | { title: string; body: string },
+): string {
   return typeof item === "string" ? item : `${item.title}: ${item.body}`;
 }
 
@@ -218,9 +232,14 @@ function buildWorkAuthoredSections(entry: WorkEntry): PageAuthoredSection[] {
       entry.summary,
       entry.description,
       ...(entry.heroDetails ?? []),
-      ...(entry.heroQuestions ?? []).map((question) => `Key question: ${question}`),
+      ...(entry.heroQuestions ?? []).map(
+        (question) => `Key question: ${question}`,
+      ),
     ]),
-    createAuthoredSection("Featured metrics", entry.featuredMetrics.map(metricToString)),
+    createAuthoredSection(
+      "Featured metrics",
+      entry.featuredMetrics.map(metricToString),
+    ),
     createAuthoredSection("Overview", entry.overview ?? []),
     createAuthoredSection("Context", entry.context),
     createAuthoredSection("Core problem", entry.problem),
@@ -240,16 +259,23 @@ function buildWorkAuthoredSections(entry: WorkEntry): PageAuthoredSection[] {
     createAuthoredSection(
       "Artifacts described on page",
       entry.visuals.map((asset) =>
-        asset.description ? `${asset.title}: ${asset.description}` : asset.title,
+        asset.description
+          ? `${asset.title}: ${asset.description}`
+          : asset.title,
       ),
     ),
   ].filter((section): section is PageAuthoredSection => section !== null);
 }
 
-function buildProductAuthoredSections(entry: ProductEntry): PageAuthoredSection[] {
+function buildProductAuthoredSections(
+  entry: ProductEntry,
+): PageAuthoredSection[] {
   return [
     createAuthoredSection("Page summary", [entry.summary, entry.description]),
-    createAuthoredSection("Featured metrics", entry.featuredMetrics.map(metricToString)),
+    createAuthoredSection(
+      "Featured metrics",
+      entry.featuredMetrics.map(metricToString),
+    ),
     createAuthoredSection("Problem", entry.problem),
     createAuthoredSection("Solution", entry.solution),
     createAuthoredSection(
@@ -262,13 +288,17 @@ function buildProductAuthoredSections(entry: ProductEntry): PageAuthoredSection[
     createAuthoredSection(
       "Artifacts described on page",
       entry.visuals.map((asset) =>
-        asset.description ? `${asset.title}: ${asset.description}` : asset.title,
+        asset.description
+          ? `${asset.title}: ${asset.description}`
+          : asset.title,
       ),
     ),
   ].filter((section): section is PageAuthoredSection => section !== null);
 }
 
-function buildThinkingAuthoredSections(entry: ThinkingEntry): PageAuthoredSection[] {
+function buildThinkingAuthoredSections(
+  entry: ThinkingEntry,
+): PageAuthoredSection[] {
   return [
     createAuthoredSection("Page summary", [entry.summary, entry.description]),
     createAuthoredSection("Key ideas", entry.keyIdeas),
@@ -280,7 +310,9 @@ function buildThinkingAuthoredSections(entry: ThinkingEntry): PageAuthoredSectio
 
 function buildLegacyCaseAuthoredSections(slug: string): PageAuthoredSection[] {
   const caseEntry = cases.find((candidate) => candidate.slug === slug);
-  const measuredEntry = CASE_STUDIES.find((candidate) => candidate.slug === slug);
+  const measuredEntry = CASE_STUDIES.find(
+    (candidate) => candidate.slug === slug,
+  );
   const overlay = portfolioGuideMetadata[slug];
 
   return [
@@ -311,7 +343,10 @@ function buildLegacyCaseAuthoredSections(slug: string): PageAuthoredSection[] {
     createAuthoredSection("Problem framing", [overlay?.problem]),
     createAuthoredSection("Actions", overlay?.actions ?? []),
     createAuthoredSection("Outcomes", overlay?.outcomes ?? []),
-    createAuthoredSection("Leadership signals", overlay?.leadershipSignals ?? []),
+    createAuthoredSection(
+      "Leadership signals",
+      overlay?.leadershipSignals ?? [],
+    ),
     createAuthoredSection(
       "Artifacts described on page",
       (overlay?.artifacts ?? []).map((artifact) =>
@@ -331,23 +366,28 @@ function workEntryToPageContext(slug: string): PageContext | null {
 
   const overlay = portfolioGuideMetadata[slug] ?? {};
 
-  const actions = overlay.actions ?? entry.execution.map((item) =>
-    typeof item === "string" ? item : `${item.title}: ${item.body}`,
-  );
+  const actions =
+    overlay.actions ??
+    entry.execution.map((item) =>
+      typeof item === "string" ? item : `${item.title}: ${item.body}`,
+    );
 
-  const outcomes = overlay.outcomes ??
+  const outcomes =
+    overlay.outcomes ??
     uniqueStrings([
       ...(entry.results ?? []),
       ...(entry.scaledBeyondPilot ?? []),
       ...entry.impact.map(metricToString),
     ]).slice(0, 8);
 
-  const metrics = overlay.metrics ??
+  const metrics =
+    overlay.metrics ??
     uniqueStrings([
       ...entry.featuredMetrics.map(metricToString),
       ...entry.impact.map(metricToString),
     ]);
-  const artifacts = overlay.artifacts ?? entry.visuals.map(visualToArtifact).slice(0, 3);
+  const artifacts =
+    overlay.artifacts ?? entry.visuals.map(visualToArtifact).slice(0, 3);
 
   return {
     slug: entry.slug,
@@ -384,7 +424,8 @@ function workEntryToPageContext(slug: string): PageContext | null {
     claimBoundaries: overlay.claimBoundaries,
     recruiterPrompts: overlay.recruiterPrompts,
     crossPageLinks: overlay.crossPageLinks,
-    authoredSections: overlay.authoredSections ?? buildWorkAuthoredSections(entry),
+    authoredSections:
+      overlay.authoredSections ?? buildWorkAuthoredSections(entry),
   };
 }
 
@@ -396,18 +437,18 @@ function productEntryToPageContext(slug: string): PageContext | null {
 
   const overlay = portfolioGuideMetadata[slug] ?? {};
 
-  const outcomes = overlay.outcomes ??
+  const outcomes =
+    overlay.outcomes ??
     uniqueStrings([
       ...entry.featuredMetrics.map(metricToString),
       ...entry.learnings,
     ]).slice(0, 6);
   const actions =
     overlay.actions ??
-    entry.productExperience.map(
-      (step) => `${step.title}: ${step.description}`,
-    );
+    entry.productExperience.map((step) => `${step.title}: ${step.description}`);
   const metrics = overlay.metrics ?? entry.featuredMetrics.map(metricToString);
-  const artifacts = overlay.artifacts ?? entry.visuals.map(visualToArtifact).slice(0, 3);
+  const artifacts =
+    overlay.artifacts ?? entry.visuals.map(visualToArtifact).slice(0, 3);
 
   return {
     slug: entry.slug,
@@ -451,7 +492,9 @@ function productEntryToPageContext(slug: string): PageContext | null {
 
 function legacyCaseToPageContext(slug: string): PageContext | null {
   const caseEntry = cases.find((candidate) => candidate.slug === slug);
-  const measuredEntry = CASE_STUDIES.find((candidate) => candidate.slug === slug);
+  const measuredEntry = CASE_STUDIES.find(
+    (candidate) => candidate.slug === slug,
+  );
   const overlay = portfolioGuideMetadata[slug];
 
   if (!caseEntry && !measuredEntry && !overlay) {
@@ -566,7 +609,9 @@ export function getCanonicalProjects(): CanonicalProject[] {
   return [...CANONICAL_PROJECTS];
 }
 
-export function getCanonicalProjectBySlug(slug: string): CanonicalProject | null {
+export function getCanonicalProjectBySlug(
+  slug: string,
+): CanonicalProject | null {
   return CANONICAL_PROJECTS.find((project) => project.slug === slug) ?? null;
 }
 
@@ -593,8 +638,9 @@ export function getPageContextBySlug(slug: string): PageContext | null {
 export function getPageContextByPath(pathname: string): PageContext | null {
   const normalizedPathname = normalizePathname(pathname);
   const project =
-    CANONICAL_PROJECTS.find((candidate) => candidate.href === normalizedPathname) ??
-    null;
+    CANONICAL_PROJECTS.find(
+      (candidate) => candidate.href === normalizedPathname,
+    ) ?? null;
 
   if (!project) {
     return null;
@@ -604,9 +650,9 @@ export function getPageContextByPath(pathname: string): PageContext | null {
 }
 
 export function getAllCanonicalPageContexts(): PageContext[] {
-  return CANONICAL_PROJECTS.map((project) => getPageContextBySlug(project.slug)).filter(
-    (pageContext): pageContext is PageContext => Boolean(pageContext),
-  );
+  return CANONICAL_PROJECTS.map((project) =>
+    getPageContextBySlug(project.slug),
+  ).filter((pageContext): pageContext is PageContext => Boolean(pageContext));
 }
 
 export function getPortfolioContext(): PortfolioContext {
@@ -757,7 +803,9 @@ export function selectRecommendationsForPage(
         ).length;
         return { testimonial, index, overlap };
       })
-      .filter((entry) => entry.overlap > 0 && !handled.has(entry.testimonial.id))
+      .filter(
+        (entry) => entry.overlap > 0 && !handled.has(entry.testimonial.id),
+      )
       .sort((a, b) => {
         if (b.overlap !== a.overlap) {
           return b.overlap - a.overlap;

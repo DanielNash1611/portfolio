@@ -183,7 +183,7 @@ export type AboutTimelineMilestone = {
 
 export const siteConfig = {
   name: "Daniel Nash",
-  title: "AI Product Leader / Senior Product Manager",
+  title: "AI Product Leader",
   location: "Los Angeles, California",
   contactHref: "/contact",
   linkedinUrl: "https://www.linkedin.com/in/daniel-a-nash/",
@@ -204,9 +204,10 @@ export const siteConfig = {
 export const homeContent = {
   hero: {
     eyebrow: "AI Product Leadership",
-    title: "Building AI products that deliver meaningful impact",
+    title:
+      "Building AI products that create business value and improve human work",
     description:
-      "I turn new AI capability into practical products, workflows, and use cases that teams use, trust, and scale.",
+      "I build AI-enabled products and adoption strategies that turn emerging capability into measurable outcomes while helping people do better, more creative, and more meaningful work.",
     primaryAction: {
       href: "/work",
       label: "Explore selected work",
@@ -239,31 +240,31 @@ export const homeContent = {
     },
   ] satisfies Metric[],
   positioning: {
-    eyebrow: "Portfolio structure",
-    title: "Organized around proof, not PM archetypes",
+    eyebrow: "What I optimize for",
+    title: "Business value, trusted adoption, and better human work",
     description:
-      "The homepage is built to answer the most useful hiring questions quickly.",
+      "The strongest AI products improve the numbers and the experience of doing the work. I focus on both.",
     categories: [
       {
-        title: "Enterprise AI adoption",
+        title: "Measurable value",
         description:
-          "Pilots, rollout systems, and guardrails that turn new capability into real usage.",
+          "Revenue, productivity, time savings, adoption, and workflow transformation tied to real operating needs.",
       },
       {
-        title: "Systems simplification",
+        title: "Trusted adoption",
         description:
-          "Commerce and operations work tied to measurable business outcomes, not just cleaner workflows.",
+          "Transparent change, practical guardrails, and rollout systems that people can understand and rely on.",
       },
       {
-        title: "AI-native execution",
+        title: "Human capability",
         description:
-          "Live products and grounded concepts that make promising workflow ideas tangible fast.",
+          "Products that help people think better, create more confidently, and spend more time on meaningful problems.",
       },
     ],
   },
   featuredWork: ["chatgpt-enterprise", "ai-platform-mcp", "checkout-redesign"],
   featuredProducts: ["launchmuse", "immunology-scout", "oms-chatgpt-app"],
-  featuredThinking: ["ai-strategy", "product-philosophy"],
+  featuredThinking: ["the-side-of-ai-i-want-to-be-on", "ai-strategy"],
   creativeHighlight: {
     title: "Creative edge, strategically applied",
     description:
@@ -285,7 +286,6 @@ export const homeContent = {
     },
   },
 };
-
 
 export const workEntries: WorkEntry[] = [
   {
@@ -1039,6 +1039,92 @@ export const productEntries: ProductEntry[] = [
 
 export const thinkingEntries: ThinkingEntry[] = [
   {
+    slug: "the-side-of-ai-i-want-to-be-on",
+    href: "/thinking/the-side-of-ai-i-want-to-be-on",
+    title: "The Side of AI I Want to Be On",
+    eyebrow: "Thinking",
+    summary:
+      "I want to build AI that creates measurable business value while helping people learn, create, discover, and do more meaningful work.",
+    description:
+      "A personal point of view on business value, creativity, trust, responsible adoption, and why the future of AI should be measured by more than automation alone.",
+    cardDescription:
+      "AI can create enormous business value. The question is whether we use that capability only to reduce work, or also to help people learn, create, discover, and flourish.",
+    readTime: "7 min read",
+    tags: ["AI Leadership", "Responsible Adoption", "Human Flourishing"],
+    keyIdeas: [
+      "Business impact and human flourishing are not opposing goals.",
+      "Trust requires honesty about how AI will change work.",
+      "The best AI products expand creativity, learning, access, and human agency.",
+    ],
+    sections: [
+      {
+        title: "What side of AI do I want to be on?",
+        body: [
+          "I have been thinking a lot about what side of AI I want to be on.",
+          "I am a product leader, a composer, a person of faith, a husband, and a father. AI does not feel abstract to me because it touches nearly every part of the life I care about: work, creativity, learning, family, faith, and the future we are building for the people who come after us.",
+          "My answer is becoming clearer. I want to be on the side of AI that makes humanity better: the side that creates real business value while also helping people learn more deeply, create more confidently, access knowledge more easily, and spend more time solving meaningful human problems.",
+        ],
+      },
+      {
+        title: "Business value is part of the point",
+        body: [
+          "I am not interested in a version of responsible AI that treats business outcomes as suspect. AI products need to work. They should improve productivity, generate revenue, save time, increase adoption, transform workflows, and make operations more effective.",
+          "I have seen that potential directly through enterprise AI adoption, agentic workflows, productivity tools, and experiments designed to help real people do their work more effectively. The strongest programs begin with a measurable problem, fit the technology into a real workflow, and learn from what people actually use.",
+          "But efficiency is a means, not a complete vision. If the only story we can tell about AI is that it lets an organization do the same work with fewer people, we are leaving much of its value unexplored.",
+        ],
+      },
+      {
+        title: "The creativity result I did not expect",
+        body: [
+          "At Guitar Center, I helped run surveys about AI adoption. We asked about time savings because productivity was an obvious outcome to measure. We also asked whether AI improved the quality or creativity of people’s work.",
+          "I expected the productivity gains. What surprised and inspired me was that a majority of respondents reported increased creativity.",
+          "That changed the way I thought about the opportunity. AI was not only helping people complete the same task faster. It was helping them explore alternatives, get unstuck, shape rough ideas, and create with more confidence. The technology could reduce friction without reducing the person. In the right product and workflow, it could expand what someone believed they were capable of doing.",
+        ],
+      },
+      {
+        title: "Trust is a product requirement",
+        body: [
+          "There is still a real tension here. AI can save money, and organizations have a responsibility to operate effectively. But saving money by quietly changing people’s responsibilities, obscuring the intent of a rollout, or allowing uncertainty to spread is not good leadership.",
+          "If AI will reduce certain kinds of work or materially change a role, people deserve honesty. They deserve enough context to understand what is changing, support as they adapt, and a credible path toward the work that comes next.",
+          "Trust is not a communications layer added after the product decision. It is part of the product and operating model. Transparent expectations, human review, practical guardrails, clear accountability, and thoughtful change management all shape whether adoption becomes durable or corrosive.",
+        ],
+      },
+      {
+        title: "Language for something I already felt",
+        body: [
+          "I recently listened to part of Elder Gerrit W. Gong’s presentation on AI, faith, dignity, and human flourishing. It gave me clearer language for something I had already been feeling.",
+          "My faith informs the belief that people have inherent worth and should not be treated as inputs to optimize away. That conviction is personal, but the product principle is broadly human: technology should respect dignity, preserve agency, and help more people participate in creating value.",
+          "This is not an argument against ambition or scale. It is an argument for a more complete definition of progress.",
+        ],
+      },
+      {
+        title: "A larger surface area for AI",
+        body: [
+          "In my professional work, that means building enterprise adoption systems, agentic workflows, productivity tools, and responsible change practices that connect AI to measurable outcomes without separating the technology from the people expected to use it.",
+          "In my personal exploration, it also means asking how AI can widen access to knowledge, support creativity, deepen scripture study, and accelerate life-sciences discovery. These experiments are not all production products or proven business outcomes. They are places where I am learning what human-centered AI could make possible.",
+          "Across both, the pattern I care about is the same: give people better tools for thinking, learning, deciding, creating, and contributing.",
+        ],
+      },
+      {
+        title: "Human flourishing is a product standard",
+        body: [
+          "For me, AI for human flourishing is not a soft alternative to product rigor. It creates harder and more useful questions.",
+          "Did the product create measurable value? Did it improve the quality of the work, not only its speed? Do people understand when and how AI is involved? Are the boundaries and review paths clear? Did the system expand access or capability? Did we help people adapt to the changes we introduced?",
+          "Those questions make the product stronger. They force strategy, experience, governance, measurement, and change management into the same conversation.",
+        ],
+      },
+      {
+        title: "There will still be problems worth solving",
+        body: [
+          "Even if AI eventually takes over a large amount of today’s work, the human story does not end. There will still be people to heal, communities to build, truth to seek, art to create, systems to improve, diseases to fight, children to teach, and human potential to unlock.",
+          "The opportunity is not simply to remove people from work. It is to help more people direct their time, judgment, creativity, and care toward work that matters.",
+          "That is the side of AI I want to be on. I want to build AI for measurable impact, responsible adoption, and human flourishing.",
+        ],
+      },
+    ],
+    featured: true,
+  },
+  {
     slug: "ai-strategy",
     href: "/thinking/ai-strategy",
     title: "AI doesn’t fail because of the model. It fails in the workflow.",
@@ -1270,19 +1356,32 @@ export const creativeEntries: CreativeEntry[] = [
 ];
 
 export const aboutContent = {
-  title:
-    "AI Product Leader building practical products, workflows, and systems",
+  title: "AI Product Leader building measurable value and better human work",
   summary:
-    "I work across product strategy, workflow modernization, enterprise AI adoption, and system design, turning new AI capability into real-world products and operating models that teams use, trust, and scale.",
+    "I turn emerging AI capability into products, workflows, and adoption strategies that create measurable business outcomes while advancing trust, creativity, and more meaningful human work.",
   paragraphs: [
     "My work usually starts the same way: find the leverage point in a system, then turn emerging capability into something operationally useful.",
     "That has taken me across ecommerce, contact center, workflow modernization, and enterprise AI. At Guitar Center, I helped scale ChatGPT Enterprise from roughly ~150 licensed users / ~40 DAU to ~1,000 users / ~800 DAU by pairing reusable workflows with governance, enablement, and close partnership across Legal, Security, Engineering, and Operations.",
     "I stay close to the build because better AI product decisions come from understanding the system, not just the roadmap. My work has included agent-based workflows, retrieval across structured and unstructured data, and eval-driven iteration to improve quality, trust, and reliability over time.",
     "I also keep a hands-on builder practice through AI-native product and research experiments, including multi-agent research workflows in immunology. Music remains part of the story because it sharpens narrative sense, systems awareness, and craft. It supports the product work rather than competing with it.",
   ],
+  humanFlourishing: {
+    eyebrow: "AI for human flourishing",
+    title:
+      "Business impact should improve human work, not erase the human from it",
+    description:
+      "I care deeply about revenue, productivity, efficiency, adoption, and scale. I also believe the best AI products earn trust, expand capability, and help people spend more time on work that matters.",
+    professional:
+      "My professional work spans enterprise AI adoption, agentic workflows, productivity tools, knowledge access, and responsible change management. The goal is to move organizations from experimentation to measurable value with transparent boundaries, practical guardrails, and support for the people affected by the change.",
+    personal:
+      "My personal explorations extend that same curiosity into creativity, scripture study, and life sciences. I treat these as learning grounds rather than proven enterprise outcomes: ways to explore how AI might help people create, understand, and discover more.",
+    manifesto:
+      "The best AI products do more than reduce costs. They help people think better, create more confidently, access knowledge more easily, and spend more time on meaningful human work.",
+  },
   timeline: {
     eyebrow: "Journey timeline",
-    title: "From composer to product, with systems thinking as the through-line",
+    title:
+      "From composer to product, with systems thinking as the through-line",
     description:
       "The titles changed over time, but the instinct stayed consistent: find structure inside ambiguity, then make it usable for real people in real systems.",
     items: [
@@ -1365,7 +1464,8 @@ export const aboutContent = {
       {
         id: "contact-center-oms",
         yearLabel: "2024",
-        title: "Contact center and OMS work expanded the scope from journeys to operating systems",
+        title:
+          "Contact center and OMS work expanded the scope from journeys to operating systems",
         summary:
           "The focus moved deeper into service workflows: roadmaps, tool-sprawl reduction, returns modernization, and the kinds of internal systems where product decisions directly shape operational reality.",
         side: "right",

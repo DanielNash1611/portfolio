@@ -8,7 +8,7 @@ import { thinkingEntries } from "@/content/portfolio";
 export const metadata: Metadata = {
   title: "Thinking",
   description:
-    "Short essays on AI strategy, product leadership, and systems thinking by Daniel Nash.",
+    "Essays by Daniel Nash on AI product leadership, measurable impact, responsible adoption, human flourishing, and systems thinking.",
 };
 
 export default function ThinkingPage(): JSX.Element {
@@ -16,12 +16,12 @@ export default function ThinkingPage(): JSX.Element {
     <Container className="space-y-8 pt-6">
       <PageHero
         eyebrow="Thinking"
-        title="Product essays that make the operating model visible"
-        description="These short pieces are here to clarify how I think about AI strategy, systems design, product leadership, and the role of creative practice in product judgment."
+        title="A practical point of view on AI, products, and human work"
+        description="These essays connect measurable business impact with the harder questions of trust, responsible adoption, creativity, systems design, and the future we want AI to help build."
         metrics={[
-          { label: "Format", value: "Short-form essays" },
-          { label: "Focus", value: "AI + product systems" },
-          { label: "Tone", value: "Strategic, concise, grounded" },
+          { label: "Focus", value: "AI product leadership" },
+          { label: "Standard", value: "Impact + responsibility" },
+          { label: "Tone", value: "Practical, personal, grounded" },
         ]}
       />
 

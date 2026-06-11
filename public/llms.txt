@@ -1,6 +1,6 @@
 # Daniel Nash Portfolio
 
-Daniel Nash is a Senior AI Product Manager and AI product leader focused on practical AI products, workflow systems, product strategy, and product-led execution.
+Daniel Nash is an AI product leader focused on building systems that create measurable business value while advancing trusted adoption, creativity, learning, and better human work.
 
 ## Key Pages
 
@@ -11,6 +11,7 @@ Daniel Nash is a Senior AI Product Manager and AI product leader focused on prac
 - Selected work: https://www.danielnash.co/work
 - Products and prototypes: https://www.danielnash.co/products
 - Product thinking: https://www.danielnash.co/thinking
+- AI leadership and human flourishing essay: https://www.danielnash.co/thinking/the-side-of-ai-i-want-to-be-on
 
 ## Relevant Portfolio Evidence
 
@@ -20,6 +21,7 @@ Daniel Nash is a Senior AI Product Manager and AI product leader focused on prac
 - OMS ChatGPT app: https://www.danielnash.co/products/oms-chatgpt-app
 - Immunology Scout: https://www.danielnash.co/products/immunology-scout
 - AI strategy essay: https://www.danielnash.co/thinking/ai-strategy
+- The Side of AI I Want to Be On: https://www.danielnash.co/thinking/the-side-of-ai-i-want-to-be-on
 
 ## Recruiter And Hiring Manager Notes
 

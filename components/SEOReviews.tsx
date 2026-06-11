@@ -11,12 +11,15 @@ const itemReviewed = {
 
 const personSchema = {
   ...itemReviewed,
-  jobTitle: "Senior AI Product Manager / AI Product Leader",
+  jobTitle: "AI Product Leader",
   sameAs: [siteConfig.linkedinUrl, siteConfig.githubUrl],
   knowsAbout: [
     "AI product management",
     "AI product strategy",
     "Enterprise AI adoption",
+    "Responsible AI adoption",
+    "Human-centered AI",
+    "Agentic workflows",
     "Product leadership",
     "Workflow automation",
     "0-to-1 product development",

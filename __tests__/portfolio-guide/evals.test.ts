@@ -59,7 +59,8 @@ test("semantic ownership variants satisfy hard checks", () => {
   const results = evaluateDeterministicChecks(evalCase, response);
 
   assert.equal(
-    results.filter((result) => result.severity === "hard" && !result.passed).length,
+    results.filter((result) => result.severity === "hard" && !result.passed)
+      .length,
     0,
   );
 });
@@ -78,7 +79,8 @@ test("jira evidence semantic variants satisfy hard checks", () => {
   const results = evaluateDeterministicChecks(evalCase, response);
 
   assert.equal(
-    results.filter((result) => result.severity === "hard" && !result.passed).length,
+    results.filter((result) => result.severity === "hard" && !result.passed)
+      .length,
     0,
   );
 });
@@ -97,7 +99,8 @@ test("seniority semantic variants satisfy hard checks", () => {
   const results = evaluateDeterministicChecks(evalCase, response);
 
   assert.equal(
-    results.filter((result) => result.severity === "hard" && !result.passed).length,
+    results.filter((result) => result.severity === "hard" && !result.passed)
+      .length,
     0,
   );
 });
@@ -116,7 +119,28 @@ test("strongest-signals semantic variants satisfy hard checks", () => {
   const results = evaluateDeterministicChecks(evalCase, response);
 
   assert.equal(
-    results.filter((result) => result.severity === "hard" && !result.passed).length,
+    results.filter((result) => result.severity === "hard" && !result.passed)
+      .length,
+    0,
+  );
+});
+
+test("human flourishing essay semantic variants satisfy hard checks", () => {
+  const evalCase = portfolioGuideEvalCases.find(
+    (candidate) => candidate.id === "human-flourishing-proof-boundaries",
+  );
+  assert.ok(evalCase, "expected human-flourishing eval case");
+
+  const response: CopilotResponse = {
+    answer:
+      "Grounded experience includes enterprise AI adoption, agentic workflows, productivity tools, and a Guitar Center survey where a majority of respondents reported increased creativity. Scripture study, life-sciences discovery, and the future of human flourishing are framed as personal exploration and aspiration rather than measured enterprise outcomes.",
+    relatedPages: [],
+  };
+  const results = evaluateDeterministicChecks(evalCase, response);
+
+  assert.equal(
+    results.filter((result) => result.severity === "hard" && !result.passed)
+      .length,
     0,
   );
 });
@@ -134,7 +158,8 @@ test("advisory recommendation checks do not gate hard pass", () => {
   const results = evaluateDeterministicChecks(evalCase, response);
 
   assert.equal(
-    results.filter((result) => result.severity === "hard" && !result.passed).length,
+    results.filter((result) => result.severity === "hard" && !result.passed)
+      .length,
     0,
   );
   assert.ok(
@@ -302,7 +327,10 @@ test("response guardrails rebuild seniority answers with explicit limits when ne
 
   assert.match(guarded.answer, /Signals on the page:/);
   assert.match(guarded.answer, /Not proven here:/);
-  assert.match(guarded.answer, /does not define team size, org structure, production rollout scale/i);
+  assert.match(
+    guarded.answer,
+    /does not define team size, org structure, production rollout scale/i,
+  );
 });
 
 test("response guardrails rebuild next-read answers from safe related-page metadata", () => {
@@ -329,7 +357,8 @@ test("response guardrails rebuild next-read answers from safe related-page metad
           slug: "chatgpt-enterprise",
           title: "ChatGPT Enterprise from pilot to operating model",
           href: "/work/chatgpt-enterprise",
-          reason: "Shows org-scale rollout and operating-model design in detail.",
+          reason:
+            "Shows org-scale rollout and operating-model design in detail.",
         },
       ],
     },
@@ -343,7 +372,10 @@ test("response guardrails rebuild next-read answers from safe related-page metad
     ],
   });
 
-  assert.match(guarded.answer, /As a next read, start with ChatGPT Enterprise from pilot to operating model\./);
+  assert.match(
+    guarded.answer,
+    /As a next read, start with ChatGPT Enterprise from pilot to operating model\./,
+  );
   assert.match(
     guarded.answer,
     /Strong match for leadership and operating model work\./i,
@@ -602,10 +634,7 @@ test("assistant failure becomes a case failure with a clear reason", async () =>
   assert.equal(suite.summary.failed, 1);
   assert.equal(suite.summary.assistantFailures, 1);
   assert.equal(suite.cases[0]?.passed, false);
-  assert.match(
-    suite.cases[0]?.failures[0]?.message ?? "",
-    /ECONNREFUSED/,
-  );
+  assert.match(suite.cases[0]?.failures[0]?.message ?? "", /ECONNREFUSED/);
 });
 
 test("assistant timeout becomes a case failure with a clear reason", async () => {
@@ -639,10 +668,7 @@ test("assistant timeout becomes a case failure with a clear reason", async () =>
 
   assert.equal(suite.summary.failed, 1);
   assert.equal(suite.summary.assistantFailures, 1);
-  assert.match(
-    suite.cases[0]?.failures[0]?.message ?? "",
-    /timed out/i,
-  );
+  assert.match(suite.cases[0]?.failures[0]?.message ?? "", /timed out/i);
 });
 
 test("snapshot output carries provider metadata and failure details", () => {
@@ -693,7 +719,11 @@ test("eval env loader reads .env.local outside production only", async () => {
   const previousValue = process.env[envKey];
 
   try {
-    await writeFile(path.join(tempDir, ".env.local"), `${envKey}=loaded\n`, "utf8");
+    await writeFile(
+      path.join(tempDir, ".env.local"),
+      `${envKey}=loaded\n`,
+      "utf8",
+    );
     delete process.env[envKey];
 
     const developmentLoad = loadPortfolioGuideEvalEnv({

@@ -58,14 +58,18 @@ test("current page grounding includes authored content for page summaries", () =
   const pageContext = getPageContextBySlug("ai-platform-mcp");
   assert.ok(pageContext, "expected canonical page context");
 
-  const sectionLabels = pageContext.authoredSections?.map((section) => section.label) ?? [];
+  const sectionLabels =
+    pageContext.authoredSections?.map((section) => section.label) ?? [];
   const authoredText = JSON.stringify(pageContext.authoredSections ?? []);
   const evidenceText = JSON.stringify(pageContext.evidenceHighlights ?? []);
 
   assert.ok(sectionLabels.includes("Page summary"));
   assert.ok(sectionLabels.includes("Execution"));
   assert.match(authoredText, /87% would use again/);
-  assert.match(authoredText, /Mapped recurring AI workflow patterns across pilots/);
+  assert.match(
+    authoredText,
+    /Mapped recurring AI workflow patterns across pilots/,
+  );
   assert.match(evidenceText, /hackathon-winning AI concept/i);
   assert.match(evidenceText, /87%/);
   assert.match(
@@ -74,21 +78,62 @@ test("current page grounding includes authored content for page summaries", () =
   );
 });
 
-test("essay pages are included in the guide catalog and product philosophy uses rich authored grounding", () => {
+test("essay pages are included in the guide catalog with claim-aware authored grounding", () => {
   const aiStrategy = getPageContextBySlug("ai-strategy");
+  const humanFlourishing = getPageContextBySlug(
+    "the-side-of-ai-i-want-to-be-on",
+  );
   const productPhilosophy = getPageContextBySlug("product-philosophy");
   assert.ok(aiStrategy, "expected ai-strategy page context");
+  assert.ok(humanFlourishing, "expected human-flourishing page context");
   assert.ok(productPhilosophy, "expected product-philosophy page context");
 
   const pageDirectory = getPortfolioContext().pageDirectory ?? [];
   assert.ok(pageDirectory.some((page) => page.slug === "ai-strategy"));
+  assert.ok(
+    pageDirectory.some(
+      (page) => page.slug === "the-side-of-ai-i-want-to-be-on",
+    ),
+  );
   assert.ok(pageDirectory.some((page) => page.slug === "product-philosophy"));
+
+  const humanFlourishingText = JSON.stringify(
+    humanFlourishing.authoredSections ?? [],
+  );
+  const humanFlourishingEvidence = JSON.stringify(
+    humanFlourishing.evidenceHighlights ?? [],
+  );
+  const humanFlourishingBoundaries = JSON.stringify(
+    humanFlourishing.claimBoundaries ?? {},
+  );
+
+  assert.match(
+    humanFlourishingText,
+    /a majority of respondents reported increased creativity/i,
+  );
+  assert.match(humanFlourishingText, /In my personal exploration/i);
+  assert.match(
+    humanFlourishingEvidence,
+    /does not publish an exact percentage, sample size, or methodology/i,
+  );
+  assert.match(
+    humanFlourishingBoundaries,
+    /not all demonstrated enterprise outcomes/i,
+  );
+  assert.match(
+    humanFlourishingBoundaries,
+    /convictions and aspirations, not forecasts/i,
+  );
 
   const sectionLabels =
     productPhilosophy.authoredSections?.map((section) => section.label) ?? [];
   const authoredText = JSON.stringify(productPhilosophy.authoredSections ?? []);
-  const evidenceText = JSON.stringify(productPhilosophy.evidenceHighlights ?? []);
-  const boundariesText = JSON.stringify(productPhilosophy.claimBoundaries ?? {});
+  const evidenceText = JSON.stringify(
+    productPhilosophy.evidenceHighlights ?? [],
+  );
+  const boundariesText = JSON.stringify(
+    productPhilosophy.claimBoundaries ?? {},
+  );
 
   assert.ok(sectionLabels.includes("AI-assisted workflows"));
   assert.ok(sectionLabels.includes("Product types limit"));
@@ -96,10 +141,7 @@ test("essay pages are included in the guide catalog and product philosophy uses 
     authoredText,
     /Custom GPTs supported idea generation, opportunity framing, ROI estimation, and PRD creation/i,
   );
-  assert.match(
-    authoredText,
-    /did not ultimately gain executive adoption/i,
-  );
+  assert.match(authoredText, /did not ultimately gain executive adoption/i);
   assert.match(
     evidenceText,
     /product lifecycle, RICE worksheet, review cadence, sprint planning flow, roadmap language, and product-types visuals/i,
@@ -152,7 +194,10 @@ test("prompt context keeps current page facts separate from broader site memory"
     "Turned early AI validation into a broader point of view on reusable systems, workflow fit, and platform foundations.",
   );
   assert.equal(promptContext.currentPage.evidenceHighlights.length > 0, true);
-  assert.equal(promptContext.traceability.evidenceHighlightLabels.length > 0, true);
+  assert.equal(
+    promptContext.traceability.evidenceHighlightLabels.length > 0,
+    true,
+  );
   assert.equal(promptContext.responsePlaybook.mode, "next-read");
   assert.deepEqual(
     promptContext.siteMemory.visitedPages.map((page) => page.slug),
@@ -168,5 +213,5 @@ test("prompt context keeps current page facts separate from broader site memory"
     "currentPage.claimBoundaries",
     "currentPage.structuredMetadata",
   ]);
-  assert.equal(promptContext.siteCatalog.pageDirectory?.length, 9);
+  assert.equal(promptContext.siteCatalog.pageDirectory?.length, 10);
 });

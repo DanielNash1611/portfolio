@@ -27,7 +27,7 @@ import {
 export const metadata: Metadata = {
   title: "Daniel Nash | AI Product Leader",
   description:
-    "Premium portfolio for Daniel Nash, an AI Product Leader / Senior Product Manager focused on turning new AI capability into practical products, workflows, and systems that teams use, trust, and scale.",
+    "Portfolio for Daniel Nash, an AI product leader building systems that create measurable business value while advancing trust, creativity, and better human work.",
 };
 
 const featuredWork = homeContent.featuredWork
@@ -147,8 +147,8 @@ export default function HomePage(): JSX.Element {
         <MotionReveal>
           <SectionHeader
             eyebrow="How I think"
-            title="A product point of view shaped by operating models, not slogans"
-            description="Short essays that make the leadership logic visible behind the case studies."
+            title="A point of view on AI value, responsibility, and human potential"
+            description="Essays that connect the operating logic behind the work with the future I want AI products to help build."
           />
         </MotionReveal>
         <div className="grid gap-6 lg:grid-cols-2">

@@ -2,7 +2,8 @@ import type { PortfolioGuideEvalCase } from "@/lib/portfolio-guide/evals/types";
 
 const REGEX_87_PERCENT = {
   type: "regex" as const,
-  value: "\\b87\\s*(%|percent)\\b|would(?:[- ]use){1,2}(?:[- ]it)?[- ]again|would[- ]use[- ]again",
+  value:
+    "\\b87\\s*(%|percent)\\b|would(?:[- ]use){1,2}(?:[- ]it)?[- ]again|would[- ]use[- ]again",
 };
 
 const REGEX_16M = {
@@ -18,7 +19,8 @@ const REGEX_27M = {
 export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
   {
     id: "ai-platform-role-fit-suggests-generator",
-    title: "Role-fit question suggests resume generator without losing grounding",
+    title:
+      "Role-fit question suggests resume generator without losing grounding",
     summary:
       "Checks that role-fit answers stay grounded in current-page evidence while offering the resume generator as an action.",
     category: "answerable",
@@ -333,16 +335,16 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     deterministicChecks: [
       {
         answerMustIncludeAny: [
-        { value: "doesn't mention mcp" },
-        { value: "does not mention mcp" },
-        { value: "i don't see mcp" },
-        { value: "no, not on this page" },
-        {
-          type: "regex" as const,
-          value:
-            "does(?: not|n't) explicitly mention (?:the term )?mcp|no,? the current page does(?: not|n't) .*mcp",
-        },
-      ],
+          { value: "doesn't mention mcp" },
+          { value: "does not mention mcp" },
+          { value: "i don't see mcp" },
+          { value: "no, not on this page" },
+          {
+            type: "regex" as const,
+            value:
+              "does(?: not|n't) explicitly mention (?:the term )?mcp|no,? the current page does(?: not|n't) .*mcp",
+          },
+        ],
         answerMustExclude: [
           { value: "^\\s*yes\\b", type: "regex" },
           { value: "it mentions mcp" },
@@ -816,7 +818,8 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
         {
           slug: "oms-chatgpt-app",
           title: "OMS ChatGPT App",
-          reason: "Good supporting evidence for AI builder work inside enterprise workflows.",
+          reason:
+            "Good supporting evidence for AI builder work inside enterprise workflows.",
           priority: 2,
         },
       ],
@@ -841,10 +844,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     question: "Summarize this page",
     deterministicChecks: {
       answerMustIncludeAnyGroups: [
-        [
-          { value: "workflow" },
-          { value: "workflow fit" },
-        ],
+        [{ value: "workflow" }, { value: "workflow fit" }],
         [
           { value: "trust" },
           { value: "governance" },
@@ -871,6 +871,49 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     judgeExpectations: [
       "Summarize the page as a workflow-first AI strategy point of view grounded in trust, enablement, and the system around the model.",
       "Do not import pilot metrics, adoption counts, or prototype validation numbers from adjacent pages.",
+    ],
+  },
+  {
+    id: "human-flourishing-proof-boundaries",
+    title: "Human flourishing essay separates proof from conviction",
+    summary:
+      "Checks that the essay's qualified creativity signal and professional grounding stay separate from personal explorations and future-facing beliefs.",
+    category: "partial",
+    answerability: "partial",
+    pageSlug: "the-side-of-ai-i-want-to-be-on",
+    question:
+      "What's grounded in experience here, and what's personal conviction?",
+    deterministicChecks: {
+      answerMustIncludeAnyGroups: [
+        [
+          { value: "majority" },
+          { value: "increased creativity" },
+          { value: "creativity survey" },
+        ],
+        [
+          { value: "enterprise AI adoption" },
+          { value: "agentic workflows" },
+          { value: "productivity tools" },
+          { value: "professional work" },
+        ],
+        [
+          { value: "personal exploration" },
+          { value: "future-facing" },
+          { value: "conviction" },
+          { value: "aspiration" },
+        ],
+      ],
+      answerMustExclude: [
+        REGEX_87_PERCENT,
+        { value: "\\b\\d{1,3}\\s*(?:%|percent)\\b", type: "regex" },
+        { value: "proves AI will" },
+      ],
+      maxSentences: 5,
+    },
+    judgeExpectations: [
+      "Ground the answer in the page's enterprise AI work and the qualified statement that a majority of survey respondents reported increased creativity.",
+      "Do not invent an exact survey percentage, sample size, methodology, or measured outcome for the personal explorations.",
+      "Label scripture study, life-sciences discovery, human flourishing, and future-of-work statements as personal exploration, conviction, or aspiration where appropriate.",
     ],
   },
   {

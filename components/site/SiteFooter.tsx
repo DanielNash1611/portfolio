@@ -11,9 +11,8 @@ export default function SiteFooter(): JSX.Element {
             Daniel Nash
           </p>
           <p className="max-w-md text-sm leading-6 text-[color:var(--color-slate)]/68">
-            AI Product Leader / Senior Product Manager focused on enterprise AI,
-            workflow modernization, and product systems that translate strategy
-            into measurable outcomes.
+            AI Product Leader focused on measurable business impact, trusted
+            adoption, and AI that improves human work.
           </p>
           <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--color-slate)]/52">
             Built with Codex

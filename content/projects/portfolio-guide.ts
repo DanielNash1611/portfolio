@@ -280,7 +280,8 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
     evidenceHighlights: [
       {
         label: "Business impact",
-        detail: "The page cites about ~$16M in estimated annualized revenue impact.",
+        detail:
+          "The page cites about ~$16M in estimated annualized revenue impact.",
         type: "metric",
       },
       {
@@ -422,7 +423,11 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
     strengths: ["0-to-1", "ai-product", "workflow-design"],
     senioritySignals: ["pm", "senior"],
     projectType: "product",
-    relatedProjectSlugs: ["oms-chatgpt-app", "ai-platform-mcp", "immunology-scout"],
+    relatedProjectSlugs: [
+      "oms-chatgpt-app",
+      "ai-platform-mcp",
+      "immunology-scout",
+    ],
     artifacts: [
       {
         label: "LaunchMuse campaign wizard",
@@ -593,7 +598,11 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
     strengths: ["0-to-1", "workflow-design", "ai-product"],
     senioritySignals: ["pm", "senior"],
     projectType: "product",
-    relatedProjectSlugs: ["ai-platform-mcp", "chatgpt-enterprise", "launchmuse"],
+    relatedProjectSlugs: [
+      "ai-platform-mcp",
+      "chatgpt-enterprise",
+      "launchmuse",
+    ],
     artifacts: [
       {
         label: "OMS workflow prototype",
@@ -642,10 +651,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       "Improved visibility into initiatives, dependencies, and progress against OKRs.",
       "Reduced time-to-align on quarterly roadmaps and made approvals faster and more confident.",
     ],
-    metrics: [
-      "Core PM adoption: 9 PMs",
-      "Onboarding program: 8 weeks",
-    ],
+    metrics: ["Core PM adoption: 9 PMs", "Onboarding program: 8 weeks"],
     tools: [
       "Jira Product Discovery",
       "RICE scoring",
@@ -738,7 +744,11 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "This connects to Product Philosophy because the essay turns this operating-model and prioritization work into a broader leadership point of view.",
       },
     ],
-    tags: ["Product Operations", "Strategic Alignment", "Jira Product Discovery"],
+    tags: [
+      "Product Operations",
+      "Strategic Alignment",
+      "Jira Product Discovery",
+    ],
     interestTags: ["pm-leadership"],
   },
   "ai-strategy": {
@@ -832,6 +842,102 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       },
     ],
     interestTags: ["pm-leadership", "platform"],
+  },
+  "the-side-of-ai-i-want-to-be-on": {
+    category: "AI leadership and responsible adoption",
+    oneLiner:
+      "A personal AI leadership essay connecting measurable business value with trust, creativity, human dignity, and a broader vision of human flourishing.",
+    role: "AI product leadership point of view",
+    companyOrProject: "AI leadership essay",
+    timeframe: "7 min read",
+    problem:
+      "AI is often framed too narrowly around automation and cost reduction, leaving trust, creativity, learning, dignity, and the quality of human work outside the product definition.",
+    actions: [
+      "Measure revenue, productivity, time savings, adoption, workflow transformation, and operational efficiency.",
+      "Treat transparency, role change, support, human review, and practical guardrails as part of the product and operating model.",
+      "Evaluate whether AI also improves work quality, creativity, knowledge access, learning, and human agency.",
+    ],
+    outcomes: [
+      "Argues that business impact and human flourishing are complementary product goals rather than opposing positions.",
+      "Uses a Guitar Center adoption survey as a qualified example: a majority of respondents reported increased creativity, but the essay gives no exact percentage.",
+      "Separates demonstrated professional work from personal exploration and future-facing conviction.",
+    ],
+    tools: [
+      "Enterprise AI adoption",
+      "Agentic workflows",
+      "Responsible change management",
+      "Human-centered product measurement",
+    ],
+    leadershipSignals: [
+      "Connects measurable operating outcomes with trust, transparency, and the human experience of organizational change.",
+      "Frames responsible adoption as a product leadership discipline rather than a communications add-on.",
+    ],
+    evidenceHighlights: [
+      {
+        label: "Qualified creativity signal",
+        detail:
+          "The essay says a majority of Guitar Center survey respondents reported increased creativity; it does not publish an exact percentage, sample size, or methodology.",
+        type: "outcome",
+      },
+      {
+        label: "Professional grounding",
+        detail:
+          "The essay grounds the point of view in enterprise AI adoption, agentic workflows, productivity tools, and experiments intended to help people work more effectively.",
+        type: "ownership",
+      },
+      {
+        label: "Responsible adoption standard",
+        detail:
+          "The essay treats transparency about role changes, support, review paths, guardrails, and accountability as product requirements.",
+        type: "workflow",
+      },
+    ],
+    claimBoundaries: {
+      directOwnership: [
+        "The page says Daniel helped run Guitar Center AI adoption surveys and has worked on enterprise AI adoption, agentic workflows, productivity tools, and AI experiments.",
+      ],
+      influence: [
+        "The essay presents Daniel's leadership point of view on how organizations should connect measurable AI value with trust and responsible change.",
+      ],
+      conceptualExploration: [
+        "Creativity, scripture study, knowledge access, life-sciences discovery, and human flourishing are partly personal explorations and future-facing product interests, not all demonstrated enterprise outcomes.",
+        "The reference to Elder Gerrit W. Gong explains language that clarified Daniel's thinking; it is not presented as product evidence.",
+      ],
+      implementation: [
+        "The essay discusses product standards and adoption practices, but it does not document a specific architecture, implementation stack, or production system.",
+      ],
+      explicitUnknowns: [
+        "The page does not provide the creativity survey's exact percentage, sample size, question wording, or methodology.",
+        "It does not claim that every personal exploration became a shipped product or produced a measured business outcome.",
+        "Its statements about the future of work are convictions and aspirations, not forecasts proven by the page.",
+      ],
+    },
+    recruiterPrompts: [
+      "What does this essay reveal about Daniel's AI leadership philosophy?",
+      "Which claims are grounded in professional experience?",
+      "What's personal conviction or future-facing exploration?",
+      "What should I view next for measured AI adoption proof?",
+    ],
+    roleLens: ["product-leader", "senior-product-manager"],
+    domains: ["enterprise-ai", "operations"],
+    strengths: ["ai-product", "leadership", "governance", "enablement"],
+    senioritySignals: ["senior", "group", "director", "exec"],
+    projectType: "essay",
+    relatedProjectSlugs: ["chatgpt-enterprise", "ai-strategy"],
+    crossPageLinks: [
+      {
+        slug: "chatgpt-enterprise",
+        bridge:
+          "This essay pairs with ChatGPT Enterprise because that case provides measured rollout, adoption, and operating-model evidence behind the responsible-adoption point of view.",
+      },
+      {
+        slug: "ai-strategy",
+        bridge:
+          "This connects to AI Strategy because that essay goes deeper on workflow fit, governance, enablement, and the system around the model.",
+      },
+    ],
+    tags: ["AI Leadership", "Responsible Adoption", "Human Flourishing"],
+    interestTags: ["pm-leadership", "ai-builder"],
   },
   "product-philosophy": {
     category: "Product leadership and operating model",

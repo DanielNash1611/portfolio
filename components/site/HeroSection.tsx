@@ -64,7 +64,7 @@ export default function HeroSection({
               <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[color:var(--color-teal)]/68">
                 {eyebrow}
               </p>
-              <h1 className="max-w-[14ch] text-balance text-5xl font-semibold leading-[0.95] tracking-tight text-[color:var(--color-slate)] md:text-6xl xl:text-[4.35rem]">
+              <h1 className="max-w-[16ch] text-balance text-4xl font-semibold leading-[0.98] tracking-tight text-[color:var(--color-slate)] sm:text-5xl md:text-[3.5rem] xl:text-[3.85rem]">
                 {title}
               </h1>
               <p className="max-w-xl text-pretty text-lg leading-8 text-[color:var(--color-slate)]/74">

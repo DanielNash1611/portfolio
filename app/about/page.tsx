@@ -14,7 +14,7 @@ const aboutPortrait = getPortrait("about-header");
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About Daniel Nash, an AI Product Leader / Senior Product Manager focused on practical AI products, workflow modernization, and enterprise adoption.",
+    "About Daniel Nash, an AI product leader focused on measurable business impact, trusted adoption, responsible change, and AI that improves human work.",
 };
 
 export default function AboutPage(): JSX.Element {
@@ -32,13 +32,15 @@ export default function AboutPage(): JSX.Element {
           },
           {
             label: "Focus",
-            value: "Enterprise AI adoption",
-            detail: "Workflow modernization, trust, governance, and measurable outcomes.",
+            value: "AI adoption + impact",
+            detail:
+              "Business outcomes, workflow transformation, trust, and responsible change.",
           },
           {
             label: "Scope",
-            value: "Products, workflows, systems",
-            detail: "Across ecommerce, contact center, and enterprise AI adoption.",
+            value: "Products, people, systems",
+            detail:
+              "Practical AI that improves the work and the experience of doing it.",
           },
         ]}
       />
@@ -65,6 +67,45 @@ export default function AboutPage(): JSX.Element {
             className="rounded-[1.75rem] border border-[color:var(--color-teal)]/10"
           />
         ) : null}
+      </section>
+
+      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[color:var(--color-slate)] px-6 py-8 text-[color:var(--color-cream)] shadow-[0_26px_70px_rgba(58,61,64,0.18)] md:px-8 md:py-10">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(219,191,150,0.12),_transparent_36%),radial-gradient(circle_at_bottom_right,_rgba(209,122,95,0.1),_transparent_38%)]"
+        />
+        <div className="relative space-y-8">
+          <div className="max-w-3xl space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[color:var(--color-tan)]">
+              {aboutContent.humanFlourishing.eyebrow}
+            </p>
+            <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+              {aboutContent.humanFlourishing.title}
+            </h2>
+            <p className="text-base leading-7 text-[color:var(--color-cream)]/76 md:text-lg md:leading-8">
+              {aboutContent.humanFlourishing.description}
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="border-t border-white/14 pt-5">
+              <h3 className="text-lg font-semibold">Professional focus</h3>
+              <p className="mt-3 text-sm leading-7 text-[color:var(--color-cream)]/72 md:text-base">
+                {aboutContent.humanFlourishing.professional}
+              </p>
+            </div>
+            <div className="border-t border-white/14 pt-5">
+              <h3 className="text-lg font-semibold">Personal exploration</h3>
+              <p className="mt-3 text-sm leading-7 text-[color:var(--color-cream)]/72 md:text-base">
+                {aboutContent.humanFlourishing.personal}
+              </p>
+            </div>
+          </div>
+
+          <blockquote className="max-w-4xl border-l-2 border-[color:var(--color-orange)] pl-5 text-xl font-semibold leading-8 text-[color:var(--color-cream)] md:text-2xl md:leading-9">
+            {aboutContent.humanFlourishing.manifesto}
+          </blockquote>
+        </div>
       </section>
 
       <AboutJourneyTimeline

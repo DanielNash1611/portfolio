@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | Daniel Nash",
   },
   description:
-    "Portfolio for Daniel Nash, an AI Product Leader / Senior Product Manager focused on turning new AI capability into practical products, workflows, and systems that teams use, trust, and scale.",
+    "Portfolio for Daniel Nash, an AI product leader building systems that create measurable business value while advancing trust, creativity, and better human work.",
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Daniel Nash | AI Product Leader",
     description:
-      "Portfolio for Daniel Nash, an AI Product Leader / Senior Product Manager focused on turning new AI capability into practical products, workflows, and systems that teams use, trust, and scale.",
+      "AI product leadership focused on measurable business impact, trusted adoption, creativity, and better human work.",
     url: "https://www.danielnash.co",
     siteName: "Daniel Nash",
     images: [
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Daniel Nash | AI Product Leader",
     description:
-      "Portfolio for Daniel Nash, an AI Product Leader / Senior Product Manager focused on turning new AI capability into practical products, workflows, and systems that teams use, trust, and scale.",
+      "AI product leadership focused on measurable business impact, trusted adoption, creativity, and better human work.",
     images: ["/og-default.svg"],
   },
 };
