@@ -204,11 +204,40 @@ export type CopilotRequest = {
   debug?: boolean;
 };
 
+/** Lightweight evidence summary for optional UI display. */
+export type EvidenceSummary = {
+  project: string;
+  claim: string;
+  capabilityTags: string[];
+  hasMetrics: boolean;
+};
+
+/**
+ * Provenance metadata describing which evidence layers backed an answer.
+ * Lets the UI (and debugging) distinguish a page-context-only answer from one
+ * augmented with source-audited ResumeCustomizer evidence, and surfaces why the
+ * deeper layer was skipped when applicable. Never contains secrets.
+ */
+export type EvidenceMetadata = {
+  /** True whenever the answer was grounded in the current/related page context. */
+  pageContextUsed: boolean;
+  /** True only when source-audited ResumeCustomizer evidence was woven in. */
+  resumeCustomizerEvidenceUsed: boolean;
+  /** Why the deeper evidence layer was not used (omitted when it was used). */
+  evidenceUnavailableReason?: string;
+  /** Non-fatal, server-side degradation notes for observability. */
+  warnings?: string[];
+};
+
 export type CopilotResponse = {
   answer: string;
   suggestedFollowUps?: string[];
   relatedPages?: RelatedPage[];
   inferredInterestTags?: InterestTag[];
+  /** Evidence items used in this answer, for optional UI display. Never contains raw resume bullets. */
+  evidenceUsed?: EvidenceSummary[];
+  /** Which evidence layers backed this answer and why the deeper layer was skipped, if it was. */
+  evidenceMeta?: EvidenceMetadata;
   debug?: {
     promptContext: Record<string, unknown>;
   };

@@ -78,6 +78,43 @@ test("current page grounding includes authored content for page summaries", () =
   );
 });
 
+test("AI Career Operating System grounding separates implemented evidence from limits", () => {
+  const pageContext = getPageContextBySlug("ai-career-operating-system");
+  assert.ok(pageContext, "expected AI Career Operating System page context");
+
+  const authoredText = JSON.stringify(pageContext.authoredSections ?? []);
+  const evidenceText = JSON.stringify(pageContext.evidenceHighlights ?? []);
+  const boundariesText = JSON.stringify(pageContext.claimBoundaries ?? {});
+
+  assert.match(
+    authoredText,
+    /source-audited evidence retrieval, role-aware resume generation/i,
+  );
+  assert.match(authoredText, /action surface, not evidence of role fit/i);
+  assert.match(authoredText, /publicSafeOnly and sourceAuditedOnly/i);
+  assert.match(authoredText, /5\/12 to 11\/12/i);
+  assert.match(authoredText, /historical and scoped/i);
+  assert.match(authoredText, /final-judge rejection is currently advisory/i);
+  assert.match(
+    authoredText,
+    /Recruiter Screen, Hiring Manager, Career Coach, Source Auditor, ATS Readability, and Positioning & Bridge Strategist/i,
+  );
+  assert.match(authoredText, /baseline-template pass uses Recruiter Screen/i);
+  assert.match(authoredText, /final-resume pass runs all six/i);
+  assert.match(authoredText, /review agents are advisory/i);
+  assert.match(authoredText, /models are useful but constrained/i);
+  assert.match(evidenceText, /browser calls only Portfolio routes/i);
+  assert.match(boundariesText, /does not claim sole hand-coding/i);
+  assert.match(
+    boundariesText,
+    /do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale/i,
+  );
+  assert.match(
+    boundariesText,
+    /must be merged and deployed in both repositories/i,
+  );
+});
+
 test("essay pages are included in the guide catalog with claim-aware authored grounding", () => {
   const aiStrategy = getPageContextBySlug("ai-strategy");
   const humanFlourishing = getPageContextBySlug(
@@ -213,5 +250,5 @@ test("prompt context keeps current page facts separate from broader site memory"
     "currentPage.claimBoundaries",
     "currentPage.structuredMetadata",
   ]);
-  assert.equal(promptContext.siteCatalog.pageDirectory?.length, 10);
+  assert.equal(promptContext.siteCatalog.pageDirectory?.length, 11);
 });

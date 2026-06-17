@@ -28,7 +28,7 @@ export default function ProductsPage(): JSX.Element {
       <div className="grid gap-6 xl:grid-cols-3">
         {productEntries.map((entry, index) => (
           <MotionReveal key={entry.slug} delay={index * 0.05}>
-            <ProductCard entry={entry} />
+            <ProductCard entry={entry} priority={index === 0} />
           </MotionReveal>
         ))}
       </div>

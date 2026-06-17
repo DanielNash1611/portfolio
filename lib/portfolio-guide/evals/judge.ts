@@ -149,17 +149,22 @@ export function createOpenAiPortfolioGuideJudge(config: {
     });
 
   return async ({ evalCase, request, generation, signal }) => {
-    const response = await client.responses.create({
-      model: config.model,
-      reasoning: { effort: "low" },
-      input: [
-        { role: "system", content: EVAL_JUDGE_SYSTEM_PROMPT },
-        {
-          role: "user",
-          content: buildJudgeInput(evalCase, request, generation),
-        },
-      ],
-    }, signal ? { signal } : undefined);
+    const response = await client.responses.create(
+      {
+        model: config.model,
+        ...(config.providerLabel === "local-openai-compatible"
+          ? {}
+          : { reasoning: { effort: "low" as const } }),
+        input: [
+          { role: "system", content: EVAL_JUDGE_SYSTEM_PROMPT },
+          {
+            role: "user",
+            content: buildJudgeInput(evalCase, request, generation),
+          },
+        ],
+      },
+      signal ? { signal } : undefined,
+    );
 
     const rawText = extractResponseText(response);
 

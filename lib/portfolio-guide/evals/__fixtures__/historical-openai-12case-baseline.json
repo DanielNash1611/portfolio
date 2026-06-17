@@ -1,0 +1,350 @@
+{
+  "provenance": {
+    "label": "baseline-openai-full",
+    "sourceArtifact": "artifacts/portfolio-guide-evals/2026-03-30T21-52-27-991Z-baseline-openai-full",
+    "providerMode": "openai",
+    "assistantModel": "gpt-5",
+    "judgeModel": "gpt-5-mini",
+    "recordedSummary": {
+      "passed": 5,
+      "total": 12
+    },
+    "note": "Real stored Portfolio Guide run captured verbatim from the source artifact. These recorded answers are the evidence behind the public 5/12 -> 11/12 claim. Do not edit the answers; regenerate from a fresh run if updating the claim."
+  },
+  "cases": [
+    {
+      "id": "ai-platform-summary",
+      "question": "Summarize this page",
+      "recordedPassed": true,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "This case study explains how an early, hackathon-winning AI prototype and follow-up UX research (87% would use again) informed a shift from isolated GPTs to reusable, workflow-driven platform foundations. The core insight is a “middle layer” (MCP-style connectors, permissions, and orchestration) that lets models reach the right tools and context while keeping humans in control. Execution focused on mapping recurring patterns, building agent-based and retrieval workflows, and translating architecture into product language, leading to shared platform vocabulary, faster reuse, and an agentic foundation; specific diagrams and workflow artifacts are noted but not publicly shown yet.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Elsewhere in the portfolio: shows the operating model side of AI adoption that complements this platform layer."
+          },
+          {
+            "slug": "ai-agents-lab",
+            "title": "AI Agents Lab",
+            "href": "/products/ai-agents-lab",
+            "reason": "Elsewhere in the portfolio: PM-led experiments that make agentic workflows tangible before full productization."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Which concrete workflows did these patterns support, and what did review/approval look like?",
+          "Can you share the MCP/connector diagram or a sanitized workflow screenshot when available?",
+          "How did the shared platform language change leadership decisions or funding conversations?"
+        ]
+      }
+    },
+    {
+      "id": "ai-platform-impact",
+      "question": "Show the impact",
+      "recordedPassed": true,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "This page cites a hackathon-winning prototype that validated the problem and follow-up UX research where 87% said they would use it again. The work shifted direction from one-off prototypes to reusable AI systems and produced three outcomes: shared platform language for better investment decisions, faster repeatability for teams, and a clearer agentic foundation for connectors and human approvals. No additional quantitative adoption or efficiency metrics are provided on this page.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Elsewhere in the portfolio: focuses on pilots-to-operating-model adoption, which may contain broader outcome metrics."
+          },
+          {
+            "slug": "ai-agents-lab",
+            "title": "AI Agents Lab",
+            "href": "/products/ai-agents-lab",
+            "reason": "Elsewhere in the portfolio: PM-led experiments that may show concrete agentic workflows informed by these platform patterns."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Can you share the UX validation artifact or a sanitized workflow screenshot mentioned here?",
+          "Which reusable connector or workflow patterns saw the most reuse across teams?",
+          "Are there any portfolio-wide metrics (adoption, cycle time, quality) tied to this platform shift?"
+        ]
+      }
+    },
+    {
+      "id": "ai-platform-ownership",
+      "question": "What did Daniel own?",
+      "recordedPassed": false,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "On this page, Daniel led the product strategy for a middle-layer AI platform approach—favoring shared connector and workflow patterns with explicit guardrails. He mapped recurring AI workflow patterns, translated MCP/orchestration concepts for executives, and built and shipped system patterns (agent-based workflows, retrieval, eval-informed iteration) while pairing enablement with governance. The page does not provide a formal ownership matrix or team boundary details.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Elsewhere in the portfolio: shows Daniel’s operating-model work that informed responsible adoption and governance."
+          },
+          {
+            "slug": "ai-agents-lab",
+            "title": "AI Agents Lab",
+            "href": "/products/ai-agents-lab",
+            "reason": "Elsewhere in the portfolio: PM-led experiments that made architecture choices tangible before full productization."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Can you clarify team scope and stakeholders for this platform work?",
+          "Which specific workflows or connectors did you ship that are public-safe to share?",
+          "How did you measure adoption or reuse of these patterns over time?"
+        ]
+      }
+    },
+    {
+      "id": "ai-platform-most-reused-patterns",
+      "question": "Which specific system patterns were shipped and reused most?",
+      "recordedPassed": false,
+      "judgeVerdict": "fail",
+      "response": {
+        "answer": "This page says he shipped reusable system patterns such as agent-based workflows, retrieval across structured and unstructured data, eval‑informed iteration, MCP‑style connector patterns, and workflow orchestration. It does not specify which of these were reused the most. Inference: given the mapped recurring workflow (retrieve context → generate draft → review → hand‑back), retrieval patterns and review/approval routing were likely among the most broadly reapplied, but the page doesn’t provide reuse rankings or counts.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Elsewhere in the portfolio, this page focuses on operating-model adoption and may show which patterns scaled in practice."
+          },
+          {
+            "slug": "ai-agents-lab",
+            "title": "AI Agents Lab",
+            "href": "/products/ai-agents-lab",
+            "reason": "Elsewhere in the portfolio, this lab may include concrete agentic workflow examples that illustrate reuse."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Do you have examples or screenshots showing how these patterns were reused across teams?",
+          "Can you share any metrics or anecdotes on which pattern saw the widest adoption?",
+          "Which governance or approval patterns became standard in the recurring retrieve–generate–review workflow?"
+        ]
+      }
+    },
+    {
+      "id": "ai-platform-contaminated-history",
+      "question": "Which patterns were reused most?",
+      "recordedPassed": false,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "This page doesn’t specify which patterns were reused the most. It does name the recurring patterns it mapped across pilots: retrieve context, generate a draft, route through review, and hand back to the human owner—plus shared connector patterns, permissions/guardrails, prompt consistency, and retrieval across structured/unstructured data. Inference: the end-to-end retrieve–draft–review–handoff workflow and reusable connector patterns likely appeared frequently because they’re called out as cross-team enablers, but the page provides no counts or ranking.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Elsewhere in the portfolio, this page discusses operating models and could provide more detail on adoption and reuse signals."
+          },
+          {
+            "slug": "ai-agents-lab",
+            "title": "AI Agents Lab",
+            "href": "/products/ai-agents-lab",
+            "reason": "Broader portfolio context for agentic workflows and experiments that may illustrate the patterns in practice."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Do you want concrete examples of the retrieve–draft–review–handoff workflow?",
+          "Should I look across related pages to see if any quantify reuse or provide specific cases?",
+          "Are you interested in how governance/approvals showed up within these patterns?"
+        ]
+      }
+    },
+    {
+      "id": "checkout-mentions-mcp",
+      "question": "Did this page mention MCP?",
+      "recordedPassed": false,
+      "judgeVerdict": "fail",
+      "response": {
+        "answer": "No. This checkout redesign page does not mention MCP.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Related from this page’s metadata; useful if you’re exploring Daniel’s platform and AI adoption work (broader portfolio context)."
+          },
+          {
+            "slug": "jira-product-discovery",
+            "title": "Jira Product Discovery adoption",
+            "href": "/case-studies/jira-product-discovery",
+            "reason": "Related from this page’s metadata; highlights execution and delivery practices similar to those described here."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Show me the AI platform (MCP) page.",
+          "Does the ChatGPT Enterprise case study mention MCP?"
+        ]
+      }
+    },
+    {
+      "id": "checkout-impact",
+      "question": "What was the impact?",
+      "recordedPassed": true,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "Documented outcomes on this page: checkout time dropped about 30% (from 3:00 to 2:03), a ~3% conversion lift was validated via a post‑launch A/B test, and the annualized revenue impact was estimated at ~$16M from that lift. The redesign launched in 12 weeks with minimal service disruption.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Elsewhere in the portfolio: another case focused on PM leadership, adoption, and measurable outcomes."
+          },
+          {
+            "slug": "jira-product-discovery",
+            "title": "Jira Product Discovery adoption",
+            "href": "/case-studies/jira-product-discovery",
+            "reason": "Elsewhere in the portfolio: complements this with execution and decision-quality tooling for delivery."
+          }
+        ],
+        "suggestedFollowUps": [
+          "How was the A/B test designed and measured for the conversion lift?",
+          "What specific collaboration practices kept the launch clean in 12 weeks?",
+          "Can you share more detail on the artifacts (e.g., the context-rich Jira ticket)?"
+        ]
+      }
+    },
+    {
+      "id": "checkout-ownership",
+      "question": "What did Daniel own?",
+      "recordedPassed": false,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "On this page, Daniel led product for a high‑stakes checkout redesign and owned the execution approach: aligning product, UX, and engineering; keeping UX involved during build; ensuring developers had the context to make strong in‑flight decisions; and driving a clean 12‑week rollout. The page attributes outcomes (faster checkout, conversion lift) to this execution model. It does not define a full ownership matrix beyond his product leadership and delivery responsibilities.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Elsewhere in the portfolio: another example of Daniel’s product leadership and operating-model work."
+          },
+          {
+            "slug": "jira-product-discovery",
+            "title": "Jira Product Discovery adoption",
+            "href": "/case-studies/jira-product-discovery",
+            "reason": "Elsewhere in the portfolio: shows his approach to adoption and execution systems."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Can you clarify the team’s ownership split (design, engineering, analytics) during this project?",
+          "What specific parts of the checkout flow or tech stack, if any, were directly under Daniel’s control?",
+          "How did he operationalize the ‘context-rich’ implementation approach across tickets and rituals?"
+        ]
+      }
+    },
+    {
+      "id": "checkout-cross-page-dau",
+      "question": "How many daily active users does this page show?",
+      "recordedPassed": false,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "This page does not state daily active users. It focuses on checkout speed, conversion lift (~3%), estimated annualized impact (~$16M), and a 12-week delivery timeline.",
+        "relatedPages": [
+          {
+            "slug": "jira-product-discovery",
+            "title": "Jira Product Discovery adoption",
+            "href": "/case-studies/jira-product-discovery",
+            "reason": "Elsewhere in the portfolio, this page covers product operating practices that may include adoption or usage signals."
+          },
+          {
+            "slug": "launchmuse",
+            "title": "LaunchMuse",
+            "href": "/products/launchmuse",
+            "reason": "Related to execution and measurement themes if you're exploring how Daniel approaches product delivery."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Do you want the conversion or revenue impact details summarized instead?",
+          "Are you looking for user scale metrics elsewhere in the portfolio?"
+        ]
+      }
+    },
+    {
+      "id": "jira-evidence",
+      "question": "What evidence is on this page?",
+      "recordedPassed": false,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "This page provides explicit outcomes and metrics: full adoption across nine product managers and an 8-week onboarding program, plus shifts to rolling prioritization, improved visibility into initiatives/dependencies/OKRs, and faster, more confident roadmap approvals. It documents concrete actions (unified Jira Product Discovery workspace, RICE-based prioritization, cross-team dashboards, live training/coaching) and leadership signals about aligning the tool to the operating model. As artifacts, it references a JPD workspace overview and the 8-week onboarding curriculum.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Explicitly related from this page’s portfolio metadata."
+          },
+          {
+            "slug": "checkout-redesign",
+            "title": "Better execution, faster checkout, measurable growth",
+            "href": "/work/checkout-redesign",
+            "reason": "Explicitly related from this page’s portfolio metadata."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Can you share the JPD workspace overview artifact?",
+          "What did the 8-week onboarding curriculum include week by week?",
+          "Can you provide examples of the dashboards (themes, impact vs. effort, dependencies)?"
+        ]
+      }
+    },
+    {
+      "id": "jira-next-read",
+      "question": "What should I read next?",
+      "recordedPassed": true,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "Given this page’s focus on product ops and an org-wide planning model, the next best reads are the related case studies on ChatGPT Enterprise and Checkout Redesign. ChatGPT Enterprise shows operating-model rollout at scale, while Checkout Redesign demonstrates execution discipline tied to measurable outcomes. Elsewhere in the portfolio, both reinforce PM leadership and enablement themes that match this page.",
+        "relatedPages": [
+          {
+            "slug": "chatgpt-enterprise",
+            "title": "ChatGPT Enterprise from pilot to operating model",
+            "href": "/work/chatgpt-enterprise",
+            "reason": "Listed as related on this page; strong match for leadership and operating-model work with org-scale rollout."
+          },
+          {
+            "slug": "checkout-redesign",
+            "title": "Better execution, faster checkout, measurable growth",
+            "href": "/work/checkout-redesign",
+            "reason": "Listed as related on this page; supports leadership signals with clear execution-to-outcome linkage."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Do you want more depth on operating models and rollout playbooks, or on execution tied to business outcomes?",
+          "Should I summarize the 8-week onboarding curriculum mentioned here?",
+          "Are you evaluating fit for a Director of Product role and want a tailored cross-page summary?"
+        ]
+      }
+    },
+    {
+      "id": "chatgpt-enterprise-next-read-platform-role",
+      "question": "What should I read next?",
+      "recordedPassed": true,
+      "judgeVerdict": "pass",
+      "response": {
+        "answer": "Given your platform focus, the best next read—elsewhere in the portfolio—is “From AI experiments to platform foundations,” which complements this page’s operating-model work with reusable systems and platform thinking. If you want more builder signal, “AI Agents Lab” shows PM-led prototypes that make workflows tangible before full productization.",
+        "relatedPages": [
+          {
+            "slug": "ai-platform-mcp",
+            "title": "From AI experiments to platform foundations",
+            "href": "/work/ai-platform-mcp",
+            "reason": "Broader portfolio context: strong match for platform and systems thinking that builds on this operating-model case."
+          },
+          {
+            "slug": "ai-agents-lab",
+            "title": "AI Agents Lab",
+            "href": "/products/ai-agents-lab",
+            "reason": "Broader portfolio context: supports AI-builder depth with PM-led prototypes and workflow experiments."
+          }
+        ],
+        "suggestedFollowUps": [
+          "Do you want a quick summary of the platform foundations page?",
+          "Should I highlight the specific artifacts or diagrams most relevant to platform PMs?",
+          "Want a short compare/contrast between the operating model here and the platform approach there?"
+        ]
+      }
+    }
+  ]
+}

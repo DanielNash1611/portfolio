@@ -6,15 +6,20 @@ import MediaFrame from "@/components/site/MediaFrame";
 
 type ProductCardProps = {
   entry: ProductEntry;
+  priority?: boolean;
 };
 
-export default function ProductCard({ entry }: ProductCardProps): JSX.Element {
+export default function ProductCard({
+  entry,
+  priority = false,
+}: ProductCardProps): JSX.Element {
   return (
     <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-black/6 bg-white/88 shadow-[0_24px_60px_rgba(58,61,64,0.09)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(58,61,64,0.12)]">
       <MediaFrame
         src={entry.heroImage}
         alt={entry.heroImageAlt}
         fallbackTitle={entry.title}
+        priority={priority}
         sizes="(min-width: 1280px) 360px, (min-width: 768px) 45vw, 100vw"
         className="aspect-[16/10] border-b border-black/6 bg-[color:var(--color-cream)]/80"
         imageClassName="transition duration-500 group-hover:scale-[1.02]"

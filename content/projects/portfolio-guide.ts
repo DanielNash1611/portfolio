@@ -37,6 +37,236 @@ type GuideOverlay = Partial<
 };
 
 export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
+  "ai-career-operating-system": {
+    category: "AI product systems",
+    oneLiner:
+      "Designed a governed AI workflow that turns approved career evidence into recruiter-ready artifacts through bounded retrieval, configured advisory reviewers, and human approval.",
+    role: "Product architecture, evidence boundaries, evaluation design, and quality control",
+    companyOrProject: "DanielNash.co + ResumeCustomizer",
+    timeframe: "2026",
+    problem:
+      "Hiring teams need fast access to credible proof, while AI-generated application materials introduce risks around unsupported claims, generic output, and unclear ownership.",
+    actions: [
+      "Separated recruiter-facing UX from the long-running resume engine through authenticated server-to-server APIs.",
+      "Kept authored page content primary while adding public-safe, source-audited evidence retrieval for deeper questions.",
+      "Defined role-aware generation, six configured advisory review agents, structural PDF checks, and explicit human accountability.",
+    ],
+    outcomes: [
+      "Created an inspectable workflow spanning portfolio discovery, evidence retrieval, resume generation, evaluation, and PDF delivery.",
+      "Stored a comparable Portfolio Guide evaluation improvement from 5/12 to 11/12 after grounding and source-separation changes.",
+      "Made current limits visible, including process-local queueing, incomplete funnel instrumentation, and advisory final-judge rejection.",
+    ],
+    metrics: [
+      "Portfolio Guide evaluation inventory: 31 authored cases.",
+      "Resume review system: 6 configured advisory agents.",
+      "Role positioning model: 3 template lanes.",
+      "Historical Portfolio Guide comparison: 5/12 to 11/12 on comparable stored 12-case OpenAI runs.",
+    ],
+    tools: [
+      "Next.js and TypeScript",
+      "OpenAI Responses API",
+      "Ollama local models",
+      "Authenticated server-to-server APIs",
+      "Playwright and Chromium PDF rendering",
+      "Deterministic role and source checks",
+    ],
+    leadershipSignals: [
+      "Framed the work as a governed evidence workflow with explicit users, boundaries, failure modes, and quality definitions.",
+      "Used AI development agents to accelerate implementation while retaining responsibility for product direction, acceptance criteria, evals, and public claims.",
+      "Kept implementation gaps and missing instrumentation visible instead of presenting roadmap capabilities as current outcomes.",
+    ],
+    evidenceHighlights: [
+      {
+        label: "Cross-product boundary",
+        detail:
+          "The browser calls only Portfolio routes; Portfolio injects the shared bearer token for ResumeCustomizer server-to-server calls.",
+        type: "workflow",
+      },
+      {
+        label: "Source-audited retrieval",
+        detail:
+          "The Claim-to-Evidence endpoint defaults to public-safe, source-audited results and returns a safe fallback when evidence is insufficient.",
+        type: "workflow",
+      },
+      {
+        label: "Qualified eval improvement",
+        detail:
+          "Comparable stored 12-case OpenAI Guide runs improved from 5/12 to 11/12 after grounding and source-separation changes.",
+        type: "metric",
+      },
+      {
+        label: "Visible product limits",
+        detail:
+          "The page explicitly identifies durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate as future work.",
+        type: "ownership",
+      },
+    ],
+    claimBoundaries: {
+      directOwnership: [
+        "Defined the product thesis, user experience, service boundaries, quality criteria, evaluation behavior, and public claim guardrails represented on the page.",
+        "Directed the integration of Portfolio recruiter UX with ResumeCustomizer evidence retrieval and role-specific generation.",
+      ],
+      influence: [
+        "Used AI development agents to accelerate implementation and iteration while retaining product and quality accountability.",
+      ],
+      conceptualExploration: [
+        "Durable queueing, joined recruiter-funnel analytics, shared page-to-evidence identifiers, and a hard reject gate are documented next investments.",
+      ],
+      implementation: [
+        "The repositories support the authenticated API boundaries, evidence retrieval, job lifecycle, specialized reviews, and structural PDF validation described here.",
+        "The page does not claim sole hand-coding or independent implementation of every component.",
+      ],
+      explicitUnknowns: [
+        "The repositories do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale, or a current full-suite evaluation pass rate.",
+        "The 5/12 to 11/12 comparison is a historical, comparable 12-case OpenAI result rather than a current universal quality score.",
+        "The Claim-to-Evidence changes must be merged and deployed in both repositories before the public integration is considered launched.",
+      ],
+    },
+    recruiterPrompts: [
+      "What does this system prove about Daniel's AI product judgment?",
+      "What particularly was Daniel responsible for?",
+      "What's implemented versus still planned?",
+      "What do the eval results actually prove?",
+      "For the role I entered, what's most relevant here?",
+    ],
+    roleLens: ["builder-pm", "product-leader"],
+    domains: ["ai-product", "platform", "career-workflows"],
+    strengths: [
+      "ai-product",
+      "workflow-design",
+      "platform",
+      "evaluation",
+      "source-grounding",
+      "technical-depth",
+    ],
+    senioritySignals: ["senior", "group", "director"],
+    projectType: "product",
+    relatedProjectSlugs: [
+      "ai-platform-mcp",
+      "chatgpt-enterprise",
+      "oms-chatgpt-app",
+      "immunology-scout",
+    ],
+    artifacts: [
+      {
+        label: "Cross-product system map",
+        type: "diagram",
+        description:
+          "Code-native diagram of recruiter UX, server API, tailoring engine, and reviewed output.",
+      },
+      {
+        label: "Eval comparison",
+        type: "case-study",
+        description:
+          "Qualified historical comparison of comparable stored 12-case Guide runs.",
+      },
+    ],
+    crossPageLinks: [
+      {
+        slug: "ai-platform-mcp",
+        bridge:
+          "This case pairs with AI Platform MCP because both show Daniel turning repeated AI workflow needs into reusable system boundaries and product patterns.",
+      },
+      {
+        slug: "chatgpt-enterprise",
+        bridge:
+          "This connects to ChatGPT Enterprise for measured organizational adoption, governance, and operating-model proof at a larger scale.",
+      },
+      {
+        slug: "oms-chatgpt-app",
+        bridge:
+          "This connects to the OMS ChatGPT App for another concrete example of authenticated tools, human control, and AI operating inside a real workflow.",
+      },
+      {
+        slug: "immunology-scout",
+        bridge:
+          "This connects to Immunology Scout for a high-stakes example of retrieval grounding, eval-driven iteration, and expert review.",
+      },
+    ],
+    interestTags: [
+      "ai-builder",
+      "pm-leadership",
+      "platform",
+      "technical-depth",
+    ],
+    authoredSections: [
+      {
+        label: "Page summary",
+        snippets: [
+          "AI Career Operating System is a governed AI workflow for turning approved career evidence into recruiter-ready artifacts.",
+          "It connects portfolio proof, source-audited evidence retrieval, role-aware resume generation, authenticated APIs, evals, and human review without hiding claim boundaries.",
+          "It uses Daniel's job search as a personal operating context to demonstrate transferable AI product decisions without claiming external adoption or enterprise scale.",
+        ],
+      },
+      {
+        label: "Why this matters and responsibility",
+        snippets: [
+          "The product problem is that hiring teams often see polished claims without knowing what evidence supports them.",
+          "Daniel defined the product architecture, evidence boundaries, claim-safety rules, workflow stages, evaluation criteria, and portfolio positioning.",
+          "AI-assisted development accelerated implementation across the Portfolio Guide and ResumeCustomizer while human review remained the final approval layer.",
+        ],
+      },
+      {
+        label: "Product boundaries",
+        snippets: [
+          "DanielNash.co owns recruiter-facing UX, authored page grounding, Portfolio Guide interactions, direct download, and optional email delivery.",
+          "ResumeCustomizer owns public-safe evidence retrieval, role mapping, drafting, specialized reviews, PDF rendering, and temporary job artifacts.",
+          "The browser calls only Portfolio routes; the Portfolio server injects the ResumeCustomizer bearer token.",
+        ],
+      },
+      {
+        label: "Proof Engine",
+        snippets: [
+          "Authored current-page content remains the Portfolio Guide's primary source.",
+          "Role context changes navigation and explanation, not the underlying facts.",
+          "The role-specific resume generator is an action surface, not evidence of role fit.",
+        ],
+      },
+      {
+        label: "Tailoring Engine",
+        snippets: [
+          "ResumeCustomizer uses deterministic triage, three positioning lanes, approved evidence, bridge classification, six configured advisory review agents, and structural PDF validation.",
+          "Unsupported requirements are treated as true gaps rather than inserted as candidate claims.",
+          "Final-judge rejection is currently advisory even though structural failures can block canonical output or rendering.",
+        ],
+      },
+      {
+        label: "Claim-to-Evidence Engine",
+        snippets: [
+          "The current working trees implement an authenticated ResumeCustomizer evidence endpoint and a Portfolio Guide tool that calls it server-to-server.",
+          "Retrieval defaults to publicSafeOnly and sourceAuditedOnly, returns structured evidence rather than raw resume bullets, and uses a safe fallback when evidence is insufficient.",
+          "This is not yet a complete evidence graph; shared page-to-evidence identifiers remain future work.",
+        ],
+      },
+      {
+        label: "Evaluation evidence",
+        snippets: [
+          "The Portfolio Guide has 31 authored evaluation cases.",
+          "Comparable stored 12-case OpenAI Guide runs improved from 5/12 to 11/12 after grounding and source-separation changes.",
+          "The 5/12 to 11/12 result is historical and scoped; it is not a current full-suite pass claim.",
+          "The six configured reviewers are Recruiter Screen, Hiring Manager, Career Coach, Source Auditor, ATS Readability, and Positioning & Bridge Strategist.",
+          "The baseline-template pass uses Recruiter Screen, Hiring Manager, Career Coach, and Positioning & Bridge Strategist; the final-resume pass runs all six.",
+          "Each reviewer returns structured findings, 1-5 scores, issue severity, source status, and source-backed, needs-source, or reject recommendations.",
+          "The review agents are advisory; structural checks can block output, while Daniel retains final approval.",
+          "Resume review artifacts expose quality tradeoffs rather than proving universal uplift.",
+        ],
+      },
+      {
+        label: "What this proves",
+        snippets: [
+          "The system demonstrates AI product judgment where models are useful but constrained.",
+          "Retrieval is source-aware, claims are bounded, unsafe gaps are surfaced instead of hidden, outputs are reviewed, and quality is measured before public representation.",
+        ],
+      },
+      {
+        label: "Implemented and next",
+        snippets: [
+          "Implemented: authenticated API boundaries, public-safe evidence retrieval, a nine-state generation lifecycle, six specialized review perspectives, and structural PDF checks.",
+          "Needs implementation or instrumentation: durable job state and queueing, shared evidence identifiers, joined recruiter-funnel measurement, versioned latency and failure metrics, and a hard gate or explicit override for rejected output.",
+        ],
+      },
+    ],
+  },
   "chatgpt-enterprise": {
     category: "Enterprise AI adoption",
     oneLiner:

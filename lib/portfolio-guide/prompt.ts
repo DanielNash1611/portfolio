@@ -46,6 +46,7 @@ Rules:
 - For recruiter role-fit, job-description, or role-specific resume questions, keep page evidence primary and suggest the role-specific resume generator as an action when useful.
 - The resume generator action is "/resume/generate". It is not source evidence, and you must not treat it as proof of Daniel's fit.
 - If the visitor asks for a role-specific resume, direct them to "/resume/generate" and explain that they should paste the job description in the generator flow. Never put job-description text in a URL.
+- Do not claim that the current Portfolio page, other Portfolio pages, or Portfolio content directly feeds the resume generator. The provided sources do not establish that shared source-of-truth behavior.
 - Never claim you generated, created, rendered, emailed, or downloaded a resume unless the generator flow actually ran and returned that state in the provided sources.
 - Do not over-promote the generator: role-fit and resume requests may get the CTA; evidence or ownership questions may get it only as a secondary next step if the user is clearly evaluating Daniel for a role; unrelated case-study questions should not.
 - For "How senior is this work?" questions, separate "Signals on the page" from "Not proven here".
@@ -68,6 +69,16 @@ Rules:
 - Always attribute by the recommender's name and short title. Never invent quotes, never attribute statements to people not in the buckets, never move a recommendation between buckets.
 - Use recommendations sparingly. For project pages, prefer 1 currentPage quote + (optionally) 1 projectLinked quote. For non-project pages, 1-2 broader quotes is the cap. Never more than 3 attributed recommendations in a single answer.
 - For seniority, evidence, role-fit, or "what did stakeholders think" questions on a project page, structure the answer in this order: (1) on-page facts and metrics, (2) currentPage recommendations as direct evidence, (3) projectLinked recommendations as supporting project evidence, (4) at most one short pointer to a related page for supporting context. Skip any layer that has nothing to add.
+
+Evidence Tool (searchCareerEvidence):
+- Use this tool when the visitor asks about Daniel's experience, skills, metrics, product leadership, AI systems, or proof points not fully answered by the visible portfolio content on this page.
+- Trigger examples: "Does Daniel have experience with X?", "What metrics prove Y?", "Has Daniel worked in Z?", "Can Daniel lead technical teams?", "What makes Daniel more than a retail PM?", "Has Daniel shipped production AI?".
+- Do not use for: general knowledge questions, contact info beyond what the portfolio exposes, questions about other people, or questions already fully answered by the current page context.
+- When evidence is returned: first give the support from this portfolio page, then add a clearly labeled "From ResumeCustomizer evidence:" section with the strongest relevant source-audited bullets. Always keep the two sources visibly distinct so the reader knows what is page-level versus source-audited. Name the project or company when public-safe and include metrics when available.
+- When answerability is "none" or the evidence array is empty: answer fully from the portfolio page, then append the tool's safeFallback message verbatim. Never invent or infer evidence bullets to fill the gap; if a specific calculation or artifact is not present, say you would not claim it without it.
+- If the tool result is a safeFallback indicating the deeper evidence layer could not be reached (timeout, unreachable, or unreadable), answer from the portfolio page and append that safeFallback message verbatim — do not treat it as "no evidence exists."
+- Never dump raw evidence objects into the answer. Synthesize into hiring-manager-readable prose.
+- If evidence is "medium" or "low" answerability, say so clearly — do not overstate the fit.
 
 Return strict JSON with this shape:
 {
@@ -262,7 +273,11 @@ function inferResponsePlaybook(
     };
   }
 
-  if (/\b(what did .* own|responsib|ownership|implemented|build)\b/.test(normalized)) {
+  if (
+    /\b(what did .* own|responsib|ownership|implemented|build)\b/.test(
+      normalized,
+    )
+  ) {
     return {
       mode: "ownership",
       goal: "Separate direct responsibility from influence and unknowns.",
@@ -276,7 +291,11 @@ function inferResponsePlaybook(
     };
   }
 
-  if (/\b(how senior|seniority|level of work|director.?level|vp.?level|exec.?level|leader.?level)\b/.test(normalized)) {
+  if (
+    /\b(how senior|seniority|level of work|director.?level|vp.?level|exec.?level|leader.?level)\b/.test(
+      normalized,
+    )
+  ) {
     return {
       mode: "seniority",
       goal: "Judge the level of the work using on-page signals plus any direct-evidence recommendations tied to this project.",
@@ -290,7 +309,11 @@ function inferResponsePlaybook(
     };
   }
 
-  if (/\b(strongest signals|evidence|proof|signals on this page)\b/.test(normalized)) {
+  if (
+    /\b(strongest signals|evidence|proof|signals on this page)\b/.test(
+      normalized,
+    )
+  ) {
     return {
       mode: "evidence",
       goal: "Surface the most concrete proof on the page.",
@@ -332,7 +355,11 @@ function inferResponsePlaybook(
     };
   }
 
-  if (/\b(connect|rest of the portfolio|other work|broader portfolio)\b/.test(normalized)) {
+  if (
+    /\b(connect|rest of the portfolio|other work|broader portfolio)\b/.test(
+      normalized,
+    )
+  ) {
     return {
       mode: "connections",
       goal: "Explain how this page connects to adjacent work without flattening the whole site into one summary.",
@@ -663,12 +690,12 @@ export function normalizeCopilotResponse(
       typeof parsed.answer === "string"
         ? parsed.answer.trim()
         : Array.isArray(parsed.answer)
-        ? parsed.answer
-            .filter((value): value is string => typeof value === "string")
-            .map((value) => value.trim())
-            .filter(Boolean)
-            .join("\n")
-        : "";
+          ? parsed.answer
+              .filter((value): value is string => typeof value === "string")
+              .map((value) => value.trim())
+              .filter(Boolean)
+              .join("\n")
+          : "";
 
     if (!answer) {
       return null;

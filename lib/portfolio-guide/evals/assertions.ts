@@ -37,11 +37,35 @@ function matches(text: string, matcher: EvalMatcher): boolean {
   );
 }
 
+/**
+ * Count prose sentences for the concision check.
+ *
+ * The naive `split(/(?<=[.!?])\s+/)` over-counts well-structured answers: an
+ * ordered-list marker like `1. ` is split into its own "sentence", and the same
+ * for `2.`, bullet markers, and keycap-emoji numbering. That penalized answers
+ * that were concise but formatted as short lists (a real failure mode observed
+ * in stored smoke runs for jira-evidence and ai-platform-seniority). We strip
+ * list scaffolding first and then drop any fragment with no alphabetic content,
+ * so the count reflects actual sentences rather than formatting. The limit
+ * itself is unchanged — a genuinely rambling prose answer still fails.
+ */
 function countSentences(text: string): number {
-  return text
-    .split(/(?<=[.!?])\s+/)
-    .map((segment) => segment.trim())
-    .filter(Boolean).length;
+  const withoutListScaffolding = text
+    // Ordered-list markers at line/segment start: "1. ", "2) ".
+    .replace(/(^|\n)\s*\d+[.)]\s+/g, "$1")
+    // Bullet markers: "- ", "* ", "• ".
+    .replace(/(^|\n)\s*[-*•]\s+/g, "$1")
+    // Keycap-emoji numbering: 1️⃣, 2️⃣, …
+    .replace(/\d+️?⃣/g, " ");
+
+  return (
+    withoutListScaffolding
+      .split(/(?<=[.!?])\s+/)
+      .map((segment) => segment.trim())
+      // A real sentence has at least one letter; this drops stray "1." or numeric
+      // fragments left by inline list markers.
+      .filter((segment) => /[a-z]/i.test(segment)).length
+  );
 }
 
 function targetLabel(target: PortfolioGuideDeterministicTextTarget): string {
@@ -184,6 +208,23 @@ function evaluateCheckSet(options: {
           { severity, target },
         ),
       );
+    });
+  }
+
+  if (checks.requiredConcepts) {
+    checks.requiredConcepts.forEach((concept) => {
+      const matched = concept.anyOf.find((matcher) => matches(text, matcher));
+      results.push({
+        passed: Boolean(matched),
+        label: `${targetLabel(target)} conveys concept "${concept.id}"`,
+        details: matched
+          ? undefined
+          : `${concept.description ? `${concept.description} ` : ""}Accepted variants: ${concept.anyOf
+              .map(matcherLabel)
+              .join(", ")}.`,
+        severity,
+        target,
+      });
     });
   }
 
