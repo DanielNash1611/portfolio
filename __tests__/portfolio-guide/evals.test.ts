@@ -455,6 +455,37 @@ test("response guardrails point direct resume requests to the generator path", (
   ]);
 });
 
+test("response guardrails reject unsupported Portfolio-to-generator source claims", () => {
+  const pageContext = getPageContextBySlug("ai-career-operating-system");
+  assert.ok(pageContext, "expected AI Career Operating System page context");
+
+  const guarded = applyPortfolioGuideResponseGuardrails({
+    request: {
+      message: "Can I generate a resume for my role?",
+      pageContext,
+      portfolioContext: getPortfolioContext(),
+      sessionContext: {
+        visitedPages: ["ai-career-operating-system"],
+        clickedPrompts: [],
+        askedQuestions: ["Can I generate a resume for my role?"],
+        inferredInterestTags: ["ai-builder"],
+      },
+    },
+    response: {
+      answer:
+        "Use /resume/generate and paste your job description. The tool pulls evidence from the current page and other portfolio pages to tailor the resume.",
+      relatedPages: [],
+    },
+    fallbackRelatedPages: [],
+  });
+
+  assert.match(
+    guarded.answer,
+    /does not prove that Portfolio pages directly feed the generated resume/i,
+  );
+  assert.doesNotMatch(guarded.answer, /pulls evidence from the current page/i);
+});
+
 test("response guardrails remove generator follow-ups from pure evidence questions", () => {
   const pageContext = getPageContextBySlug("checkout-redesign");
   assert.ok(pageContext, "expected checkout page context");

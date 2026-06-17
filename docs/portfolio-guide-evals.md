@@ -37,6 +37,10 @@ Recommended operating model:
   Seeded eval cases. This is the main file to extend when you want more coverage.
 - `lib/portfolio-guide/evals/assertions.ts`
   Deterministic check helpers.
+- `lib/portfolio-guide/evals/concepts.ts`
+  Reusable, named answer concepts (see "Structured concepts" below).
+- `lib/portfolio-guide/evals/__fixtures__/`
+  Committed historical runs behind the public 5/12 → 11/12 claim (see "Historical replay").
 - `lib/portfolio-guide/evals/judge.ts`
   LLM judge prompt and response normalization.
 - `lib/portfolio-guide/evals/runner.ts`
@@ -107,11 +111,18 @@ npm run eval:portfolio-guide:local -- --filter ai-platform-seniority
 npm run eval:portfolio-guide:local-judge -- --filter ai-platform-seniority
 ```
 
-The built-in smoke subset is:
+The built-in smoke subset (`PORTFOLIO_GUIDE_SMOKE_CASE_IDS` in
+`scripts/run-portfolio-guide-evals.ts`) is 12 cases:
 
+- `ai-platform-role-fit-suggests-generator`
+- `ai-platform-direct-resume-request`
+- `checkout-evidence-does-not-overpromote-generator`
 - `checkout-mentions-mcp`
 - `ai-platform-most-reused-patterns`
 - `ai-platform-contaminated-history`
+- `ai-platform-seniority`
+- `ai-platform-implied-not-proven`
+- `ai-platform-connections`
 - `checkout-cross-page-dau`
 - `jira-evidence`
 - `jira-next-read`
@@ -182,6 +193,66 @@ A case passes only when:
 - The judge verdict is `pass`.
 - The judge meets minimum thresholds:
   `groundedness >= 4`, `sourceSeparation >= 4`, `helpfulness >= 3`, `concision >= 3`, and `uncertaintyHandling >= 4` for partial or unanswerable cases (`>= 3` for fully answerable cases).
+
+## Determinism & Honest Scoring
+
+The deterministic checks are pure functions, but the answer they score comes
+from a live model (OpenAI or local Ollama). **The suite score is therefore not
+reproducible run-to-run.** Two runs of the same code minutes apart can differ by
+several cases purely from model sampling (we have stored runs that swing 7/12 ↔
+5/12 with no code change).
+
+Treat the live score as a _range_, not a metric:
+
+- For a real signal, run `--smoke` 3+ times and report the spread, not one number.
+- Never present a single live `--smoke` number as a regression without re-running.
+- Never equate the live smoke score with the historical 5/12 → 11/12 claim. That
+  claim is a specific stored, judge-scored, 12-case OpenAI run (see "Historical
+  replay"); the live smoke loop is a different, deterministic-only local check.
+
+When you change `prompt.ts` or `service.ts`, expect the live score to move even
+though no eval rule changed — the _wording_ shifted under the matchers. Fix
+genuine brittleness in the checks; do not tune limits or variants just to move
+the number.
+
+## Structured Concepts
+
+Prefer `requiredConcepts` (in `concepts.ts`) over `answerMustIncludeAnyGroups`
+for trust signals. A concept is one idea with several accepted surface forms:
+
+```ts
+export const REFUSES_TO_RANK_REUSE: EvalConcept = {
+  id: "refuses-to-rank-reuse",
+  description: "States the page does not rank which pattern was reused most …",
+  anyOf: [
+    /* regex + literal variants of the SAME idea */
+  ],
+};
+```
+
+Why: failures read `conveys concept "refuses-to-rank-reuse"` with the accepted
+variants, instead of `Missing expected signal "led a team"`. De-brittling means
+adding genuinely-equivalent variants in one shared place.
+
+Rule: a concept only broadens _positive_ signals. Forbidden claims stay in
+`answerMustExclude`, so widening a concept can never let an overclaim through.
+Each variant you add must still be a correct-answer phrasing — verify against
+stored answers (`artifacts/portfolio-guide-evals/*`) rather than guessing.
+
+The concision check (`maxSentences`) ignores ordered-list markers, bullets, and
+keycap emoji so a short list answer is not miscounted as many sentences. It still
+fails genuinely rambling prose.
+
+## Historical Replay
+
+The public "5/12 → 11/12" claim is backed by two real runs committed verbatim in
+`lib/portfolio-guide/evals/__fixtures__/`. `historical-eval-replay.test.ts`
+asserts their preserved provenance (5/12 and 11/12, judged), that every case
+still exists in the suite, and that re-scoring the frozen answers is
+deterministic. Note the headline number is _judge-gated_: on the deterministic
+layer alone those same answers score higher (11/12 → 12/12), so most of 5 → 11
+was groundedness/source-separation scored by the judge. Do not edit fixture
+answers; regenerate from a fresh run if the claim changes.
 
 ## Adding More Cases
 

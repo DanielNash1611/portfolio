@@ -9,6 +9,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test:portfolio-guide": "tsx --test __tests__/portfolio-guide/*.test.ts",
+    "smoke:evidence": "tsx scripts/smoke-test-evidence.ts",
     "eval:portfolio-guide": "tsx scripts/run-portfolio-guide-evals.ts",
     "eval:portfolio-guide:local": "tsx scripts/run-portfolio-guide-evals.ts --provider-mode local-answer-no-judge --assistant-model gpt-oss:20b",
     "eval:portfolio-guide:local-judge": "tsx scripts/run-portfolio-guide-evals.ts --provider-mode local-answer-local-judge --assistant-model gpt-oss:20b --judge-model qwen2.5:14b",

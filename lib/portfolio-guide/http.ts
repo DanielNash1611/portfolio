@@ -11,6 +11,11 @@ import type {
   GuideInteractionSource,
 } from "@/lib/portfolio-guide/types";
 import { GUIDE_UNAVAILABLE_MESSAGE } from "@/lib/portfolio-guide/constants";
+// The Claim-to-Evidence tool reuses the existing ResumeCustomizer connection
+// (RESUME_CUSTOMIZER_API_BASE_URL + RESUME_CUSTOMIZER_API_TOKEN) — the same
+// server-to-server boundary the resume generator already uses. No separate key.
+import { getResumeEngineConfig } from "@/lib/resume-generator/config";
+import { isEvidenceMockEnabled } from "@/lib/portfolio-guide/tools/mockEvidence";
 
 type PortfolioGuideSuccessBody =
   | CopilotResponse
@@ -40,6 +45,12 @@ export type PortfolioGuideRouteDependencies = {
   now: () => number;
   logWarning: (...args: unknown[]) => void;
   logError: (...args: unknown[]) => void;
+  /** Optional: URL for the ResumeCustomizer evidence API. If unset, evidence tool is disabled. */
+  getEvidenceApiUrl?: () => string | undefined;
+  /** Optional: API key for the ResumeCustomizer evidence API (server-side only). */
+  getEvidenceApiKey?: () => string | undefined;
+  /** Optional: when true, the evidence tool is served by the local non-prod mock. */
+  getEvidenceMockEnabled?: () => boolean;
 };
 
 function isStringArray(input: unknown): input is string[] {
@@ -188,6 +199,11 @@ function defaultDependencies(): PortfolioGuideRouteDependencies {
     now: () => Date.now(),
     logWarning: (...args: unknown[]) => console.warn(...args),
     logError: (...args: unknown[]) => console.error(...args),
+    // Reuse the shared ResumeCustomizer connection config so the evidence tool
+    // and the resume generator stay in lockstep on one base URL + bearer token.
+    getEvidenceApiUrl: () => getResumeEngineConfig().baseUrl ?? undefined,
+    getEvidenceApiKey: () => getResumeEngineConfig().token ?? undefined,
+    getEvidenceMockEnabled: () => isEvidenceMockEnabled(),
   };
 }
 
@@ -284,9 +300,19 @@ export async function handlePortfolioGuideRequest(
   const startedAt = dependencies.now();
 
   try {
+    const evidenceApiUrl = dependencies.getEvidenceApiUrl?.();
+    const evidenceApiKey = dependencies.getEvidenceApiKey?.();
+    const evidenceConfig =
+      evidenceApiUrl && evidenceApiKey
+        ? { apiUrl: evidenceApiUrl, apiKey: evidenceApiKey }
+        : undefined;
+    const evidenceMock = dependencies.getEvidenceMockEnabled?.() ?? false;
+
     const generation = await dependencies.generateResponse(payload, {
       apiKey,
       model,
+      evidenceConfig,
+      evidenceMock,
     });
     const promptContext = payload.debug
       ? dependencies.buildPromptContext(payload, generation.relatedPages)

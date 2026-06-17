@@ -150,10 +150,14 @@ export type CreativeEntry = {
 export type ResumeVariant = {
   id: string;
   title: string;
-  audience: string;
+  subtitle: string;
+  bestFor: string;
   filename: string;
-  note: string;
+  ctaLabel: string;
   focusAreas: string[];
+  /** Legacy `/resume#...` fragment ids the portfolio guide deep-links to; kept
+   *  as extra anchors so those existing links still scroll to the right card. */
+  legacyAnchors?: string[];
 };
 
 export type AboutTimelineVisual =
@@ -263,7 +267,11 @@ export const homeContent = {
     ],
   },
   featuredWork: ["chatgpt-enterprise", "ai-platform-mcp", "checkout-redesign"],
-  featuredProducts: ["launchmuse", "immunology-scout", "oms-chatgpt-app"],
+  featuredProducts: [
+    "oms-chatgpt-app",
+    "ai-career-operating-system",
+    "immunology-scout",
+  ],
   featuredThinking: ["the-side-of-ai-i-want-to-be-on", "ai-strategy"],
   creativeHighlight: {
     title: "Creative edge, strategically applied",
@@ -723,6 +731,106 @@ export const workEntries: WorkEntry[] = [
 ];
 
 export const productEntries: ProductEntry[] = [
+  {
+    slug: "ai-career-operating-system",
+    href: "/products/ai-career-operating-system",
+    title: "AI Career Operating System",
+    eyebrow: "AI Product System",
+    status: "Production-shaped",
+    summary:
+      "A governed AI workflow for turning approved career evidence into recruiter-ready artifacts.",
+    description:
+      "Governed AI workflow with source-audited retrieval, role-aware generation, evals, and human review.",
+    heroImage:
+      "/images/ai-career-operating-system/resume-customizer-thumbnail.png",
+    heroImageAlt:
+      "AI Career Operating System workflow from target-company scanning through evaluation, multi-agent review, resume tailoring, and PDF generation.",
+    tags: [
+      "AI Product Systems",
+      "Source Grounding",
+      "Evals",
+      "API Integration",
+    ],
+    featuredMetrics: [
+      {
+        label: "Guide evaluation",
+        value: "31 cases",
+        detail:
+          "Authored cases covering grounding, ownership, seniority, and cross-page behavior.",
+      },
+      {
+        label: "Review system",
+        value: "6 agents",
+        detail:
+          "Recruiter, hiring-manager, career-coach, source-audit, ATS, and positioning perspectives.",
+      },
+      {
+        label: "Service boundary",
+        value: "Authenticated API",
+        detail:
+          "Server-to-server authentication keeps internal credentials outside the browser.",
+      },
+    ],
+    problem: [
+      "Hiring teams need fast access to credible, role-relevant proof, while AI-generated career materials introduce real risks around unsupported claims, generic language, and unclear ownership.",
+      "A public portfolio and a long-running resume engine also have different security, deployment, and user-experience responsibilities.",
+    ],
+    solution: [
+      "DanielNash.co owns recruiter-facing discovery, page-grounded guidance, and conversion actions. ResumeCustomizer owns evidence retrieval, role mapping, drafting, six configured advisory review agents, rendering, and temporary artifacts.",
+      "An authenticated server-to-server boundary connects the products without exposing internal credentials to the browser, while structured evals and human review keep trust visible.",
+    ],
+    productExperience: [
+      {
+        title: "Explore authored proof",
+        description:
+          "Visitors evaluate current-page evidence and explicit ownership boundaries through the Portfolio Guide.",
+      },
+      {
+        title: "Retrieve source-audited evidence",
+        description:
+          "Deeper career questions can use a public-safe, source-audited evidence endpoint without exposing raw resume bullets.",
+      },
+      {
+        title: "Generate and review a tailored artifact",
+        description:
+          "A role-specific request moves through a nine-state generation workflow before PDF delivery and human accountability.",
+      },
+    ],
+    evaluationAndTrust: [
+      "Portfolio Guide evals test grounding, ownership boundaries, source separation, and recruiter-facing answer quality.",
+      "ResumeCustomizer separates supported evidence, safe positioning bridges, and true gaps before rendering.",
+      "Structural PDF validation is enforced; final-judge rejection remains advisory until a hard gate or explicit override is implemented.",
+    ],
+    learnings: [
+      "AI product quality depends on the workflow and evidence model around generation, not only on the model response.",
+      "Clear service ownership makes long-running, high-stakes generation easier to secure, explain, and improve.",
+      "Evaluation artifacts are most useful when they expose tradeoffs and limits instead of manufacturing a universal quality score.",
+    ],
+    buildStory: [
+      "The system uses a real personal operating context to demonstrate transferable product decisions: source governance, service boundaries, asynchronous jobs, eval design, privacy, and human accountability.",
+      "Authenticated boundaries, source-audited retrieval, structural checks, and human approval are implemented. Durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate remain explicit next investments.",
+    ],
+    visuals: [
+      {
+        title: "AI Career Operating System map",
+        description:
+          "A deterministic architecture visual connecting recruiter-facing proof, the authenticated service boundary, the tailoring engine, and reviewed output.",
+        image: "/images/ai-career-operating-system/system-map.svg",
+        alt: "Abstract system map connecting four stages of the AI Career Operating System.",
+      },
+    ],
+    actions: [
+      {
+        href: "/products/ai-career-operating-system#portfolio-guide-ai-career-operating-system",
+        label: "Ask the Portfolio Guide",
+      },
+      {
+        href: "/resume/generate",
+        label: "Generate a role-specific resume",
+      },
+    ],
+    featured: true,
+  },
   {
     slug: "launchmuse",
     href: "/products/launchmuse",
@@ -1521,45 +1629,41 @@ export const aboutContent = {
   ],
 };
 
+// Two portfolio-ready default resume variants, generated through ResumeCustomizer
+// from a canonical final-resume.json (the finalized renderer path), not template
+// previews. Both lead with neutral "Portfolio" metadata — no target company.
 export const resumeVariants: ResumeVariant[] = [
   {
-    id: "product-leader",
-    title: "Product Leader",
-    audience:
-      "Best for PM leadership, AI transformation, operating model, and portfolio strategy conversations.",
-    filename: "daniel-nash-product-leader-resume.pdf",
-    note: "Emphasizes enterprise AI governance, PM enablement, operating cadence, and portfolio-level decision quality.",
+    id: "senior-ai-product-manager",
+    title: "Senior AI Product Manager",
+    subtitle: "Applied AI Products & Agentic Workflows",
+    bestFor:
+      "AI PM, Applied AI PM, agentic workflows, AI platform, LLM product, and product-builder roles.",
+    filename: "daniel-nash-senior-ai-product-manager.pdf",
+    ctaLabel: "Download AI PM Resume",
     focusAreas: [
-      "AI transformation and governance",
-      "PM org enablement",
-      "Operating model and portfolio strategy",
+      "Agentic workflows, retrieval grounding, evals, and human-in-the-loop review",
+      "ChatGPT Enterprise scaled to ~1,000 licensed / ~800 active users",
+      "Prototype-to-production AI builds (OMS ChatGPT App, Immunology Scout)",
     ],
+    // The applied-AI builder résumé also answers the guide's senior-PM and
+    // builder deep-links.
+    legacyAnchors: ["senior-product-manager", "builder-pm"],
   },
   {
-    id: "senior-product-manager",
-    title: "Senior Product Manager",
-    audience:
-      "Best for broad-market product roles spanning growth, commerce, operations, and customer experience.",
-    filename: "daniel-nash-senior-product-manager-resume.pdf",
-    note: "Balances measurable business impact with end-to-end ownership across commerce, service workflows, and AI-enabled products.",
+    id: "ai-product-leader",
+    title: "AI Product Leader",
+    subtitle: "Enterprise AI Transformation",
+    bestFor:
+      "Director / Lead / Product Strategy roles, AI transformation, enterprise enablement, governance, and product operating model roles.",
+    filename: "daniel-nash-ai-product-leader.pdf",
+    ctaLabel: "Download AI Product Leader Resume",
     focusAreas: [
-      "Customer journeys and commerce",
-      "Workflow modernization",
-      "AI-enabled execution",
+      "Enterprise AI strategy, governance, and product operating model",
+      "AI Center of Excellence and product-led adoption",
+      "$2.7M+ projected annual AI impact and ~60 FTE-equivalent capacity gains",
     ],
-  },
-  {
-    id: "builder-pm",
-    title: "Builder / 0-to-1 PM",
-    audience:
-      "Best for builder-focused roles emphasizing prototypes, AI workflows, and incubation.",
-    filename: "daniel-nash-builder-pm-resume.pdf",
-    note: "Leans into prototypes, agentic workflows, grounded retrieval, and PM-led product building.",
-    focusAreas: [
-      "0-to-1 AI products",
-      "Prototypes and demos",
-      "Workflow systems and evals",
-    ],
+    legacyAnchors: ["product-leader"],
   },
 ];
 

@@ -10,8 +10,21 @@ import {
 import type {
   CopilotRequest,
   CopilotResponse,
+  EvidenceSummary,
   RelatedPage,
 } from "@/lib/portfolio-guide/types";
+import {
+  buildUnavailableEvidenceResult,
+  callEvidenceTool,
+  EVIDENCE_FALLBACK_MESSAGES,
+  SEARCH_CAREER_EVIDENCE_TOOL_DEFINITION,
+  type EvidenceConfig,
+  type EvidenceItem,
+  type EvidenceSearchResponse,
+  type EvidenceUnavailableReason,
+} from "@/lib/portfolio-guide/tools/evidence";
+import { runMockEvidence } from "@/lib/portfolio-guide/tools/mockEvidence";
+import type { EvidenceMetadata } from "@/lib/portfolio-guide/types";
 
 export type PortfolioGuideServiceConfig = {
   apiKey: string;
@@ -22,6 +35,14 @@ export type PortfolioGuideServiceConfig = {
   reasoningEffort?: "low" | "medium" | "high";
   client?: OpenAI;
   signal?: AbortSignal;
+  /** When provided, enables the searchCareerEvidence tool (server-side call to ResumeCustomizer). */
+  evidenceConfig?: EvidenceConfig;
+  /**
+   * When true, the evidence tool is served by the in-process local mock instead
+   * of a real ResumeCustomizer call. Non-production only; lets the whole
+   * evidence path be exercised on localhost. Takes precedence over evidenceConfig.
+   */
+  evidenceMock?: boolean;
 };
 
 export type PortfolioGuideProviderInfo = {
@@ -79,9 +100,10 @@ function answerDeniesMention(answer: string, term: string): boolean {
       `\\b(?:no|does not|doesn't|do not|don't|not on this page|i don't see)\\b[\\s\\S]{0,80}\\b${escapedTerm}\\b`,
       "i",
     ).test(normalized) ||
-    new RegExp(`\\b${escapedTerm}\\b[\\s\\S]{0,40}\\b(?:is not|isn't)\\b`, "i").test(
-      normalized,
-    )
+    new RegExp(
+      `\\b${escapedTerm}\\b[\\s\\S]{0,40}\\b(?:is not|isn't)\\b`,
+      "i",
+    ).test(normalized)
   );
 }
 
@@ -120,10 +142,12 @@ function isConnectionsQuestion(question: string): boolean {
 }
 
 function isDirectResumeRequest(question: string): boolean {
-  return /\b(?:resume|cv)\b/i.test(question) &&
+  return (
+    /\b(?:resume|cv)\b/i.test(question) &&
     /\b(?:role|job|jd|job description|specific|tailor|tailored|custom|generate|get|download|look at|send|pdf)\b/i.test(
       question,
-    );
+    )
+  );
 }
 
 function isRoleFitOrJobDescriptionQuestion(question: string): boolean {
@@ -154,9 +178,9 @@ function hasExplicitLimit(answer: string): boolean {
 }
 
 function stripSpeculativeTail(answer: string): string {
-  const sentences = answer.match(/[^.!?]+[.!?]?/g)?.map((sentence) => sentence.trim()) ?? [
-    answer.trim(),
-  ];
+  const sentences = answer
+    .match(/[^.!?]+[.!?]?/g)
+    ?.map((sentence) => sentence.trim()) ?? [answer.trim()];
   const filtered = sentences.filter(
     (sentence) =>
       !/(^inference:|\blikely\b|\bprobably\b|\bmight\b|\bmost broadly\b|\bappeared frequently\b|\bsaw the most use\b)/i.test(
@@ -186,11 +210,17 @@ function softenOwnershipClaims(answer: string, subjectName: string): string {
       `The page shows ${subjectName} leading`,
     )
     .replace(
-      new RegExp(`\\b${escapeRegex(subjectName)}\\s+designed and implemented\\b`, "gi"),
+      new RegExp(
+        `\\b${escapeRegex(subjectName)}\\s+designed and implemented\\b`,
+        "gi",
+      ),
       `The page describes ${subjectName} driving`,
     )
     .replace(
-      new RegExp(`\\b${escapeRegex(subjectName)}\\s+built\\b([\\s\\S]{0,80})\\bend[- ]to[- ]end\\b`, "gi"),
+      new RegExp(
+        `\\b${escapeRegex(subjectName)}\\s+built\\b([\\s\\S]{0,80})\\bend[- ]to[- ]end\\b`,
+        "gi",
+      ),
       `${subjectName} helped build$1`,
     );
 }
@@ -215,7 +245,27 @@ function removeResumeGenerationCompletionClaims(answer: string): string {
     );
 }
 
-function uniqueFollowUps(items: Array<string | undefined>, limit = 4): string[] {
+function removeUnsupportedPortfolioGeneratorSourceClaims(
+  answer: string,
+): string {
+  const correction =
+    "The current page does not prove that Portfolio pages directly feed the generated resume.";
+
+  return answer
+    .replace(
+      /\b(?:the\s+)?(?:tool|generator)(?:\s+flow)?\s+(?:pulls?|uses?|reads?|retrieves?)\s+(?:its\s+)?evidence\s+from\s+(?:the\s+)?current\s+(?:portfolio\s+)?page(?:\s+and\s+(?:other\s+)?portfolio\s+pages)?[^.!?]*[.!?]?/gi,
+      correction,
+    )
+    .replace(
+      /\bportfolio\s+(?:pages|content)\s+(?:directly\s+)?(?:power|powers|feed|feeds|supply|supplies)\s+(?:the\s+)?(?:resume\s+)?generator[^.!?]*[.!?]?/gi,
+      correction,
+    );
+}
+
+function uniqueFollowUps(
+  items: Array<string | undefined>,
+  limit = 4,
+): string[] {
   const seen = new Set<string>();
   const results: string[] = [];
 
@@ -252,13 +302,8 @@ function isResumeGeneratorFollowUp(label: string): boolean {
   );
 }
 
-function addResumeGeneratorFollowUps(
-  existing: string[] | undefined,
-): string[] {
-  return uniqueFollowUps([
-    ...RESUME_GENERATOR_FOLLOW_UPS,
-    ...(existing ?? []),
-  ]);
+function addResumeGeneratorFollowUps(existing: string[] | undefined): string[] {
+  return uniqueFollowUps([...RESUME_GENERATOR_FOLLOW_UPS, ...(existing ?? [])]);
 }
 
 function removeResumeGeneratorFollowUps(
@@ -270,10 +315,7 @@ function removeResumeGeneratorFollowUps(
 }
 
 function normalizeReasonForAnswer(reason: string): string {
-  return reason
-    .trim()
-    .replace(/\s+/g, " ")
-    .replace(/[.]$/, "");
+  return reason.trim().replace(/\s+/g, " ").replace(/[.]$/, "");
 }
 
 function buildSafeRelatedPages(
@@ -284,7 +326,9 @@ function buildSafeRelatedPages(
     fallbackRelatedPages.map((page) => [page.slug, page]),
   );
   const selectedPages =
-    responsePages && responsePages.length > 0 ? responsePages : fallbackRelatedPages;
+    responsePages && responsePages.length > 0
+      ? responsePages
+      : fallbackRelatedPages;
 
   return selectedPages
     .map((page) => {
@@ -355,9 +399,11 @@ function pickDistinctDetails(
   return results;
 }
 
-function summarizeRecommendation(
-  rec: { name: string; title: string; short: string },
-): string {
+function summarizeRecommendation(rec: {
+  name: string;
+  title: string;
+  short: string;
+}): string {
   const firstTitleSegment = rec.title.split(/[,|·]/)[0].trim();
   const titleClause = firstTitleSegment ? ` (${firstTitleSegment})` : "";
   return `${rec.name}${titleClause}: "${rec.short.replace(/^["“]|["”]$/g, "")}"`;
@@ -407,7 +453,9 @@ function buildSeniorityAnswer(request: CopilotRequest): string | undefined {
   return parts.map(ensureTrailingPeriod).join(" ");
 }
 
-function buildImpliedNotProvenAnswer(request: CopilotRequest): string | undefined {
+function buildImpliedNotProvenAnswer(
+  request: CopilotRequest,
+): string | undefined {
   const explicitProof = pickDistinctDetails(
     [
       request.pageContext.evidenceHighlights?.[0]?.detail,
@@ -415,7 +463,8 @@ function buildImpliedNotProvenAnswer(request: CopilotRequest): string | undefine
     ],
     2,
   );
-  const implied = request.pageContext.claimBoundaries?.conceptualExploration?.[0];
+  const implied =
+    request.pageContext.claimBoundaries?.conceptualExploration?.[0];
   const unknown = request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
 
   if (explicitProof.length === 0 && !implied && !unknown) {
@@ -454,7 +503,9 @@ function buildConnectionsAnswer(input: {
   const parts: string[] = [];
 
   if (currentPageLead) {
-    parts.push(ensureTrailingPeriod(`This page stands on its own as ${currentPageLead}`));
+    parts.push(
+      ensureTrailingPeriod(`This page stands on its own as ${currentPageLead}`),
+    );
   }
 
   if (firstPage?.reason) {
@@ -477,7 +528,10 @@ function answerIncludesExplicitMetric(
   }
 
   return pageMetrics.some((metric) => {
-    const numericMatches = metric.match(/\b\d+(?:[.,]\d+)?%?|\$\d+(?:\.\d+)?\s*[mb]?|\b(?:eight|nine|twelve|sixteen)\b/gi) ?? [];
+    const numericMatches =
+      metric.match(
+        /\b\d+(?:[.,]\d+)?%?|\$\d+(?:\.\d+)?\s*[mb]?|\b(?:eight|nine|twelve|sixteen)\b/gi,
+      ) ?? [];
 
     return numericMatches.some((token) =>
       normalizeText(answer).includes(normalizeText(token)),
@@ -506,10 +560,7 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   );
   const directResumeRequest = isDirectResumeRequest(request.message);
 
-  if (
-    mentionTerm &&
-    answerDeniesMention(answer, mentionTerm)
-  ) {
+  if (mentionTerm && answerDeniesMention(answer, mentionTerm)) {
     const termPattern = new RegExp(`\\b${escapeRegex(mentionTerm)}\\b`, "i");
 
     suggestedFollowUps = suggestedFollowUps?.filter(
@@ -530,7 +581,8 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   }
 
   if (
-    (isOwnershipQuestion(request.message) || isRankingQuestion(request.message)) &&
+    (isOwnershipQuestion(request.message) ||
+      isRankingQuestion(request.message)) &&
     hasExplicitLimit(answer)
   ) {
     answer = stripSpeculativeTail(answer);
@@ -598,6 +650,7 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   }
 
   answer = removeResumeGenerationCompletionClaims(answer);
+  answer = removeUnsupportedPortfolioGeneratorSourceClaims(answer);
 
   if (directResumeRequest) {
     if (!includesResumeGeneratorPath(answer)) {
@@ -621,6 +674,40 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   };
 }
 
+// ── Tool-calling helpers ──────────────────────────────────────────────────────
+
+type FunctionCallItem = {
+  type: "function_call";
+  call_id: string;
+  name: string;
+  arguments: string;
+};
+
+function getResponseOutput(response: unknown): unknown[] {
+  const typed = response as { output?: unknown[] };
+  return Array.isArray(typed.output) ? typed.output : [];
+}
+
+function extractFunctionCalls(response: unknown): FunctionCallItem[] {
+  return getResponseOutput(response).filter(
+    (item): item is FunctionCallItem =>
+      Boolean(item) &&
+      typeof item === "object" &&
+      (item as Record<string, unknown>).type === "function_call",
+  );
+}
+
+function buildEvidenceSummaries(
+  evidenceItems: EvidenceItem[],
+): EvidenceSummary[] {
+  return evidenceItems.map((e) => ({
+    project: e.project,
+    claim: e.claim,
+    capabilityTags: e.capabilityTags,
+    hasMetrics: e.metrics.length > 0,
+  }));
+}
+
 export async function generatePortfolioGuideResponse(
   request: CopilotRequest,
   config: PortfolioGuideServiceConfig,
@@ -634,7 +721,14 @@ export async function generatePortfolioGuideResponse(
     reasoningEffort = "low",
     client = new OpenAI({ apiKey, baseURL }),
     signal,
+    evidenceConfig,
+    evidenceMock = false,
   } = config;
+
+  // The evidence tool is available when either a real ResumeCustomizer
+  // connection is configured or the local mock is enabled. The mock takes
+  // precedence so localhost testing never hits a (possibly down) real endpoint.
+  const evidenceEnabled = Boolean(evidenceConfig) || evidenceMock;
 
   const relatedPages = getRelatedPages(
     request.pageContext,
@@ -652,19 +746,184 @@ export async function generatePortfolioGuideResponse(
     },
   };
   const promptInput = buildPortfolioGuideInput(enrichedRequest, relatedPages);
-  const response = await client.responses.create({
-    model,
-    reasoning: { effort: reasoningEffort },
-    input: [
-      { role: "system", content: systemPrompt },
-      {
-        role: "user",
-        content: promptInput,
-      },
-    ],
-  }, signal ? { signal } : undefined);
 
-  const rawText = extractResponseText(response);
+  // Base input shared by both LLM calls
+  const baseInput = [
+    { role: "system" as const, content: systemPrompt },
+    { role: "user" as const, content: promptInput },
+  ];
+
+  // First call: include evidence tool definition when the tool is available
+  type ResponsesCreateParams = Parameters<typeof client.responses.create>[0];
+  const firstCallParams: ResponsesCreateParams = evidenceEnabled
+    ? {
+        model,
+        reasoning: { effort: reasoningEffort },
+        input: baseInput,
+        tools: [SEARCH_CAREER_EVIDENCE_TOOL_DEFINITION],
+      }
+    : { model, reasoning: { effort: reasoningEffort }, input: baseInput };
+
+  const firstResponse = await client.responses.create(
+    firstCallParams,
+    signal ? { signal } : undefined,
+  );
+
+  // Detect tool calls and execute them server-side.
+  //
+  // The entire evidence-augmentation path is wrapped so that a missing,
+  // unreachable, slow, or malformed ResumeCustomizer response degrades the
+  // chatbot to a page-context answer instead of crashing the route with a
+  // generic "Unexpected server error." Page context is always available.
+  let finalResponse: unknown = firstResponse;
+  let evidenceUsed: EvidenceSummary[] | undefined;
+  let resumeCustomizerEvidenceUsed = false;
+  let evidenceUnavailableReason: EvidenceUnavailableReason | undefined =
+    evidenceEnabled ? undefined : "not_configured";
+  const warnings: string[] = [];
+
+  if (evidenceEnabled) {
+    const toolCalls = extractFunctionCalls(firstResponse).filter(
+      (toolCall) => toolCall.name === "searchCareerEvidence",
+    );
+
+    if (toolCalls.length > 0) {
+      try {
+        const allEvidence: EvidenceItem[] = [];
+        const toolResultItems: Array<{
+          type: "function_call_output";
+          call_id: string;
+          output: string;
+        }> = [];
+        let lastUnavailableReason: EvidenceUnavailableReason | undefined;
+
+        for (const toolCall of toolCalls) {
+          let toolInput: Record<string, unknown>;
+          try {
+            toolInput = JSON.parse(toolCall.arguments) as Record<
+              string,
+              unknown
+            >;
+          } catch {
+            toolInput = {};
+          }
+
+          const query =
+            typeof toolInput.query === "string"
+              ? toolInput.query
+              : promptInput.slice(0, 200);
+
+          const toolPayload = {
+            query,
+            currentPortfolioPage:
+              typeof toolInput.currentPortfolioPage === "string"
+                ? toolInput.currentPortfolioPage
+                : request.pageContext.slug,
+            visitorIntent:
+              typeof toolInput.visitorIntent === "string"
+                ? toolInput.visitorIntent
+                : undefined,
+            maxResults:
+              typeof toolInput.maxResults === "number"
+                ? toolInput.maxResults
+                : 5,
+          };
+
+          const result = evidenceMock
+            ? await runMockEvidence({ query, userMessage: request.message })
+            : await callEvidenceTool(
+                toolPayload,
+                evidenceConfig as EvidenceConfig,
+                signal,
+              );
+
+          let safeResult: EvidenceSearchResponse;
+          if (result.ok) {
+            safeResult = result.data;
+            if (safeResult.evidence.length === 0) {
+              lastUnavailableReason = "no_evidence_found";
+              if (!safeResult.safeFallback) {
+                safeResult = {
+                  ...safeResult,
+                  safeFallback:
+                    EVIDENCE_FALLBACK_MESSAGES.no_evidence_found,
+                };
+              }
+            }
+          } else {
+            lastUnavailableReason = result.reason;
+            warnings.push(
+              `evidence_unavailable:${result.reason}${
+                result.status ? `:${result.status}` : ""
+              }`,
+            );
+            safeResult = buildUnavailableEvidenceResult(query, result.reason);
+          }
+
+          if (safeResult.evidence.length > 0) {
+            allEvidence.push(...safeResult.evidence);
+          }
+
+          toolResultItems.push({
+            type: "function_call_output",
+            call_id: toolCall.call_id,
+            output: JSON.stringify(safeResult),
+          });
+        }
+
+        if (allEvidence.length > 0) {
+          evidenceUsed = buildEvidenceSummaries(allEvidence);
+          resumeCustomizerEvidenceUsed = true;
+        } else {
+          evidenceUnavailableReason =
+            lastUnavailableReason ?? "no_evidence_found";
+        }
+
+        // Second call: replay the model's full first-turn output (reasoning
+        // items + function_call items, in order) followed by our tool results,
+        // then ask for the synthesized answer with no tools.
+        //
+        // Echoing the whole output (not just the function_call items) is
+        // required for reasoning models: the Responses API rejects a
+        // function_call that is replayed without its sibling reasoning item.
+        const secondCallInput = [
+          ...baseInput,
+          ...getResponseOutput(firstResponse),
+          ...toolResultItems,
+        ] as ResponsesCreateParams["input"];
+
+        finalResponse = await client.responses.create(
+          {
+            model,
+            reasoning: { effort: reasoningEffort },
+            input: secondCallInput,
+          },
+          signal ? { signal } : undefined,
+        );
+      } catch (error) {
+        // The evidence augmentation or the synthesis call failed. Recover with
+        // a single page-context-only completion so the visitor still gets a
+        // useful, grounded answer rather than a server error.
+        console.warn(
+          "[portfolio-guide] evidence augmentation failed; falling back to page context",
+          error,
+        );
+        evidenceUsed = undefined;
+        resumeCustomizerEvidenceUsed = false;
+        evidenceUnavailableReason = "evidence_layer_error";
+        warnings.push("evidence_layer_error");
+
+        finalResponse = await client.responses.create(
+          { model, reasoning: { effort: reasoningEffort }, input: baseInput },
+          signal ? { signal } : undefined,
+        );
+      }
+    }
+    // toolCalls.length === 0: the model answered from page context without
+    // requesting deeper evidence. Not an error — leave reason unset.
+  }
+
+  const rawText = extractResponseText(finalResponse);
   if (!rawText) {
     throw new Error("No portfolio guide response was returned.");
   }
@@ -681,13 +940,30 @@ export async function generatePortfolioGuideResponse(
     response: normalizedResponse,
     fallbackRelatedPages: relatedPages,
   });
-  const normalizationStatus = parsedResponse ? "normalized-json" : "raw-fallback";
+  const normalizationStatus = parsedResponse
+    ? "normalized-json"
+    : "raw-fallback";
+
+  const evidenceMeta: EvidenceMetadata = {
+    pageContextUsed: true,
+    resumeCustomizerEvidenceUsed,
+    ...(evidenceUnavailableReason
+      ? { evidenceUnavailableReason }
+      : {}),
+    ...(warnings.length > 0 ? { warnings } : {}),
+  };
+
+  const finalCopilotResponse: CopilotResponse = {
+    ...guardedResponse,
+    ...(evidenceUsed ? { evidenceUsed } : {}),
+    evidenceMeta,
+  };
 
   return {
     promptInput,
     rawText,
     relatedPages,
-    response: guardedResponse,
+    response: finalCopilotResponse,
     normalizationStatus,
     provider: {
       label: providerLabel,

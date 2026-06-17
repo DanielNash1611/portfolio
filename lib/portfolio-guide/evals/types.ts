@@ -22,6 +22,21 @@ export type EvalMatcher = {
   flags?: string;
 };
 
+/**
+ * A named answer requirement. Like an `answerMustIncludeAnyGroups` group, the
+ * answer satisfies the concept when it matches ANY one of `anyOf`. The
+ * difference is the stable `id` and `description`: failures are reported as
+ * `concept "<id>"` with the accepted variants, so a reviewer sees *which idea*
+ * was missing rather than *which literal phrase*. Variants should be different
+ * surface forms of the SAME idea — broadening them de-brittles the check
+ * without lowering the bar, because forbidden-claim excludes stay separate.
+ */
+export type EvalConcept = {
+  id: string;
+  description?: string;
+  anyOf: EvalMatcher[];
+};
+
 export type PortfolioGuideDeterministicTextTarget =
   | "answer"
   | "suggestedFollowUps"
@@ -32,6 +47,12 @@ export type PortfolioGuideDeterministicChecks = {
   answerMustIncludeAll?: EvalMatcher[];
   answerMustIncludeAny?: EvalMatcher[];
   answerMustIncludeAnyGroups?: EvalMatcher[][];
+  /**
+   * Named, reusable concept requirements (AND across concepts, OR within each
+   * concept's `anyOf`). Preferred over `answerMustIncludeAnyGroups` for trust
+   * signals: failures name the missing concept instead of a raw regex.
+   */
+  requiredConcepts?: EvalConcept[];
   answerMustExclude?: EvalMatcher[];
   relatedPageSlugsMustInclude?: string[];
   relatedPageSlugsMustExclude?: string[];
@@ -79,9 +100,7 @@ export type PortfolioGuideDeterministicCheckResult = {
   label: string;
   details?: string;
   severity: "hard" | "advisory";
-  target:
-    | PortfolioGuideDeterministicTextTarget
-    | "relatedPages";
+  target: PortfolioGuideDeterministicTextTarget | "relatedPages";
 };
 
 export type PortfolioGuideEvalCaseResult = {

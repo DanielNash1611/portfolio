@@ -61,6 +61,12 @@ const CANONICAL_PROJECTS: CanonicalProject[] = [
     source: "product",
   },
   {
+    slug: "ai-career-operating-system",
+    href: "/products/ai-career-operating-system",
+    title: "AI Career Operating System",
+    source: "product",
+  },
+  {
     slug: "immunology-scout",
     href: "/products/immunology-scout",
     title: "Immunology Scout",

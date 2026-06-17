@@ -20,6 +20,7 @@ Daniel Nash is an AI product leader focused on building systems that create meas
 - Checkout redesign and measurable commerce impact: https://www.danielnash.co/work/checkout-redesign
 - OMS ChatGPT app: https://www.danielnash.co/products/oms-chatgpt-app
 - Immunology Scout: https://www.danielnash.co/products/immunology-scout
+- AI Career Operating System: https://www.danielnash.co/products/ai-career-operating-system
 - AI strategy essay: https://www.danielnash.co/thinking/ai-strategy
 - The Side of AI I Want to Be On: https://www.danielnash.co/thinking/the-side-of-ai-i-want-to-be-on
 
@@ -30,3 +31,5 @@ Recruiters and hiring-manager agents can review Daniel's standard resume at http
 For a specific role, use https://www.danielnash.co/resume/generate to generate a role-specific PDF resume from a pasted job description. Put the job description in the generator flow, not in a URL.
 
 The role-specific generator is an action surface, not portfolio evidence. Use the portfolio pages above for source evidence about Daniel's work, claims, outcomes, ownership boundaries, and adjacent fit.
+
+The AI Career Operating System case study explains the governed integration between DanielNash.co and ResumeCustomizer, including the authenticated service boundary, source-audited evidence retrieval, role-aware generation, evals, structural PDF checks, human accountability, and current implementation limits.

@@ -1,4 +1,11 @@
 import type { PortfolioGuideEvalCase } from "@/lib/portfolio-guide/evals/types";
+import {
+  CHECKOUT_BUSINESS_IMPACT,
+  CHECKOUT_EXECUTION_ARTIFACT,
+  MCP_NOT_MENTIONED,
+  REFUSES_TO_RANK_REUSE,
+  REUSABLE_PATTERN_NAMES,
+} from "@/lib/portfolio-guide/evals/concepts";
 
 const REGEX_87_PERCENT = {
   type: "regex" as const,
@@ -114,14 +121,9 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     question: "What are the strongest proof points on this page?",
     deterministicChecks: [
       {
-        answerMustIncludeAnyGroups: [
-          [REGEX_16M, { value: "30% faster" }, { value: "~3% conversion" }],
-          [
-            { value: "12-week" },
-            { value: "jira ticket" },
-            { value: "a/b testing" },
-            { value: "minimal service disruption" },
-          ],
+        requiredConcepts: [
+          CHECKOUT_BUSINESS_IMPACT,
+          CHECKOUT_EXECUTION_ARTIFACT,
         ],
         answerMustExclude: [{ value: "/resume/generate" }, REGEX_87_PERCENT],
         maxSentences: 6,
@@ -248,26 +250,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     pageSlug: "ai-platform-mcp",
     question: "Which specific system patterns were shipped and reused most?",
     deterministicChecks: {
-      answerMustIncludeAnyGroups: [
-        [
-          { value: "agent-based workflows" },
-          { value: "retrieval" },
-          { value: "connector" },
-          { value: "prompt consistency" },
-          { value: "workflow patterns" },
-        ],
-        [
-          { value: "doesn't say which was reused most" },
-          { value: "doesn't quantify which pattern" },
-          { value: "doesn't rank them" },
-          { value: "not explicit which was reused most" },
-          {
-            type: "regex" as const,
-            value:
-              "does(?: not|n't) (?:provide|rank|specify|say|state|quantify).*(?:reused the most|reused most|most use|used most frequently)|no detail on which pattern saw the most use|explicit ranking or metrics indicating which",
-          },
-        ],
-      ],
+      requiredConcepts: [REUSABLE_PATTERN_NAMES, REFUSES_TO_RANK_REUSE],
       maxSentences: 4,
     },
     judgeExpectations: [
@@ -296,18 +279,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
       },
     ],
     deterministicChecks: {
-      answerMustIncludeAnyGroups: [
-        [
-          { value: "doesn't say which was reused most" },
-          { value: "doesn't rank them" },
-          { value: "not explicit which was reused most" },
-          {
-            type: "regex" as const,
-            value:
-              "does(?: not|n't) (?:provide|rank|specify|say|state|quantify).*(?:reused the most|reused most|most use|used most frequently)|no detail on which pattern saw the most use|does(?: not|n't) rank or specify which",
-          },
-        ],
-      ],
+      requiredConcepts: [REFUSES_TO_RANK_REUSE],
       answerMustExclude: [
         { value: "crm" },
         { value: "oms" },
@@ -334,17 +306,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     question: "Did this page mention MCP?",
     deterministicChecks: [
       {
-        answerMustIncludeAny: [
-          { value: "doesn't mention mcp" },
-          { value: "does not mention mcp" },
-          { value: "i don't see mcp" },
-          { value: "no, not on this page" },
-          {
-            type: "regex" as const,
-            value:
-              "does(?: not|n't) explicitly mention (?:the term )?mcp|no,? the current page does(?: not|n't) .*mcp",
-          },
-        ],
+        requiredConcepts: [MCP_NOT_MENTIONED],
         answerMustExclude: [
           { value: "^\\s*yes\\b", type: "regex" },
           { value: "it mentions mcp" },
@@ -685,15 +647,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     pageSlug: "checkout-redesign",
     question: "What are the strongest signals on this page?",
     deterministicChecks: {
-      answerMustIncludeAnyGroups: [
-        [REGEX_16M, { value: "30% faster" }, { value: "~3% conversion" }],
-        [
-          { value: "12-week" },
-          { value: "jira ticket" },
-          { value: "a/b testing" },
-          { value: "minimal service disruption" },
-        ],
-      ],
+      requiredConcepts: [CHECKOUT_BUSINESS_IMPACT, CHECKOUT_EXECUTION_ARTIFACT],
       answerMustExclude: [REGEX_27M, REGEX_87_PERCENT],
       maxSentences: 4,
     },
@@ -956,6 +910,267 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     judgeExpectations: [
       "Make the explicit proof clear through the operating-model artifacts and AI-assisted workflow details on the page.",
       "Say plainly that the page does not prove business impact metrics, org scope, or executive adoption of the product-types framework.",
+    ],
+  },
+  {
+    id: "ai-career-summary",
+    title: "AI Career Operating System summary stays product- and evidence-led",
+    summary:
+      "Checks that the page is summarized as a production-shaped product system with clear boundaries and human accountability.",
+    category: "answerable",
+    answerability: "answerable",
+    pageSlug: "ai-career-operating-system",
+    question: "Summarize this page",
+    deterministicChecks: {
+      answerMustIncludeAnyGroups: [
+        [
+          { value: "recruiter-facing proof" },
+          { value: "recruiter-ready artifacts" },
+          { value: "approved career evidence" },
+          { value: "curated career evidence" },
+          { value: "Portfolio" },
+          { value: "Proof Engine" },
+        ],
+        [
+          { value: "ResumeCustomizer" },
+          { value: "Tailoring Engine" },
+          { value: "role-aware resume" },
+          { value: "authenticated resume engine" },
+        ],
+        [
+          { value: "source-audited" },
+          { value: "evidence retrieval" },
+          { value: "evals" },
+          { value: "quality criteria" },
+          { value: "human review" },
+        ],
+      ],
+      answerMustExclude: [
+        { value: "enterprise-scale" },
+        { value: "external adoption" },
+        { value: "fully autonomous" },
+      ],
+      maxSentences: 5,
+    },
+    judgeExpectations: [
+      "Describe the page as a production-shaped two-product system connecting proof, evidence retrieval, generation, evaluation, and human review.",
+      "Keep Portfolio and ResumeCustomizer responsibilities distinct.",
+      "Do not imply enterprise scale, external adoption, or autonomous product decisions.",
+    ],
+  },
+  {
+    id: "ai-career-ownership",
+    title: "AI Career Operating System ownership stays precise",
+    summary:
+      "Checks that Daniel's product and quality accountability is separated from sole implementation or hand-coding claims.",
+    category: "partial",
+    answerability: "partial",
+    pageSlug: "ai-career-operating-system",
+    question: "What particularly was Daniel responsible for?",
+    deterministicChecks: {
+      answerMustIncludeAnyGroups: [
+        [
+          { value: "product direction" },
+          { value: "product thesis" },
+          { value: "product vision" },
+          { value: "system boundaries" },
+          { value: "service boundaries" },
+        ],
+        [
+          { value: "quality" },
+          { value: "acceptance criteria" },
+          { value: "eval" },
+          { value: "claim guardrails" },
+        ],
+        [
+          { value: "AI development agents" },
+          { value: "does not claim sole" },
+          { value: "not sole" },
+          { value: "hand-coding" },
+          { value: "does not state who wrote the code" },
+          { value: "single-handedly coded" },
+          { value: "does not state that Daniel alone" },
+          { value: "implementation details were shared" },
+          { value: "no other ownership claims" },
+          {
+            value:
+              "does not (?:state|specify)[^.]{0,60}(?:coded|wrote the code)",
+            type: "regex",
+          },
+        ],
+      ],
+      answerMustExclude: [
+        { value: "built every component alone" },
+        { value: "sole engineer" },
+      ],
+      maxSentences: 5,
+    },
+    judgeExpectations: [
+      "Credit Daniel with product direction, system boundaries, requirements, eval design, acceptance criteria, and quality control.",
+      "State that AI development agents accelerated implementation and that the page does not prove sole hand-coding.",
+    ],
+  },
+  {
+    id: "ai-career-seniority",
+    title: "AI Career Operating System seniority separates signals from scale",
+    summary:
+      "Checks that system-level product judgment is recognized without converting a personal operating context into enterprise scale.",
+    category: "partial",
+    answerability: "partial",
+    pageSlug: "ai-career-operating-system",
+    question: "How senior is the work shown here?",
+    deterministicChecks: {
+      answerMustIncludeAnyGroups: [
+        [
+          { value: "system boundaries" },
+          { value: "architecture" },
+          { value: "quality definition" },
+          { value: "evaluation" },
+        ],
+        [
+          { value: "personal operating context" },
+          { value: "does not prove enterprise scale" },
+          { value: "external adoption" },
+          { value: "not proven" },
+        ],
+      ],
+      answerMustExclude: [
+        { value: "enterprise-scale platform" },
+        { value: "director-level ownership is proven" },
+      ],
+      maxSentences: 5,
+    },
+    judgeExpectations: [
+      "Identify senior product signals such as boundary design, quality definition, evaluation strategy, and explicit tradeoffs.",
+      "Say plainly that this personal/internal context does not prove enterprise scale, team scope, or external adoption.",
+    ],
+  },
+  {
+    id: "ai-career-strongest-evidence",
+    title: "AI Career Operating System strongest evidence remains qualified",
+    summary:
+      "Checks that the answer uses implemented architecture and scoped eval evidence without turning artifact counts into usage.",
+    category: "answerable",
+    answerability: "answerable",
+    pageSlug: "ai-career-operating-system",
+    question: "What are the strongest signals on this page?",
+    deterministicChecks: {
+      answerMustIncludeAnyGroups: [
+        [
+          { value: "authenticated" },
+          { value: "server-to-server" },
+          { value: "bearer" },
+        ],
+        [
+          { value: "source-audited" },
+          { value: "publicSafeOnly" },
+          { value: "sourceAuditedOnly" },
+          { value: "product thesis" },
+          { value: "quality criteria" },
+          { value: "evaluation behavior" },
+          { value: "grounding" },
+          { value: "source-separation" },
+        ],
+        [
+          { value: "5/12" },
+          { value: "11/12" },
+          { value: "25" },
+          { value: "31" },
+          { value: "six" },
+          { value: "6" },
+        ],
+      ],
+      answerMustExclude: [
+        { value: "407 resumes" },
+        { value: "89.7% generation success" },
+        { value: "all evals pass" },
+      ],
+      maxSentences: 8,
+    },
+    judgeExpectations: [
+      "Lead with the authenticated boundary, governed evidence retrieval, specialized reviews, or qualified historical eval comparison.",
+      "Do not convert repository artifacts into external usage or generation-success claims.",
+    ],
+  },
+  {
+    id: "ai-career-implied-not-proven",
+    title: "AI Career Operating System states roadmap limits directly",
+    summary:
+      "Checks that the Guide distinguishes current architecture from durable reliability, shared identifiers, and outcome measurement.",
+    category: "partial",
+    answerability: "partial",
+    pageSlug: "ai-career-operating-system",
+    question: "What's implied but not proven here?",
+    deterministicChecks: {
+      answerMustIncludeAnyGroups: [
+        [
+          { value: "durable queue" },
+          { value: "job store" },
+          { value: "process-local" },
+        ],
+        [
+          { value: "shared evidence identifiers" },
+          { value: "shared page-to-evidence identifiers" },
+          { value: "complete evidence graph" },
+          { value: "joined recruiter funnel" },
+        ],
+        [
+          { value: "hard gate" },
+          { value: "hard reject gate" },
+          { value: "explicit override" },
+          { value: "rejected output" },
+          { value: "advisory" },
+        ],
+        [
+          { value: "external adoption" },
+          { value: "hiring outcomes" },
+          { value: "enterprise scale" },
+        ],
+      ],
+      maxSentences: 6,
+    },
+    judgeExpectations: [
+      "Separate implemented APIs, evidence retrieval, reviews, and structural checks from roadmap capabilities.",
+      "Name missing durable queueing, shared identifiers, joined funnel measurement, or hard reject gating.",
+      "Do not imply external adoption, hiring outcomes, or enterprise reliability.",
+    ],
+  },
+  {
+    id: "ai-career-direct-resume-request",
+    title: "AI Career Operating System resume request uses action boundary",
+    summary:
+      "Checks that direct resume requests go to the generator while preserving the distinction between generated action and portfolio evidence.",
+    category: "answerable",
+    answerability: "answerable",
+    pageSlug: "ai-career-operating-system",
+    question: "Can I generate a resume for my role?",
+    deterministicChecks: [
+      {
+        answerMustIncludeAll: [{ value: "/resume/generate" }],
+        answerMustIncludeAny: [
+          { value: "paste the job description" },
+          { value: "paste your job description" },
+          { value: "generator flow" },
+        ],
+        answerMustExclude: [
+          { value: "generated a resume" },
+          { value: "resume is ready" },
+          { value: "pulls evidence from the current page" },
+          { value: "portfolio pages directly feed" },
+          { value: "jobDescription=", type: "regex" },
+          { value: "\\?jd=", type: "regex" },
+        ],
+        maxSentences: 10,
+      },
+      {
+        target: "suggestedFollowUps",
+        answerMustIncludeAll: [{ value: "Generate a resume for my role" }],
+      },
+    ],
+    judgeExpectations: [
+      "Point to /resume/generate and tell the visitor to paste the job description in the flow.",
+      "Treat the generator as an action rather than evidence of Daniel's fit.",
+      "Do not claim generation has already occurred.",
     ],
   },
 ];
