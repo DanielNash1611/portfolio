@@ -65,7 +65,7 @@ export default function JumpingOnCoalsHero(): JSX.Element {
             className="space-y-4"
           >
             <h1 className="text-balance text-[clamp(3.75rem,10vw,7.5rem)] font-semibold leading-[0.82] tracking-[-0.055em] text-[#fff3d7]">
-              Jumping
+              Jumping{" "}
               <span className="mt-2 block text-[#ffad61]">on Coals</span>
             </h1>
             <p className="max-w-[610px] text-pretty text-base leading-7 text-[#fff3d7]/82 sm:text-lg md:text-xl md:leading-8">
