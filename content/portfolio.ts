@@ -1359,6 +1359,44 @@ export const thinkingEntries: ThinkingEntry[] = [
 
 export const creativeEntries: CreativeEntry[] = [
   {
+    slug: "jumping-on-coals",
+    href: "/creative/jumping-on-coals",
+    title: "Jumping on Coals",
+    eyebrow: "Interactive Album / Browser Game",
+    summary:
+      "An original album about ambition, burnout, recovery, and repetition, transformed into a tactile eight-chapter game.",
+    description:
+      "A 37–42 minute pixel-art browser experience where eight non-looping songs become eight playable chapters and every mechanic carries part of the album's metaphor.",
+    tags: ["Interactive Music", "Game Design", "Creative AI"],
+    heroImage: "/images/jumping-on-coals/title-screen.png",
+    heroImageAlt:
+      "Jumping on Coals title screen at a pixel-art playground at sunset.",
+    sections: [
+      {
+        title: "The album is the game",
+        body: [
+          "Eight non-looping songs become eight playable chapters. The music sets each chapter's duration and emotional shape; the mechanics let the player inhabit the story rather than hear it explained.",
+          "It is not a rhythm game, and the music is not interchangeable background audio. When a song reaches silence, the game opens a final action or choice without taking control away from the player.",
+        ],
+      },
+      {
+        title: "Why I made it",
+        body: [
+          "The album came from a period when I was putting nearly all of my energy into work and becoming angry, isolated, and creatively empty. I took my first paid PTO day on a Friday and wrote the full album over that weekend.",
+          "As I composed, a visual story appeared: leave the safe repetition of a swing, land on hot coals, dig down for relief, recover, climb out, and choose whether to leave or begin the cycle again.",
+        ],
+      },
+      {
+        title: "From album to interactive work",
+        body: [
+          "The original album, central metaphor, creative direction, Phaser foundation, and rough three-chapter prototype all existed before OpenAI Build Week.",
+          "Build Week expanded that stalled foundation into the complete eight-chapter browser experience, including the later recovery and escape scenes, rebuilt mechanics, the long coal route, responsive presentation, touch controls, and browser-ready audio.",
+        ],
+      },
+    ],
+    featured: true,
+  },
+  {
     slug: "eeg-music",
     href: "/creative/eeg-music",
     title: "Farraginous",

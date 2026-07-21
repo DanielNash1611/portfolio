@@ -1,0 +1,168 @@
+# Full timestamped transcript
+
+Source: `Jumping on Coals Hackathon Explanation.mp3`
+
+Reviewed local faster-whisper transcript with word-level timestamps in the companion JSON.
+Known project names are corrected; the JSON retains each segment's raw model text.
+
+**00:00:02.420 - 00:00:13.980**  Alright, well I'm going to be talking about Jumping on Coals. I guess starting off what is it? So first it was an album that I wrote years ago.
+
+**00:00:14.640 - 00:00:26.520**  The story of how that album came to be is I actually was working really, really, really, really hard in my job. I hadn't written music for a while and I was starting to bug me.
+
+**00:00:27.540 - 00:00:42.900**  And as I was contemplating my life choices and how much energy I was putting into my work because I was putting a lot into work. I wanted to progress quickly.
+
+**00:00:43.420 - 00:00:52.020**  I wanted to grow fast. I wanted to accomplish a lot. I wanted to leave a legacy. It was even something that I told a coworker at that point. It was a small company, right?
+
+**00:00:52.020 - 00:01:05.360**  So it wasn't necessarily going to happen there, but I really wanted to grow and move quickly. And so I worked my butt off. I worked it off a little bit too hard.
+
+**00:01:05.740 - 00:01:17.020**  I was pretty much dedicating 110% of my energy towards this job and trying to make it successful as even an area that was struggling.
+
+**00:01:17.020 - 00:01:28.580**  And the work that I did even got it to the point where it wasn't struggling anymore. But at what cost? It made it so that I was I was a lot angrier.
+
+**00:01:29.260 - 00:01:39.260**  I was not in a good position. And I was even in a new city. It was not it was not easy. And I didn't have any family around either.
+
+**00:01:39.260 - 00:01:55.140**  And so I finally took my first paid PTO day. And it was on a Friday. So I took off that Friday. And over the weekend I wrote the entire album of Jumping on Coals.
+
+**00:01:55.760 - 00:02:04.470**  And what was interesting is that in my mind as I was writing this music, I had these visuals coming into play.
+
+**00:02:04.470 - 00:02:18.490**  Like I had this odd allegory or analogy coming into my mind of first starting off with being on the swing. And how the motion is just repetitive and you do it over and over and over again.
+
+**00:02:18.730 - 00:02:33.490**  But you know what, you're kind of safe and you're secure. And and as my mind went through this analogy, it's like, well, when you're on the swing, you're safe from what's on the ground. And in this case, the analogy goes as far as there's coal on the ground.
+
+**00:02:33.490 - 00:02:44.410**  And and so when you get off the swing and you're not doing what's just comfortable and just doing the same stuff again as you're trying to do something something else and you're moving beyond.
+
+**00:02:44.990 - 00:03:00.650**  Then you you end up having to keep moving your feet. You can't stop. If you stop on the coals, you're going to burn. And so so there came the name of the entire album Jumping on Coals, which is also one of the tracks within within the within the album.
+
+**00:03:00.650 - 00:03:14.040**  And and so so I had these visuals and eventually like trying to seek seek reprieve and so digging a hole, getting through all the way until you're under and past the coals and now it's cool.
+
+**00:03:14.260 - 00:03:26.060**  But now you're stuck in this hole and you're exhausted. And then and then eventually you find I can't I can't stay down here. This isn't this isn't where I want to be. And in a lot of ways, that's where I felt like I was.
+
+**00:03:26.060 - 00:03:41.080**  When when I decided to take this PTO and so then so then then I was digging myself out and this is me writing this album, putting this together and and writing this to this next bit where I'm digging myself out.
+
+**00:03:41.220 - 00:03:50.700**  And so dig dig dig dig dig dig and you're digging yourself out just the way that you dug in. And in my mind, there's a shovel involved and there's a dig all the way back up.
+
+**00:03:50.700 - 00:04:03.500**  And by the time you get back up, you're exhausted, but the digging ends up covering the coals so you have a safe place to land and there's a moment of rest and reprieve.
+
+**00:04:04.620 - 00:04:14.640**  And then and the big questions, well, well, what next? And so then I know that at least the typical answer to me always seem to be, well, all right, I'll get back on the swing.
+
+**00:04:15.380 - 00:04:25.360**  Get back on the swing again. And and that's that's this whole album and it kind of ends up just being this endless loop potentially until you leave.
+
+**00:04:26.140 - 00:04:38.520**  And and so so that was the core idea of this and even within the creativity of writing it, it's all written with one one cello pizzicato sound with different audio effects.
+
+**00:04:38.520 - 00:04:56.120**  And and so so that was representing like one person doing a many different things and being in many different scenarios and feeling many different ways and not not like a bunch of a bunch of different variables, but just really it's one one person doing all of this stuff.
+
+**00:04:56.120 - 00:05:17.760**  And so a lot of the creativity that went into this album went like that. And so so now now it it comes to our video game here, right? Like what was I creating with this video game? I always kind of imagined maybe I'd make a video of of this experience or or maybe something more interactive like this video game.
+
+**00:05:17.760 - 00:05:35.930**  So I always had this in my mind for years that I wanted to do something like this. And I always was like scouting out locations and like, maybe I can make a video here. But then at the same time, like, well, it's kind of weird to go shoot a video at a park or if I had like kids as like my my my characters.
+
+**00:05:36.490 - 00:05:49.970**  Even it and so so it always seemed really strange trying to make a video for this never was really able to accomplish that. And making a video game was just kind of out of the question. I didn't know how to code well enough. I could make a basic HTML page.
+
+**00:05:50.290 - 00:05:56.910**  I knew how to talk with developers, but I didn't have any budget. I couldn't I couldn't get anyone to build anything like this. And so.
+
+**00:05:56.910 - 00:06:07.780**  So so finally, as AI has become bigger and as I started like building things with AI. Now for a little over half of a year, I've been building stuff with with AI.
+
+**00:06:07.780 - 00:06:21.560**  I finally started doing OK, well, maybe I can maybe I can make a game that's related to this. And I started having conversations with ChatGPT, ChatGPT had a really great understanding of the concept.
+
+**00:06:21.560 - 00:06:32.420**  And it did a really, really good job coming up with with game mechanics that would fit with the story, the overall structure of everything.
+
+**00:06:33.500 - 00:06:42.980**  Since I'm in product management, I wanted to make a PRD. It taught me about how making GDDs is more typical for games. So we made a GDD that made perfect sense for the game.
+
+**00:06:43.740 - 00:06:57.800**  ChatGPT was on top of it. And so this was back in 5.2 days, GPT-5.2. I decided, all right, well, Codex is doing OK coding some of my apps right now in my prototypes. So let's give it a shot building this game.
+
+**00:06:59.100 - 00:07:07.660**  And so I started building the game. And the first scene is just being a kid on the swing at the golden hour, right, at dusk.
+
+**00:07:07.660 - 00:07:17.970**  And so, so the kids on the swing is the idea. And I even had visuals that were created by ChatGPT that was like, that's gorgeous.
+
+**00:07:18.290 - 00:07:26.590**  We had some discussions around, well, should it be like pixel or should it be more realistic landed more on the pixel ones as it was generating some concept images.
+
+**00:07:26.850 - 00:07:34.330**  And I love the concept images coming up with even the character design that it came up with. I'm like, all right, this is solid. Let's do this. Let's go build this.
+
+**00:07:34.330 - 00:07:46.340**  And so then I bring it over to Codex and we had it give a shot at the first scene, see what it could do. And to be perfectly honest, I was quite disappointed.
+
+**00:07:47.120 - 00:08:03.340**  I had already come up with these concepts. I had these visuals. I had everything. And it came out with a rectangle and a line. And if I remember correctly, it did not move at all. Like a swing had no gravity, no physics, even though explain that it should have physics.
+
+**00:08:04.280 - 00:08:18.690**  It was just a line that moved on a rectangle from a center point and went halfway up the circle. And I was like, OK, all right. And so then I started refining it moving through it like, hey, let's get to move like a swing.
+
+**00:08:18.690 - 00:08:29.870**  And actually, I got someone excited because it's still the early days of AI coding. And so it was able to swing eventually, but it was a lot of work.
+
+**00:08:30.230 - 00:08:46.770**  It was a lot of work to get to the point where I'm like, OK, this rectangle is now swinging more or less like a swing. It's close enough. And so we got down to swing mechanic. That was great. And then all right, let's try scene two and just as much work, just disappointing.
+
+**00:08:48.150 - 00:09:01.250**  First runs and like this summer Feynman kind of got to somewhat of something, OK. And then I remember even trying to get the visuals in there. I'm like, all right, we've got these character designs. Can you now make it?
+
+**00:09:02.570 - 00:09:13.410**  And at this point, like codex couldn't do any image gen. So it wasn't able to create any images. So I was just, I got surprised that it wasn't able to generate the images.
+
+**00:09:13.410 - 00:09:22.290**  So I had to go to chat to create the images, bring the images over, and then have it try to. And then in the end, it still did not put the images into the code.
+
+**00:09:22.290 - 00:09:34.430**  And it was, it was stayed ugly. Eventually, I tried to make it do do things with a sprite sheet that I generated in ChatGPT. And at that time, even the sprite sheets were pretty meh.
+
+**00:09:34.690 - 00:09:43.830**  But I was trying to make it work. So, so we got it in there. So there was kind of a character in there, maybe more or less that looked terrible.
+
+**00:09:43.830 - 00:09:53.770**  But it was at least the character. And so eventually, I just, I just decided to stop because I couldn't get it to where I really needed it to be.
+
+**00:09:54.450 - 00:10:06.150**  I couldn't get through any of that stuff. And so now we are here about five months later. We've got GPT-5.6.
+
+**00:10:06.150 - 00:10:18.310**  This Goal Mode is here. We've got Sol. And so I was experimenting with Sol on another project I was working on. And I was seeing what it was capable of.
+
+**00:10:18.410 - 00:10:27.130**  And I used Goal Mode on something that took 14 hours. It's like, okay, now this is going the right direction. This is something I might be able to work with. Let's give it a shot.
+
+**00:10:27.130 - 00:10:39.690**  I actually also seen an example of a game that was created by OpenAI. And I'm like, oh, visually, that's more or less doing the types of things I was trying to do visually in the first place. So maybe it can do it now.
+
+**00:10:40.150 - 00:10:45.770**  So I decided to go back to 5.6 and go back to this project and give it a shot.
+
+**00:10:47.730 - 00:10:55.870**  In the first go around, I went to Goal Mode. I'm like, all right, let's make this thing work. It's basically what I asked. It may be a little bit more detailed than that.
+
+**00:10:56.450 - 00:11:05.790**  But that's essentially like, all right, we're jumping back into this project. We're going to try again. I want you to decide if you start from scratch or just be able to work from where we're going, where we were.
+
+**00:11:05.790 - 00:11:18.950**  And it evaluated and it's like, oh, no, this is a good foundation. We'll work from here and it gave through a pass. And I put it in Goal Mode, and I had it actually make the game work.
+
+**00:11:20.770 - 00:11:31.660**  And so, and that was with the three out of the eight scenes that we're going to be coming to play. And so it ended up generating it.
+
+**00:11:31.660 - 00:11:43.840**  And it put the visuals in. It actually looked like the game I wanted. And, and then it was just for finite time and improving and building out more. And it was beautiful.
+
+**00:11:44.480 - 00:11:52.640**  It still used the old sprite sheet at that point, but it had the right backgrounds, the right scenery, the mechanics were improved.
+
+**00:11:52.640 - 00:12:06.140**  Which I remembered with the swing, like swinging back and forth was cool, but it got boring really fast. And I actually needed it to last for the entire song, because I wanted this, this is more driven by the album than it is by the game.
+
+**00:12:06.580 - 00:12:16.660**  And so this is an album driven art piece, interactive piece as opposed to a game that was created. And then there's some background music to it.
+
+**00:12:16.660 - 00:12:28.720**  And so each scene is supposed to last as long as the song is. And so if the character is supposed to be able to do something interactive and engaging during the whole time and swinging by itself was not super engaging.
+
+**00:12:28.720 - 00:12:46.100**  And ChatGPT or GPT-5.6 codex came up with a game mechanic where the characters catching fireflies that end up spinning around it. And, and eventually like it started off at just going around in a circle around the character.
+
+**00:12:46.400 - 00:12:54.000**  And like, okay, that's not bad. And eventually we started I started molding the visuals to be something a lot more fascinating and interesting.
+
+**00:12:54.000 - 00:13:03.300**  So it keeps the player mentally engaged with what's happening and interested with what's happening visually that then helps them connect to the music further.
+
+**00:13:05.450 - 00:13:21.210**  So it was it was crazy because it executed this like within an hour or two. I'd have to check exactly how long but that it just it just did it in one night. And, and after that, I was able to now actually make this game.
+
+**00:13:21.210 - 00:13:31.490**  It was it was that moment that like, okay, this this can actually be a thing now. And I remember one of my next goals, one of the next goal modes that I did was, okay, well, you have the GDD.
+
+**00:13:31.750 - 00:13:47.330**  It's already there. How about you just build out all of the other scenes that we had planned. And it took a pass through that it built out the entire thing. And I remember like that that was like the first time I was like, okay, now this is actually fun.
+
+**00:13:47.330 - 00:13:57.730**  It is fun to make this game. And so then from there kept refining the mechanics making more interesting reward risk reward decisions for the characters.
+
+**00:13:58.030 - 00:14:08.230**  So that the players can actually have some some fun during it other than the parts that are meant to be grueling and terrible because this is more of an indie game. And this was a artistic piece.
+
+**00:14:09.910 - 00:14:27.590**  Maybe that's a little mean of me, but that's part of the experience of the burnout. And so there are portions that are not as fun as others, but the, but in the end, I'm able to finally express something that I've been trying to solve for a long time.
+
+**00:14:27.590 - 00:14:48.090**  I remember even trying to solve it by writing blog posts on my own website and like, well, no one's ever going to reason, you know, maybe no one will ever play this game either, but I'll at least be able to make it have engaged with people in a way that they may have never been able to understand the emotions that are actually going into this album.
+
+**00:14:48.090 - 00:15:01.160**  And what kinds of thoughts and experiences there were. And you'll find in the game there's an ambiguous ending. So it'll be interesting for people to engage with that.
+
+**00:15:01.400 - 00:15:11.390**  And maybe even the discussions that could come out of this are things that I would love to see people like give out like what what what do you what do you see?
+
+**00:15:11.390 - 00:15:26.490**  Right, like what what did you feel in this experience? What do you do you think there are any answers to any of these these things. And so I'm I'm very fascinated to see where people take this as they engage with this art piece.
+
+**00:15:26.670 - 00:15:31.830**  Because I don't really see it as just like a fun game. This is definitely not going to be huge blockbuster hit.
+
+**00:15:32.650 - 00:15:45.230**  It's not made to be an E3 type game. This is an indie art piece. And I I'm so excited because I was never going to be able to do this just on my own.
+
+**00:15:45.790 - 00:15:53.230**  I've sometimes I dreamed about it. Sometimes I took a code academy course just to try to get to the point that well, maybe I'll be able to do this.
+
+**00:15:53.230 - 00:16:00.230**  But let this this just sped up all of that and turn it into something I could just do and and all I do is I talk to it in English.
+
+**00:16:00.270 - 00:16:08.270**  I talked to it like like someone who I want to play the games with and it actually builds what I'm looking for.
+
+**00:16:08.270 - 00:16:27.910**  And it's been an amazing experience to build with the latest Codex with 5.6 and with Goal Mode and having Sol just go after these things and build at incredible speeds and with minimal errors throughout the process.
+
+**00:16:28.770 - 00:16:32.090**  And yeah, that's that's my story.
