@@ -79,10 +79,40 @@ export default function ProductTemplate({
   const pageContext = getPageContextByPath(entry.href);
   const portfolioContext = getPortfolioContext();
   const isLaunchMuse = entry.slug === "launchmuse";
+  const palette = isLaunchMuse
+    ? {
+        hero: "bg-[#402334]",
+        framing: "bg-[#f0d39f]",
+        problem: "bg-[#efc1ad]",
+        why: "bg-[#d6e0d4]",
+        experience: "bg-[#402334]",
+        visual: "bg-[#f5ead9]",
+        trust: "bg-[#d6e7df]",
+        learn: "bg-[#efc1ad]",
+        build: "bg-[#f0d39f]",
+        footer: "bg-[#402334]",
+      }
+    : {
+        hero: "bg-[#123f3d]",
+        framing: "bg-[#d9e9df]",
+        problem: "bg-[#d6e4ee]",
+        why: "bg-[#efd7a8]",
+        experience: "bg-[#123f3d]",
+        visual: "bg-[#eef0e5]",
+        trust: "bg-[#e5c3b7]",
+        learn: "bg-[#d5e6df]",
+        build: "bg-[#d8e5ed]",
+        footer: "bg-[#123f3d]",
+      };
 
   return (
-    <div className="overflow-hidden pb-20 md:pb-28">
-      <section className="relative isolate overflow-hidden bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
+    <div className="overflow-hidden">
+      <section
+        className={clsx(
+          "relative isolate overflow-hidden text-[color:var(--color-cream)]",
+          palette.hero,
+        )}
+      >
         <div
           aria-hidden="true"
           className="absolute bottom-0 right-0 h-1/2 w-full bg-[linear-gradient(115deg,transparent_45%,rgba(219,96,72,0.18)_100%)]"
@@ -105,10 +135,7 @@ export default function ProductTemplate({
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#ff826d]">
                     {entry.eyebrow}
                   </p>
-                  <span
-                    aria-hidden="true"
-                    className="h-px w-8 bg-white/22"
-                  />
+                  <span aria-hidden="true" className="h-px w-8 bg-white/22" />
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--color-cream)]/52">
                     {entry.status}
                   </p>
@@ -199,101 +226,120 @@ export default function ProductTemplate({
         </div>
       </section>
 
-      <Container className="space-y-16 pt-14 md:space-y-24 md:pt-20">
-        {pageContext ? (
-          <PortfolioGuide
-            pageContext={pageContext}
-            portfolioContext={portfolioContext}
-          />
-        ) : null}
+      <section className="bg-[color:var(--color-background)] py-10 md:py-14">
+        <Container>
+          {pageContext ? (
+            <PortfolioGuide
+              pageContext={pageContext}
+              portfolioContext={portfolioContext}
+            />
+          ) : null}
+        </Container>
+      </section>
 
-        <MotionReveal>
-          <section className="grid gap-8 border-y border-[color:var(--color-slate)]/14 py-12 md:py-16 lg:grid-cols-[minmax(0,0.58fr)_minmax(0,1.42fr)] lg:gap-20">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-              Product framing
-            </p>
-            <p className="max-w-4xl text-pretty font-serif text-2xl leading-9 tracking-[-0.02em] text-[color:var(--color-slate)] md:text-4xl md:leading-[1.2]">
-              {entry.description}
-            </p>
-          </section>
-        </MotionReveal>
-
-        <MotionReveal>
-          <section className="grid gap-14 lg:grid-cols-2 lg:gap-20">
-            <article>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                01 · Problem
-              </p>
-              <h2 className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                The friction this product addresses.
-              </h2>
-              <div className="mt-8 border-t border-[color:var(--color-slate)]/14">
-                {entry.problem.map((item, index) => (
-                  <p
-                    key={item}
-                    className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 text-base leading-7 text-[color:var(--color-slate)]/72 sm:grid-cols-[2.5rem_minmax(0,1fr)]"
-                  >
-                    <span className="font-mono text-xs tracking-[0.16em] text-[color:var(--color-orange)]">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span>{item}</span>
-                  </p>
-                ))}
-              </div>
-            </article>
-
-            <article>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                02 · Solution
-              </p>
-              <h2 className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                An intentionally narrow product wedge.
-              </h2>
-              <div className="mt-8 border-t border-[color:var(--color-slate)]/14">
-                {entry.solution.map((item, index) => (
-                  <p
-                    key={item}
-                    className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 text-base leading-7 text-[color:var(--color-slate)]/72 sm:grid-cols-[2.5rem_minmax(0,1fr)]"
-                  >
-                    <span className="font-mono text-xs tracking-[0.16em] text-[color:var(--color-orange)]">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span>{item}</span>
-                  </p>
-                ))}
-              </div>
-            </article>
-          </section>
-        </MotionReveal>
-
-        {entry.whyThisMatters?.length ? (
+      <section className={clsx("py-16 md:py-24", palette.framing)}>
+        <Container>
           <MotionReveal>
-            <section className="grid gap-10 border-y border-[color:var(--color-slate)]/14 py-12 md:py-16 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
-              <div>
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.58fr)_minmax(0,1.42fr)] lg:gap-20">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                Product framing
+              </p>
+              <p className="max-w-4xl text-pretty font-serif text-2xl leading-9 tracking-[-0.02em] text-[color:var(--color-slate)] md:text-4xl md:leading-[1.2]">
+                {entry.description}
+              </p>
+            </div>
+          </MotionReveal>
+        </Container>
+      </section>
+
+      <section className={clsx("py-16 md:py-24", palette.problem)}>
+        <Container>
+          <MotionReveal>
+            <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
+              <article>
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                  Why this matters
+                  01 · Problem
                 </p>
                 <h2 className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                  The value beyond simple content planning.
+                  The friction this product addresses.
                 </h2>
-              </div>
-              <div className="space-y-6 border-t border-[color:var(--color-slate)]/14 pt-6">
-                {entry.whyThisMatters.map((item) => (
-                  <p
-                    key={item}
-                    className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg md:leading-8"
-                  >
-                    {item}
-                  </p>
-                ))}
-              </div>
-            </section>
+                <div className="mt-8 border-t border-[color:var(--color-slate)]/14">
+                  {entry.problem.map((item, index) => (
+                    <p
+                      key={item}
+                      className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 text-base leading-7 text-[color:var(--color-slate)]/72 sm:grid-cols-[2.5rem_minmax(0,1fr)]"
+                    >
+                      <span className="font-mono text-xs tracking-[0.16em] text-[color:var(--color-orange)]">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span>{item}</span>
+                    </p>
+                  ))}
+                </div>
+              </article>
+
+              <article>
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                  02 · Solution
+                </p>
+                <h2 className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                  An intentionally narrow product wedge.
+                </h2>
+                <div className="mt-8 border-t border-[color:var(--color-slate)]/14">
+                  {entry.solution.map((item, index) => (
+                    <p
+                      key={item}
+                      className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 text-base leading-7 text-[color:var(--color-slate)]/72 sm:grid-cols-[2.5rem_minmax(0,1fr)]"
+                    >
+                      <span className="font-mono text-xs tracking-[0.16em] text-[color:var(--color-orange)]">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span>{item}</span>
+                    </p>
+                  ))}
+                </div>
+              </article>
+            </div>
           </MotionReveal>
-        ) : null}
-      </Container>
+        </Container>
+      </section>
+
+      {entry.whyThisMatters?.length ? (
+        <section className={clsx("py-16 md:py-24", palette.why)}>
+          <Container>
+            <MotionReveal>
+              <div className="grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                    Why this matters
+                  </p>
+                  <h2 className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                    The value beyond simple content planning.
+                  </h2>
+                </div>
+                <div className="space-y-6 border-t border-[color:var(--color-slate)]/14 pt-6">
+                  {entry.whyThisMatters.map((item) => (
+                    <p
+                      key={item}
+                      className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg md:leading-8"
+                    >
+                      {item}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </MotionReveal>
+          </Container>
+        </section>
+      ) : null}
 
       <MotionReveal>
-        <section className="mt-16 bg-[color:var(--color-slate)] py-16 text-[color:var(--color-cream)] md:mt-24 md:py-24">
+        <section
+          className={clsx(
+            "py-16 text-[color:var(--color-cream)] md:py-24",
+            palette.experience,
+          )}
+        >
           <Container>
             <div className="grid gap-10 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] lg:gap-20">
               <div>
@@ -327,93 +373,141 @@ export default function ProductTemplate({
         </section>
       </MotionReveal>
 
-      <Container className="space-y-16 py-16 md:space-y-24 md:py-24">
-        {entry.visuals.length ? (
-          <MotionReveal>
-            <section>
-              <div className="grid gap-8 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] lg:gap-20">
+      {entry.visuals.length ? (
+        <section className={clsx("py-16 md:py-24", palette.visual)}>
+          <Container>
+            <MotionReveal>
+              <div>
+                <div className="grid gap-8 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] lg:gap-20">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                      Visual evidence
+                    </p>
+                    <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                      See the product at work.
+                    </h2>
+                  </div>
+                  <p className="max-w-2xl border-t border-[color:var(--color-slate)]/14 pt-6 text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg">
+                    Current product visuals and public-safe artifacts from the
+                    working experience.
+                  </p>
+                </div>
+
+                <div className="mt-10 border-t border-[color:var(--color-slate)]/14">
+                  {entry.visuals.map((asset, index) => (
+                    <figure
+                      key={asset.title}
+                      className="grid gap-7 border-b border-[color:var(--color-slate)]/14 py-8 lg:grid-cols-[minmax(0,1.42fr)_minmax(260px,0.58fr)] lg:items-start lg:gap-10"
+                    >
+                      {asset.image ? (
+                        <MediaFrame
+                          src={asset.image}
+                          alt={asset.alt ?? asset.title}
+                          fallbackTitle={asset.title}
+                          sizes="(min-width: 1280px) 900px, (min-width: 1024px) 68vw, 100vw"
+                          className="group aspect-video border border-[color:var(--color-slate)]/12 bg-[color:var(--color-background-soft)]"
+                          imageClassName={clsx(
+                            asset.imageFit === "contain"
+                              ? "object-contain"
+                              : "object-cover",
+                            "transition-transform duration-700 group-hover:scale-[1.012]",
+                          )}
+                          expandable={asset.expandable}
+                          expandLabel={`Expand ${asset.title}`}
+                        />
+                      ) : (
+                        <div className="flex aspect-video items-center justify-center border border-dashed border-[color:var(--color-slate)]/22 bg-[color:var(--color-background-soft)] px-6 text-center text-sm font-medium text-[color:var(--color-slate)]/60">
+                          Reserved for a public-safe artifact
+                        </div>
+                      )}
+                      <figcaption className="lg:pt-1">
+                        <p className="font-mono text-xs tracking-[0.18em] text-[color:var(--color-orange)]">
+                          {String(index + 1).padStart(2, "0")}
+                        </p>
+                        <h3 className="mt-4 font-serif text-3xl font-medium tracking-[-0.035em] text-[color:var(--color-slate)]">
+                          {asset.title}
+                        </h3>
+                        <p className="mt-4 text-base leading-7 text-[color:var(--color-slate)]/68">
+                          {asset.description}
+                        </p>
+                        {asset.todo ? (
+                          <p className="mt-5 border-l-2 border-[color:var(--color-orange)] pl-4 text-sm leading-6 text-[color:var(--color-slate)]/64">
+                            {asset.todo}
+                          </p>
+                        ) : null}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </div>
+            </MotionReveal>
+          </Container>
+        </section>
+      ) : null}
+
+      {entry.evaluationAndTrust?.length ? (
+        <section className={clsx("py-16 md:py-24", palette.trust)}>
+          <Container>
+            <MotionReveal>
+              <div className="grid gap-10 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] lg:gap-20">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                    Visual evidence
+                    Evaluation & trust
                   </p>
-                  <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                    See the product at work.
+                  <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                    Define quality before claiming confidence.
                   </h2>
+                  <p className="mt-6 max-w-md text-base leading-7 text-[color:var(--color-slate)]/64">
+                    How quality was defined, tested, and improved in a
+                    high-stakes domain.
+                  </p>
                 </div>
-                <p className="max-w-2xl border-t border-[color:var(--color-slate)]/14 pt-6 text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg">
-                  Current product visuals and public-safe artifacts from the
-                  working experience.
-                </p>
-              </div>
-
-              <div className="mt-10 border-t border-[color:var(--color-slate)]/14">
-                {entry.visuals.map((asset, index) => (
-                  <figure
-                    key={asset.title}
-                    className="grid gap-7 border-b border-[color:var(--color-slate)]/14 py-8 lg:grid-cols-[minmax(0,1.42fr)_minmax(260px,0.58fr)] lg:items-start lg:gap-10"
-                  >
-                    {asset.image ? (
-                      <MediaFrame
-                        src={asset.image}
-                        alt={asset.alt ?? asset.title}
-                        fallbackTitle={asset.title}
-                        sizes="(min-width: 1280px) 900px, (min-width: 1024px) 68vw, 100vw"
-                        className="group aspect-video border border-[color:var(--color-slate)]/12 bg-[color:var(--color-background-soft)]"
-                        imageClassName={clsx(
-                          asset.imageFit === "contain"
-                            ? "object-contain"
-                            : "object-cover",
-                          "transition-transform duration-700 group-hover:scale-[1.012]",
-                        )}
-                        expandable={asset.expandable}
-                        expandLabel={`Expand ${asset.title}`}
-                      />
-                    ) : (
-                      <div className="flex aspect-video items-center justify-center border border-dashed border-[color:var(--color-slate)]/22 bg-[color:var(--color-background-soft)] px-6 text-center text-sm font-medium text-[color:var(--color-slate)]/60">
-                        Reserved for a public-safe artifact
-                      </div>
-                    )}
-                    <figcaption className="lg:pt-1">
-                      <p className="font-mono text-xs tracking-[0.18em] text-[color:var(--color-orange)]">
-                        {String(index + 1).padStart(2, "0")}
+                <div className="border-t border-[color:var(--color-slate)]/14">
+                  {entry.evaluationAndTrust.map((item, index) => (
+                    <article
+                      key={item}
+                      className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 sm:grid-cols-[3rem_minmax(0,1fr)]"
+                    >
+                      <span className="font-mono text-xs tracking-[0.18em] text-[color:var(--color-orange)]">
+                        0{index + 1}
+                      </span>
+                      <p className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72">
+                        {item}
                       </p>
-                      <h3 className="mt-4 font-serif text-3xl font-medium tracking-[-0.035em] text-[color:var(--color-slate)]">
-                        {asset.title}
-                      </h3>
-                      <p className="mt-4 text-base leading-7 text-[color:var(--color-slate)]/68">
-                        {asset.description}
-                      </p>
-                      {asset.todo ? (
-                        <p className="mt-5 border-l-2 border-[color:var(--color-orange)] pl-4 text-sm leading-6 text-[color:var(--color-slate)]/64">
-                          {asset.todo}
-                        </p>
-                      ) : null}
-                    </figcaption>
-                  </figure>
-                ))}
+                    </article>
+                  ))}
+                </div>
               </div>
-            </section>
-          </MotionReveal>
-        ) : null}
+            </MotionReveal>
+          </Container>
+        </section>
+      ) : null}
 
-        {entry.evaluationAndTrust?.length ? (
+      {isLaunchMuse ? (
+        <section className="bg-[color:var(--color-background)] py-16 md:py-24">
+          <Container>
+            <MotionReveal>
+              <ExampleCampaignOutputSection />
+            </MotionReveal>
+          </Container>
+        </section>
+      ) : null}
+
+      <section className={clsx("py-16 md:py-24", palette.learn)}>
+        <Container>
           <MotionReveal>
-            <section className="grid gap-10 border-y border-[color:var(--color-slate)]/14 py-12 md:py-16 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] lg:gap-20">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] lg:gap-20">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                  Evaluation & trust
+                  What I learned
                 </p>
-                <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                  Define quality before claiming confidence.
+                <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                  The product and leadership lessons.
                 </h2>
-                <p className="mt-6 max-w-md text-base leading-7 text-[color:var(--color-slate)]/64">
-                  How quality was defined, tested, and improved in a high-stakes
-                  domain.
-                </p>
               </div>
-              <div className="border-t border-[color:var(--color-slate)]/14">
-                {entry.evaluationAndTrust.map((item, index) => (
-                  <article
+              <ol className="border-t border-[color:var(--color-slate)]/14">
+                {entry.learnings.map((item, index) => (
+                  <li
                     key={item}
                     className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 sm:grid-cols-[3rem_minmax(0,1fr)]"
                   >
@@ -423,51 +517,17 @@ export default function ProductTemplate({
                     <p className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72">
                       {item}
                     </p>
-                  </article>
+                  </li>
                 ))}
-              </div>
-            </section>
-          </MotionReveal>
-        ) : null}
-
-        {isLaunchMuse ? (
-          <MotionReveal>
-            <ExampleCampaignOutputSection />
-          </MotionReveal>
-        ) : null}
-
-        <MotionReveal>
-          <section className="grid gap-10 border-y border-[color:var(--color-slate)]/14 py-12 md:py-16 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] lg:gap-20">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                What I learned
-              </p>
-              <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                The product and leadership lessons.
-              </h2>
+              </ol>
             </div>
-            <ol className="border-t border-[color:var(--color-slate)]/14">
-              {entry.learnings.map((item, index) => (
-                <li
-                  key={item}
-                  className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 sm:grid-cols-[3rem_minmax(0,1fr)]"
-                >
-                  <span className="font-mono text-xs tracking-[0.18em] text-[color:var(--color-orange)]">
-                    0{index + 1}
-                  </span>
-                  <p className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72">
-                    {item}
-                  </p>
-                </li>
-              ))}
-            </ol>
-          </section>
-        </MotionReveal>
-      </Container>
+          </MotionReveal>
+        </Container>
+      </section>
 
       {entry.buildStory?.length ? (
         <MotionReveal>
-          <section className="bg-[color:var(--color-background-soft)] py-16 md:py-24">
+          <section className={clsx("py-16 md:py-24", palette.build)}>
             <Container>
               <div className="grid gap-10 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] lg:gap-20">
                 <div>
@@ -503,7 +563,12 @@ export default function ProductTemplate({
         </MotionReveal>
       ) : null}
 
-      <section className="bg-[color:var(--color-slate)] py-16 text-[color:var(--color-cream)] md:py-20">
+      <section
+        className={clsx(
+          "py-16 text-[color:var(--color-cream)] md:py-20",
+          palette.footer,
+        )}
+      >
         <Container>
           <MotionReveal>
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">

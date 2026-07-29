@@ -208,8 +208,8 @@ export default function OmsChatGptAppPage(): JSX.Element {
   const primaryAction = entry.actions?.[0];
 
   return (
-    <div className="overflow-hidden pb-20 md:pb-28">
-      <section className="relative overflow-hidden bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
+    <div className="overflow-hidden">
+      <section className="relative overflow-hidden bg-[#182f45] text-[color:var(--color-cream)]">
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-[radial-gradient(circle_at_83%_28%,rgba(223,196,149,0.12),transparent_28%),linear-gradient(112deg,rgba(23,63,61,0.52),transparent_52%)]"
@@ -323,22 +323,27 @@ export default function OmsChatGptAppPage(): JSX.Element {
         ) : null}
       </Container>
 
-      <Container id="overview" className="scroll-mt-24 py-12 md:py-20">
-        <MotionReveal>
-          <SectionLead
-            eyebrow="Product overview"
-            title="A tangible workflow artifact, not just a concept statement."
-          >
-            <p className="text-xl leading-8 text-[color:var(--color-slate)]/84 md:text-2xl md:leading-9">
-              A conversational AI interface for Order Management workflows,
-              designed to make common support and operations tasks faster,
-              clearer, and safer to execute.
-            </p>
-          </SectionLead>
-        </MotionReveal>
-      </Container>
+      <section
+        id="overview"
+        className="scroll-mt-24 bg-[#ecd9ac] py-16 md:py-24"
+      >
+        <Container>
+          <MotionReveal>
+            <SectionLead
+              eyebrow="Product overview"
+              title="A tangible workflow artifact, not just a concept statement."
+            >
+              <p className="text-xl leading-8 text-[color:var(--color-slate)]/84 md:text-2xl md:leading-9">
+                A conversational AI interface for Order Management workflows,
+                designed to make common support and operations tasks faster,
+                clearer, and safer to execute.
+              </p>
+            </SectionLead>
+          </MotionReveal>
+        </Container>
+      </section>
 
-      <section className="bg-[color:var(--color-background-soft)] py-16 md:py-24">
+      <section className="bg-[#e9c2b4] py-16 md:py-24">
         <Container>
           <MotionReveal>
             <SectionLead eyebrow="Problem framing" title="Why I built it">
@@ -361,32 +366,31 @@ export default function OmsChatGptAppPage(): JSX.Element {
         </Container>
       </section>
 
-      <Container className="py-16 md:py-24">
-        <MotionReveal>
-          <SectionLead
-            eyebrow="Workflow scope"
-            title="What it does"
-          >
-            <p className="text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
-              Focused on a narrow slice of OMS work where trust and control
-              matter.
-            </p>
-          </SectionLead>
-        </MotionReveal>
-        <MotionReveal delay={0.08} className="mt-12">
-          <NumberedList items={whatItDoes} columns />
-        </MotionReveal>
-      </Container>
+      <section className="bg-[#d8e8e1] py-16 md:py-24">
+        <Container>
+          <MotionReveal>
+            <SectionLead eyebrow="Workflow scope" title="What it does">
+              <p className="text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
+                Focused on a narrow slice of OMS work where trust and control
+                matter.
+              </p>
+            </SectionLead>
+          </MotionReveal>
+          <MotionReveal delay={0.08} className="mt-12">
+            <NumberedList items={whatItDoes} columns />
+          </MotionReveal>
+        </Container>
+      </section>
 
-      <section className="border-y border-[color:var(--color-slate)]/14 bg-white/34 py-16 md:py-24">
+      <section className="bg-[#d8e5ed] py-16 md:py-24">
         <Container>
           <MotionReveal>
             <SectionLead eyebrow="Interaction design" title="How it works">
               <p className="text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
                 Built as a custom ChatGPT App, the prototype uses mock OMS data
-                to simulate real workflows without exposing PII. It was
-                designed to live inside the existing AI platform environment
-                employees were already using.
+                to simulate real workflows without exposing PII. It was designed
+                to live inside the existing AI platform environment employees
+                were already using.
               </p>
               <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
                 The goal was not just to simulate functionality. It was to
@@ -397,7 +401,7 @@ export default function OmsChatGptAppPage(): JSX.Element {
         </Container>
       </section>
 
-      <section className="py-16 md:py-24">
+      <section className="bg-[#f4e8d8] py-16 md:py-24">
         <Container>
           <MotionReveal>
             <SectionLead
@@ -452,7 +456,7 @@ export default function OmsChatGptAppPage(): JSX.Element {
         </Container>
       </section>
 
-      <section className="bg-[color:var(--color-slate)] py-16 text-[color:var(--color-cream)] md:py-24">
+      <section className="bg-[#264640] py-16 text-[color:var(--color-cream)] md:py-24">
         <Container>
           <MotionReveal>
             <SectionLead
@@ -466,33 +470,35 @@ export default function OmsChatGptAppPage(): JSX.Element {
               </p>
               <p className="text-base leading-7 text-[color:var(--color-cream)]/62">
                 It helped shift thinking from AI as a standalone tool toward AI
-                as an active participant in real workflows. Framed carefully,
-                it represented an early example of a new pattern for
-                conversational interaction with internal systems.
+                as an active participant in real workflows. Framed carefully, it
+                represented an early example of a new pattern for conversational
+                interaction with internal systems.
               </p>
             </SectionLead>
           </MotionReveal>
         </Container>
       </section>
 
-      <Container className="py-16 md:py-24">
-        <MotionReveal>
-          <SectionLead
-            eyebrow="Follow-on work"
-            title="From prototype to real system work"
-          >
-            <p className="text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
-              The prototype created alignment to move forward and explore
-              production viability.
-            </p>
-          </SectionLead>
-        </MotionReveal>
-        <MotionReveal delay={0.08} className="mt-12">
-          <NumberedList items={prototypeToSystemWork} columns />
-        </MotionReveal>
-      </Container>
+      <section className="bg-[#e6c3b6] py-16 md:py-24">
+        <Container>
+          <MotionReveal>
+            <SectionLead
+              eyebrow="Follow-on work"
+              title="From prototype to real system work"
+            >
+              <p className="text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
+                The prototype created alignment to move forward and explore
+                production viability.
+              </p>
+            </SectionLead>
+          </MotionReveal>
+          <MotionReveal delay={0.08} className="mt-12">
+            <NumberedList items={prototypeToSystemWork} columns />
+          </MotionReveal>
+        </Container>
+      </section>
 
-      <section className="bg-[color:var(--color-background-soft)] py-16 md:py-24">
+      <section className="bg-[#d5e5dd] py-16 md:py-24">
         <Container>
           <MotionReveal>
             <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
@@ -524,23 +530,25 @@ export default function OmsChatGptAppPage(): JSX.Element {
         </Container>
       </section>
 
-      <Container className="pt-16 md:pt-24">
-        <MotionReveal>
-          <CTASection
-            title="Interested in the product logic, guardrails, or enterprise workflow angle?"
-            description="This page is structured to make the prototype easy to discuss with recruiters, builders, and teams thinking about AI in real operating environments."
-            primaryAction={{
-              href: primaryAction?.href ?? siteConfig.linkedinUrl,
-              label: primaryAction?.label ?? "Live prototype",
-              external: true,
-            }}
-            secondaryAction={{
-              href: siteConfig.contactHref,
-              label: "Send a message",
-            }}
-          />
-        </MotionReveal>
-      </Container>
+      <section className="bg-[#182f45] py-10 md:py-14">
+        <Container>
+          <MotionReveal>
+            <CTASection
+              title="Interested in the product logic, guardrails, or enterprise workflow angle?"
+              description="This page is structured to make the prototype easy to discuss with recruiters, builders, and teams thinking about AI in real operating environments."
+              primaryAction={{
+                href: primaryAction?.href ?? siteConfig.linkedinUrl,
+                label: primaryAction?.label ?? "Live prototype",
+                external: true,
+              }}
+              secondaryAction={{
+                href: siteConfig.contactHref,
+                label: "Send a message",
+              }}
+            />
+          </MotionReveal>
+        </Container>
+      </section>
     </div>
   );
 }

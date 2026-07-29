@@ -4,7 +4,7 @@ import MotionReveal from "@/components/site/MotionReveal";
 export default function WhatThisProves(): JSX.Element {
   return (
     <section
-      className="border-y border-white/12 bg-[color:var(--color-slate)] text-[color:var(--color-cream)]"
+      className="border-y border-white/12 bg-[#173f3d] text-[color:var(--color-cream)]"
       aria-labelledby="what-this-proves-heading"
     >
       <Container className="py-16 md:py-24">

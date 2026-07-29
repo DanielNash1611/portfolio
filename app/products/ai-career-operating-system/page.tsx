@@ -66,67 +66,87 @@ export default function AiCareerOperatingSystemPage(): JSX.Element {
     <div className="overflow-hidden">
       <AiCareerHero />
 
-      <Container className="space-y-20 py-20 md:space-y-28 md:py-28">
-        <MotionReveal>
-          <CaseStudyOverview />
-        </MotionReveal>
+      <section className="bg-[#dbe7e3] py-16 md:py-24">
+        <Container className="space-y-16 md:space-y-24">
+          <MotionReveal>
+            <CaseStudyOverview />
+          </MotionReveal>
 
-        <MotionReveal>
-          <section className="space-y-10" aria-labelledby="boundaries-heading">
-            <div className="grid gap-6 lg:grid-cols-[minmax(240px,0.72fr)_minmax(0,1.28fr)] lg:gap-16">
-              <h2
-                id="boundaries-heading"
-                className="max-w-[10ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl"
-              >
-                Clear product boundaries
-              </h2>
-              <p className="max-w-2xl self-end text-pretty text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg md:leading-8">
-                The products share an operating context and authenticated
-                contracts, but each retains a distinct responsibility. Human
-                review remains the final accountability layer.
-              </p>
-            </div>
-
-            <div className="grid border-y border-[color:var(--color-slate)]/16 md:grid-cols-3 md:divide-x md:divide-[color:var(--color-slate)]/16">
-              {boundaries.map((boundary, index) => (
-                <article
-                  key={boundary.title}
-                  className="border-b border-[color:var(--color-slate)]/16 py-7 last:border-b-0 md:border-b-0 md:px-7 md:first:pl-0 md:last:pr-0"
+          <MotionReveal>
+            <section
+              className="space-y-10"
+              aria-labelledby="boundaries-heading"
+            >
+              <div className="grid gap-6 lg:grid-cols-[minmax(240px,0.72fr)_minmax(0,1.28fr)] lg:gap-16">
+                <h2
+                  id="boundaries-heading"
+                  className="max-w-[10ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl"
                 >
-                  <p className="font-mono text-xs text-[color:var(--color-orange)]">
-                    0{index + 1}
-                  </p>
-                  <h3 className="mt-5 font-serif text-2xl font-medium tracking-[-0.025em] text-[color:var(--color-slate)]">
-                    {boundary.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-[color:var(--color-slate)]/68">
-                    {boundary.detail}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </section>
-        </MotionReveal>
+                  Clear product boundaries
+                </h2>
+                <p className="max-w-2xl self-end text-pretty text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg md:leading-8">
+                  The products share an operating context and authenticated
+                  contracts, but each retains a distinct responsibility. Human
+                  review remains the final accountability layer.
+                </p>
+              </div>
 
-        {pageContext ? (
-          <PortfolioGuide
-            pageContext={pageContext}
-            portfolioContext={portfolioContext}
-          />
-        ) : null}
+              <div className="grid border-y border-[color:var(--color-slate)]/16 md:grid-cols-3 md:divide-x md:divide-[color:var(--color-slate)]/16">
+                {boundaries.map((boundary, index) => (
+                  <article
+                    key={boundary.title}
+                    className="border-b border-[color:var(--color-slate)]/16 py-7 last:border-b-0 md:border-b-0 md:px-7 md:first:pl-0 md:last:pr-0"
+                  >
+                    <p className="font-mono text-xs text-[color:var(--color-orange)]">
+                      0{index + 1}
+                    </p>
+                    <h3 className="mt-5 font-serif text-2xl font-medium tracking-[-0.025em] text-[color:var(--color-slate)]">
+                      {boundary.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-6 text-[color:var(--color-slate)]/68">
+                      {boundary.detail}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </MotionReveal>
+        </Container>
+      </section>
 
-        <ProductEngines />
-        <EvidenceBridge />
-      </Container>
+      <section className="bg-[color:var(--color-background)] py-10 md:py-14">
+        <Container>
+          {pageContext ? (
+            <PortfolioGuide
+              pageContext={pageContext}
+              portfolioContext={portfolioContext}
+            />
+          ) : null}
+        </Container>
+      </section>
+
+      <section className="bg-[#e8c7ba] py-16 md:py-24">
+        <Container className="space-y-20 md:space-y-28">
+          <ProductEngines />
+          <EvidenceBridge />
+        </Container>
+      </section>
 
       <WhatThisProves />
 
-      <Container className="space-y-20 py-20 md:space-y-28 md:py-28">
-        <EvalEvidence />
-        <ImplementedNext />
-      </Container>
+      <section className="bg-[#e6d7aa] py-16 md:py-24">
+        <Container>
+          <EvalEvidence />
+        </Container>
+      </section>
 
-      <section className="border-t border-white/12 bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
+      <section className="bg-[#d8e5ed] py-16 md:py-24">
+        <Container>
+          <ImplementedNext />
+        </Container>
+      </section>
+
+      <section className="border-t border-white/12 bg-[#173f3d] text-[color:var(--color-cream)]">
         <Container className="grid gap-10 py-14 md:py-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <MotionReveal className="max-w-3xl">
             <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-tan)]">

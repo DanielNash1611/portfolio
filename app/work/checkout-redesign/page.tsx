@@ -85,8 +85,8 @@ export default function CheckoutRedesignPage(): JSX.Element {
   }
 
   return (
-    <div className="overflow-hidden pb-20 md:pb-28">
-      <section className="relative isolate overflow-hidden bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
+    <div className="overflow-hidden">
+      <section className="relative isolate overflow-hidden bg-[#1c3040] text-[color:var(--color-cream)]">
         <div
           aria-hidden="true"
           className="absolute inset-y-0 right-0 hidden w-[48%] bg-[color:var(--color-orange)] lg:block"
@@ -204,103 +204,113 @@ export default function CheckoutRedesignPage(): JSX.Element {
         </div>
       </section>
 
-      <Container className="space-y-16 pt-14 md:space-y-24 md:pt-20">
-        {pageContext ? (
-          <PortfolioGuide
-            pageContext={pageContext}
-            portfolioContext={portfolioContext}
-          />
-        ) : null}
+      <section className="bg-[color:var(--color-background)] py-12 md:py-18">
+        <Container className="space-y-14">
+          {pageContext ? (
+            <PortfolioGuide
+              pageContext={pageContext}
+              portfolioContext={portfolioContext}
+            />
+          ) : null}
 
-        {entry.heroDetails?.[0] ? (
+          {entry.heroDetails?.[0] ? (
+            <MotionReveal>
+              <section className="grid gap-8 border-y border-[color:var(--color-slate)]/14 py-12 md:py-16 lg:grid-cols-[minmax(0,0.58fr)_minmax(0,1.42fr)] lg:gap-20">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                  The case in one sentence
+                </p>
+                <p className="max-w-4xl text-pretty font-serif text-2xl leading-9 tracking-[-0.02em] text-[color:var(--color-slate)] md:text-4xl md:leading-[1.2]">
+                  {entry.heroDetails[0]}
+                </p>
+              </section>
+            </MotionReveal>
+          ) : null}
+        </Container>
+      </section>
+
+      <section className="bg-[#ecd9ac] py-16 md:py-24">
+        <Container>
           <MotionReveal>
-            <section className="grid gap-8 border-y border-[color:var(--color-slate)]/14 py-12 md:py-16 lg:grid-cols-[minmax(0,0.58fr)_minmax(0,1.42fr)] lg:gap-20">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                The case in one sentence
-              </p>
-              <p className="max-w-4xl text-pretty font-serif text-2xl leading-9 tracking-[-0.02em] text-[color:var(--color-slate)] md:text-4xl md:leading-[1.2]">
-                {entry.heroDetails[0]}
-              </p>
-            </section>
-          </MotionReveal>
-        ) : null}
-
-        <MotionReveal>
-          <section>
-            <div className="grid gap-9 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
-              <div className="space-y-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                  The stakes
-                </p>
-                <h2 className="max-w-[11ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                  A critical revenue journey with very little room for error.
-                </h2>
-              </div>
-              <div className="space-y-6 border-t border-[color:var(--color-slate)]/14 pt-6 lg:mt-2">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--color-slate)]/46">
-                  Why delivery mattered as much as the interface
-                </p>
-                {entry.context.map((paragraph) => (
-                  <p
-                    key={paragraph}
-                    className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg md:leading-8"
-                  >
-                    {paragraph}
+            <div>
+              <div className="grid gap-9 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
+                <div className="space-y-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                    The stakes
                   </p>
-                ))}
-              </div>
-            </div>
-            <CheckoutFragilityArtifact />
-          </section>
-        </MotionReveal>
-
-        <MotionReveal>
-          <section className="border-y border-[color:var(--color-slate)]/14 py-12 md:py-16">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                  My role
-                </p>
-                <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                  Improve decision quality during execution.
-                </h2>
-              </div>
-
-              <div>
-                <p className="max-w-3xl text-lg leading-8 text-[color:var(--color-slate)]/76">
-                  I helped drive the effort across product, UX, and engineering
-                  from problem definition through rollout. That included
-                  aligning the team around the stakes of the redesign, shaping
-                  the work clearly enough that people could make good decisions
-                  during execution, and improving how collaboration happened
-                  during the build.
-                </p>
-                <ol className="mt-9 border-t border-[color:var(--color-slate)]/14">
-                  {roleChanges.map((item, index) => (
-                    <li
-                      key={item}
-                      className="grid gap-3 border-b border-[color:var(--color-slate)]/14 py-6 sm:grid-cols-[3rem_minmax(0,1fr)]"
+                  <h2 className="max-w-[11ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                    A critical revenue journey with very little room for error.
+                  </h2>
+                </div>
+                <div className="space-y-6 border-t border-[color:var(--color-slate)]/14 pt-6 lg:mt-2">
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--color-slate)]/46">
+                    Why delivery mattered as much as the interface
+                  </p>
+                  {entry.context.map((paragraph) => (
+                    <p
+                      key={paragraph}
+                      className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg md:leading-8"
                     >
-                      <span className="font-mono text-xs tracking-[0.18em] text-[color:var(--color-orange)]">
-                        0{index + 1}
-                      </span>
-                      <p className="max-w-2xl text-base leading-7 text-[color:var(--color-slate)]/72">
-                        {item}
-                      </p>
-                    </li>
+                      {paragraph}
+                    </p>
                   ))}
-                </ol>
-                <p className="mt-7 font-serif text-2xl tracking-[-0.02em] text-[color:var(--color-slate)]">
-                  That improved decision quality throughout the project.
-                </p>
+                </div>
+              </div>
+              <CheckoutFragilityArtifact />
+            </div>
+          </MotionReveal>
+        </Container>
+      </section>
+
+      <section className="bg-[#d8e5ed] py-16 md:py-24">
+        <Container>
+          <MotionReveal>
+            <div>
+              <div className="grid gap-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                    My role
+                  </p>
+                  <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                    Improve decision quality during execution.
+                  </h2>
+                </div>
+
+                <div>
+                  <p className="max-w-3xl text-lg leading-8 text-[color:var(--color-slate)]/76">
+                    I helped drive the effort across product, UX, and
+                    engineering from problem definition through rollout. That
+                    included aligning the team around the stakes of the
+                    redesign, shaping the work clearly enough that people could
+                    make good decisions during execution, and improving how
+                    collaboration happened during the build.
+                  </p>
+                  <ol className="mt-9 border-t border-[color:var(--color-slate)]/14">
+                    {roleChanges.map((item, index) => (
+                      <li
+                        key={item}
+                        className="grid gap-3 border-b border-[color:var(--color-slate)]/14 py-6 sm:grid-cols-[3rem_minmax(0,1fr)]"
+                      >
+                        <span className="font-mono text-xs tracking-[0.18em] text-[color:var(--color-orange)]">
+                          0{index + 1}
+                        </span>
+                        <p className="max-w-2xl text-base leading-7 text-[color:var(--color-slate)]/72">
+                          {item}
+                        </p>
+                      </li>
+                    ))}
+                  </ol>
+                  <p className="mt-7 font-serif text-2xl tracking-[-0.02em] text-[color:var(--color-slate)]">
+                    That improved decision quality throughout the project.
+                  </p>
+                </div>
               </div>
             </div>
-          </section>
-        </MotionReveal>
-      </Container>
+          </MotionReveal>
+        </Container>
+      </section>
 
       <MotionReveal>
-        <section className="mt-16 bg-[color:var(--color-slate)] py-16 text-[color:var(--color-cream)] md:mt-24 md:py-24">
+        <section className="bg-[#264640] py-16 text-[color:var(--color-cream)] md:py-24">
           <Container>
             <div className="grid gap-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
               <div className="space-y-5">
@@ -331,86 +341,92 @@ export default function CheckoutRedesignPage(): JSX.Element {
         </section>
       </MotionReveal>
 
-      <Container className="space-y-16 py-16 md:space-y-24 md:py-24">
-        <MotionReveal>
-          <ArtifactBlock
-            title="Context-rich implementation ticket"
-            caption="A representative story showing how I framed user need, expected behavior, and business rationale so engineering could make stronger in-flight decisions."
-            notes={jiraNotes}
-          >
-            <MediaFrame
-              src="/images/checkout-redesign/jira-ticket.png"
-              alt="Jira ticket screenshot showing a user story, implementation details, and business rationale for a checkout-related change."
-              sizes="(min-width: 1280px) 820px, (min-width: 768px) 70vw, 100vw"
-              className="aspect-[16/9] border border-[color:var(--color-slate)]/12 bg-white"
-              imageClassName="object-contain bg-white p-2 md:p-4"
-              expandable
-              expandLabel="Expand Jira implementation artifact"
-            />
-          </ArtifactBlock>
-        </MotionReveal>
+      <section className="bg-[#f4e8d8] py-16 md:py-24">
+        <Container className="space-y-16 md:space-y-24">
+          <MotionReveal>
+            <ArtifactBlock
+              title="Context-rich implementation ticket"
+              caption="A representative story showing how I framed user need, expected behavior, and business rationale so engineering could make stronger in-flight decisions."
+              notes={jiraNotes}
+            >
+              <MediaFrame
+                src="/images/checkout-redesign/jira-ticket.png"
+                alt="Jira ticket screenshot showing a user story, implementation details, and business rationale for a checkout-related change."
+                sizes="(min-width: 1280px) 820px, (min-width: 768px) 70vw, 100vw"
+                className="aspect-[16/9] border border-[color:var(--color-slate)]/12 bg-white"
+                imageClassName="object-contain bg-white p-2 md:p-4"
+                expandable
+                expandLabel="Expand Jira implementation artifact"
+              />
+            </ArtifactBlock>
+          </MotionReveal>
 
-        <MotionReveal>
-          <ArtifactBlock
-            title="Before & After"
-            caption="The redesign simplified a dense multi-step checkout into a clearer, easier-to-scan flow."
-          >
-            <div className="grid gap-px bg-[color:var(--color-slate)]/14 lg:grid-cols-2">
-              {beforeAfterArtifacts.map((artifact) => (
-                <figure key={artifact.label} className="bg-white">
-                  <figcaption className="border-b border-[color:var(--color-slate)]/12 px-5 py-4 text-[11px] font-bold uppercase tracking-[0.24em] text-[color:var(--color-orange)]">
-                    {artifact.label}
-                  </figcaption>
-                  <MediaFrame
-                    src={artifact.src}
-                    alt={artifact.alt}
-                    sizes="(min-width: 1280px) 620px, (min-width: 1024px) 48vw, 100vw"
-                    className="aspect-[16/10] bg-[color:var(--color-background)]/84"
-                    imageClassName="object-contain bg-[color:var(--color-background)]/84 p-4 object-top"
-                    expandable
-                    expandLabel={`Expand ${artifact.label.toLowerCase()} checkout screenshot`}
-                  />
-                </figure>
-              ))}
-            </div>
-          </ArtifactBlock>
-        </MotionReveal>
+          <MotionReveal>
+            <ArtifactBlock
+              title="Before & After"
+              caption="The redesign simplified a dense multi-step checkout into a clearer, easier-to-scan flow."
+            >
+              <div className="grid gap-px bg-[color:var(--color-slate)]/14 lg:grid-cols-2">
+                {beforeAfterArtifacts.map((artifact) => (
+                  <figure key={artifact.label} className="bg-white">
+                    <figcaption className="border-b border-[color:var(--color-slate)]/12 px-5 py-4 text-[11px] font-bold uppercase tracking-[0.24em] text-[color:var(--color-orange)]">
+                      {artifact.label}
+                    </figcaption>
+                    <MediaFrame
+                      src={artifact.src}
+                      alt={artifact.alt}
+                      sizes="(min-width: 1280px) 620px, (min-width: 1024px) 48vw, 100vw"
+                      className="aspect-[16/10] bg-[color:var(--color-background)]/84"
+                      imageClassName="object-contain bg-[color:var(--color-background)]/84 p-4 object-top"
+                      expandable
+                      expandLabel={`Expand ${artifact.label.toLowerCase()} checkout screenshot`}
+                    />
+                  </figure>
+                ))}
+              </div>
+            </ArtifactBlock>
+          </MotionReveal>
+        </Container>
+      </section>
 
-        <MotionReveal>
-          <section className="grid gap-10 border-y border-[color:var(--color-slate)]/14 py-12 md:py-16 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
-            <div className="space-y-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                Delivery
-              </p>
-              <h2 className="max-w-[10ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                Fast timeline, unusually clean release.
-              </h2>
-            </div>
-            <div className="border-t border-[color:var(--color-slate)]/14">
-              {deliveryParagraphs.map((paragraph, index) => (
-                <article
-                  key={paragraph}
-                  className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 sm:grid-cols-[3rem_minmax(0,1fr)]"
-                >
-                  <span className="font-mono text-xs tracking-[0.18em] text-[color:var(--color-orange)]">
-                    0{index + 1}
-                  </span>
-                  <p className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72">
-                    {paragraph}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </section>
-        </MotionReveal>
+      <section className="bg-[#d7e8e1] py-16 md:py-24">
+        <Container className="space-y-16 md:space-y-24">
+          <MotionReveal>
+            <section className="grid gap-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
+              <div className="space-y-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                  Delivery
+                </p>
+                <h2 className="max-w-[10ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                  Fast timeline, unusually clean release.
+                </h2>
+              </div>
+              <div className="border-t border-[color:var(--color-slate)]/14">
+                {deliveryParagraphs.map((paragraph, index) => (
+                  <article
+                    key={paragraph}
+                    className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-6 sm:grid-cols-[3rem_minmax(0,1fr)]"
+                  >
+                    <span className="font-mono text-xs tracking-[0.18em] text-[color:var(--color-orange)]">
+                      0{index + 1}
+                    </span>
+                    <p className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72">
+                      {paragraph}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </MotionReveal>
 
-        <MotionReveal>
-          <UsabilityResultsBlock />
-        </MotionReveal>
-      </Container>
+          <MotionReveal>
+            <UsabilityResultsBlock />
+          </MotionReveal>
+        </Container>
+      </section>
 
       <MotionReveal>
-        <section className="bg-[color:var(--color-slate)] py-16 text-[color:var(--color-cream)] md:py-24">
+        <section className="bg-[#1c3040] py-16 text-[color:var(--color-cream)] md:py-24">
           <Container>
             <div className="grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
               <div>
@@ -453,51 +469,53 @@ export default function CheckoutRedesignPage(): JSX.Element {
         </section>
       </MotionReveal>
 
-      <Container className="space-y-16 pt-16 md:space-y-24 md:pt-24">
-        <MotionReveal>
-          <section className="border-b border-[color:var(--color-slate)]/14 pb-16 md:pb-24">
-            <TestimonialsSection
-              eyebrow="Key recommendations"
-              title="How close collaborators described the work"
-              description="Two partner perspectives that reinforce the same story: stronger execution quality during build led to a better outcome."
-              testimonials={relatedTestimonials}
-            />
-          </section>
-        </MotionReveal>
+      <section className="bg-[#e9c4b6] py-16 md:py-24">
+        <Container className="space-y-16 md:space-y-24">
+          <MotionReveal>
+            <section className="border-b border-[color:var(--color-slate)]/14 pb-16 md:pb-24">
+              <TestimonialsSection
+                eyebrow="Key recommendations"
+                title="How close collaborators described the work"
+                description="Two partner perspectives that reinforce the same story: stronger execution quality during build led to a better outcome."
+                testimonials={relatedTestimonials}
+              />
+            </section>
+          </MotionReveal>
 
-        <MotionReveal>
-          <section className="grid gap-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                Reflection
-              </p>
-              <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
-                What this case says about how I work.
-              </h2>
-            </div>
-            <div className="space-y-6 border-t border-[color:var(--color-slate)]/14 pt-6">
-              {entry.reflection.map((paragraph) => (
-                <p
-                  key={paragraph}
-                  className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg md:leading-8"
-                >
-                  {paragraph}
+          <MotionReveal>
+            <section className="grid gap-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                  Reflection
                 </p>
-              ))}
-              <Link
-                href="/work"
-                className="group mt-4 inline-flex items-center gap-3 border-b border-[color:var(--color-slate)]/24 pb-2 text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--color-slate)] transition hover:border-[color:var(--color-orange)] hover:text-[color:var(--color-orange)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-4"
-              >
-                Explore all case studies
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </Link>
-            </div>
-          </section>
-        </MotionReveal>
-      </Container>
+                <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-4xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-6xl">
+                  What this case says about how I work.
+                </h2>
+              </div>
+              <div className="space-y-6 border-t border-[color:var(--color-slate)]/14 pt-6">
+                {entry.reflection.map((paragraph) => (
+                  <p
+                    key={paragraph}
+                    className="max-w-3xl text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg md:leading-8"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+                <Link
+                  href="/work"
+                  className="group mt-4 inline-flex items-center gap-3 border-b border-[color:var(--color-slate)]/24 pb-2 text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--color-slate)] transition hover:border-[color:var(--color-orange)] hover:text-[color:var(--color-orange)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-4"
+                >
+                  Explore all case studies
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </div>
+            </section>
+          </MotionReveal>
+        </Container>
+      </section>
     </div>
   );
 }

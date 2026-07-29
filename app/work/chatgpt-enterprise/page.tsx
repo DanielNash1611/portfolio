@@ -22,7 +22,7 @@ export default function ChatGptEnterprisePage(): JSX.Element {
   }
 
   return (
-    <div className="overflow-hidden pb-20 md:pb-28">
+    <div className="overflow-hidden">
       <section className="relative isolate overflow-hidden bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
         <div
           aria-hidden="true"
@@ -130,11 +130,7 @@ export default function ChatGptEnterprisePage(): JSX.Element {
         </Container>
       </section>
 
-      <Container id="case-study" className="scroll-mt-24 pt-12 md:pt-18">
-        <div className="[&>div>section:first-child]:hidden">
-          <CaseStudyTemplate entry={entry} />
-        </div>
-      </Container>
+      <CaseStudyTemplate entry={entry} hideHero />
     </div>
   );
 }

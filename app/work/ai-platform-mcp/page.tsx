@@ -175,8 +175,8 @@ function StoryImage({
 
 export default function AiPlatformMcpPage(): JSX.Element {
   return (
-    <div className="overflow-hidden pb-20 md:pb-28">
-      <section className="relative overflow-hidden bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
+    <div className="overflow-hidden">
+      <section className="relative overflow-hidden bg-[#183444] text-[color:var(--color-cream)]">
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-[radial-gradient(circle_at_78%_26%,rgba(223,196,149,0.12),transparent_27%),linear-gradient(115deg,rgba(23,63,61,0.48),transparent_50%)]"
@@ -195,9 +195,9 @@ export default function AiPlatformMcpPage(): JSX.Element {
                 From AI experiments to platform foundations
               </h1>
               <p className="mt-7 max-w-2xl text-pretty text-base leading-7 text-[color:var(--color-cream)]/66 md:text-lg md:leading-8">
-                This work started with a customer-facing AI prototype, then
-                grew into a broader point of view on how AI adoption really
-                scales inside an organization.
+                This work started with a customer-facing AI prototype, then grew
+                into a broader point of view on how AI adoption really scales
+                inside an organization.
               </p>
               <a
                 href="#origin"
@@ -262,56 +262,58 @@ export default function AiPlatformMcpPage(): JSX.Element {
         ) : null}
       </Container>
 
-      <Container id="origin" className="scroll-mt-24 py-12 md:py-20">
-        <MotionReveal>
-          <SectionLead
-            eyebrow="Where this started"
-            title="A prototype that proved customers cared"
-          >
-            <p className="text-xl leading-8 text-[color:var(--color-slate)]/84 md:text-2xl md:leading-9">
-              During a company hackathon, I led a team to design and build a
-              functional AI prototype for Guitar Center customers.
-            </p>
-            <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
-              The concept addressed a real product discovery problem and was
-              envisioned as an experience that could support customers across
-              ecommerce, in-store, and contact center touchpoints.
-            </p>
-            <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
-              In a follow-up UX study, 87% of participants said they would use
-              it again.
-            </p>
-            <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
-              That result mattered more than the award. It showed that AI could
-              create real customer value quickly when grounded in a clear use
-              case.
-            </p>
-          </SectionLead>
-        </MotionReveal>
+      <section id="origin" className="scroll-mt-24 bg-[#ead7a7] py-16 md:py-24">
+        <Container>
+          <MotionReveal>
+            <SectionLead
+              eyebrow="Where this started"
+              title="A prototype that proved customers cared"
+            >
+              <p className="text-xl leading-8 text-[color:var(--color-slate)]/84 md:text-2xl md:leading-9">
+                During a company hackathon, I led a team to design and build a
+                functional AI prototype for Guitar Center customers.
+              </p>
+              <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
+                The concept addressed a real product discovery problem and was
+                envisioned as an experience that could support customers across
+                ecommerce, in-store, and contact center touchpoints.
+              </p>
+              <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
+                In a follow-up UX study, 87% of participants said they would use
+                it again.
+              </p>
+              <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
+                That result mattered more than the award. It showed that AI
+                could create real customer value quickly when grounded in a
+                clear use case.
+              </p>
+            </SectionLead>
+          </MotionReveal>
 
-        <MotionReveal delay={0.08}>
-          <div className="mt-14 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-            <StoryImage
-              src="/images/sound-synthesist/hackathon-photo.jpg"
-              alt="Hackathon photo showing Daniel Nash and teammates holding the winning check at Guitar Center's ChatGPT hackathon."
-              title="Hackathon winner"
-              description="The original hackathon photo anchors the story in the real moment the concept gained internal traction."
-              className="aspect-square border border-[color:var(--color-slate)]/14 bg-[color:var(--color-background-soft)]"
-              imageClassName="object-cover object-center"
-            />
-            <StoryImage
-              src="/images/sound-synthesist/product-visual.png"
-              alt="Sound Synthesist concept visual showing the functional custom GPT experience."
-              title="Functional custom GPT prototype"
-              description="A product visual of the experience that made the functional prototype tangible beyond the original pitch."
-              className="aspect-square border border-[color:var(--color-slate)]/14 bg-white"
-              imageClassName="object-contain bg-white p-3"
-            />
-          </div>
-        </MotionReveal>
-      </Container>
+          <MotionReveal delay={0.08}>
+            <div className="mt-14 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+              <StoryImage
+                src="/images/sound-synthesist/hackathon-photo.jpg"
+                alt="Hackathon photo showing Daniel Nash and teammates holding the winning check at Guitar Center's ChatGPT hackathon."
+                title="Hackathon winner"
+                description="The original hackathon photo anchors the story in the real moment the concept gained internal traction."
+                className="aspect-square border border-[color:var(--color-slate)]/14 bg-[color:var(--color-background-soft)]"
+                imageClassName="object-cover object-center"
+              />
+              <StoryImage
+                src="/images/sound-synthesist/product-visual.png"
+                alt="Sound Synthesist concept visual showing the functional custom GPT experience."
+                title="Functional custom GPT prototype"
+                description="A product visual of the experience that made the functional prototype tangible beyond the original pitch."
+                className="aspect-square border border-[color:var(--color-slate)]/14 bg-white"
+                imageClassName="object-contain bg-white p-3"
+              />
+            </div>
+          </MotionReveal>
+        </Container>
+      </section>
 
-      <section className="bg-[color:var(--color-background-soft)] py-16 md:py-24">
+      <section className="bg-[#d7e8df] py-16 md:py-24">
         <Container>
           <MotionReveal>
             <SectionLead
@@ -327,16 +329,15 @@ export default function AiPlatformMcpPage(): JSX.Element {
                 adoption.
               </p>
               <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
-                Turning promising AI ideas into durable value requires more
-                than a strong concept. It requires ownership, workflow fit,
-                reusable patterns, and structural support.
+                Turning promising AI ideas into durable value requires more than
+                a strong concept. It requires ownership, workflow fit, reusable
+                patterns, and structural support.
               </p>
               <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
                 This experience also reinforced how important focused
                 go-to-market strategy is for AI products. Early launches are
-                often strongest when centered on one high-value use case,
-                paired with a refined interaction model and a clear adoption
-                path.
+                often strongest when centered on one high-value use case, paired
+                with a refined interaction model and a clear adoption path.
               </p>
               <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
                 That became the bridge from experimentation to platform
@@ -349,7 +350,7 @@ export default function AiPlatformMcpPage(): JSX.Element {
 
       <section
         id="sound-seeker-live-demo"
-        className="scroll-mt-24 py-16 md:py-24"
+        className="scroll-mt-24 bg-[#edc7b7] py-16 md:py-24"
       >
         <Container>
           <MotionReveal>
@@ -369,11 +370,11 @@ export default function AiPlatformMcpPage(): JSX.Element {
               <div className="space-y-5 text-base leading-7 text-[color:var(--color-slate)]/70">
                 <p>
                   To make the hackathon concept more tangible, I rebuilt the
-                  original idea as a public-facing prototype. The demo shows
-                  how an AI assistant can help musicians move from a tonal
-                  reference to a concrete rig and signal chain, while making
-                  the interaction pattern visible to others exploring what
-                  these systems could become.
+                  original idea as a public-facing prototype. The demo shows how
+                  an AI assistant can help musicians move from a tonal reference
+                  to a concrete rig and signal chain, while making the
+                  interaction pattern visible to others exploring what these
+                  systems could become.
                 </p>
                 <p>
                   In this context, the demo serves as a working artifact of the
@@ -394,7 +395,7 @@ export default function AiPlatformMcpPage(): JSX.Element {
         </Container>
       </section>
 
-      <section className="bg-[color:var(--color-slate)] py-16 text-[color:var(--color-cream)] md:py-24">
+      <section className="bg-[#173f3d] py-16 text-[color:var(--color-cream)] md:py-24">
         <Container>
           <MotionReveal>
             <SectionLead
@@ -432,33 +433,35 @@ export default function AiPlatformMcpPage(): JSX.Element {
         </Container>
       </section>
 
-      <Container className="py-16 md:py-24">
-        <MotionReveal>
-          <SectionLead
-            eyebrow="Customer validation"
-            title="Users wanted it back"
-          >
-            <p className="text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
-              A follow-up UX study showed strong reuse intent and positive
-              sentiment, reinforcing that the concept solved a meaningful
-              customer problem.
-            </p>
-          </SectionLead>
-        </MotionReveal>
+      <section className="bg-[#d8e5ed] py-16 md:py-24">
+        <Container>
+          <MotionReveal>
+            <SectionLead
+              eyebrow="Customer validation"
+              title="Users wanted it back"
+            >
+              <p className="text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
+                A follow-up UX study showed strong reuse intent and positive
+                sentiment, reinforcing that the concept solved a meaningful
+                customer problem.
+              </p>
+            </SectionLead>
+          </MotionReveal>
 
-        <MotionReveal delay={0.08} className="mt-14">
-          <StoryImage
-            src="/images/sound-synthesist/ux-validation.png"
-            alt="UX validation visual showing user research feedback and the 87 percent would-use-again result."
-            title="UX validation results"
-            description="The strongest signal was not just positive sentiment, but clear evidence that musicians wanted to use the experience again."
-            className="aspect-[3/2] border border-[color:var(--color-slate)]/14 bg-white"
-            imageClassName="object-contain bg-white p-2"
-          />
-        </MotionReveal>
-      </Container>
+          <MotionReveal delay={0.08} className="mt-14">
+            <StoryImage
+              src="/images/sound-synthesist/ux-validation.png"
+              alt="UX validation visual showing user research feedback and the 87 percent would-use-again result."
+              title="UX validation results"
+              description="The strongest signal was not just positive sentiment, but clear evidence that musicians wanted to use the experience again."
+              className="aspect-[3/2] border border-[color:var(--color-slate)]/14 bg-white"
+              imageClassName="object-contain bg-white p-2"
+            />
+          </MotionReveal>
+        </Container>
+      </section>
 
-      <section className="border-y border-[color:var(--color-slate)]/14 bg-white/34 py-16 md:py-24">
+      <section className="bg-[#ecd9ac] py-16 md:py-24">
         <Container>
           <MotionReveal>
             <SectionLead
@@ -512,7 +515,7 @@ export default function AiPlatformMcpPage(): JSX.Element {
         </Container>
       </section>
 
-      <section className="bg-[color:var(--color-background-soft)] py-16 md:py-24">
+      <section className="bg-[#d7e8df] py-16 md:py-24">
         <Container>
           <MotionReveal>
             <SectionLead
@@ -520,10 +523,9 @@ export default function AiPlatformMcpPage(): JSX.Element {
               title="One recommendation engine, multiple touchpoints"
             >
               <p className="text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
-                The prototype validated value in a single interface. From
-                there, I explored how the same AI layer could support product
-                discovery across ecommerce, in-store, and contact center
-                workflows.
+                The prototype validated value in a single interface. From there,
+                I explored how the same AI layer could support product discovery
+                across ecommerce, in-store, and contact center workflows.
               </p>
             </SectionLead>
           </MotionReveal>
@@ -533,82 +535,84 @@ export default function AiPlatformMcpPage(): JSX.Element {
         </Container>
       </section>
 
-      <Container className="py-16 md:py-24">
-        <MotionReveal>
-          <div className="grid gap-12 border-b border-[color:var(--color-slate)]/16 pb-16 md:pb-24 lg:grid-cols-2 lg:gap-20">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                Influence
-              </p>
-              <h2 className="mt-5 max-w-[12ch] text-balance text-4xl font-medium leading-[0.96] tracking-[-0.04em] md:text-5xl">
-                What the work helped shape
-              </h2>
-              <div className="mt-8 space-y-5 text-base leading-7 text-[color:var(--color-slate)]/70">
-                <p>
-                  The concept generated strong internal interest and
-                  contributed to broader thinking around AI-enabled customer
-                  experiences.
+      <section className="bg-[#ecc5b7] py-16 md:py-24">
+        <Container>
+          <MotionReveal>
+            <div className="grid gap-12 border-b border-[color:var(--color-slate)]/16 pb-16 md:pb-24 lg:grid-cols-2 lg:gap-20">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                  Influence
                 </p>
-                <p>
-                  While I did not own the final implementation path, the work
-                  sharpened my view of what it takes to move from early momentum
-                  to durable organizational value.
+                <h2 className="mt-5 max-w-[12ch] text-balance text-4xl font-medium leading-[0.96] tracking-[-0.04em] md:text-5xl">
+                  What the work helped shape
+                </h2>
+                <div className="mt-8 space-y-5 text-base leading-7 text-[color:var(--color-slate)]/70">
+                  <p>
+                    The concept generated strong internal interest and
+                    contributed to broader thinking around AI-enabled customer
+                    experiences.
+                  </p>
+                  <p>
+                    While I did not own the final implementation path, the work
+                    sharpened my view of what it takes to move from early
+                    momentum to durable organizational value.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                  Key learnings
                 </p>
+                <h2 className="mt-5 text-balance text-4xl font-medium leading-[0.96] tracking-[-0.04em] md:text-5xl">
+                  What stayed with me
+                </h2>
+                <ol className="mt-8 border-t border-[color:var(--color-slate)]/16">
+                  {learnings.map((item, index) => (
+                    <li
+                      key={item}
+                      className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4 border-b border-[color:var(--color-slate)]/16 py-4 text-base leading-7 text-[color:var(--color-slate)]/76"
+                    >
+                      <span className="font-mono text-xs tracking-[0.14em] text-[color:var(--color-orange)]">
+                        0{index + 1}
+                      </span>
+                      {item}
+                    </li>
+                  ))}
+                </ol>
               </div>
             </div>
+          </MotionReveal>
 
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                Key learnings
+          <MotionReveal>
+            <section className="grid gap-8 py-16 md:py-24 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+                  Why it matters
+                </p>
+                <h2 className="mt-5 max-w-[12ch] text-balance text-4xl font-medium leading-[0.96] tracking-[-0.04em] md:text-6xl">
+                  The foundation of my AI platform thinking
+                </h2>
+              </div>
+              <p className="max-w-3xl self-end text-pretty text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
+                This experience shaped how I approach AI product work today:
+                solve a real problem, validate quickly, and design the
+                surrounding system so early value can become something
+                repeatable and durable.
               </p>
-              <h2 className="mt-5 text-balance text-4xl font-medium leading-[0.96] tracking-[-0.04em] md:text-5xl">
-                What stayed with me
-              </h2>
-              <ol className="mt-8 border-t border-[color:var(--color-slate)]/16">
-                {learnings.map((item, index) => (
-                  <li
-                    key={item}
-                    className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4 border-b border-[color:var(--color-slate)]/16 py-4 text-base leading-7 text-[color:var(--color-slate)]/76"
-                  >
-                    <span className="font-mono text-xs tracking-[0.14em] text-[color:var(--color-orange)]">
-                      0{index + 1}
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </MotionReveal>
+            </section>
+          </MotionReveal>
 
-        <MotionReveal>
-          <section className="grid gap-8 py-16 md:py-24 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
-                Why it matters
-              </p>
-              <h2 className="mt-5 max-w-[12ch] text-balance text-4xl font-medium leading-[0.96] tracking-[-0.04em] md:text-6xl">
-                The foundation of my AI platform thinking
-              </h2>
-            </div>
-            <p className="max-w-3xl self-end text-pretty text-xl leading-8 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-9">
-              This experience shaped how I approach AI product work today:
-              solve a real problem, validate quickly, and design the surrounding
-              system so early value can become something repeatable and
-              durable.
-            </p>
-          </section>
-        </MotionReveal>
-
-        <MotionReveal>
-          <TestimonialsSection
-            eyebrow="Recommendations"
-            title="How collaborators described this work"
-            description="Two adjacent perspectives that reinforce the same pattern: translating early AI momentum into practical systems, stronger guardrails, and credible cross-functional execution."
-            testimonials={relatedTestimonials}
-          />
-        </MotionReveal>
-      </Container>
+          <MotionReveal>
+            <TestimonialsSection
+              eyebrow="Recommendations"
+              title="How collaborators described this work"
+              description="Two adjacent perspectives that reinforce the same pattern: translating early AI momentum into practical systems, stronger guardrails, and credible cross-functional execution."
+              testimonials={relatedTestimonials}
+            />
+          </MotionReveal>
+        </Container>
+      </section>
     </div>
   );
 }
