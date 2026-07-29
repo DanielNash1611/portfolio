@@ -18,7 +18,7 @@ export default function Container<T extends ElementType = "div">({
   return (
     <Component
       className={clsx(
-        "mx-auto w-full max-w-[1200px] px-5 sm:px-6 md:px-8",
+        "mx-auto w-full max-w-[1400px] px-5 sm:px-6 md:px-8",
         className,
       )}
       {...props}

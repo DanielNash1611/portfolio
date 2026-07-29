@@ -1,6 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
+  "crons": [
+    {
+      "path": "/api/internal/portfolio-guide/cleanup",
+      "schedule": "0 9 * * *"
+    }
+  ],
   "redirects": [
     {
       "source": "/(.*)",

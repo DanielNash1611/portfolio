@@ -5,6 +5,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import type {
   GuideConversationMessage,
+  GuidePersistenceStatus,
   GuideTone,
 } from "@/lib/portfolio-guide/types";
 
@@ -15,10 +16,15 @@ type PortfolioGuidePanelProps = {
   onSubmit: () => void;
   onFollowUp: (message: string) => void;
   onRetry: () => void;
+  onNewConversation: () => void;
+  onDeleteConversation: () => void;
   isLoading: boolean;
   isUnavailable: boolean;
   errorMessage: string | null;
   loadingLabel: string;
+  persistenceStatus: GuidePersistenceStatus;
+  persistenceWarning: string | null;
+  isHydrating: boolean;
   tone?: GuideTone;
 };
 
@@ -56,10 +62,15 @@ export default function PortfolioGuidePanel({
   onSubmit,
   onFollowUp,
   onRetry,
+  onNewConversation,
+  onDeleteConversation,
   isLoading,
   isUnavailable,
   errorMessage,
   loadingLabel,
+  persistenceStatus,
+  persistenceWarning,
+  isHydrating,
   tone = "site",
 }: PortfolioGuidePanelProps): JSX.Element {
   const panelClassName =
@@ -99,6 +110,64 @@ export default function PortfolioGuidePanel({
 
   return (
     <div className={clsx("space-y-5 p-5 md:p-6", panelClassName)}>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 pb-4">
+        <p
+          className={clsx(
+            "text-xs leading-5",
+            tone === "site"
+              ? "text-[color:var(--color-slate)]/58"
+              : "text-brand-slate/60",
+          )}
+        >
+          {isHydrating
+            ? "Restoring this browser's conversation..."
+            : persistenceStatus === "durable"
+              ? "Saved across this site for 90 days after your last question."
+              : "Temporary conversation in this browser session."}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={onNewConversation}
+            disabled={isLoading}
+            className={clsx(
+              "rounded-full border px-3 py-1.5 text-xs font-semibold transition disabled:opacity-50",
+              tone === "site"
+                ? "border-[color:var(--color-teal)]/14 bg-white text-[color:var(--color-teal)]"
+                : "border-brand-teal/15 bg-white text-brand-teal",
+            )}
+          >
+            New conversation
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (
+                typeof window === "undefined" ||
+                window.confirm("Delete this conversation and its saved history?")
+              ) {
+                onDeleteConversation();
+              }
+            }}
+            disabled={isLoading || messages.length === 0}
+            className={clsx(
+              "rounded-full border px-3 py-1.5 text-xs font-semibold transition disabled:opacity-40",
+              tone === "site"
+                ? "border-[color:var(--color-orange)]/18 bg-white text-[color:var(--color-slate)]/72"
+                : "border-brand-orange/20 bg-white text-brand-slate/72",
+            )}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+
+      {persistenceWarning ? (
+        <div className={clsx("rounded-xl border px-3 py-2 text-xs leading-5", statusClassName)}>
+          {persistenceWarning}
+        </div>
+      ) : null}
+
       {messages.length > 0 ? (
         <div className="space-y-3">
           {messages.map((message) => (
@@ -111,6 +180,11 @@ export default function PortfolioGuidePanel({
                   : assistantMessageClassName,
               )}
             >
+              {message.pageTitle ? (
+                <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] opacity-55">
+                  {message.pageTitle}
+                </p>
+              ) : null}
               <p className="whitespace-pre-line">{message.content}</p>
 
               {message.role === "assistant" && message.relatedPages?.length ? (
@@ -250,6 +324,7 @@ export default function PortfolioGuidePanel({
           id="portfolio-guide-question"
           name="portfolio-guide-question"
           rows={3}
+          maxLength={4000}
           value={draft}
           disabled={isLoading || isUnavailable}
           onChange={(event) => onDraftChange(event.target.value)}
@@ -269,8 +344,9 @@ export default function PortfolioGuidePanel({
                 : "text-brand-slate/56",
             )}
           >
-            Questions may be stored to improve the guide. Please don&apos;t include
-            sensitive information. Press Ctrl/Cmd + Enter to send.
+            Conversations are saved for 90 days to improve the guide and may be
+            processed by OpenAI. Don&apos;t include sensitive information. Press
+            Ctrl/Cmd + Enter to send. {draft.length.toLocaleString()}/4,000
           </p>
           <button
             type="submit"

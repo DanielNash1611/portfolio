@@ -26,8 +26,8 @@ function Column({
   complete: boolean;
 }): JSX.Element {
   return (
-    <div className="space-y-5">
-      <h3 className="text-2xl font-semibold text-[color:var(--color-slate)]">
+    <div className="space-y-6">
+      <h3 className="font-serif text-2xl font-medium tracking-[-0.025em] text-[color:var(--color-slate)] md:text-3xl">
         {title}
       </h3>
       <ul className="space-y-3">
@@ -58,30 +58,39 @@ function Column({
 export default function ImplementedNext(): JSX.Element {
   return (
     <section
-      className="space-y-8 rounded-[2rem] border border-[color:var(--color-teal)]/9 bg-[color:var(--color-background)]/88 px-6 py-8 shadow-[0_20px_50px_rgba(44,79,82,0.06)] md:px-8 md:py-10"
+      className="space-y-10 border-y border-[color:var(--color-slate)]/16 py-10 md:py-14"
       aria-labelledby="implemented-next-heading"
     >
-      <div className="max-w-3xl space-y-4">
-        <h2
-          id="implemented-next-heading"
-          className="text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-4xl"
-        >
-          What is real. What gets stronger next.
-        </h2>
-        <p className="text-pretty text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg">
+      <div className="grid gap-6 lg:grid-cols-[minmax(260px,0.74fr)_minmax(0,1.26fr)] lg:gap-16">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+            Capability boundary
+          </p>
+          <h2
+            id="implemented-next-heading"
+            className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl"
+          >
+            What is real. What gets stronger next.
+          </h2>
+        </div>
+        <p className="max-w-2xl self-end text-pretty text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg md:leading-8">
           The credible product story includes its limits. Current capabilities
           are visible on the left; the investments required for stronger
           reliability and measurement stay visible on the right.
         </p>
       </div>
 
-      <div className="grid gap-10 md:grid-cols-2">
-        <Column title="Implemented" items={implemented} complete />
-        <Column
-          title="Needs implementation or instrumentation"
-          items={next}
-          complete={false}
-        />
+      <div className="grid border-t border-[color:var(--color-slate)]/16 md:grid-cols-2 md:divide-x md:divide-[color:var(--color-slate)]/16">
+        <div className="py-8 md:pr-10">
+          <Column title="Implemented" items={implemented} complete />
+        </div>
+        <div className="border-t border-[color:var(--color-slate)]/16 py-8 md:border-t-0 md:pl-10">
+          <Column
+            title="Needs implementation or instrumentation"
+            items={next}
+            complete={false}
+          />
+        </div>
       </div>
     </section>
   );

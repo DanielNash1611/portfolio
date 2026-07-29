@@ -11,6 +11,8 @@ import {
   recordTagSignals,
   setVisitorIntent,
   writeGuideSessionState,
+  appendSiteWideConversationMessages,
+  getSiteWideConversation,
 } from "@/lib/portfolio-guide/session";
 import { GUIDE_SESSION_STORAGE_KEY } from "@/lib/portfolio-guide/constants";
 
@@ -134,4 +136,28 @@ test("visitor intent and recommended path can be persisted and cleared", () => {
 
   assert.equal(persistedState.visitorIntent, undefined);
   assert.equal(persistedState.recommendedPath, undefined);
+});
+
+test("site-wide conversation survives page changes and a new state resets it", () => {
+  let state = createEmptyGuideSessionState();
+  state = appendSiteWideConversationMessages(state, [
+    {
+      id: "user-1",
+      role: "user",
+      content: "Question from page one",
+      pageSlug: "ai-platform-mcp",
+      createdAt: "2026-06-18T00:00:00.000Z",
+    },
+    {
+      id: "assistant-1",
+      role: "assistant",
+      content: "Answer from page one",
+      pageSlug: "ai-platform-mcp",
+      createdAt: "2026-06-18T00:00:01.000Z",
+    },
+  ]);
+
+  assert.equal(getSiteWideConversation(state).length, 2);
+  assert.equal(getSiteWideConversation(state)[0].pageSlug, "ai-platform-mcp");
+  assert.deepEqual(getSiteWideConversation(createEmptyGuideSessionState()), []);
 });

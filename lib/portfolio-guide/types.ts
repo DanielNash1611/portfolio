@@ -69,6 +69,8 @@ export type GuideInteractionMeta = {
   visitorId: string;
   sessionId: string;
   turnIndex: number;
+  conversationId?: string;
+  clientTurnId?: string;
 };
 
 export type RelatedPage = {
@@ -246,8 +248,40 @@ export type CopilotResponse = {
 export type GuideConversationMessage = CopilotConversationMessage & {
   id: string;
   createdAt: string;
+  turnId?: string;
+  pageSlug?: string;
+  pageTitle?: string;
   suggestedFollowUps?: string[];
   relatedPages?: RelatedPage[];
+};
+
+export type GuideSessionSignals = Pick<
+  SessionContext,
+  | "visitedPages"
+  | "clickedPrompts"
+  | "askedQuestions"
+  | "inferredInterestTags"
+  | "visitorIntent"
+  | "recommendedPath"
+  | "lastVisitedAt"
+>;
+
+export type PortfolioGuideTurnRequest = {
+  clientTurnId: string;
+  pageSlug: string;
+  message: string;
+  source: GuideInteractionSource;
+  sessionSignals: GuideSessionSignals;
+  fallbackConversation?: CopilotConversationMessage[];
+};
+
+export type GuidePersistenceStatus = "durable" | "degraded" | "disabled";
+
+export type GuideConversationSnapshot = {
+  messages: GuideConversationMessage[];
+  sessionSignals?: GuideSessionSignals;
+  persistenceStatus: GuidePersistenceStatus;
+  expiresAt?: string;
 };
 
 export type GuideSessionState = SessionContext & {

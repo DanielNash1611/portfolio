@@ -1,23 +1,21 @@
-import MediaFrame from "@/components/site/MediaFrame";
-
-const workflowAlt =
-  "Diagram showing a governed AI workflow from approved career evidence to portfolio proof, claim-to-evidence retrieval, role-aware tailoring, specialized reviews, and a human-approved artifact.";
-
 export default function CaseStudyOverview(): JSX.Element {
   return (
-    <section className="space-y-8" aria-labelledby="why-this-matters-heading">
-      <div className="grid gap-8 lg:grid-cols-2">
-        <article className="border-t-2 border-[color:var(--color-teal)]/22 pt-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--color-orange)]">
+    <section
+      className="border-y border-[color:var(--color-slate)]/16"
+      aria-labelledby="why-this-matters-heading"
+    >
+      <div className="grid lg:grid-cols-2 lg:divide-x lg:divide-[color:var(--color-slate)]/16">
+        <article className="py-9 lg:pr-12">
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
             Product problem
           </p>
           <h2
             id="why-this-matters-heading"
-            className="mt-3 text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-4xl"
+            className="mt-5 max-w-[10ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-5xl"
           >
             Why this matters
           </h2>
-          <p className="mt-4 text-pretty text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg">
+          <p className="mt-6 max-w-xl text-pretty text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg md:leading-8">
             Hiring teams often see polished claims without knowing what evidence
             supports them. This system separates authored proof, source-audited
             evidence, role-specific tailoring, AI-assisted critique, and final
@@ -26,14 +24,14 @@ export default function CaseStudyOverview(): JSX.Element {
           </p>
         </article>
 
-        <article className="border-t-2 border-[color:var(--color-orange)]/28 pt-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--color-orange)]">
+        <article className="border-t border-[color:var(--color-slate)]/16 py-9 lg:border-t-0 lg:pl-12">
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
             Hands-on AI product leadership
           </p>
-          <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-4xl">
+          <h2 className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-5xl">
             Daniel&apos;s responsibility
           </h2>
-          <p className="mt-4 text-pretty text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg">
+          <p className="mt-6 max-w-xl text-pretty text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg md:leading-8">
             Daniel defined the product architecture, evidence boundaries,
             claim-safety rules, workflow stages, evaluation criteria, and
             portfolio positioning. He used AI-assisted development to build and
@@ -42,24 +40,10 @@ export default function CaseStudyOverview(): JSX.Element {
           </p>
         </article>
       </div>
-
-      <figure className="space-y-3">
-        <MediaFrame
-          src="/images/products/ai-career-operating-system/governed-ai-workflow-career-evidence.png"
-          alt={workflowAlt}
-          fallbackTitle="Governed AI workflow for career evidence"
-          sizes="(min-width: 1280px) 1150px, 94vw"
-          className="aspect-[1693/929] rounded-[1.5rem] border border-black/6 bg-white shadow-[0_24px_60px_rgba(58,61,64,0.08)]"
-          imageClassName="object-contain"
-          priority
-          expandable
-          expandLabel="Expand governed AI workflow diagram"
-        />
-        <figcaption className="text-sm leading-6 text-[color:var(--color-slate)]/58">
-          Governance and guardrails stay active from approved evidence through
-          the final human-approved artifact.
-        </figcaption>
-      </figure>
+      <p className="border-t border-[color:var(--color-slate)]/16 py-5 text-sm leading-6 text-[color:var(--color-slate)]/58">
+        Governance and guardrails stay active from approved evidence through the
+        final human-approved artifact.
+      </p>
     </section>
   );
 }

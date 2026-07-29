@@ -10,6 +10,7 @@ import ProductEngines from "@/components/ai-career-system/ProductEngines";
 import WhatThisProves from "@/components/ai-career-system/WhatThisProves";
 import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import Container from "@/components/site/Container";
+import MotionReveal from "@/components/site/MotionReveal";
 import {
   getPageContextByPath,
   getPortfolioContext,
@@ -58,98 +59,119 @@ const boundaries = [
 ];
 
 const actionClassName =
-  "inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]";
+  "group inline-flex items-center justify-center gap-2 border px-5 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]";
 
 export default function AiCareerOperatingSystemPage(): JSX.Element {
   return (
-    <Container className="space-y-12 pt-6 pb-16 md:space-y-16">
+    <div className="overflow-hidden">
       <AiCareerHero />
-      <CaseStudyOverview />
 
-      <section className="space-y-8" aria-labelledby="boundaries-heading">
-        <div className="max-w-3xl space-y-4">
-          <h2
-            id="boundaries-heading"
-            className="text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-4xl"
-          >
-            Clear product boundaries
-          </h2>
-          <p className="text-pretty text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg">
-            The products share an operating context and authenticated contracts,
-            but each retains a distinct responsibility. Human review remains the
-            final accountability layer.
-          </p>
-        </div>
+      <Container className="space-y-20 py-20 md:space-y-28 md:py-28">
+        <MotionReveal>
+          <CaseStudyOverview />
+        </MotionReveal>
 
-        <div className="grid gap-5 md:grid-cols-3">
-          {boundaries.map((boundary, index) => (
-            <article
-              key={boundary.title}
-              className="border-t-2 border-[color:var(--color-teal)]/22 pt-5"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--color-orange)]">
-                0{index + 1}
+        <MotionReveal>
+          <section className="space-y-10" aria-labelledby="boundaries-heading">
+            <div className="grid gap-6 lg:grid-cols-[minmax(240px,0.72fr)_minmax(0,1.28fr)] lg:gap-16">
+              <h2
+                id="boundaries-heading"
+                className="max-w-[10ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl"
+              >
+                Clear product boundaries
+              </h2>
+              <p className="max-w-2xl self-end text-pretty text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg md:leading-8">
+                The products share an operating context and authenticated
+                contracts, but each retains a distinct responsibility. Human
+                review remains the final accountability layer.
               </p>
-              <h3 className="mt-3 text-2xl font-semibold text-[color:var(--color-slate)]">
-                {boundary.title}
-              </h3>
-              <p className="mt-3 text-sm leading-6 text-[color:var(--color-slate)]/68">
-                {boundary.detail}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
+            </div>
 
-      {pageContext ? (
-        <PortfolioGuide
-          pageContext={pageContext}
-          portfolioContext={portfolioContext}
-        />
-      ) : null}
+            <div className="grid border-y border-[color:var(--color-slate)]/16 md:grid-cols-3 md:divide-x md:divide-[color:var(--color-slate)]/16">
+              {boundaries.map((boundary, index) => (
+                <article
+                  key={boundary.title}
+                  className="border-b border-[color:var(--color-slate)]/16 py-7 last:border-b-0 md:border-b-0 md:px-7 md:first:pl-0 md:last:pr-0"
+                >
+                  <p className="font-mono text-xs text-[color:var(--color-orange)]">
+                    0{index + 1}
+                  </p>
+                  <h3 className="mt-5 font-serif text-2xl font-medium tracking-[-0.025em] text-[color:var(--color-slate)]">
+                    {boundary.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-[color:var(--color-slate)]/68">
+                    {boundary.detail}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+        </MotionReveal>
 
-      <ProductEngines />
-      <EvidenceBridge />
+        {pageContext ? (
+          <PortfolioGuide
+            pageContext={pageContext}
+            portfolioContext={portfolioContext}
+          />
+        ) : null}
+
+        <ProductEngines />
+        <EvidenceBridge />
+      </Container>
+
       <WhatThisProves />
-      <EvalEvidence />
-      <ImplementedNext />
 
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[color:var(--color-slate)] px-6 py-8 text-[color:var(--color-cream)] shadow-[0_30px_80px_rgba(58,61,64,0.18)] md:px-8 md:py-10">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(219,191,150,0.2),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(209,122,95,0.22),_transparent_42%)]"
-        />
-        <div className="relative grid gap-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-          <div className="max-w-3xl space-y-4">
-            <h2 className="max-w-[18ch] text-balance text-3xl font-semibold tracking-tight md:text-4xl">
+      <Container className="space-y-20 py-20 md:space-y-28 md:py-28">
+        <EvalEvidence />
+        <ImplementedNext />
+      </Container>
+
+      <section className="border-t border-white/12 bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
+        <Container className="grid gap-10 py-14 md:py-20 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+          <MotionReveal className="max-w-3xl">
+            <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-tan)]">
+              <span className="h-px w-10 bg-current" aria-hidden="true" />
+              Continue exploring
+            </div>
+            <h2 className="mt-6 max-w-[17ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] md:text-6xl">
               Explore the evidence first. Try the workflow when it is useful.
             </h2>
-            <p className="text-base leading-7 text-[color:var(--color-cream)]/78 md:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[color:var(--color-cream)]/72 md:text-lg">
               Use the generator when a role-specific artifact would help a
               hiring team evaluate the same evidence in context.
             </p>
-            <p className="text-sm leading-6 text-[color:var(--color-cream)]/62">
+            <p className="mt-3 text-sm leading-6 text-[color:var(--color-cream)]/52">
               The generator is an action surface, not evidence of role fit.
             </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
+          </MotionReveal>
+
+          <MotionReveal
+            delay={0.08}
+            className="flex flex-wrap gap-3 lg:max-w-[320px] lg:justify-end"
+          >
             <Link
               href="#portfolio-guide-ai-career-operating-system"
-              className={`${actionClassName} border-[color:var(--color-cream)] bg-[color:var(--color-cream)] text-[color:var(--color-slate)]`}
+              className={`${actionClassName} border-[color:var(--color-cream)] bg-[color:var(--color-cream)] text-[color:var(--color-slate)] hover:border-[color:var(--color-tan)] hover:bg-[color:var(--color-tan)]`}
             >
               Ask the Portfolio Guide
-              <ArrowDown className="h-4 w-4" aria-hidden="true" />
+              <ArrowDown
+                className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
+                aria-hidden="true"
+              />
             </Link>
             <Link
               href="/resume/generate"
-              className={`${actionClassName} border-white/20 bg-transparent text-[color:var(--color-cream)] hover:bg-white/10`}
+              className={`${actionClassName} border-white/24 text-[color:var(--color-cream)] hover:border-[color:var(--color-tan)] hover:text-[color:var(--color-tan)]`}
             >
               Generate a role-specific resume
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              <ArrowUpRight
+                className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
             </Link>
-          </div>
-        </div>
+          </MotionReveal>
+        </Container>
       </section>
-    </Container>
+    </div>
   );
 }

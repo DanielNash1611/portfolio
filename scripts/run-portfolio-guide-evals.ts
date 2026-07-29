@@ -28,6 +28,8 @@ const PORTFOLIO_GUIDE_SMOKE_CASE_IDS = new Set([
   "checkout-mentions-mcp",
   "ai-platform-most-reused-patterns",
   "ai-platform-contaminated-history",
+  "ai-platform-referential-follow-up",
+  "checkout-multiturn-current-page-primary",
   "ai-platform-seniority",
   "ai-platform-implied-not-proven",
   "ai-platform-connections",

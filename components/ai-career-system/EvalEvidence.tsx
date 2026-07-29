@@ -48,7 +48,7 @@ const reviewAgents = [
 const signals = [
   {
     label: "Portfolio Guide",
-    value: "31 cases",
+    value: "33 cases",
     detail: "Authored evaluation inventory",
   },
   {
@@ -65,15 +65,20 @@ const signals = [
 
 export default function EvalEvidence(): JSX.Element {
   return (
-    <section className="space-y-8" aria-labelledby="eval-evidence-heading">
-      <div className="max-w-3xl space-y-4">
-        <h2
-          id="eval-evidence-heading"
-          className="text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-4xl"
-        >
-          Evals define quality before they measure it
-        </h2>
-        <p className="text-pretty text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg">
+    <section className="space-y-10" aria-labelledby="eval-evidence-heading">
+      <div className="grid gap-6 lg:grid-cols-[minmax(260px,0.74fr)_minmax(0,1.26fr)] lg:gap-16">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+            Evaluation evidence
+          </p>
+          <h2
+            id="eval-evidence-heading"
+            className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl"
+          >
+            Evals define quality before they measure it
+          </h2>
+        </div>
+        <p className="max-w-2xl self-end text-pretty text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg md:leading-8">
           In a stored 12-case Portfolio Guide eval set, grounding and
           source-separation changes improved acceptable responses from 5/12 to
           11/12. This is a historical comparison from comparable runs, not a
@@ -86,19 +91,19 @@ export default function EvalEvidence(): JSX.Element {
         alt="Evaluation card showing Portfolio Guide grounding improvement from 5 out of 12 acceptable responses to 11 out of 12 in a historical comparable run."
         fallbackTitle="Portfolio Guide grounding improvement"
         sizes="(min-width: 1280px) 1100px, 94vw"
-        className="aspect-[3/2] rounded-[1.5rem] border border-black/6 bg-white shadow-[0_24px_60px_rgba(58,61,64,0.08)]"
-        imageClassName="object-contain"
+        className="aspect-[3/2] border border-[color:var(--color-slate)]/14 bg-white"
+        imageClassName="object-contain transition-transform duration-700 hover:scale-[1.012]"
         expandable
         expandLabel="Expand Portfolio Guide grounding evaluation"
       />
 
-      <article className="space-y-8 rounded-[2rem] border border-[color:var(--color-teal)]/9 bg-[color:var(--color-background)]/88 p-6 shadow-[0_20px_50px_rgba(44,79,82,0.06)] md:p-8">
+      <article className="space-y-9 border-y border-[color:var(--color-slate)]/16 py-10 md:py-14">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-end">
           <div className="max-w-xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[color:var(--color-orange)]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
               Six configured reviewers
             </p>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-3xl">
+            <h3 className="mt-5 max-w-[14ch] font-serif text-3xl font-medium leading-[1] tracking-[-0.035em] text-[color:var(--color-slate)] md:text-5xl">
               Different agents own different failure modes
             </h3>
           </div>
@@ -116,8 +121,8 @@ export default function EvalEvidence(): JSX.Element {
           alt="Infographic showing six advisory resume review agents: Recruiter Screen, Hiring Manager, Career Coach, Source Auditor, ATS Readability, and Positioning and Bridge Strategist, followed by structured findings, scores, issue severity, source status, and human approval."
           fallbackTitle="Six advisory review agents"
           sizes="(min-width: 1280px) 1040px, 94vw"
-          className="aspect-[3/2] rounded-[1.5rem] border border-black/6 bg-white shadow-[0_24px_60px_rgba(58,61,64,0.08)]"
-          imageClassName="object-contain"
+          className="aspect-[3/2] border border-[color:var(--color-slate)]/14 bg-white"
+          imageClassName="object-contain transition-transform duration-700 hover:scale-[1.012]"
           expandable
           expandLabel="Expand six advisory review agents diagram"
         />
@@ -134,10 +139,10 @@ export default function EvalEvidence(): JSX.Element {
                 </span>
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h4 className="font-semibold text-[color:var(--color-slate)]">
+                    <h4 className="font-serif text-lg font-medium text-[color:var(--color-slate)]">
                       {agent.name}
                     </h4>
-                    <span className="rounded-full border border-[color:var(--color-teal)]/12 bg-white/70 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-teal)]/72">
+                    <span className="border-l border-[color:var(--color-orange)]/40 pl-2.5 text-[0.6rem] font-bold uppercase tracking-[0.16em] text-[color:var(--color-teal)]/68">
                       {agent.pass}
                     </span>
                   </div>
@@ -175,16 +180,16 @@ export default function EvalEvidence(): JSX.Element {
         </div>
       </article>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid border-y border-[color:var(--color-slate)]/16 md:grid-cols-3 md:divide-x md:divide-[color:var(--color-slate)]/16">
         {signals.map((signal) => (
           <article
             key={signal.label}
-            className="border-t-2 border-[color:var(--color-teal)]/22 pt-4"
+            className="border-b border-[color:var(--color-slate)]/16 py-6 last:border-b-0 md:border-b-0 md:px-7 md:first:pl-0 md:last:pr-0"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--color-teal)]/68">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/64">
               {signal.label}
             </p>
-            <p className="mt-2 text-3xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+            <p className="mt-3 font-serif text-3xl font-medium tracking-[-0.03em] text-[color:var(--color-slate)]">
               {signal.value}
             </p>
             <p className="mt-2 text-sm text-[color:var(--color-slate)]/62">

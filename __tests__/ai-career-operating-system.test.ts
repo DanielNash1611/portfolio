@@ -14,7 +14,7 @@ test("AI Career Operating System keeps its governed product framing", () => {
   );
   assert.deepEqual(
     entry.featuredMetrics.map((metric) => metric.value),
-    ["31 cases", "6 agents", "Authenticated API"],
+    ["33 cases", "6 agents", "Authenticated API"],
   );
   assert.deepEqual(
     entry.featuredMetrics[2],

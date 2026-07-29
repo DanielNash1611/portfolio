@@ -6,6 +6,7 @@ import {
   GUIDE_SESSION_VERSION,
   GUIDE_VISITOR_STORAGE_KEY,
   MAX_MESSAGES_PER_PAGE,
+  MAX_SITE_WIDE_MESSAGES,
   MAX_TAG_SIGNALS,
   MAX_TRACKED_PROMPTS,
   MAX_TRACKED_QUESTIONS,
@@ -37,6 +38,7 @@ const VALID_SENIORITY = [
 let memorySessionState: GuideSessionState = createEmptyGuideSessionState();
 let memoryVisitorId: string | null = null;
 let memoryInteractionSessionId: string | null = null;
+const SITE_WIDE_CONVERSATION_KEY = "__site_wide__";
 
 function cloneState(state: GuideSessionState): GuideSessionState {
   return JSON.parse(JSON.stringify(state)) as GuideSessionState;
@@ -446,4 +448,44 @@ export function getConversationForPage(
   slug: string,
 ): GuideConversationMessage[] {
   return state.conversationsBySlug[slug] ?? [];
+}
+
+export function getSiteWideConversation(
+  state: GuideSessionState,
+): GuideConversationMessage[] {
+  const siteWide = state.conversationsBySlug[SITE_WIDE_CONVERSATION_KEY];
+  if (siteWide) {
+    return siteWide;
+  }
+  return Object.values(state.conversationsBySlug)
+    .flat()
+    .sort((left, right) => left.createdAt.localeCompare(right.createdAt));
+}
+
+export function appendSiteWideConversationMessages(
+  state: GuideSessionState,
+  messages: GuideConversationMessage[],
+): GuideSessionState {
+  const currentMessages = getSiteWideConversation(state);
+  return {
+    ...state,
+    conversationsBySlug: {
+      [SITE_WIDE_CONVERSATION_KEY]: capArray(
+        [...currentMessages, ...messages],
+        MAX_SITE_WIDE_MESSAGES,
+      ),
+    },
+  };
+}
+
+export function replaceSiteWideConversation(
+  state: GuideSessionState,
+  messages: GuideConversationMessage[],
+): GuideSessionState {
+  return {
+    ...state,
+    conversationsBySlug: {
+      [SITE_WIDE_CONVERSATION_KEY]: capArray(messages, MAX_SITE_WIDE_MESSAGES),
+    },
+  };
 }

@@ -346,7 +346,7 @@ export default function ProductPhilosophyPage(): JSX.Element {
   }
 
   return (
-    <Container className="space-y-10 pt-6 md:space-y-12">
+    <Container className="space-y-10 pb-20 pt-8 md:space-y-12 md:pb-28">
       <section className="relative overflow-hidden rounded-[2.4rem] border border-black/6 bg-white/86 px-6 py-9 shadow-[0_30px_80px_rgba(58,61,64,0.1)] md:px-10 md:py-14">
         <div
           aria-hidden="true"

@@ -57,7 +57,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       "Made current limits visible, including process-local queueing, incomplete funnel instrumentation, and advisory final-judge rejection.",
     ],
     metrics: [
-      "Portfolio Guide evaluation inventory: 31 authored cases.",
+      "Portfolio Guide evaluation inventory: 33 authored cases.",
       "Resume review system: 6 configured advisory agents.",
       "Role positioning model: 3 template lanes.",
       "Historical Portfolio Guide comparison: 5/12 to 11/12 on comparable stored 12-case OpenAI runs.",
@@ -241,7 +241,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Evaluation evidence",
         snippets: [
-          "The Portfolio Guide has 31 authored evaluation cases.",
+          "The Portfolio Guide has 33 authored evaluation cases.",
           "Comparable stored 12-case OpenAI Guide runs improved from 5/12 to 11/12 after grounding and source-separation changes.",
           "The 5/12 to 11/12 result is historical and scoped; it is not a current full-suite pass claim.",
           "The six configured reviewers are Recruiter Screen, Hiring Manager, Career Coach, Source Auditor, ATS Readability, and Positioning & Bridge Strategist.",

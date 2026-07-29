@@ -36,6 +36,13 @@ async function main() {
     contact_submissions: string | null;
   }>;
   const tableExists = Boolean(tableStatus?.table_name);
+  const [conversationTableStatus] = (await sql.query(
+    `
+      SELECT
+        TO_REGCLASS('public.portfolio_guide_conversations') AS conversations,
+        TO_REGCLASS('public.portfolio_guide_trace_events') AS trace_events
+    `,
+  )) as Array<{ conversations: string | null; trace_events: string | null }>;
   const contactSubmissionsExists = Boolean(
     contactTableStatus?.contact_submissions,
   );
@@ -64,6 +71,12 @@ async function main() {
   console.info(`Checked at=${databaseInfo?.checked_at ?? "unknown"}`);
   console.info(
     `portfolio_guide_interactions=${tableExists ? "present" : "missing"}`,
+  );
+  console.info(
+    `portfolio_guide_conversations=${conversationTableStatus?.conversations ? "present" : "missing"}`,
+  );
+  console.info(
+    `portfolio_guide_trace_events=${conversationTableStatus?.trace_events ? "present" : "missing"}`,
   );
   console.info(
     `contact_submissions=${contactSubmissionsExists ? "present" : "missing"}`,

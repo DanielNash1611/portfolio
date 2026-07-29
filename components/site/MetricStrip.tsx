@@ -15,16 +15,16 @@ export default function MetricStrip({
 
   if (variant === "compact") {
     return (
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid border-l border-t border-[color:var(--color-slate)]/18 sm:grid-cols-2 xl:grid-cols-4">
         {metrics.map((metric) => (
           <article
             key={`${metric.label}-${metric.value}`}
-            className="flex h-full flex-col rounded-[1.45rem] border border-black/6 bg-white/84 px-5 py-5 shadow-[0_20px_50px_rgba(58,61,64,0.08)]"
+            className="flex h-full flex-col border-b border-r border-[color:var(--color-slate)]/18 px-5 py-5"
           >
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/68">
               {metric.label}
             </p>
-            <p className="metric-value mt-3 text-3xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+            <p className="metric-value mt-3 font-serif text-3xl tracking-[-0.04em] text-[color:var(--color-slate)]">
               {metric.value}
             </p>
             {metric.detail ? (
@@ -39,16 +39,16 @@ export default function MetricStrip({
   }
 
   return (
-    <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <section className="grid border-l border-t border-[color:var(--color-slate)]/18 md:grid-cols-2 xl:grid-cols-4">
       {metrics.map((metric) => (
         <article
           key={`${metric.label}-${metric.value}`}
-          className="flex h-full flex-col rounded-[1.5rem] border border-black/6 bg-white/82 px-5 py-5 shadow-[0_20px_50px_rgba(58,61,64,0.08)]"
+          className="flex h-full flex-col border-b border-r border-[color:var(--color-slate)]/18 px-5 py-5"
         >
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/68">
             {metric.label}
           </p>
-          <h3 className="metric-value mt-3 text-3xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+          <h3 className="metric-value mt-3 font-serif text-3xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)]">
             {metric.value}
           </h3>
           {metric.detail ? (

@@ -4,11 +4,13 @@ export const GUIDE_SESSION_STORAGE_KEY = "portfolio-guide:v1";
 export const GUIDE_VISITOR_STORAGE_KEY = "portfolio-guide:visitor-id";
 export const GUIDE_INTERACTION_SESSION_STORAGE_KEY = "portfolio-guide:session-id";
 export const GUIDE_SESSION_VERSION = 2;
+export const PORTFOLIO_GUIDE_PROMPT_VERSION = "2026-06-18.durable-v1";
 export const MAX_VISITED_PAGES = 12;
 export const MAX_TRACKED_PROMPTS = 20;
 export const MAX_TRACKED_QUESTIONS = 20;
 export const MAX_TAG_SIGNALS = 24;
 export const MAX_MESSAGES_PER_PAGE = 10;
+export const MAX_SITE_WIDE_MESSAGES = 100;
 export const MAX_CONVERSATION_CONTEXT_MESSAGES = 4;
 
 export const DEFAULT_GUIDE_TITLE = "Ask about this page";

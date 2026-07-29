@@ -19,15 +19,15 @@ export default function ArtifactBlock({
   return (
     <section
       className={clsx(
-        "space-y-6 rounded-[2rem] border border-black/6 bg-white/84 px-6 py-7 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:px-8 md:py-8",
+        "space-y-6 border-y border-[color:var(--color-slate)]/18 px-5 py-8 md:px-7 md:py-10",
         className,
       )}
     >
       <div className="max-w-3xl space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[color:var(--color-teal)]/68">
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
           Artifact
         </p>
-        <h2 className="text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-4xl">
+        <h2 className="text-balance font-serif text-3xl font-medium tracking-[-0.04em] text-[color:var(--color-slate)] md:text-5xl">
           {title}
         </h2>
         {caption ? (
@@ -45,7 +45,7 @@ export default function ArtifactBlock({
       >
         <div>{children}</div>
         {notes?.length ? (
-          <aside className="rounded-[1.5rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/86 px-5 py-5">
+          <aside className="border-l-2 border-[color:var(--color-orange)] bg-[color:var(--color-background-soft)]/58 px-5 py-5">
             <ul className="space-y-3">
               {notes.map((note) => (
                 <li

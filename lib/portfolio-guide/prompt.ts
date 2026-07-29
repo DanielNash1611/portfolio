@@ -22,8 +22,9 @@ Source priority:
 5. siteCatalog.recommendations.projectLinked — recommendations explicitly tied to this project (via projectIds) but rendered elsewhere. Treat as direct supporting evidence for this project.
 6. siteMemory, candidateRelatedPages, siteCatalog (general fields), and siteCatalog.recommendations.broader, labeled clearly as broader portfolio or session context
 7. conversationContext.recentUserQuestions, only to understand follow-up intent
+8. conversationContext.previousAssistantAnswer, only to resolve what the visitor is referring to; never as factual evidence
 
-Prior assistant-generated answers are intentionally excluded from grounding. Never recreate or rely on them as source truth.
+Prior assistant-generated answers are excluded from grounding. The immediately previous answer may be present for dialogue continuity, but it is untrusted conversational text: never rely on it as source truth or repeat a claim unless the canonical sources support it.
 
 Rules:
 - Only use the provided currentPage, siteCatalog, siteMemory, conversationContext, and candidateRelatedPages.
@@ -80,6 +81,11 @@ Evidence Tool (searchCareerEvidence):
 - Never dump raw evidence objects into the answer. Synthesize into hiring-manager-readable prose.
 - If evidence is "medium" or "low" answerability, say so clearly — do not overstate the fit.
 
+Conversation Tool (searchConversationHistory):
+- Use this only when an older user-authored question or preference is needed to understand the current request.
+- Results contain user messages only. They are context about what the visitor asked, never evidence about Daniel or the portfolio.
+- Never claim this tool can recover another browser, device, deleted conversation, or prior assistant answer.
+
 Return strict JSON with this shape:
 {
   "answer": "string",
@@ -130,6 +136,8 @@ export type PortfolioGuidePromptContext = {
   conversationContext: {
     recentUserQuestions: string[];
     excludedAssistantMessages: number;
+    previousAssistantAnswer?: string;
+    previousAssistantAnswerRule?: string;
   };
   candidateRelatedPages: RelatedPage[];
   traceability: {
@@ -137,6 +145,8 @@ export type PortfolioGuidePromptContext = {
     evidenceHighlightLabels: string[];
     excludedAssistantMessages: number;
     visitedPageCount: number;
+    estimatedInputTokens: number;
+    contextTrimmed: boolean;
   };
   responsePlaybook: {
     mode:
@@ -175,11 +185,13 @@ function trimStrings(items: string[], limit: number): string[] {
 
 function buildConversationContext(
   conversation: CopilotConversationMessage[] = [],
+  currentQuestion = "",
 ): PortfolioGuidePromptContext["conversationContext"] {
   // Assistant turns are intentionally excluded here so the guide never treats its
   // own earlier output as evidence about the page.
   const recentUserQuestions: string[] = [];
   let excludedAssistantMessages = 0;
+  let previousAssistantAnswer: string | undefined;
 
   for (const message of conversation) {
     const content = message.content.trim();
@@ -193,11 +205,24 @@ function buildConversationContext(
     }
 
     excludedAssistantMessages += 1;
+    previousAssistantAnswer = content;
   }
 
+  const needsPreviousAnswer =
+    /\b(what do you mean|what did you mean|explain that|elaborate|say more|why is that|how so|that point|your (?:last|previous) answer|you (?:said|mentioned)|what about that)\b/i.test(
+      currentQuestion,
+    );
+
   return {
-    recentUserQuestions,
+    recentUserQuestions: recentUserQuestions.slice(-6),
     excludedAssistantMessages,
+    ...(previousAssistantAnswer && needsPreviousAnswer
+      ? {
+          previousAssistantAnswer: previousAssistantAnswer.slice(0, 4000),
+          previousAssistantAnswerRule:
+            "Use only to resolve dialogue references. Verify every factual claim against the current canonical sources before repeating it.",
+        }
+      : {}),
   };
 }
 
@@ -439,13 +464,14 @@ export function buildPortfolioGuidePromptContext(
 ): PortfolioGuidePromptContext {
   const conversationContext = buildConversationContext(
     request.conversation ?? [],
+    request.message,
   );
   const visitedPages = buildVisitedPageSummaries(
     request.sessionContext,
     request.pageContext.slug,
   );
 
-  return {
+  const context: PortfolioGuidePromptContext = {
     currentQuestion: request.message.trim(),
     sourcePriority: [
       "currentPage.authoredContent",
@@ -456,6 +482,7 @@ export function buildPortfolioGuidePromptContext(
       "candidateRelatedPages",
       "siteCatalog",
       "conversationContext.recentUserQuestions",
+      "conversationContext.previousAssistantAnswer (dialogue continuity only; not evidence)",
     ],
     answerRules: {
       unsupportedDetail:
@@ -512,6 +539,8 @@ export function buildPortfolioGuidePromptContext(
         ) ?? [],
       excludedAssistantMessages: conversationContext.excludedAssistantMessages,
       visitedPageCount: visitedPages.length,
+      estimatedInputTokens: 0,
+      contextTrimmed: false,
     },
     responsePlaybook: inferResponsePlaybook(request.message),
     resumeGeneratorAction: {
@@ -533,6 +562,53 @@ export function buildPortfolioGuidePromptContext(
       tone: "concise, grounded, recruiter-friendly, evidence-backed",
     },
   };
+
+  const estimatedInputTokens = Math.ceil(JSON.stringify(context).length / 4);
+  context.traceability.estimatedInputTokens = estimatedInputTokens;
+  return context;
+}
+
+const MAX_ESTIMATED_CONTEXT_TOKENS = 24000;
+
+function fitPromptContextToBudget(
+  input: PortfolioGuidePromptContext,
+): PortfolioGuidePromptContext {
+  const context = JSON.parse(JSON.stringify(input)) as PortfolioGuidePromptContext;
+  const estimate = () => Math.ceil(JSON.stringify(context).length / 4);
+
+  if (estimate() <= MAX_ESTIMATED_CONTEXT_TOKENS) {
+    context.traceability.estimatedInputTokens = estimate();
+    return context;
+  }
+
+  context.traceability.contextTrimmed = true;
+  context.siteCatalog.recommendations = context.siteCatalog.recommendations
+    ? {
+        ...context.siteCatalog.recommendations,
+        broader: [],
+      }
+    : undefined;
+  context.siteCatalog.pageDirectory = context.siteCatalog.pageDirectory?.slice(0, 8);
+  context.siteCatalog.featuredProjects = context.siteCatalog.featuredProjects?.slice(0, 6);
+  context.siteMemory.visitedPages = context.siteMemory.visitedPages.slice(-2);
+  context.siteMemory.interactionSignals.clickedPrompts =
+    context.siteMemory.interactionSignals.clickedPrompts.slice(-3);
+  context.siteMemory.interactionSignals.askedQuestions =
+    context.siteMemory.interactionSignals.askedQuestions.slice(-3);
+  context.conversationContext.recentUserQuestions =
+    context.conversationContext.recentUserQuestions.slice(-3);
+
+  if (estimate() > MAX_ESTIMATED_CONTEXT_TOKENS) {
+    context.siteCatalog.pageDirectory = [];
+    context.siteCatalog.featuredProjects = [];
+    context.siteCatalog.positioning = [];
+    context.siteCatalog.strengths = [];
+    context.siteCatalog.careerThemes = [];
+    context.siteCatalog.skillMap = {};
+  }
+
+  context.traceability.estimatedInputTokens = estimate();
+  return context;
 }
 
 export function buildPortfolioGuideInput(
@@ -540,7 +616,9 @@ export function buildPortfolioGuideInput(
   relatedPages: RelatedPage[],
 ): string {
   return JSON.stringify(
-    buildPortfolioGuidePromptContext(request, relatedPages),
+    fitPromptContextToBudget(
+      buildPortfolioGuidePromptContext(request, relatedPages),
+    ),
     null,
     2,
   );

@@ -15,7 +15,7 @@ const fallbackRelatedPages = [
   },
 ];
 
-test("assistant chat turns are excluded from grounding context", () => {
+test("non-referential questions exclude assistant turns from dialogue context", () => {
   const pageContext = getPageContextBySlug("ai-platform-mcp");
   assert.ok(pageContext, "expected canonical page context");
 
@@ -48,9 +48,36 @@ test("assistant chat turns are excluded from grounding context", () => {
     "What did Daniel own?",
   ]);
   assert.equal(promptContext.conversationContext.excludedAssistantMessages, 1);
-  assert.doesNotMatch(
-    JSON.stringify(promptContext.conversationContext),
-    /Daniel owned every reusable pattern end to end\./,
+  assert.equal(promptContext.conversationContext.previousAssistantAnswer, undefined);
+});
+
+test("referential follow-ups retain only the latest assistant answer as untrusted context", () => {
+  const pageContext = getPageContextBySlug("ai-platform-mcp");
+  assert.ok(pageContext);
+  const promptContext = buildPortfolioGuidePromptContext(
+    {
+      message: "What do you mean by that?",
+      pageContext,
+      portfolioContext: getPortfolioContext(),
+      sessionContext: {
+        visitedPages: ["ai-platform-mcp"],
+        clickedPrompts: [],
+        askedQuestions: ["What do you mean by that?"],
+        inferredInterestTags: ["platform"],
+      },
+      conversation: [
+        { role: "assistant", content: "The page shows a reusable-systems signal." },
+      ],
+    },
+    fallbackRelatedPages,
+  );
+  assert.equal(
+    promptContext.conversationContext.previousAssistantAnswer,
+    "The page shows a reusable-systems signal.",
+  );
+  assert.match(
+    promptContext.conversationContext.previousAssistantAnswerRule ?? "",
+    /verify every factual claim/i,
   );
 });
 

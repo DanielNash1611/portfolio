@@ -90,14 +90,14 @@ export default function EditorialEssayLayout({
 }: EditorialEssayLayoutProps): JSX.Element {
   return (
     <>
-      <section className="relative overflow-hidden rounded-[2.4rem] border border-black/6 bg-white/86 px-6 py-9 shadow-[0_30px_80px_rgba(58,61,64,0.1)] md:px-10 md:py-14">
+      <section className="relative overflow-hidden border-y border-[color:var(--color-slate)]/18 py-10 md:py-16">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(44,79,82,0.05),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(209,122,95,0.045),_transparent_36%)]"
+          className="pointer-events-none absolute right-0 top-0 h-24 w-24 border-l border-[color:var(--color-orange)]/28 bg-[color:var(--color-orange)]/8"
         />
         <div className="relative max-w-[50rem] space-y-6">
           <div className="space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[color:var(--color-teal)]/70">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
               {eyebrow}
             </p>
             <div className="flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/62">
@@ -108,7 +108,7 @@ export default function EditorialEssayLayout({
               />
               <span>{articleLabel}</span>
             </div>
-            <h1 className="max-w-4xl text-balance text-4xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-6xl">
+            <h1 className="max-w-4xl text-balance font-serif text-[clamp(3rem,6vw,6.5rem)] font-medium leading-[0.95] tracking-[-0.052em] text-[color:var(--color-slate)]">
               {title}
             </h1>
           </div>
@@ -124,12 +124,15 @@ export default function EditorialEssayLayout({
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-2 pt-2">
-            {tags.map((tag) => (
+          <div className="flex flex-wrap border-l border-[color:var(--color-slate)]/16 pt-2">
+            {tags.map((tag, index) => (
               <span
                 key={tag}
-                className="inline-flex rounded-full border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/92 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-teal)]/74"
+                className="inline-flex border-r border-[color:var(--color-slate)]/16 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--color-teal)]/68"
               >
+                <span className="mr-2 font-mono text-[color:var(--color-orange)]">
+                  0{index + 1}
+                </span>
                 {tag}
               </span>
             ))}
@@ -148,12 +151,12 @@ export default function EditorialEssayLayout({
             <article
               className={clsx(
                 section.tone === "closing"
-                  ? "rounded-[2.2rem] border border-[color:var(--color-teal)]/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.86),rgba(242,227,213,0.76))] px-6 py-8 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:px-8 md:py-10"
+                  ? "border-y border-[color:var(--color-slate)]/18 bg-[color:var(--color-background-soft)]/64 px-6 py-8 md:px-8 md:py-10"
                   : "border-t border-black/7 pt-10 md:pt-14",
               )}
             >
               <div className="mx-auto max-w-[46rem] space-y-5">
-                <h2 className="text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-5xl">
+                <h2 className="text-balance font-serif text-3xl font-medium leading-[1.04] tracking-[-0.04em] text-[color:var(--color-slate)] md:text-5xl">
                   {section.title}
                 </h2>
                 {section.blocks.map((block) =>

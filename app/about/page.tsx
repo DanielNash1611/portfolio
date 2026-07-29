@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage(): JSX.Element {
   return (
-    <Container className="space-y-10 pt-6 md:space-y-12">
+    <Container className="space-y-12 pb-20 pt-8 md:space-y-16 md:pb-28">
       <PageHero
         eyebrow="About Daniel Nash"
         title={aboutContent.title}
@@ -64,12 +64,12 @@ export default function AboutPage(): JSX.Element {
           <Portrait
             variant="about-header"
             portrait={aboutPortrait}
-            className="rounded-[1.75rem] border border-[color:var(--color-teal)]/10"
+            className="!rounded-none border border-[color:var(--color-teal)]/18 shadow-[12px_14px_0_var(--color-tan)]"
           />
         ) : null}
       </section>
 
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[color:var(--color-slate)] px-6 py-8 text-[color:var(--color-cream)] shadow-[0_26px_70px_rgba(58,61,64,0.18)] md:px-8 md:py-10">
+      <section className="relative overflow-hidden border-y border-white/10 bg-[color:var(--color-slate)] px-6 py-9 text-[color:var(--color-cream)] md:px-8 md:py-12">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(219,191,150,0.12),_transparent_36%),radial-gradient(circle_at_bottom_right,_rgba(209,122,95,0.1),_transparent_38%)]"
@@ -124,7 +124,7 @@ export default function AboutPage(): JSX.Element {
           {aboutContent.principles.map((principle) => (
             <li
               key={principle}
-              className="rounded-[1.25rem] bg-white/72 px-5 py-4 text-base leading-7 text-[color:var(--color-slate)]/72"
+              className="border-l-2 border-[color:var(--color-orange)] bg-white/40 px-5 py-4 text-base leading-7 text-[color:var(--color-slate)]/72"
             >
               {principle}
             </li>

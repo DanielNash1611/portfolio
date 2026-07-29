@@ -327,6 +327,17 @@ export async function handlePortfolioGuideRequest(
         status: "answered",
         latencyMs: elapsedMs,
         answerLength: generation.response.answer.trim().length,
+        answer: generation.response.answer.trim(),
+        promptSnapshot: {
+          pageTitle: payload.pageContext.title,
+          context: JSON.parse(generation.promptInput) as Record<string, unknown>,
+        },
+        responsePayload: generation.response,
+        responseIds: generation.responseIds,
+        usage: generation.usage,
+        normalizationStatus: generation.normalizationStatus,
+        evidenceMetadata: generation.response.evidenceMeta,
+        traceEvents: generation.traceEvents,
       },
       dependencies.logWarning,
     );

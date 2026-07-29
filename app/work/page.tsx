@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import CaseStudyCard from "@/components/site/CaseStudyCard";
-import Container from "@/components/site/Container";
-import MotionReveal from "@/components/site/MotionReveal";
-import PageHero from "@/components/site/PageHero";
+import StudioCollectionPage from "@/components/site/StudioCollectionPage";
 import { workEntries } from "@/content/portfolio";
 
 export const metadata: Metadata = {
@@ -13,25 +10,29 @@ export const metadata: Metadata = {
 
 export default function WorkPage(): JSX.Element {
   return (
-    <Container className="space-y-8 pt-6">
-      <PageHero
-        eyebrow="Work"
-        title="Case studies in turning AI capabilities into production-ready systems"
-        description="This work spans enterprise adoption, agent workflows, retrieval and system layers, workflow modernization, and measurable business impact. Each case study is structured to make the operating logic easy to scan."
-        metrics={[
-          { label: "Coverage", value: "AI + systems + operations" },
-          { label: "Style", value: "Strategic and hands-on" },
-          { label: "Signal", value: "Production reality, not demos" },
-        ]}
-      />
-
-      <div className="grid gap-6 xl:grid-cols-3">
-        {workEntries.map((entry, index) => (
-          <MotionReveal key={entry.slug} delay={index * 0.05}>
-            <CaseStudyCard entry={entry} />
-          </MotionReveal>
-        ))}
-      </div>
-    </Container>
+    <StudioCollectionPage
+      eyebrow="Selected case studies"
+      title="Making AI real."
+      description="The operating work behind credible AI products: finding the right problem, creating the conditions for trust, and turning early proof into durable business value."
+      collectionEyebrow="The work"
+      collectionTitle="Decisions, systems, outcomes."
+      proofItems={[
+        { label: "Practice", value: "AI product leadership" },
+        { label: "Operating range", value: "Strategy through delivery" },
+        { label: "Standard", value: "Evidence over theater" },
+      ]}
+      entries={workEntries.map((entry) => ({
+        slug: entry.slug,
+        href: entry.href,
+        title: entry.title,
+        eyebrow: entry.eyebrow,
+        meta: `${entry.company} · ${entry.timeframe}`,
+        description: entry.description,
+        image: entry.heroImage,
+        imageAlt: entry.heroImageAlt,
+        imageClassName: "object-cover",
+        metrics: entry.featuredMetrics,
+      }))}
+    />
   );
 }

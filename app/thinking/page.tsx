@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function ThinkingPage(): JSX.Element {
   return (
-    <Container className="space-y-8 pt-6">
+    <Container className="space-y-12 pb-20 pt-8 md:pb-28">
       <PageHero
         eyebrow="Thinking"
         title="A practical point of view on AI, products, and human work"
@@ -25,7 +25,7 @@ export default function ThinkingPage(): JSX.Element {
         ]}
       />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-x-12 gap-y-6 lg:grid-cols-2">
         {thinkingEntries.map((entry, index) => (
           <MotionReveal key={entry.slug} delay={index * 0.05}>
             <EssayCard entry={entry} />

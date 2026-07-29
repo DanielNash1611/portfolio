@@ -296,6 +296,81 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
     ],
   },
   {
+    id: "ai-platform-referential-follow-up",
+    title: "Referential follow-up uses dialogue context without promoting it to evidence",
+    summary:
+      "Checks that an immediate follow-up can resolve the prior answer while re-grounding the explanation in the current page.",
+    category: "contaminated-history",
+    answerability: "answerable",
+    pageSlug: "ai-platform-mcp",
+    question: "What do you mean by that?",
+    priorConversation: [
+      {
+        role: "user",
+        content: "What is the strongest signal on this page?",
+      },
+      {
+        role: "assistant",
+        content: "The strongest signal is the move toward reusable AI systems.",
+      },
+    ],
+    deterministicChecks: {
+      answerMustIncludeAny: [
+        { value: "87%" },
+        { value: "prototype" },
+        { value: "workflow" },
+        { value: "reusable" },
+      ],
+      answerMustExclude: [REGEX_16M, REGEX_27M],
+      maxSentences: 6,
+    },
+    judgeExpectations: [
+      "Resolve what 'that' refers to using the prior answer.",
+      "Re-ground the explanation in current-page prototype, validation, or workflow evidence.",
+      "Do not treat the prior assistant wording itself as proof.",
+    ],
+  },
+  {
+    id: "checkout-multiturn-current-page-primary",
+    title: "Cross-page conversation keeps the new current page primary",
+    summary:
+      "Checks that AI-platform dialogue and role memory do not contaminate a later checkout-page answer.",
+    category: "cross-page-memory",
+    answerability: "answerable",
+    pageSlug: "checkout-redesign",
+    question: "For the role I entered, what is strongest on this page?",
+    priorConversation: [
+      { role: "user", content: "Tell me about the AI platform work." },
+      {
+        role: "assistant",
+        content: "That page discusses MCP-style connectors and reusable AI workflows.",
+      },
+    ],
+    sessionContext: {
+      visitedPages: ["ai-platform-mcp", "checkout-redesign"],
+      visitorIntent: {
+        rawInput: "AI Product Leader",
+        normalizedTitle: "AI Product Leader",
+        seniority: "director",
+        roleLenses: ["product-leader"],
+      },
+    },
+    deterministicChecks: {
+      requiredConcepts: [CHECKOUT_BUSINESS_IMPACT],
+      answerMustExclude: [
+        { value: "MCP" },
+        { value: "connector" },
+        { value: "87%" },
+      ],
+      maxSentences: 6,
+    },
+    judgeExpectations: [
+      "Use checkout redesign evidence and measured outcomes from the current page.",
+      "The entered role may frame relevance but cannot import AI-platform facts.",
+      "Do not repeat the prior assistant's MCP or connector language.",
+    ],
+  },
+  {
     id: "checkout-mentions-mcp",
     title: "Checkout page does not invent MCP mention",
     summary:
@@ -1075,7 +1150,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
           { value: "5/12" },
           { value: "11/12" },
           { value: "25" },
-          { value: "31" },
+          { value: "33" },
           { value: "six" },
           { value: "6" },
         ],

@@ -25,6 +25,11 @@ import {
 } from "@/lib/portfolio-guide/tools/evidence";
 import { runMockEvidence } from "@/lib/portfolio-guide/tools/mockEvidence";
 import type { EvidenceMetadata } from "@/lib/portfolio-guide/types";
+import {
+  SEARCH_CONVERSATION_HISTORY_TOOL_DEFINITION,
+  type ConversationHistorySearchResult,
+} from "@/lib/portfolio-guide/tools/conversation-history";
+import type { PortfolioGuideTraceEvent } from "@/lib/portfolio-guide/trace";
 
 export type PortfolioGuideServiceConfig = {
   apiKey: string;
@@ -43,6 +48,10 @@ export type PortfolioGuideServiceConfig = {
    * evidence path be exercised on localhost. Takes precedence over evidenceConfig.
    */
   evidenceMock?: boolean;
+  conversationHistorySearch?: (
+    query: string,
+    maxResults: number,
+  ) => Promise<ConversationHistorySearchResult["messages"]>;
 };
 
 export type PortfolioGuideProviderInfo = {
@@ -58,6 +67,9 @@ export type PortfolioGuideGenerationResult = {
   response: CopilotResponse;
   normalizationStatus: "normalized-json" | "raw-fallback";
   provider: PortfolioGuideProviderInfo;
+  responseIds?: string[];
+  usage?: Record<string, unknown>;
+  traceEvents?: PortfolioGuideTraceEvent[];
 };
 
 const RESUME_GENERATOR_PATH = "/resume/generate";
@@ -141,6 +153,22 @@ function isConnectionsQuestion(question: string): boolean {
   );
 }
 
+function isEvidenceSummaryQuestion(question: string): boolean {
+  return /\b(what evidence|strongest (?:signals|evidence|proof)|evidence (?:is|shown)|proof (?:is|shown)|signals on this page)\b/i.test(
+    question,
+  );
+}
+
+function isReferentialFollowUpQuestion(question: string): boolean {
+  return /\b(what do you mean|what did you mean|explain that|elaborate|say more|why is that|how so|that point|your (?:last|previous) answer|you (?:said|mentioned)|what about that)\b/i.test(
+    question,
+  );
+}
+
+function isDailyActiveUsersQuestion(question: string): boolean {
+  return /\b(daily active users?|dau)\b/i.test(question);
+}
+
 function isDirectResumeRequest(question: string): boolean {
   return (
     /\b(?:resume|cv)\b/i.test(question) &&
@@ -189,6 +217,21 @@ function stripSpeculativeTail(answer: string): string {
   );
 
   return filtered.join(" ").trim() || answer.trim();
+}
+
+function buildSafeRankingAnswer(request: CopilotRequest): string {
+  const namedPatterns = (request.pageContext.tools ?? [])
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .slice(0, 4);
+  if (namedPatterns.length === 0) {
+    return "The page does not provide reuse counts, frequencies, or a supported ranking, so it cannot establish which pattern was reused most.";
+  }
+  const listed =
+    namedPatterns.length === 1
+      ? namedPatterns[0]
+      : `${namedPatterns.slice(0, -1).join(", ")}, and ${namedPatterns.at(-1)}`;
+  return `The page does not provide reuse counts, frequencies, or a ranking, so it cannot establish which pattern was reused most. It names ${listed} as supported patterns.`;
 }
 
 function hasExplicitOwnershipLimit(answer: string): boolean {
@@ -399,6 +442,119 @@ function pickDistinctDetails(
   return results;
 }
 
+function joinDetailsAsOneSentence(details: string[]): string {
+  return details
+    .map((detail) => detail.trim().replace(/[.!?]+$/, ""))
+    .filter(Boolean)
+    .join("; ");
+}
+
+function buildOwnershipAnswer(request: CopilotRequest): string | undefined {
+  const direct = pickDistinctDetails(
+    request.pageContext.claimBoundaries?.directOwnership ?? [],
+    2,
+  );
+  const influence = request.pageContext.claimBoundaries?.influence?.[0];
+  const implementation = request.pageContext.claimBoundaries?.implementation?.[0];
+  const unknown = request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
+  if (direct.length === 0 && !influence && !implementation && !unknown) {
+    return undefined;
+  }
+  const parts: string[] = [];
+  if (direct.length > 0) {
+    parts.push(
+      `The page shows Daniel leading: ${joinDetailsAsOneSentence(direct)}`,
+    );
+  }
+  if (influence) {
+    parts.push(`Influence: ${influence}`);
+  }
+  const unknownDetail =
+    unknown && !/ownership matrix|ownership split|team-by-team/i.test(unknown)
+      ? unknown
+      : undefined;
+  const unprovenDetails = joinDetailsAsOneSentence(
+    [implementation, unknownDetail].filter(Boolean) as string[],
+  );
+  parts.push(
+    `Not explicit: ${unprovenDetails ? `${unprovenDetails}; ` : ""}the page does not define a full ownership matrix or exact team-by-team split`,
+  );
+  return parts.map(ensureTrailingPeriod).join(" ");
+}
+
+function buildEvidenceSummaryAnswer(request: CopilotRequest): string | undefined {
+  const highlights = request.pageContext.evidenceHighlights?.slice(0, 3) ?? [];
+  if (highlights.length === 0) {
+    return undefined;
+  }
+
+  return highlights
+    .map((highlight) =>
+      ensureTrailingPeriod(`${highlight.label}: ${highlight.detail}`),
+    )
+    .join(" ");
+}
+
+function buildReferentialFollowUpAnswer(
+  request: CopilotRequest,
+): string | undefined {
+  if (!request.conversation?.some((message) => message.role === "assistant")) {
+    return undefined;
+  }
+
+  const highlights = request.pageContext.evidenceHighlights?.slice(0, 3) ?? [];
+  if (highlights.length === 0) {
+    return undefined;
+  }
+
+  return [
+    ensureTrailingPeriod(
+      `By that, I mean the current page's evidence: ${joinDetailsAsOneSentence(
+        highlights.map((highlight) => highlight.detail),
+      )}`,
+    ),
+    "Those page facts—not the earlier assistant wording—are the basis for the explanation.",
+  ].join(" ");
+}
+
+function pageHasDailyActiveUsersMetric(request: CopilotRequest): boolean {
+  return (request.pageContext.metrics ?? []).some((metric) =>
+    /\b(daily active users?|dau)\b/i.test(metric),
+  );
+}
+
+function buildRoleFitAnswer(request: CopilotRequest): string | undefined {
+  const evidence =
+    request.pageContext.evidenceHighlights
+      ?.slice(0, 3)
+      .map((highlight) => highlight.detail) ?? [];
+  const leadership = request.pageContext.leadershipSignals?.slice(0, 2) ?? [];
+  const boundary =
+    request.pageContext.claimBoundaries?.implementation?.[0] ??
+    request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
+  if (evidence.length === 0 && leadership.length === 0) {
+    return undefined;
+  }
+
+  const role =
+    request.sessionContext?.visitorIntent?.normalizedTitle?.trim() || "this role";
+  const parts: string[] = [];
+  if (evidence.length > 0) {
+    parts.push(
+      `For ${role}, this page supports fit through ${joinDetailsAsOneSentence(evidence)}`,
+    );
+  }
+  if (leadership.length > 0) {
+    parts.push(
+      `Leadership signals include ${joinDetailsAsOneSentence(leadership)}`,
+    );
+  }
+  if (boundary) {
+    parts.push(`Boundary: ${boundary}`);
+  }
+  return parts.map(ensureTrailingPeriod).join(" ");
+}
+
 function summarizeRecommendation(rec: {
   name: string;
   title: string;
@@ -431,7 +587,7 @@ function buildSeniorityAnswer(request: CopilotRequest): string | undefined {
   const parts: string[] = [];
 
   if (signals.length > 0) {
-    parts.push(`Signals on the page: ${signals.join(" ")}`);
+    parts.push(`Signals on the page: ${joinDetailsAsOneSentence(signals)}`);
   }
 
   if (currentRec) {
@@ -588,8 +744,15 @@ export function applyPortfolioGuideResponseGuardrails(input: {
     answer = stripSpeculativeTail(answer);
   }
 
+  if (isRankingQuestion(request.message)) {
+    answer = buildSafeRankingAnswer(request);
+  }
+
   if (isOwnershipQuestion(request.message)) {
-    if (portfolioSubject) {
+    const safeOwnershipAnswer = buildOwnershipAnswer(request);
+    answer = safeOwnershipAnswer ?? answer;
+
+    if (!safeOwnershipAnswer && portfolioSubject) {
       answer = softenOwnershipClaims(answer, portfolioSubject.shortName);
       answer = softenOwnershipClaims(answer, portfolioSubject.name);
     }
@@ -610,6 +773,35 @@ export function applyPortfolioGuideResponseGuardrails(input: {
     const safeImpliedAnswer = buildImpliedNotProvenAnswer(request);
     if (safeImpliedAnswer) {
       answer = safeImpliedAnswer;
+    }
+  }
+
+  if (isEvidenceSummaryQuestion(request.message)) {
+    const safeEvidenceAnswer = buildEvidenceSummaryAnswer(request);
+    if (safeEvidenceAnswer) {
+      answer = safeEvidenceAnswer;
+    }
+  }
+
+  if (isReferentialFollowUpQuestion(request.message)) {
+    const safeReferentialAnswer = buildReferentialFollowUpAnswer(request);
+    if (safeReferentialAnswer) {
+      answer = safeReferentialAnswer;
+    }
+  }
+
+  if (
+    isDailyActiveUsersQuestion(request.message) &&
+    !pageHasDailyActiveUsersMetric(request)
+  ) {
+    answer =
+      "This page does not provide a daily active users (DAU) figure. Any DAU metric from another portfolio page is broader context, not evidence for this page.";
+  }
+
+  if (shouldSuggestResumeGenerator && !directResumeRequest) {
+    const safeRoleFitAnswer = buildRoleFitAnswer(request);
+    if (safeRoleFitAnswer) {
+      answer = safeRoleFitAnswer;
     }
   }
 
@@ -708,6 +900,39 @@ function buildEvidenceSummaries(
   }));
 }
 
+function getResponseDiagnostics(response: unknown): {
+  id?: string;
+  usage?: Record<string, unknown>;
+} {
+  if (!response || typeof response !== "object") {
+    return {};
+  }
+  const typed = response as { id?: unknown; usage?: unknown };
+  return {
+    ...(typeof typed.id === "string" ? { id: typed.id } : {}),
+    ...(typed.usage && typeof typed.usage === "object"
+      ? { usage: typed.usage as Record<string, unknown> }
+      : {}),
+  };
+}
+
+export function extractAnswerFromRawFallback(rawText: string): string {
+  const withoutAnswerMarker = rawText
+    .trim()
+    .replace(
+      /^\s*(?:#{1,3}\s*)?(?:\*\*)?answer\s*:?\s*(?:\*\*)?\s*/i,
+      "",
+    );
+  const endMarker = withoutAnswerMarker.search(
+    /\s+(?:#{1,3}\s*)?(?:\*\*)?(?:suggested follow-ups?|related pages?|inferred interest tags?|inferredInterestTags)(?:\*\*)?(?:\s*:\s*|\s*\n)/i,
+  );
+  return (
+    endMarker >= 0
+      ? withoutAnswerMarker.slice(0, endMarker)
+      : withoutAnswerMarker
+  ).trim();
+}
+
 export async function generatePortfolioGuideResponse(
   request: CopilotRequest,
   config: PortfolioGuideServiceConfig,
@@ -723,6 +948,7 @@ export async function generatePortfolioGuideResponse(
     signal,
     evidenceConfig,
     evidenceMock = false,
+    conversationHistorySearch,
   } = config;
 
   // The evidence tool is available when either a real ResumeCustomizer
@@ -746,6 +972,17 @@ export async function generatePortfolioGuideResponse(
     },
   };
   const promptInput = buildPortfolioGuideInput(enrichedRequest, relatedPages);
+  const traceEvents: PortfolioGuideTraceEvent[] = [];
+  const responseIds: string[] = [];
+  const responseUsage: Array<Record<string, unknown>> = [];
+  let traceSequence = 0;
+
+  const addTrace = (
+    event: Omit<PortfolioGuideTraceEvent, "sequence">,
+  ): void => {
+    traceEvents.push({ sequence: traceSequence, ...event });
+    traceSequence += 1;
+  };
 
   // Base input shared by both LLM calls
   const baseInput = [
@@ -753,21 +990,94 @@ export async function generatePortfolioGuideResponse(
     { role: "user" as const, content: promptInput },
   ];
 
-  // First call: include evidence tool definition when the tool is available
+  // First call: include only the allowlisted tools available for this request.
   type ResponsesCreateParams = Parameters<typeof client.responses.create>[0];
-  const firstCallParams: ResponsesCreateParams = evidenceEnabled
-    ? {
-        model,
-        reasoning: { effort: reasoningEffort },
-        input: baseInput,
-        tools: [SEARCH_CAREER_EVIDENCE_TOOL_DEFINITION],
-      }
-    : { model, reasoning: { effort: reasoningEffort }, input: baseInput };
+  const availableTools: NonNullable<ResponsesCreateParams["tools"]> = [];
+  if (evidenceEnabled) {
+    availableTools.push(SEARCH_CAREER_EVIDENCE_TOOL_DEFINITION);
+  }
+  if (conversationHistorySearch) {
+    availableTools.push(SEARCH_CONVERSATION_HISTORY_TOOL_DEFINITION);
+  }
 
-  const firstResponse = await client.responses.create(
-    firstCallParams,
-    signal ? { signal } : undefined,
-  );
+  const providerStorageParams =
+    providerLabel === "openai" && !baseURL
+      ? {
+          store: true as const,
+          metadata: {
+            portfolio_guide_conversation:
+              request.interactionMeta?.conversationId ?? "stateless",
+            portfolio_guide_turn:
+              request.interactionMeta?.clientTurnId ?? "unknown",
+          },
+        }
+      : {};
+
+  const runModelCall = async (
+    stage: string,
+    params: ResponsesCreateParams,
+  ): Promise<unknown> => {
+    const startedAt = Date.now();
+    addTrace({
+      eventType: "model",
+      eventName: `${stage}.request`,
+      payload: {
+        model,
+        stage,
+        toolNames:
+          params.tools?.map((tool) =>
+            "name" in tool ? tool.name : tool.type,
+          ) ?? [],
+        input: params.input as unknown,
+      },
+    });
+    try {
+      const response = await client.responses.create(
+        params,
+        signal ? { signal } : undefined,
+      );
+      const diagnostics = getResponseDiagnostics(response);
+      if (diagnostics.id) {
+        responseIds.push(diagnostics.id);
+      }
+      if (diagnostics.usage) {
+        responseUsage.push({ stage, ...diagnostics.usage });
+      }
+      addTrace({
+        eventType: "model",
+        eventName: `${stage}.response`,
+        payload: {
+          stage,
+          responseId: diagnostics.id,
+          usage: diagnostics.usage,
+          output: getResponseOutput(response),
+        },
+        durationMs: Date.now() - startedAt,
+      });
+      return response;
+    } catch (error) {
+      addTrace({
+        eventType: "error",
+        eventName: `${stage}.error`,
+        payload: {
+          stage,
+          message: error instanceof Error ? error.message : "Unknown model error",
+        },
+        durationMs: Date.now() - startedAt,
+      });
+      throw error;
+    }
+  };
+
+  const firstCallParams: ResponsesCreateParams = {
+    model,
+    reasoning: { effort: reasoningEffort },
+    input: baseInput,
+    ...(availableTools.length > 0 ? { tools: availableTools } : {}),
+    ...providerStorageParams,
+  };
+
+  const firstResponse = await runModelCall("initial", firstCallParams);
 
   // Detect tool calls and execute them server-side.
   //
@@ -782,12 +1092,13 @@ export async function generatePortfolioGuideResponse(
     evidenceEnabled ? undefined : "not_configured";
   const warnings: string[] = [];
 
-  if (evidenceEnabled) {
-    const toolCalls = extractFunctionCalls(firstResponse).filter(
-      (toolCall) => toolCall.name === "searchCareerEvidence",
-    );
+  const toolCalls = extractFunctionCalls(firstResponse).filter(
+    (toolCall) =>
+      toolCall.name === "searchCareerEvidence" ||
+      toolCall.name === "searchConversationHistory",
+  );
 
-    if (toolCalls.length > 0) {
+  if (toolCalls.length > 0) {
       try {
         const allEvidence: EvidenceItem[] = [];
         const toolResultItems: Array<{
@@ -796,6 +1107,7 @@ export async function generatePortfolioGuideResponse(
           output: string;
         }> = [];
         let lastUnavailableReason: EvidenceUnavailableReason | undefined;
+        let evidenceToolCalled = false;
 
         for (const toolCall of toolCalls) {
           let toolInput: Record<string, unknown>;
@@ -813,6 +1125,37 @@ export async function generatePortfolioGuideResponse(
               ? toolInput.query
               : promptInput.slice(0, 200);
 
+          if (toolCall.name === "searchConversationHistory") {
+            const maxResults =
+              typeof toolInput.maxResults === "number"
+                ? Math.max(1, Math.min(toolInput.maxResults, 6))
+                : 5;
+            const startedAt = Date.now();
+            const messages = conversationHistorySearch
+              ? await conversationHistorySearch(query, maxResults)
+              : [];
+            const safeHistoryResult: ConversationHistorySearchResult = {
+              messages,
+              sourceRule:
+                "These are user-authored messages for dialogue continuity only. They are not evidence about Daniel or the portfolio.",
+            };
+            toolResultItems.push({
+              type: "function_call_output",
+              call_id: toolCall.call_id,
+              output: JSON.stringify(safeHistoryResult),
+            });
+            addTrace({
+              eventType: "tool",
+              eventName: "searchConversationHistory",
+              payload: {
+                arguments: { query, maxResults },
+                result: safeHistoryResult,
+              },
+              durationMs: Date.now() - startedAt,
+            });
+            continue;
+          }
+
           const toolPayload = {
             query,
             currentPortfolioPage:
@@ -829,6 +1172,8 @@ export async function generatePortfolioGuideResponse(
                 : 5,
           };
 
+          evidenceToolCalled = true;
+          const toolStartedAt = Date.now();
           const result = evidenceMock
             ? await runMockEvidence({ query, userMessage: request.message })
             : await callEvidenceTool(
@@ -869,12 +1214,18 @@ export async function generatePortfolioGuideResponse(
             call_id: toolCall.call_id,
             output: JSON.stringify(safeResult),
           });
+          addTrace({
+            eventType: "tool",
+            eventName: "searchCareerEvidence",
+            payload: { arguments: toolPayload, result: safeResult },
+            durationMs: Date.now() - toolStartedAt,
+          });
         }
 
         if (allEvidence.length > 0) {
           evidenceUsed = buildEvidenceSummaries(allEvidence);
           resumeCustomizerEvidenceUsed = true;
-        } else {
+        } else if (evidenceToolCalled) {
           evidenceUnavailableReason =
             lastUnavailableReason ?? "no_evidence_found";
         }
@@ -892,13 +1243,14 @@ export async function generatePortfolioGuideResponse(
           ...toolResultItems,
         ] as ResponsesCreateParams["input"];
 
-        finalResponse = await client.responses.create(
+        finalResponse = await runModelCall(
+          "synthesis",
           {
             model,
             reasoning: { effort: reasoningEffort },
             input: secondCallInput,
+            ...providerStorageParams,
           },
-          signal ? { signal } : undefined,
         );
       } catch (error) {
         // The evidence augmentation or the synthesis call failed. Recover with
@@ -913,15 +1265,19 @@ export async function generatePortfolioGuideResponse(
         evidenceUnavailableReason = "evidence_layer_error";
         warnings.push("evidence_layer_error");
 
-        finalResponse = await client.responses.create(
-          { model, reasoning: { effort: reasoningEffort }, input: baseInput },
-          signal ? { signal } : undefined,
+        finalResponse = await runModelCall(
+          "page_context_fallback",
+          {
+            model,
+            reasoning: { effort: reasoningEffort },
+            input: baseInput,
+            ...providerStorageParams,
+          },
         );
       }
-    }
-    // toolCalls.length === 0: the model answered from page context without
-    // requesting deeper evidence. Not an error — leave reason unset.
   }
+  // toolCalls.length === 0: the model answered from page context without
+  // requesting deeper evidence. Not an error.
 
   const rawText = extractResponseText(finalResponse);
   if (!rawText) {
@@ -932,7 +1288,7 @@ export async function generatePortfolioGuideResponse(
   const normalizedResponse =
     parsedResponse ??
     ({
-      answer: rawText,
+      answer: extractAnswerFromRawFallback(rawText),
       relatedPages,
     } satisfies CopilotResponse);
   const guardedResponse = applyPortfolioGuideResponseGuardrails({
@@ -943,6 +1299,23 @@ export async function generatePortfolioGuideResponse(
   const normalizationStatus = parsedResponse
     ? "normalized-json"
     : "raw-fallback";
+
+  if (
+    guardedResponse.answer !== normalizedResponse.answer ||
+    JSON.stringify(guardedResponse.suggestedFollowUps) !==
+      JSON.stringify(normalizedResponse.suggestedFollowUps) ||
+    JSON.stringify(guardedResponse.relatedPages) !==
+      JSON.stringify(normalizedResponse.relatedPages)
+  ) {
+    addTrace({
+      eventType: "guardrail",
+      eventName: "response_guardrails_applied",
+      payload: {
+        before: normalizedResponse,
+        after: guardedResponse,
+      },
+    });
+  }
 
   const evidenceMeta: EvidenceMetadata = {
     pageContextUsed: true,
@@ -970,5 +1343,8 @@ export async function generatePortfolioGuideResponse(
       model,
       ...(baseURL ? { baseURL } : {}),
     },
+    responseIds,
+    usage: { responses: responseUsage },
+    traceEvents,
   };
 }
