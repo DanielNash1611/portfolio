@@ -24,17 +24,22 @@ const steps = [
 export default function EvidenceBridge(): JSX.Element {
   return (
     <section
-      className="space-y-8 rounded-[2rem] border border-black/6 bg-white/84 px-6 py-8 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:px-8 md:py-10"
+      className="space-y-10 border-y border-[color:var(--color-slate)]/16 py-10 md:py-14"
       aria-labelledby="evidence-bridge-heading"
     >
-      <div className="max-w-3xl space-y-4">
-        <h2
-          id="evidence-bridge-heading"
-          className="text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-4xl"
-        >
-          Claim-to-Evidence Engine
-        </h2>
-        <p className="text-pretty text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg">
+      <div className="grid gap-6 lg:grid-cols-[minmax(260px,0.74fr)_minmax(0,1.26fr)] lg:gap-16">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+            Governed retrieval
+          </p>
+          <h2
+            id="evidence-bridge-heading"
+            className="mt-5 max-w-[11ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl"
+          >
+            Claim-to-Evidence Engine
+          </h2>
+        </div>
+        <p className="max-w-2xl self-end text-pretty text-base leading-7 text-[color:var(--color-slate)]/68 md:text-lg md:leading-8">
           This is the core governed-product mechanism: it lets the Portfolio
           Guide answer deeper hiring-manager questions without inventing claims
           or exposing unsafe or private details. Retrieval reuses the existing
@@ -43,27 +48,33 @@ export default function EvidenceBridge(): JSX.Element {
         </p>
       </div>
 
-      <MediaFrame
-        src="/images/products/ai-career-operating-system/claim-to-evidence-engine.png"
-        alt="Diagram of the Claim-to-Evidence Engine showing a Portfolio Guide question, authenticated API call, public-safe and source-audited filters, structured evidence response, and safe fallback."
-        fallbackTitle="Claim-to-Evidence Engine"
-        sizes="(min-width: 1280px) 1100px, 94vw"
-        className="aspect-[3/2] rounded-[1.5rem] border border-black/6 bg-white"
-        imageClassName="object-contain"
-        expandable
-        expandLabel="Expand Claim-to-Evidence Engine diagram"
-      />
+      <div className="relative pb-5 pl-4 sm:pb-7 sm:pl-7">
+        <div
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 top-10 w-[36%] bg-[color:var(--color-tan)]"
+        />
+        <MediaFrame
+          src="/images/products/ai-career-operating-system/claim-to-evidence-engine.png"
+          alt="Diagram of the Claim-to-Evidence Engine showing a Portfolio Guide question, authenticated API call, public-safe and source-audited filters, structured evidence response, and safe fallback."
+          fallbackTitle="Claim-to-Evidence Engine"
+          sizes="(min-width: 1280px) 1100px, 94vw"
+          className="aspect-[3/2] border border-[color:var(--color-slate)]/14 bg-white"
+          imageClassName="object-contain transition-transform duration-700 hover:scale-[1.012]"
+          expandable
+          expandLabel="Expand Claim-to-Evidence Engine diagram"
+        />
+      </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid border-y border-[color:var(--color-slate)]/16 lg:grid-cols-3 lg:divide-x lg:divide-[color:var(--color-slate)]/16">
         {steps.map((step, index) => (
           <article
             key={step.title}
-            className="relative rounded-[1.45rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/82 p-5"
+            className="border-b border-[color:var(--color-slate)]/16 py-6 last:border-b-0 lg:border-b-0 lg:px-7 lg:first:pl-0 lg:last:pr-0"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-orange)]">
+            <p className="font-mono text-xs text-[color:var(--color-orange)]">
               0{index + 1} / {step.label}
             </p>
-            <h3 className="mt-4 text-xl font-semibold text-[color:var(--color-slate)]">
+            <h3 className="mt-4 font-serif text-xl font-medium tracking-[-0.02em] text-[color:var(--color-slate)]">
               {step.title}
             </h3>
             <p className="mt-3 text-sm leading-6 text-[color:var(--color-slate)]/68">
@@ -73,9 +84,9 @@ export default function EvidenceBridge(): JSX.Element {
         ))}
       </div>
 
-      <div className="grid gap-5 border-t border-[color:var(--color-teal)]/10 pt-7 md:grid-cols-2">
-        <div>
-          <h3 className="text-lg font-semibold text-[color:var(--color-slate)]">
+      <div className="grid border-t border-[color:var(--color-slate)]/16 md:grid-cols-2 md:divide-x md:divide-[color:var(--color-slate)]/16">
+        <div className="py-7 md:pr-8">
+          <h3 className="font-serif text-xl font-medium text-[color:var(--color-slate)]">
             What it is
           </h3>
           <p className="mt-2 text-sm leading-6 text-[color:var(--color-slate)]/68">
@@ -84,8 +95,8 @@ export default function EvidenceBridge(): JSX.Element {
             degradation. Raw resume bullets remain private.
           </p>
         </div>
-        <div>
-          <h3 className="text-lg font-semibold text-[color:var(--color-slate)]">
+        <div className="border-t border-[color:var(--color-slate)]/16 py-7 md:border-t-0 md:pl-8">
+          <h3 className="font-serif text-xl font-medium text-[color:var(--color-slate)]">
             What it is not
           </h3>
           <p className="mt-2 text-sm leading-6 text-[color:var(--color-slate)]/68">
@@ -95,7 +106,7 @@ export default function EvidenceBridge(): JSX.Element {
         </div>
       </div>
 
-      <p className="rounded-[1.2rem] border border-[color:var(--color-orange)]/15 bg-[color:var(--color-orange)]/7 px-4 py-3 text-sm leading-6 text-[color:var(--color-slate)]/68">
+      <p className="border-l-2 border-[color:var(--color-orange)] bg-[color:var(--color-orange)]/6 px-5 py-4 text-sm leading-6 text-[color:var(--color-slate)]/68">
         Launch condition: the Portfolio tool and ResumeCustomizer evidence
         endpoint must be merged and deployed together.
       </p>

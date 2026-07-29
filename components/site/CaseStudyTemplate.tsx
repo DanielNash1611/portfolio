@@ -40,7 +40,7 @@ export default function CaseStudyTemplate({
   const hasSidebarArtifacts = sidebarArtifacts.length > 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageHero
         eyebrow={entry.eyebrow}
         title={entry.title}
@@ -144,7 +144,7 @@ export default function CaseStudyTemplate({
               {entry.problem.map((item) => (
                 <li
                   key={item}
-                  className="rounded-[1.25rem] bg-[color:var(--color-cream)]/72 px-5 py-4 text-base leading-7 text-[color:var(--color-slate)]/74"
+                  className="border-l-2 border-[color:var(--color-orange)] bg-[color:var(--color-background-soft)]/52 px-5 py-4 text-base leading-7 text-[color:var(--color-slate)]/74"
                 >
                   {item}
                 </li>
@@ -175,14 +175,14 @@ export default function CaseStudyTemplate({
               {entry.optionsAndTradeoffs.map((option) => (
                 <article
                   key={option.option}
-                  className="rounded-[1.35rem] border border-[color:var(--color-teal)]/10 bg-white/78 px-5 py-5"
+                  className="border-t border-[color:var(--color-slate)]/16 py-5"
                 >
                   <div className="flex flex-wrap items-center gap-3">
                     <h3 className="text-lg font-semibold text-[color:var(--color-slate)]">
                       {option.option}
                     </h3>
                     {option.selected ? (
-                      <span className="inline-flex rounded-full bg-[color:var(--color-orange)]/12 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:var(--color-orange)]/90">
+                      <span className="inline-flex border-l-2 border-[color:var(--color-orange)] pl-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--color-orange)]">
                         Chosen path
                       </span>
                     ) : null}
@@ -203,10 +203,10 @@ export default function CaseStudyTemplate({
               {entry.execution.map((item, index) => (
                 <li
                   key={typeof item === "string" ? item : item.title}
-                  className="grid grid-cols-[40px_minmax(0,1fr)] items-start gap-4 rounded-[1.35rem] border border-black/6 bg-white/78 px-5 py-5"
+                  className="grid grid-cols-[40px_minmax(0,1fr)] items-start gap-4 border-t border-[color:var(--color-slate)]/16 py-5"
                 >
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[color:var(--color-teal)] text-sm font-semibold text-[color:var(--color-cream)]">
-                    {index + 1}
+                  <span className="inline-flex h-10 w-10 items-center justify-center border border-[color:var(--color-teal)]/24 font-mono text-xs font-bold text-[color:var(--color-orange)]">
+                    0{index + 1}
                   </span>
                   <div className="space-y-2 pt-0.5">
                     {typeof item === "string" ? (
@@ -234,7 +234,8 @@ export default function CaseStudyTemplate({
                     {entry.artifactSectionTitle ?? "Selected artifacts"}
                   </p>
                   <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/66">
-                    Workflow discovery exhibit from the early stage of the pilot.
+                    Workflow discovery exhibit from the early stage of the
+                    pilot.
                   </p>
                 </div>
                 <div className="grid gap-5">
@@ -337,7 +338,9 @@ export default function CaseStudyTemplate({
 
       <TestimonialsSection
         eyebrow="Recommendations"
-        title={entry.recommendationsTitle ?? "How collaborators described this work"}
+        title={
+          entry.recommendationsTitle ?? "How collaborators described this work"
+        }
         description={
           entry.recommendationsDescription ??
           "A restrained selection of recommendation excerpts that reinforce the same story from adjacent perspectives."

@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import Container from "@/components/site/Container";
-import MotionReveal from "@/components/site/MotionReveal";
-import PageHero from "@/components/site/PageHero";
-import ProductCard from "@/components/site/ProductCard";
+import StudioCollectionPage from "@/components/site/StudioCollectionPage";
 import { productEntries } from "@/content/portfolio";
 
 export const metadata: Metadata = {
@@ -13,25 +10,33 @@ export const metadata: Metadata = {
 
 export default function ProductsPage(): JSX.Element {
   return (
-    <Container className="space-y-8 pt-6">
-      <PageHero
-        eyebrow="Products"
-        title="Live products and concept work that reinforce the builder story"
-        description="These pages show how I move from product framing to AI-native workflows, prototypes, and public-facing artifacts without losing strategic rigor."
-        metrics={[
-          { label: "Surface area", value: "Live alpha + concepts" },
-          { label: "Bias", value: "Focused MVPs" },
-          { label: "Why it matters", value: "Builder credibility" },
-        ]}
-      />
-
-      <div className="grid gap-6 xl:grid-cols-3">
-        {productEntries.map((entry, index) => (
-          <MotionReveal key={entry.slug} delay={index * 0.05}>
-            <ProductCard entry={entry} priority={index === 0} />
-          </MotionReveal>
-        ))}
-      </div>
-    </Container>
+    <StudioCollectionPage
+      eyebrow="Products & prototypes"
+      title="Building is how I think."
+      description="Focused products, live experiments, and production-shaped concepts. Each one turns an emerging capability into something concrete enough to use, test, and improve."
+      collectionEyebrow="The product shelf"
+      collectionTitle="Ideas made tangible."
+      proofItems={[
+        { label: "Surface area", value: "Live alpha + concepts" },
+        { label: "Build stance", value: "Focused, testable MVPs" },
+        { label: "Throughline", value: "Human-centered systems" },
+      ]}
+      entries={productEntries.map((entry) => ({
+        slug: entry.slug,
+        href: entry.href,
+        title: entry.title,
+        eyebrow: entry.eyebrow,
+        meta: entry.status,
+        description: entry.description,
+        image: entry.heroImage,
+        imageAlt: entry.heroImageAlt,
+        imageClassName:
+          entry.heroImageClassName ??
+          (entry.slug === "ai-career-operating-system"
+            ? "object-contain bg-white p-4"
+            : "object-cover"),
+        metrics: entry.featuredMetrics,
+      }))}
+    />
   );
 }

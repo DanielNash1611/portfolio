@@ -13,19 +13,21 @@ import {
 } from "@/lib/portfolio-guide/constants";
 import { getSessionAwarePrompt, inferInterestTags } from "@/lib/portfolio-guide/infer-tags";
 import {
-  appendConversationMessages,
-  ensureGuideInteractionSessionId,
-  ensureGuideVisitorId,
-  getConversationForPage,
+  appendSiteWideConversationMessages,
+  createEmptyGuideSessionState,
+  getSiteWideConversation,
   readGuideSessionState,
   recordPageVisit,
   recordPromptClick,
   recordQuestion,
   recordTagSignals,
+  replaceSiteWideConversation,
   writeGuideSessionState,
 } from "@/lib/portfolio-guide/session";
 import type {
   GuideConversationMessage,
+  GuideConversationSnapshot,
+  GuidePersistenceStatus,
   GuideTone,
   PageContext,
   PortfolioContext,
@@ -45,17 +47,27 @@ function createConversationMessage(
   content: string,
   options?: Pick<
     GuideConversationMessage,
-    "suggestedFollowUps" | "relatedPages"
-  >,
+    "suggestedFollowUps" | "relatedPages" | "turnId" | "pageSlug" | "pageTitle"
+  > & { id?: string },
 ): GuideConversationMessage {
   return {
-    id: `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    id: options?.id ?? `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     role,
     content,
     createdAt: new Date().toISOString(),
     suggestedFollowUps: options?.suggestedFollowUps,
     relatedPages: options?.relatedPages,
+    turnId: options?.turnId,
+    pageSlug: options?.pageSlug,
+    pageTitle: options?.pageTitle,
   };
+}
+
+function createClientTurnId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `turn_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
 }
 
 function uniquePrompts(prompts: Array<string | null | undefined>, limit = 6): string[] {
@@ -90,25 +102,80 @@ export default function PortfolioGuide({
   const [status, setStatus] = useState<GuideStatus>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [lastMessage, setLastMessage] = useState<string>("");
+  const [lastClientTurnId, setLastClientTurnId] = useState<string>("");
   const [loadingLabel, setLoadingLabel] = useState("Grounding this answer in the page…");
   const [extraPrompt, setExtraPrompt] = useState<string | null>(null);
   const [visitorIntent, setVisitorIntent] = useState<VisitorIntent | null>(null);
+  const [persistenceStatus, setPersistenceStatus] =
+    useState<GuidePersistenceStatus>("disabled");
+  const [persistenceWarning, setPersistenceWarning] = useState<string | null>(null);
+  const [isHydrating, setIsHydrating] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const initialTags = inferInterestTags({ pageContext });
-    const nextState = writeGuideSessionState(
-      recordTagSignals(
-        recordPageVisit(readGuideSessionState(), pageContext.slug),
-        initialTags,
-      ),
+    let nextState = writeGuideSessionState(
+      recordTagSignals(recordPageVisit(readGuideSessionState(), pageContext.slug), initialTags),
     );
-
-    setMessages(getConversationForPage(nextState, pageContext.slug));
+    const localMessages = getSiteWideConversation(nextState);
+    setMessages(localMessages);
     setExtraPrompt(getSessionAwarePrompt(nextState, pageContext.slug));
     setVisitorIntent(nextState.visitorIntent ?? null);
+
+    void fetch("/api/portfolio-copilot/conversation", { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Conversation restore failed.");
+        }
+        return (await response.json()) as GuideConversationSnapshot & {
+          persistenceWarning?: string;
+        };
+      })
+      .then((snapshot) => {
+        if (cancelled) {
+          return;
+        }
+        setPersistenceStatus(snapshot.persistenceStatus);
+        setPersistenceWarning(snapshot.persistenceWarning ?? null);
+        if (snapshot.persistenceStatus === "durable") {
+          nextState = writeGuideSessionState(
+            replaceSiteWideConversation(
+              {
+                ...nextState,
+                ...(snapshot.sessionSignals ?? {}),
+              },
+              snapshot.messages,
+            ),
+          );
+          setMessages(snapshot.messages);
+          setVisitorIntent(nextState.visitorIntent ?? null);
+          setExtraPrompt(getSessionAwarePrompt(nextState, pageContext.slug));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setPersistenceStatus("degraded");
+          setPersistenceWarning(
+            "Saved history is temporarily unavailable; this browser is keeping a temporary copy.",
+          );
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsHydrating(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [pageContext]);
 
-  async function submitMessage(message: string, source: "chip" | "input" | "follow-up") {
+  async function submitMessage(
+    message: string,
+    source: "chip" | "input" | "follow-up",
+    existingClientTurnId?: string,
+  ) {
     const trimmedMessage = message.trim();
     if (!trimmedMessage || status === "loading" || status === "unavailable") {
       return;
@@ -118,6 +185,8 @@ export default function PortfolioGuide({
     setStatus("loading");
     setErrorMessage(null);
     setLastMessage(trimmedMessage);
+    const clientTurnId = existingClientTurnId ?? createClientTurnId();
+    setLastClientTurnId(clientTurnId);
     setLoadingLabel(
       source === "input"
         ? visitorIntent
@@ -144,10 +213,6 @@ export default function PortfolioGuide({
     setExtraPrompt(getSessionAwarePrompt(nextState, pageContext.slug));
     setVisitorIntent(nextState.visitorIntent ?? null);
 
-    const pageConversation = getConversationForPage(nextState, pageContext.slug);
-    const turnIndex =
-      pageConversation.filter((entry) => entry.role === "user").length + 1;
-
     try {
       const response = await fetch("/api/portfolio-copilot", {
         method: "POST",
@@ -155,10 +220,11 @@ export default function PortfolioGuide({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          clientTurnId,
+          pageSlug: pageContext.slug,
           message: trimmedMessage,
-          pageContext,
-          portfolioContext,
-          sessionContext: {
+          source,
+          sessionSignals: {
             visitedPages: nextState.visitedPages,
             clickedPrompts: nextState.clickedPrompts,
             askedQuestions: nextState.askedQuestions,
@@ -167,13 +233,7 @@ export default function PortfolioGuide({
             recommendedPath: nextState.recommendedPath,
             lastVisitedAt: nextState.lastVisitedAt,
           },
-          interactionMeta: {
-            source,
-            visitorId: ensureGuideVisitorId(),
-            sessionId: ensureGuideInteractionSessionId(),
-            turnIndex,
-          },
-          conversation: pageConversation
+          fallbackConversation: messages
             .slice(-MAX_CONVERSATION_CONTEXT_MESSAGES)
             .map((entry) => ({
               role: entry.role,
@@ -189,6 +249,9 @@ export default function PortfolioGuide({
         inferredInterestTags?: PageContext["interestTags"];
         error?: string;
         code?: string;
+        turnId?: string;
+        persistenceStatus?: GuidePersistenceStatus;
+        persistenceWarning?: string;
       };
 
       if (!response.ok) {
@@ -213,18 +276,31 @@ export default function PortfolioGuide({
         throw new Error("Portfolio Guide returned an empty answer.");
       }
 
+      if (data.persistenceStatus) {
+        setPersistenceStatus(data.persistenceStatus);
+      }
+      setPersistenceWarning(data.persistenceWarning ?? null);
+
       const updatedState = writeGuideSessionState(
-        appendConversationMessages(
+        appendSiteWideConversationMessages(
           recordTagSignals(
             nextState,
             (data.inferredInterestTags ?? []).filter(Boolean) as NonNullable<
               PageContext["interestTags"]
             >,
           ),
-          pageContext.slug,
           [
-            createConversationMessage("user", trimmedMessage),
+            createConversationMessage("user", trimmedMessage, {
+              id: data.turnId ? `${data.turnId}:user` : undefined,
+              turnId: data.turnId,
+              pageSlug: pageContext.slug,
+              pageTitle: pageContext.title,
+            }),
             createConversationMessage("assistant", data.answer.trim(), {
+              id: data.turnId ? `${data.turnId}:assistant` : undefined,
+              turnId: data.turnId,
+              pageSlug: pageContext.slug,
+              pageTitle: pageContext.title,
               suggestedFollowUps: data.suggestedFollowUps,
               relatedPages: data.relatedPages,
             }),
@@ -232,7 +308,7 @@ export default function PortfolioGuide({
         ),
       );
 
-      setMessages(getConversationForPage(updatedState, pageContext.slug));
+      setMessages(getSiteWideConversation(updatedState));
       setExtraPrompt(getSessionAwarePrompt(updatedState, pageContext.slug));
       setVisitorIntent(updatedState.visitorIntent ?? null);
       setDraft("");
@@ -245,6 +321,48 @@ export default function PortfolioGuide({
           ? error.message
           : "Portfolio Guide could not answer right now.",
       );
+    }
+  }
+
+  async function startNewConversation() {
+    if (status === "loading") {
+      return;
+    }
+    try {
+      const response = await fetch("/api/portfolio-copilot/conversation/new", {
+        method: "POST",
+      });
+      const data = (await response.json()) as GuideConversationSnapshot & {
+        persistenceWarning?: string;
+      };
+      setPersistenceStatus(data.persistenceStatus);
+      setPersistenceWarning(data.persistenceWarning ?? null);
+    } catch {
+      setPersistenceStatus("degraded");
+      setPersistenceWarning("A new temporary conversation was started in this browser.");
+    }
+    const nextState = writeGuideSessionState(createEmptyGuideSessionState());
+    setMessages([]);
+    setVisitorIntent(null);
+    setExtraPrompt(getSessionAwarePrompt(nextState, pageContext.slug));
+    setErrorMessage(null);
+    setDraft("");
+  }
+
+  async function deleteConversation() {
+    if (status === "loading") {
+      return;
+    }
+    try {
+      await fetch("/api/portfolio-copilot/conversation", { method: "DELETE" });
+    } finally {
+      const nextState = writeGuideSessionState(createEmptyGuideSessionState());
+      setMessages([]);
+      setVisitorIntent(null);
+      setPersistenceWarning(null);
+      setExtraPrompt(getSessionAwarePrompt(nextState, pageContext.slug));
+      setErrorMessage(null);
+      setDraft("");
     }
   }
 
@@ -335,11 +453,16 @@ export default function PortfolioGuide({
           onDraftChange={setDraft}
           onSubmit={() => void submitMessage(draft, "input")}
           onFollowUp={(message) => void submitMessage(message, "follow-up")}
-          onRetry={() => void submitMessage(lastMessage, "input")}
+          onRetry={() => void submitMessage(lastMessage, "input", lastClientTurnId)}
+          onNewConversation={() => void startNewConversation()}
+          onDeleteConversation={() => void deleteConversation()}
           isLoading={status === "loading"}
           isUnavailable={status === "unavailable"}
           errorMessage={errorMessage}
           loadingLabel={loadingLabel}
+          persistenceStatus={persistenceStatus}
+          persistenceWarning={persistenceWarning}
+          isHydrating={isHydrating}
           tone={tone}
         />
       ) : null}

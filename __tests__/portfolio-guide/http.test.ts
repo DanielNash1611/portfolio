@@ -88,6 +88,20 @@ test("portfolio guide handler returns a grounded answer and logs completion", as
       status: "answered",
       latencyMs: 175,
       answerLength: 15,
+      answer: "Grounded answer",
+      promptSnapshot: {
+        pageTitle: "From AI experiments to platform foundations",
+        context: {},
+      },
+      responsePayload: {
+        answer: "Grounded answer",
+        relatedPages: [],
+      },
+      responseIds: undefined,
+      usage: undefined,
+      normalizationStatus: "normalized-json",
+      evidenceMetadata: undefined,
+      traceEvents: undefined,
     },
   ]);
   assert.equal(logWarnings.length, 0);

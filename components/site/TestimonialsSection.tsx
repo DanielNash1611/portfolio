@@ -37,16 +37,16 @@ export default function TestimonialsSection({
         title={title}
         description={description}
       />
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-x-8 gap-y-6 lg:grid-cols-2">
         {testimonials.map((testimonial) => (
           <TestimonialCard key={testimonial.id} item={testimonial} />
         ))}
       </div>
       {footerLink ? (
-        <div className="flex justify-center pt-2">
+        <div className="flex justify-end pt-2">
           <Link
             href={footerLink.href}
-            className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-teal)]/20 bg-white/82 px-5 py-2.5 text-sm font-semibold text-[color:var(--color-teal)] shadow-sm transition hover:border-[color:var(--color-teal)]/40 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="inline-flex items-center gap-2 border-b border-[color:var(--color-teal)] pb-1 text-sm font-bold text-[color:var(--color-teal)] transition hover:border-[color:var(--color-orange)] hover:text-[color:var(--color-orange)]"
           >
             {footerLink.label}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />

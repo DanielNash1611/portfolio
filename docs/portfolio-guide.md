@@ -12,7 +12,7 @@
 
 ## What Was Built
 
-The Portfolio Guide is a compact inline `Ask about this work` feature for canonical project-detail pages, now extended with a homepage role-intent entry point. Visitors can optionally declare the role they are hiring for, get a deterministic reading path, and carry that context through later project-page guide conversations without adding a database.
+The Portfolio Guide is a compact inline `Ask about this work` feature for canonical project-detail pages, extended with homepage role intent and one anonymous site-wide conversation. With durable conversations enabled, Neon restores the thread in the same browser for 90 days after the last turn.
 
 ## Architecture Summary
 
@@ -25,16 +25,16 @@ The Portfolio Guide is a compact inline `Ask about this work` feature for canoni
 
 ## Data Flow
 
-1. The server page builds `pageContext` from the canonical route and `portfolioContext` from shared site content.
-2. The homepage role-intent module can normalize a title/brief/JD into `visitorIntent`, rank a deterministic `recommendedPath`, and persist both to `sessionStorage`.
-3. The client guide records session behavior in the same shared browser session: visited pages, clicked prompts, asked questions, inferred tags, visitor intent, recommended path, and per-page transcripts.
-4. On interaction, the client sends `message`, `pageContext`, `portfolioContext`, `sessionContext`, `interactionMeta`, and a trimmed recent conversation to `/api/portfolio-copilot`.
-5. The route computes related-page candidates with both page similarity and role-intent weighting, logs the prompt to Neon with anonymous visitor/session IDs, calls the model with a grounded system prompt, validates the JSON response, and filters any invalid tags or page suggestions.
-6. The client stores the answer in the current page’s session transcript and updates the subtle session-aware extra chip.
+1. The client sends only `clientTurnId`, `pageSlug`, the message/source, bounded session signals, and a degraded-mode dialogue fallback.
+2. The route resolves `pageContext` and `portfolioContext` from canonical server-side content; client-supplied page facts cannot enter grounding.
+3. The opaque cookie resolves one active conversation, and Neon restores the site-wide transcript and role/navigation memory.
+4. The route reserves an idempotent turn, applies per-conversation/IP/global limits, and constructs a bounded 24k-token prompt context.
+5. The Responses API can use the allowlisted career-evidence and user-history tools. Every model call, tool result, and deterministic guardrail change is recorded in a redacted trace.
+6. The answer and trace complete the pending turn. If persistence fails, the same grounded model path runs without blocking the visitor.
 
 ## Storage Approach
 
-- Session tailoring still uses browser storage:
+- `sessionStorage` is only a temporary UI/degraded-mode cache for:
   - `visitedPages`
   - `clickedPrompts`
   - `askedQuestions`
@@ -43,14 +43,11 @@ The Portfolio Guide is a compact inline `Ask about this work` feature for canoni
   - `recommendedPath`
   - `lastVisitedAt`
   - `tagSignals`
-  - `conversationsBySlug`
-- Anonymous interaction logging now uses Neon:
-  - user prompt text only
-  - anonymous `visitorId` from `localStorage`
-  - anonymous `sessionId` from `sessionStorage`
-  - prompt source, page slug, role intent, tag signals, visited pages, and response status
-  - response summary fields such as latency and answer length, but not the assistant answer body
-- If browser storage is unavailable, the guide falls back to in-memory IDs and session state for the current tab so the page still works.
+  - the current site-wide transcript cache
+- Anonymous conversations use an opaque 256-bit `HttpOnly` cookie; only its SHA-256 hash is stored in Neon.
+- Neon stores the full user/assistant transcript, validated prompt snapshot, model response IDs and usage, evidence metadata, and redacted model/tool/guardrail trace events.
+- Conversation memory is deliberately narrow: role intent, visited pages, inferred interest tags, recent user questions, and only the immediately previous assistant answer when a follow-up is explicitly referential.
+- When persistence is disabled or unavailable, the model path still works and the current browser tab keeps a temporary `sessionStorage` copy.
 
 ## How Page Metadata Works
 
@@ -73,9 +70,9 @@ The Portfolio Guide is a compact inline `Ask about this work` feature for canoni
 
 ## How Session Awareness Works
 
-- The first time a visitor lands on a canonical project page, that slug is added to `visitedPages`.
+- The first time a visitor lands on a canonical project page, that slug is added to `visitedPages` and later merged into the durable conversation memory.
 - If the visitor declares a hiring role from the homepage, that role is normalized into `visitorIntent` and reused throughout the browsing session.
-- Chip clicks and typed questions are tracked in-session only.
+- Chip clicks and typed questions are tracked in the active anonymous conversation and expire after 90 days of inactivity.
 - Interest tags are inferred from page metadata, chip text, and typed questions using a fixed allowlist:
   - `ai-builder`
   - `pm-leadership`
@@ -102,9 +99,11 @@ The Portfolio Guide is a compact inline `Ask about this work` feature for canoni
 
 1. Add `OPENAI_API_KEY` to your local environment.
 2. Optionally add `OPENAI_MODEL` to override the default `gpt-5.4` fallback.
-3. Run `npm install` if dependencies are not already present.
-4. Start the app with `npm run dev`.
-5. Validate the feature with `npm run lint`, `npm run typecheck`, `npm run test:portfolio-guide`, `npm run eval:portfolio-guide`, and `npm run build`.
+3. Set `PORTFOLIO_GUIDE_DURABLE_CONVERSATIONS=true` and a long random `PORTFOLIO_GUIDE_PRIVACY_SALT`.
+4. Set `CRON_SECRET` for the protected retention cleanup route.
+5. Run `npm run db:migrate`, then start the app with `npm run dev`.
+6. Inspect conversations with `npm run report:portfolio-guide-conversations -- --since 30d`; add `--conversation <id-prefix>` for full turn and trace details.
+7. Validate with `npm run lint`, `npm run typecheck`, `npm run test:portfolio-guide`, `npm run eval:portfolio-guide:local -- --smoke`, and `npm run build`.
 
 ## Eval Coverage
 
@@ -114,13 +113,8 @@ The Portfolio Guide is a compact inline `Ask about this work` feature for canoni
 - Seed cases cover answerable, partially answerable, unanswerable, contaminated-history, and cross-page-memory behavior.
 - See `docs/portfolio-guide-evals.md` for commands, output structure, and how to add new cases.
 
-## Validation Notes
-
-- Code-level validation is complete: focused tests, typecheck, lint, and production build all passed.
-- In this sandbox, interactive local-server verification was limited by watcher and runtime artifact issues (`EMFILE` during `next dev`, then missing `.next/BUILD_ID` when trying `next start` despite a successful build). Re-run the normal browser pass on a typical local machine after pulling the changes.
-
 ## Grounding Hardening Note
 
 - Root cause: the guide already used structured site content instead of DOM scraping, but the prompt also included recent conversation with assistant replies. That let earlier model-written answers influence later ones, especially when the current-page context was condensed and left room for synthesis.
-- What changed: the prompt now separates `currentPage.authoredContent`, `currentPage.structuredMetadata`, `siteMemory`, `siteCatalog`, and user-only conversation context. Assistant replies are excluded from grounding, richer authored page sections are passed from structured content, and prompt rules now explicitly block unsupported rankings, ownership claims, and invented causality.
+- What changed: the prompt separates `currentPage.authoredContent`, `currentPage.structuredMetadata`, `siteMemory`, `siteCatalog`, and conversation context. Non-referential turns exclude assistant history; referential follow-ups receive only the immediately previous assistant answer, labeled as untrusted dialogue context. A separate tool can search older user messages but never assistant claims.
 - Tradeoffs: the guide is intentionally more willing to say that a detail is not explicit on the page. That reduces speculative answers, but it also means some follow-up questions now produce a narrower answer unless the current page or broader site context clearly supports the claim.

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ResumeGeneratePage(): JSX.Element {
   return (
-    <Container className="space-y-8 pt-6">
+    <Container className="space-y-10 pb-20 pt-8 md:pb-28">
       <PageHero
         eyebrow="Role-specific resume"
         title="Generate a resume tailored to your role"

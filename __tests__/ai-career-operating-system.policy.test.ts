@@ -61,7 +61,7 @@ test("the displayed Guide case count matches the real eval suite size", () => {
 
 test("no '<n> cases' claim on the page drifts from the real suite size", async () => {
   const surface = await pageSurface();
-  // Matches "31 cases" / "31 authored cases" / "31 authored evaluation cases".
+  // Matches "<n> cases" / "<n> authored cases" / "<n> authored evaluation cases".
   // Deliberately ignores the hyphenated historical "12-case OpenAI run" phrase.
   const claims = [
     ...surface.matchAll(/(\d+)\s+(?:authored\s+)?(?:evaluation\s+)?cases\b/g),

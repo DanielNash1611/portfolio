@@ -12,7 +12,7 @@ export default function CreativeTemplate({
   entry,
 }: CreativeTemplateProps): JSX.Element {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageHero
         eyebrow={entry.eyebrow}
         title={entry.title}
@@ -44,10 +44,10 @@ export default function CreativeTemplate({
             {entry.embeds.map((embed) => (
               <article
                 key={embed.title}
-                className="overflow-hidden rounded-[1.5rem] border border-black/6 bg-white/84"
+                className="overflow-hidden border-y border-[color:var(--color-slate)]/16"
               >
-                <div className="p-5">
-                  <h3 className="text-xl font-semibold text-[color:var(--color-slate)]">
+                <div className="py-5">
+                  <h3 className="font-serif text-2xl font-medium tracking-[-0.03em] text-[color:var(--color-slate)]">
                     {embed.title}
                   </h3>
                   <p className="mt-2 text-sm leading-6 text-[color:var(--color-slate)]/68">
@@ -56,7 +56,6 @@ export default function CreativeTemplate({
                 </div>
                 {embed.type === "spotify" ? (
                   <iframe
-                    style={{ borderRadius: "0 0 24px 24px" }}
                     src={embed.src}
                     width="100%"
                     height="152"

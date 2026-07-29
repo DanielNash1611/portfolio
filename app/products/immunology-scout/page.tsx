@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Container from "@/components/site/Container";
 import ProductTemplate from "@/components/site/ProductTemplate";
 import { getProductEntry } from "@/content/portfolio";
 
@@ -17,9 +16,5 @@ export default function ImmunologyScoutPage(): JSX.Element {
     notFound();
   }
 
-  return (
-    <Container className="space-y-8 pt-6">
-      <ProductTemplate entry={entry} />
-    </Container>
-  );
+  return <ProductTemplate entry={entry} />;
 }

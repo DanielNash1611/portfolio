@@ -13,17 +13,17 @@ export default function EssayCard({ entry }: EssayCardProps): JSX.Element {
   const hasKeyIdeas = keyIdeas.length > 0;
 
   return (
-    <article className="flex h-full flex-col rounded-[1.75rem] border border-black/6 bg-white/84 p-5 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:p-6">
+    <article className="flex h-full flex-col border-t border-[color:var(--color-slate)]/20 py-6">
       <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-3">
           <span className="text-xs font-semibold uppercase tracking-[0.26em] text-[color:var(--color-teal)]/68">
             {entry.eyebrow}
           </span>
-          <span className="whitespace-nowrap rounded-full bg-[color:var(--color-cream)] px-3 py-1 text-xs font-medium text-[color:var(--color-slate)]/72">
+          <span className="whitespace-nowrap border-l border-[color:var(--color-slate)]/18 pl-3 text-xs font-medium text-[color:var(--color-slate)]/62">
             {entry.readTime}
           </span>
         </div>
-        <h3 className="clamp-2 min-h-[3.6rem] text-2xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+        <h3 className="clamp-2 min-h-[3.6rem] max-w-[19ch] font-serif text-3xl font-medium leading-[1.05] tracking-[-0.035em] text-[color:var(--color-slate)]">
           {cardTitle}
         </h3>
         <p
@@ -51,7 +51,7 @@ export default function EssayCard({ entry }: EssayCardProps): JSX.Element {
       <div className={hasKeyIdeas ? "mt-auto pt-6" : "mt-auto pt-8"}>
         <Link
           href={entry.href}
-          className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[color:var(--color-teal)]/16 bg-white px-5 py-3 text-sm font-semibold text-[color:var(--color-teal)] transition hover:border-[color:var(--color-teal)]/26 hover:bg-[color:var(--color-cream)]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-cream)]"
+          className="inline-flex items-center gap-2 border-b border-[color:var(--color-teal)] pb-1 text-sm font-bold text-[color:var(--color-teal)] transition hover:border-[color:var(--color-orange)] hover:text-[color:var(--color-orange)]"
         >
           Read essay
           <ArrowUpRight className="h-4 w-4" aria-hidden="true" />

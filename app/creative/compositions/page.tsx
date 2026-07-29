@@ -17,7 +17,7 @@ export default function CompositionsPage(): JSX.Element {
   }
 
   return (
-    <Container className="space-y-8 pt-6">
+    <Container className="space-y-10 pb-20 pt-8 md:pb-28">
       <CreativeTemplate entry={entry} />
     </Container>
   );

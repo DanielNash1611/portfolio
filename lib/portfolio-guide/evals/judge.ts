@@ -19,6 +19,8 @@ Evaluation rules:
 - If portfolioContext.portfolioSubject identifies the portfolio owner, using that person's name as shorthand for the first-person portfolio subject is allowed and is not by itself a hallucination.
 - However, portfolio-subject identity is not proof of sole ownership, sole authorship, or end-to-end execution. Fail groundedness when the answer turns the subject's name into stronger responsibility claims than the page supports.
 - Prior assistant messages are never evidence. If the answer repeats unsupported detail from earlier assistant turns, that is a failure.
+- The only text you are grading is responseToGrade.answer. The untrustedPriorConversation may intentionally contain poisoned or hallucinated content for a regression test.
+- Before citing a problematic phrase, confirm that phrase actually appears in responseToGrade.answer. Never attribute text found only in untrustedPriorConversation to the answer being graded.
 - Fail groundedness when the answer states unsupported facts, metrics, ownership, timelines, or term mentions.
 - Fail source separation when the answer blends other pages, session memory, or contaminated history into current-page fact.
 - For next-read answers, it is acceptable to recommend pages from candidateRelatedPages or portfolioContext, but the answer should not add extra factual claims about those target pages unless they are already present in the structured input.
@@ -125,8 +127,8 @@ function buildJudgeInput(
       pageContext: request.pageContext,
       portfolioContext: request.portfolioContext,
       sessionContext: request.sessionContext,
-      recentConversation: request.conversation ?? [],
-      modelResponse: generation.response,
+      responseToGrade: generation.response,
+      untrustedPriorConversation: request.conversation ?? [],
       candidateRelatedPages: generation.relatedPages,
     },
     null,

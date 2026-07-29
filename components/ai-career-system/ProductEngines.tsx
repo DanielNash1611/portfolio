@@ -43,9 +43,12 @@ export default function ProductEngines(): JSX.Element {
   return (
     <section className="space-y-8" aria-labelledby="how-it-works-heading">
       <div className="max-w-3xl space-y-4">
+        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--color-orange)]">
+          System mechanics
+        </p>
         <h2
           id="how-it-works-heading"
-          className="text-balance text-3xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-4xl"
+          className="max-w-[11ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl"
         >
           How the system works
         </h2>
@@ -56,10 +59,13 @@ export default function ProductEngines(): JSX.Element {
         </p>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_150px_minmax(0,1fr)] lg:items-stretch">
-        <article className="space-y-6 rounded-[2rem] border border-black/6 bg-white/84 p-6 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:p-8">
+      <div className="grid border-y border-[color:var(--color-slate)]/16 lg:grid-cols-[minmax(0,1fr)_150px_minmax(0,1fr)] lg:items-stretch">
+        <article className="space-y-7 py-8 lg:pr-9">
           <div className="space-y-3">
-            <h3 className="text-3xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+            <p className="font-mono text-xs text-[color:var(--color-orange)]">
+              01
+            </p>
+            <h3 className="font-serif text-3xl font-medium tracking-[-0.035em] text-[color:var(--color-slate)] md:text-4xl">
               Proof Engine
             </h3>
             <p className="text-sm leading-6 text-[color:var(--color-slate)]/66">
@@ -68,7 +74,7 @@ export default function ProductEngines(): JSX.Element {
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-[1.4rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/82">
+          <div className="overflow-hidden border border-[color:var(--color-slate)]/16 bg-[color:var(--color-background)]/70">
             <div className="flex items-center gap-2 border-b border-black/6 bg-white/80 px-4 py-3">
               <span className="h-2.5 w-2.5 rounded-full bg-[color:var(--color-orange)]/55" />
               <span className="h-2.5 w-2.5 rounded-full bg-[color:var(--color-tan)]/75" />
@@ -88,7 +94,7 @@ export default function ProductEngines(): JSX.Element {
                     <span className="font-semibold text-[color:var(--color-teal)]">
                       {label}
                     </span>
-                    <span className="h-2 self-center rounded-full bg-[color:var(--color-teal)]/10" />
+                    <span className="h-px self-center bg-[color:var(--color-teal)]/18" />
                   </div>
                 ),
               )}
@@ -98,7 +104,7 @@ export default function ProductEngines(): JSX.Element {
           <PointList items={proofPoints} />
         </article>
 
-        <div className="flex flex-col items-center justify-center gap-3 py-2 text-center">
+        <div className="flex flex-col items-center justify-center gap-3 border-y border-[color:var(--color-slate)]/16 py-6 text-center lg:border-x lg:border-y-0">
           <ArrowRight
             className="h-6 w-6 rotate-90 text-[color:var(--color-orange)] lg:rotate-0"
             aria-hidden="true"
@@ -108,9 +114,12 @@ export default function ProductEngines(): JSX.Element {
           </p>
         </div>
 
-        <article className="space-y-6 rounded-[2rem] border border-[color:var(--color-teal)]/9 bg-[color:var(--color-background)]/88 p-6 shadow-[0_20px_50px_rgba(44,79,82,0.06)] md:p-8">
+        <article className="space-y-7 py-8 lg:pl-9">
           <div className="space-y-3">
-            <h3 className="text-3xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+            <p className="font-mono text-xs text-[color:var(--color-orange)]">
+              02
+            </p>
+            <h3 className="font-serif text-3xl font-medium tracking-[-0.035em] text-[color:var(--color-slate)] md:text-4xl">
               Tailoring Engine
             </h3>
             <p className="text-sm leading-6 text-[color:var(--color-slate)]/66">
@@ -131,7 +140,7 @@ export default function ProductEngines(): JSX.Element {
                     className="absolute left-[18px] top-8 h-full w-px bg-[color:var(--color-teal)]/18"
                   />
                 ) : null}
-                <span className="relative z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--color-teal)]/14 bg-white text-xs font-semibold text-[color:var(--color-teal)]">
+                <span className="relative z-10 inline-flex h-9 w-9 items-center justify-center border border-[color:var(--color-teal)]/20 bg-[color:var(--color-background)] text-xs font-semibold text-[color:var(--color-teal)]">
                   {index + 1}
                 </span>
                 <span className="pt-1.5 font-semibold text-[color:var(--color-slate)]">
@@ -146,7 +155,7 @@ export default function ProductEngines(): JSX.Element {
       </div>
 
       <div className="border-y border-[color:var(--color-teal)]/10 py-7 text-center">
-        <p className="mx-auto max-w-4xl text-balance text-2xl font-semibold leading-9 text-[color:var(--color-slate)]">
+        <p className="mx-auto max-w-4xl text-balance font-serif text-2xl font-medium leading-9 tracking-[-0.02em] text-[color:var(--color-slate)] md:text-3xl">
           Models assist with mapping, drafting, and critique; Daniel remains
           responsible for what is approved and submitted.
         </p>

@@ -21,7 +21,12 @@ export default function CardMetricGrid({
   }
 
   return (
-    <div className={clsx("grid grid-cols-2 gap-3", className)}>
+    <div
+      className={clsx(
+        "grid grid-cols-2 border-l border-t border-[color:var(--color-slate)]/14",
+        className,
+      )}
+    >
       {items.map((metric, index) => {
         const isLastOddItem =
           items.length % 2 === 1 && index === items.length - 1;
@@ -30,7 +35,7 @@ export default function CardMetricGrid({
           <article
             key={`${metric.label}-${metric.value}`}
             className={clsx(
-              "flex min-w-0 min-h-[104px] flex-col rounded-[1.2rem] border border-[color:var(--color-teal)]/8 bg-[color:var(--color-background)]/88 px-4 py-4",
+              "flex min-h-[96px] min-w-0 flex-col border-b border-r border-[color:var(--color-slate)]/14 px-4 py-4",
               isLastOddItem && items.length > 1 ? "col-span-2" : "",
               itemClassName,
             )}

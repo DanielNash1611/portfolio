@@ -57,11 +57,13 @@ const productSignals = [
 
 export default function ResumePage(): JSX.Element {
   return (
-    <Container className="space-y-12 pt-6 pb-16 md:space-y-16">
+    <Container className="space-y-12 pb-20 pt-8 md:space-y-16 md:pb-28">
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(resumeProfileJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(resumeProfileJsonLd),
+        }}
       />
 
       <PageHero
@@ -90,7 +92,7 @@ export default function ResumePage(): JSX.Element {
             <article
               key={variant.id}
               id={variant.id}
-              className="relative flex h-full scroll-mt-28 flex-col rounded-[1.75rem] border border-black/6 bg-white/84 p-6 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:p-8"
+              className="relative flex h-full scroll-mt-28 flex-col border-t border-[color:var(--color-slate)]/20 py-6 md:py-8"
             >
               {variant.legacyAnchors?.map((anchor) => (
                 <span
@@ -106,7 +108,7 @@ export default function ResumePage(): JSX.Element {
                   <FileText aria-hidden="true" className="h-3.5 w-3.5" />
                   Resume variant
                 </p>
-                <h3 className="text-2xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+                <h3 className="font-serif text-3xl font-medium leading-[1.05] tracking-[-0.035em] text-[color:var(--color-slate)]">
                   {variant.title}
                 </h3>
                 <p className="text-base font-medium leading-7 text-[color:var(--color-teal)]">
@@ -121,7 +123,7 @@ export default function ResumePage(): JSX.Element {
                 {variant.bestFor}
               </p>
 
-              <ul className="mt-5 space-y-2 rounded-[1.25rem] bg-[color:var(--color-cream)]/72 px-4 py-4 text-sm leading-6 text-[color:var(--color-slate)]/76">
+              <ul className="mt-5 space-y-2 border-l-2 border-[color:var(--color-orange)] bg-[color:var(--color-background-soft)]/58 px-4 py-4 text-sm leading-6 text-[color:var(--color-slate)]/76">
                 {variant.focusAreas.map((area) => (
                   <li key={area} className="flex gap-2">
                     <span
@@ -137,7 +139,7 @@ export default function ResumePage(): JSX.Element {
                 <a
                   href={`/resumes/${variant.filename}`}
                   download
-                  className="inline-flex items-center gap-2 rounded-full bg-[color:var(--color-teal)] px-5 py-3 text-sm font-semibold text-[color:var(--color-cream)] transition hover:bg-[color:var(--color-slate)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-cream)]"
+                  className="inline-flex items-center gap-2 border border-[color:var(--color-teal)] bg-[color:var(--color-teal)] px-5 py-3 text-sm font-bold text-[color:var(--color-cream)] transition hover:bg-[color:var(--color-orange)]"
                 >
                   <Download aria-hidden="true" className="h-4 w-4" />
                   {variant.ctaLabel}
@@ -146,7 +148,7 @@ export default function ResumePage(): JSX.Element {
                   href={`/resumes/${variant.filename}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center rounded-full border border-[color:var(--color-teal)]/16 bg-white px-5 py-3 text-sm font-semibold text-[color:var(--color-teal)] transition hover:bg-[color:var(--color-cream)]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-cream)]"
+                  className="inline-flex items-center border border-[color:var(--color-teal)]/22 px-5 py-3 text-sm font-bold text-[color:var(--color-teal)] transition hover:bg-white/35"
                 >
                   Open PDF
                 </a>
@@ -159,7 +161,7 @@ export default function ResumePage(): JSX.Element {
       {/* The product behind the resumes — prominent, not buried. */}
       <section
         aria-labelledby="resume-system"
-        className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[color:var(--color-slate)] px-6 py-10 text-[color:var(--color-cream)] shadow-[0_30px_80px_rgba(58,61,64,0.18)] md:px-10 md:py-12"
+        className="relative overflow-hidden border-y border-white/8 bg-[color:var(--color-slate)] px-6 py-10 text-[color:var(--color-cream)] md:px-10 md:py-12"
       >
         <div
           aria-hidden="true"
@@ -177,11 +179,11 @@ export default function ResumePage(): JSX.Element {
             ResumeCustomizer is an AI product system I built to make resume
             tailoring evidence-based instead of vibes-based. It evaluates a
             target role, selects the right positioning lane, maps source-backed
-            proof points to the job&apos;s hiring thesis, runs specialized review
-            agents, and renders a finalized PDF from canonical structured resume
-            JSON. The system is designed to prevent unsupported claims, reduce
-            overfitting to a single job description, and make the strongest
-            truthful evidence obvious within a 10-second skim.
+            proof points to the job&apos;s hiring thesis, runs specialized
+            review agents, and renders a finalized PDF from canonical structured
+            resume JSON. The system is designed to prevent unsupported claims,
+            reduce overfitting to a single job description, and make the
+            strongest truthful evidence obvious within a 10-second skim.
           </p>
 
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">

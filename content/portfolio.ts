@@ -754,7 +754,7 @@ export const productEntries: ProductEntry[] = [
     featuredMetrics: [
       {
         label: "Guide evaluation",
-        value: "31 cases",
+        value: "33 cases",
         detail:
           "Authored cases covering grounding, ownership, seniority, and cross-page behavior.",
       },
@@ -1391,6 +1391,82 @@ export const creativeEntries: CreativeEntry[] = [
         body: [
           "The original album, central metaphor, creative direction, Phaser foundation, and rough three-chapter prototype all existed before OpenAI Build Week.",
           "Build Week expanded that stalled foundation into the complete eight-chapter browser experience, including the later recovery and escape scenes, rebuilt mechanics, the long coal route, responsive presentation, touch controls, and browser-ready audio.",
+        ],
+      },
+    ],
+    featured: true,
+  },
+  {
+    slug: "tabletop-symphony",
+    href: "/creative/tabletop-symphony",
+    title: "Tabletop Symphony",
+    eyebrow: "Adaptive Music / Live Play",
+    summary:
+      "A composer-built adaptive score exploring how music can follow the emotional shape of live tabletop play.",
+    description:
+      "A high-level look at the product idea, creation process, working alpha, concept evolution, and design system—without publishing the mechanics behind it.",
+    tags: ["Adaptive Music", "Tabletop Play", "Creative AI"],
+    heroImage: "/images/tabletop-symphony/app-tablet.webp",
+    heroImageAlt:
+      "Tabletop Symphony working alpha running on a tablet.",
+    sections: [
+      {
+        title: "The product idea",
+        body: [
+          "Tabletop Symphony explores how music can follow the emotional shape of a live tabletop session without asking the Game Master to manage another thing.",
+          "The visible experience is intentionally simple: the score serves the story, the music remains composer-built, and the GM keeps control.",
+        ],
+      },
+      {
+        title: "Creating the alpha",
+        body: [
+          "The process began with the GM's limited attention, reduced the experience to a small emotional language, and used replayable scenes and live conversation to test trust and pacing.",
+          "The current alpha is a tap-first companion with clear readiness, readable score state, and direct guidance when it matters.",
+        ],
+      },
+      {
+        title: "Public boundary",
+        body: [
+          "The portfolio page shares the premise, experience principles, visual evolution, and current interface.",
+          "The mechanics, tuning decisions, evaluation data, music structure, and launch strategy remain private while the product is in development.",
+        ],
+      },
+    ],
+    featured: true,
+  },
+  {
+    slug: "gravity",
+    href: "/creative/gravity",
+    title: "Gravity",
+    eyebrow: "Spatial Music / Interactive Composition",
+    summary:
+      "An original concert work transformed into an explorable spatial composition where movement and listener perspective change what you hear.",
+    description:
+      "A browser-native creative-technology case study spanning the original composition, PRD-led process, generated concept art, Codex implementation, spatial audio, and an Ultra visual-fidelity pass.",
+    tags: ["Spatial Audio", "Interactive Music", "Creative AI"],
+    heroImage: "/images/gravity/app/gravity-atomic-field.png",
+    heroImageAlt:
+      "Gravity Atomic view with autonomous performers orbiting a luminous central cello.",
+    sections: [
+      {
+        title: "The original artistic question",
+        body: [
+          "Gravity began as a live composition for cello and approximately fourteen mobile instrumentalists. Each performer repeated an independent pattern without synchronizing, approached the cello, revolved around it, escaped, and eventually returned.",
+          "The digital work asks what becomes possible when the audience can move inside that same composition and hear it from the audience, the cello, or an orbiting performer.",
+        ],
+      },
+      {
+        title: "From idea to MVP",
+        body: [
+          "I brainstormed the experience first, converted the idea into a detailed PRD, then created a design system with generated concept references and deterministic visual-acceptance fixtures before implementation began.",
+          "Codex helped translate those artifacts into a Vite and TypeScript MVP using native Web Audio, autonomous performer timelines, shared visual and audible coordinates, and Atomic and Celestial views of one simulation.",
+        ],
+      },
+      {
+        title: "The visual-fidelity push",
+        body: [
+          "After the MVP worked, I used Codex in Ultra mode for a concentrated visual pass against four generated concept targets: the entry gate, Atomic field, Celestial field, and cello listening perspective.",
+          "The pass improved material, lighting, depth, trail grammar, and cello presence while preserving accessibility, simulation truth, and the central rule that performers never share a musical clock.",
         ],
       },
     ],

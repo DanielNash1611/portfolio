@@ -93,6 +93,12 @@ test("interaction logger stores prompt-only request metadata and response summar
     321,
     84,
     null,
+    null,
+    null,
+    null,
+    [],
+    null,
+    null,
+    null,
   ]);
 });
-

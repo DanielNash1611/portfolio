@@ -16,8 +16,8 @@ function CTAAction({
   primary: boolean;
 }): JSX.Element {
   const className = primary
-    ? "inline-flex items-center justify-center whitespace-nowrap rounded-full border border-[color:var(--color-cream)] bg-[color:var(--color-cream)] px-5 py-3 text-sm font-semibold text-[color:var(--color-slate)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]"
-    : "inline-flex items-center justify-center whitespace-nowrap rounded-full border border-white/20 bg-transparent px-5 py-3 text-sm font-semibold text-[color:var(--color-cream)] transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]";
+    ? "inline-flex items-center justify-center whitespace-nowrap border border-[color:var(--color-cream)] bg-[color:var(--color-cream)] px-5 py-3 text-sm font-bold text-[color:var(--color-slate)] transition hover:bg-[#e6a286] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]"
+    : "inline-flex items-center justify-center whitespace-nowrap border border-white/24 bg-transparent px-5 py-3 text-sm font-bold text-[color:var(--color-cream)] transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]";
 
   if (action.external) {
     return (
@@ -46,17 +46,17 @@ export default function CTASection({
   secondaryAction,
 }: CTASectionProps): JSX.Element {
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[color:var(--color-slate)] px-6 py-8 text-[color:var(--color-cream)] shadow-[0_30px_80px_rgba(58,61,64,0.18)] md:px-8 md:py-10">
+    <section className="relative overflow-hidden border-y border-white/12 bg-[color:var(--color-slate)] px-6 py-9 text-[color:var(--color-cream)] md:px-8 md:py-12">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(219,191,150,0.2),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(209,122,95,0.22),_transparent_42%)]"
+        className="pointer-events-none absolute right-0 top-0 h-full w-1/3 bg-[linear-gradient(135deg,transparent_30%,rgba(219,96,72,0.2))]"
       />
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[color:var(--color-cream)]/68">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#e6a286]">
             Contact
           </p>
-          <h2 className="max-w-[18ch] text-balance text-3xl font-semibold tracking-tight md:text-4xl">
+          <h2 className="max-w-[18ch] text-balance font-serif text-3xl font-medium leading-[1.02] tracking-[-0.04em] md:text-5xl">
             {title}
           </h2>
           <p className="max-w-2xl text-base leading-7 text-[color:var(--color-cream)]/78 md:text-lg">

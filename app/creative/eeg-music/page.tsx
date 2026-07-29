@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Link from "next/link";
 import clsx from "clsx";
+import { ArrowLeft, ArrowUpRight, Play } from "lucide-react";
 import { notFound } from "next/navigation";
 import Container from "@/components/site/Container";
-import ContentSection from "@/components/site/ContentSection";
 import MediaFrame from "@/components/site/MediaFrame";
+import MotionReveal from "@/components/site/MotionReveal";
 import ResponsiveVideoEmbed from "@/components/site/ResponsiveVideoEmbed";
 import ResponsiveVideoPlayer from "@/components/site/ResponsiveVideoPlayer";
 import { getCreativeEntry } from "@/content/portfolio";
@@ -15,7 +16,6 @@ const youtubeWatchUrl = "https://www.youtube.com/watch?v=D4u6WibLvMQ";
 const youtubeEmbedUrl = "https://www.youtube.com/embed/D4u6WibLvMQ";
 const interviewWatchUrl = "https://www.youtube.com/watch?v=b_6cR5kkjZI";
 const interviewEmbedUrl = "https://www.youtube.com/embed/b_6cR5kkjZI";
-const youtubeThumbnailUrl = "/images/farraginous-youtube-thumb.jpg";
 const patchImageUrl = "/images/farraginous-puredata-patch.jpg";
 const emotivPortraitImageUrl = "/images/farraginous/emotiv-portrait.jpg";
 const emotivKitImageUrl = "/images/farraginous/emotiv-kit.jpg";
@@ -98,7 +98,7 @@ function ArtifactCard({
   return (
     <article
       className={clsx(
-        "overflow-hidden rounded-[1.6rem] border border-black/6 bg-white/86 shadow-[0_18px_50px_rgba(58,61,64,0.08)]",
+        "group flex h-full flex-col border-t border-[color:var(--color-slate)]/16 pt-5",
         className,
       )}
     >
@@ -108,23 +108,26 @@ function ArtifactCard({
         fallbackTitle={title}
         sizes="(min-width: 1280px) 640px, (min-width: 1024px) 50vw, 100vw"
         className={clsx(
-          "aspect-[3/2] border-b border-black/6 bg-[color:var(--color-cream)]/78",
+          "aspect-[3/2] border border-[color:var(--color-slate)]/12 bg-white",
           mediaClassName,
         )}
-        imageClassName={clsx("object-cover", imageClassName)}
+        imageClassName={clsx(
+          "object-cover transition-transform duration-700 group-hover:scale-[1.02]",
+          imageClassName,
+        )}
         unoptimized={unoptimized}
         expandable
         expandLabel={`Expand ${title}`}
       />
 
-      <div className="space-y-3 p-5 md:p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/68">
+      <div className="flex flex-1 flex-col pt-5">
+        <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--color-orange)]">
           {eyebrow}
         </p>
-        <h3 className="text-xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+        <h3 className="mt-3 font-serif text-2xl font-medium tracking-[-0.03em] text-[color:var(--color-slate)]">
           {title}
         </h3>
-        <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
+        <p className="mt-3 text-sm leading-7 text-[color:var(--color-slate)]/64">
           {caption}
         </p>
         {href ? (
@@ -132,9 +135,10 @@ function ArtifactCard({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center text-sm font-semibold text-[color:var(--color-teal)] underline decoration-[color:var(--color-teal)]/35 underline-offset-4 transition hover:decoration-[color:var(--color-teal)]"
+            className="mt-5 inline-flex w-fit items-center gap-2 border-b border-[color:var(--color-teal)] pb-1 text-sm font-bold text-[color:var(--color-teal)] transition hover:border-[color:var(--color-orange)] hover:text-[color:var(--color-orange)]"
           >
             Watch on YouTube
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </a>
         ) : null}
       </div>
@@ -162,25 +166,27 @@ function VideoArtifactCard({
   return (
     <article
       className={clsx(
-        "overflow-hidden rounded-[1.6rem] border border-black/6 bg-white/86 shadow-[0_18px_50px_rgba(58,61,64,0.08)]",
+        "flex h-full flex-col border-t border-[color:var(--color-slate)]/16 pt-5",
         className,
       )}
     >
-      <ResponsiveVideoPlayer
-        title={title}
-        src={src}
-        poster={poster}
-        aspectClassName={aspectClassName}
-      />
+      <div className="overflow-hidden border border-[color:var(--color-slate)]/12 bg-white">
+        <ResponsiveVideoPlayer
+          title={title}
+          src={src}
+          poster={poster}
+          aspectClassName={aspectClassName}
+        />
+      </div>
 
-      <div className="space-y-3 p-5 md:p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/68">
+      <div className="pt-5">
+        <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--color-orange)]">
           Process video
         </p>
-        <h3 className="text-xl font-semibold tracking-tight text-[color:var(--color-slate)]">
+        <h3 className="mt-3 font-serif text-2xl font-medium tracking-[-0.03em] text-[color:var(--color-slate)]">
           {title}
         </h3>
-        <p className="text-base leading-7 text-[color:var(--color-slate)]/70">
+        <p className="mt-3 text-sm leading-7 text-[color:var(--color-slate)]/64">
           {caption}
         </p>
       </div>
@@ -194,331 +200,439 @@ export default function EegMusicPage(): JSX.Element {
   }
 
   return (
-    <Container className="space-y-8 pt-6">
-      <section className="relative overflow-hidden rounded-[2rem] border border-black/6 bg-white/84 px-6 py-8 shadow-[0_30px_80px_rgba(58,61,64,0.1)] md:px-8 md:py-10">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(44,79,82,0.04),_transparent_38%),radial-gradient(circle_at_bottom_right,_rgba(209,122,95,0.035),_transparent_42%)]"
-        />
-        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.98fr)]">
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[color:var(--color-teal)]/70">
-                Creative Technology / Original Composition / Center for
-                Latter-day Saint Arts
-              </p>
-              <h1 className="text-balance text-4xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-5xl">
-                Farraginous
-              </h1>
-              <p className="max-w-3xl text-pretty text-base leading-7 text-[color:var(--color-slate)]/72 md:text-lg">
-                An experimental composition and video about mixed identity,
-                shaped by hybrid tuning systems and biometric signals.
-              </p>
-            </div>
+    <div className="overflow-hidden pb-20 md:pb-28">
+      <section className="bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
+        <Container className="py-10 md:py-14 lg:py-20">
+          <Link
+            href="/creative"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[color:var(--color-tan)]/68 transition hover:text-[color:var(--color-tan)]"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+            Creative studio
+          </Link>
 
-            <div className="rounded-[1.5rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/88 px-5 py-5">
-              <p className="text-lg leading-8 text-[color:var(--color-slate)]">
-                “A song built from biometric signals about mixed identity,
-                coexistence, and belonging.”
-              </p>
-            </div>
-          </div>
+          <div className="mt-10 grid items-end gap-10 lg:grid-cols-[minmax(0,0.86fr)_minmax(440px,1.14fr)] lg:gap-16">
+            <MotionReveal>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
+                  Composition / creative technology
+                </p>
+                <h1 className="mt-6 max-w-[8ch] font-serif text-[clamp(4rem,7vw,6.5rem)] font-medium leading-[0.82] tracking-[-0.06em]">
+                  Farraginous
+                </h1>
+                <p className="mt-7 max-w-lg text-pretty font-serif text-2xl italic leading-[1.18] tracking-[-0.02em] text-[color:var(--color-tan)] md:text-3xl">
+                  The sound of living in-between.
+                </p>
+                <p className="mt-6 max-w-xl text-base leading-8 text-[color:var(--color-cream)]/64">
+                  An experimental composition and video about mixed identity,
+                  shaped by hybrid tuning systems and biometric signals.
+                </p>
+                <a
+                  href="#watch"
+                  className="group mt-8 inline-flex items-center gap-3 border border-[color:var(--color-tan)] bg-[color:var(--color-tan)] px-5 py-3 text-sm font-bold text-[color:var(--color-slate)] transition hover:bg-[color:var(--color-cream)]"
+                >
+                  Watch the piece
+                  <Play
+                    className="h-3.5 w-3.5 fill-current transition-transform group-hover:scale-110"
+                    aria-hidden="true"
+                  />
+                </a>
+              </div>
+            </MotionReveal>
 
-          <div className="relative min-h-[360px] lg:min-h-[420px]">
-            <div className="absolute inset-y-8 right-0 left-12 overflow-hidden rounded-[1.8rem] border border-[color:var(--color-teal)]/10 bg-white shadow-[0_28px_70px_rgba(58,61,64,0.12)]">
-              <div className="relative h-full w-full">
-                <Image
-                  src={patchImageUrl}
-                  alt="Raw Pure Data patch used in Farraginous."
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 40vw, 100vw"
-                  className="object-cover object-center"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(247,245,242,0.18),rgba(58,61,64,0.12))]" />
-                <div className="absolute right-5 top-5 rounded-full border border-white/35 bg-[color:var(--color-slate)]/72 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-white backdrop-blur-sm">
-                  Raw Pure Data patch
+            <MotionReveal delay={0.1}>
+              <figure>
+                <div className="relative pb-6 pl-5 sm:pl-8">
+                  <div
+                    className="absolute bottom-0 left-0 top-8 w-[36%] bg-[color:var(--color-orange)]"
+                    aria-hidden="true"
+                  />
+                  <MediaFrame
+                    src={installationViewImageUrl}
+                    alt="Farraginous displayed in the Center for Latter-day Saint Arts exhibition."
+                    fallbackTitle="Farraginous installation"
+                    sizes="(min-width: 1024px) 56vw, 100vw"
+                    priority
+                    className="aspect-[16/11] border border-white/14 bg-black"
+                    imageClassName="object-cover"
+                  />
                 </div>
-              </div>
-            </div>
-
-            <div className="absolute bottom-0 left-0 w-[58%] max-w-[320px] overflow-hidden rounded-[1.6rem] border border-black/8 bg-white shadow-[0_24px_60px_rgba(58,61,64,0.16)] lg:-rotate-[4deg]">
-              <div className="relative aspect-[4/5]">
-                <Image
-                  src={youtubeThumbnailUrl}
-                  alt="Video still from Farraginous showing the EEG headset in frame."
-                  fill
-                  sizes="(min-width: 1024px) 18vw, 50vw"
-                  className="object-cover object-[58%_center]"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(58,61,64,0.04),rgba(58,61,64,0.28))]" />
-              </div>
-              <div className="space-y-1 px-4 py-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/68">
-                  Final video still
-                </p>
-                <p className="text-sm leading-6 text-[color:var(--color-slate)]/72">
-                  The released artifact, with the EEG headset still visible in
-                  frame.
-                </p>
-              </div>
-            </div>
+                <figcaption className="ml-5 flex justify-between gap-5 border-t border-white/16 pt-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--color-cream)]/46 sm:ml-8">
+                  <span>Installation view</span>
+                  <span>Center for Latter-day Saint Arts</span>
+                </figcaption>
+              </figure>
+            </MotionReveal>
           </div>
-        </div>
+
+          <dl
+            aria-label="Project metadata"
+            className="mt-14 grid border-t border-white/14 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {metadataItems.map((item, index) => (
+              <MotionReveal
+                key={item.label}
+                delay={index * 0.04}
+                className="border-b border-white/12 py-5 sm:px-5 sm:odd:border-r lg:border-b-0 lg:border-r lg:odd:border-r lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0"
+              >
+                <dt className="text-[9px] font-bold uppercase tracking-[0.22em] text-[color:var(--color-tan)]/54">
+                  {item.label}
+                </dt>
+                <dd className="mt-2 text-sm font-semibold leading-6 text-[color:var(--color-cream)]/84">
+                  {item.value}
+                </dd>
+              </MotionReveal>
+            ))}
+          </dl>
+        </Container>
       </section>
+
+      <Container className="py-20 md:py-28">
+        <MotionReveal>
+          <section className="grid gap-10 border-b border-[color:var(--color-slate)]/16 pb-20 md:pb-28 lg:grid-cols-[minmax(260px,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
+                The work
+              </p>
+              <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl">
+                Two systems, neither erased.
+              </h2>
+            </div>
+            <div className="space-y-6">
+              {overviewParagraphs.map((paragraph, index) => (
+                <p
+                  key={paragraph}
+                  className={
+                    index === 0
+                      ? "max-w-3xl text-pretty text-xl leading-9 text-[color:var(--color-slate)]/82 md:text-2xl md:leading-10"
+                      : "max-w-3xl text-base leading-8 text-[color:var(--color-slate)]/64"
+                  }
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </section>
+        </MotionReveal>
+
+        <MotionReveal>
+          <section className="grid gap-10 pt-20 md:pt-28 lg:grid-cols-[minmax(260px,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
+                Why I made it
+              </p>
+              <p className="mt-5 max-w-[13ch] font-serif text-3xl italic leading-[1.12] tracking-[-0.035em] text-[color:var(--color-slate)] md:text-4xl">
+                “I wanted the music itself to carry the feeling.”
+              </p>
+            </div>
+            <div className="space-y-6">
+              {whyItExistsParagraphs.map((paragraph) => (
+                <p
+                  key={paragraph}
+                  className="max-w-3xl text-base leading-8 text-[color:var(--color-slate)]/66"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </section>
+        </MotionReveal>
+      </Container>
 
       <section
-        aria-label="Project metadata"
-        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        id="watch"
+        className="scroll-mt-24 bg-[#102b30] py-20 text-[color:var(--color-cream)] md:py-28"
       >
-        {metadataItems.map((item) => (
-          <div
-            key={item.label}
-            className="rounded-[1.5rem] border border-[color:var(--color-teal)]/10 bg-white/84 px-5 py-5 shadow-[0_18px_40px_rgba(58,61,64,0.06)]"
-          >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/68">
-              {item.label}
-            </p>
-            <p className="mt-2 text-base font-semibold leading-7 text-[color:var(--color-slate)]">
-              {item.value}
-            </p>
-          </div>
-        ))}
-      </section>
-
-      <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)]">
-        <ContentSection title="Overview">
-          {overviewParagraphs.map((paragraph) => (
-            <p
-              key={paragraph}
-              className="text-base leading-7 text-[color:var(--color-slate)]/72"
-            >
-              {paragraph}
-            </p>
-          ))}
-
-          <div className="space-y-4 border-t border-[color:var(--color-teal)]/12 pt-6">
-            <h3 className="text-2xl font-semibold tracking-tight text-[color:var(--color-slate)]">
-              Why I made it
-            </h3>
-            {whyItExistsParagraphs.map((paragraph) => (
-              <p
-                key={paragraph}
-                className="text-base leading-7 text-[color:var(--color-slate)]/72"
+        <Container>
+          <MotionReveal className="grid items-start gap-10 lg:grid-cols-[minmax(260px,0.62fr)_minmax(0,1.38fr)] lg:gap-16">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-tan)]/68">
+                Final artifact
+              </p>
+              <h2 className="mt-5 max-w-[7ch] font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] md:text-6xl">
+                Watch the piece.
+              </h2>
+              <p className="mt-6 max-w-sm text-base leading-7 text-[color:var(--color-cream)]/60">
+                The released video carries the composition, the body, and the
+                visual narrative as one artifact.
+              </p>
+              <a
+                href={youtubeWatchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-7 inline-flex items-center gap-2 border-b border-[color:var(--color-tan)] pb-1 text-sm font-bold text-[color:var(--color-tan)] transition hover:text-white"
               >
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        </ContentSection>
-
-        <ContentSection
-          title="Watch the piece"
-          description="The released video artifact for Farraginous."
-        >
-          <ResponsiveVideoEmbed
-            title="Farraginous by Daniel Nash"
-            src={youtubeEmbedUrl}
-          />
-          <p className="text-sm leading-6 text-[color:var(--color-slate)]/68">
-            Watch Farraginous, the final video artifact for this project.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <a
-              href={youtubeWatchUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full border border-[color:var(--color-teal)] bg-[color:var(--color-teal)] px-5 py-3 text-sm font-semibold text-[color:var(--color-cream)] transition hover:bg-[color:var(--color-slate)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-cream)]"
-            >
-              Watch on YouTube
-            </a>
-          </div>
-        </ContentSection>
+                Open on YouTube
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </div>
+            <div className="border border-white/14 bg-black">
+              <ResponsiveVideoEmbed
+                title="Farraginous by Daniel Nash"
+                src={youtubeEmbedUrl}
+              />
+            </div>
+          </MotionReveal>
+        </Container>
       </section>
 
-      <ContentSection
-        title="How it works"
-        description="The system stayed intentionally legible: tuning and biometrics shaped behavior, but the piece remained grounded in musical feeling rather than technical display."
-      >
-        <div className="grid gap-x-10 gap-y-8 md:grid-cols-2">
-          {howItWorksItems.map((item) => (
-            <article
-              key={item.title}
-              className="space-y-3 border-t border-[color:var(--color-teal)]/12 pt-4"
-            >
-              <h3 className="text-2xl font-semibold tracking-tight text-[color:var(--color-slate)]">
-                {item.title}
-              </h3>
-              <p className="text-base leading-7 text-[color:var(--color-slate)]/72">
-                {item.body}
-              </p>
-            </article>
-          ))}
-        </div>
-
-        <div className="rounded-[1.5rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/88 px-5 py-5">
-          <p className="text-base leading-7 text-[color:var(--color-slate)]/76">
-            Instead of treating biometric data as a novelty effect, I used it as
-            compositional material. The result is a piece where identity is
-            expressed not only through story and tuning, but through the
-            behavior of the body itself. It is also an argument that different
-            cultural systems can coexist without one needing to erase the other.
-          </p>
-        </div>
-      </ContentSection>
-
-      <ContentSection
-        title="Process / System Artifacts"
-        description="This material shows the project as documented creative R&D: the device, the patch, the live setup tests, and the way the system was actually handled during development."
-      >
-        <div className="grid gap-4 lg:grid-cols-3">
-          <ArtifactCard
-            eyebrow="Process artifact"
-            title="Development portrait"
-            caption="Using the Emotiv EPOC+ during development."
-            image={emotivPortraitImageUrl}
-            alt="Portrait of Daniel Nash wearing the Emotiv EPOC+ during development."
-            mediaClassName="aspect-[4/5]"
-            className="lg:row-span-1"
-            unoptimized
-          />
-          <ArtifactCard
-            eyebrow="Process artifact"
-            title="Signal patch"
-            caption="Patch environment used to map biometric behavior into sound."
-            image={patchImageUrl}
-            alt="Raw Pure Data patch used to shape signal behavior in Farraginous."
-            className="lg:col-span-2"
-            mediaClassName="aspect-[4/3]"
-            imageClassName="object-contain bg-white p-2 md:p-4"
-          />
-          <ArtifactCard
-            eyebrow="Process artifact"
-            title="Device kit"
-            caption="The EEG device used in the project."
-            image={emotivKitImageUrl}
-            alt="The Emotiv EPOC+ device and kit used in the project."
-            mediaClassName="aspect-[4/3]"
-            unoptimized
-          />
-          <VideoArtifactCard
-            title="Home demo"
-            caption="Home demo showing blink detection and patch behavior in real time."
-            src={homeDemoVideoUrl}
-            poster={homeDemoPosterImageUrl}
-            aspectClassName="aspect-[4/5]"
-          />
-        </div>
-      </ContentSection>
-
-      <ContentSection
-        title="Exhibition / Presented Publicly"
-        description="Farraginous was presented as part of the Center for Latter-day Saint Arts exhibition environment, where the work was shown alongside other artists in a public event setting."
-      >
-        <div className="grid gap-4 lg:grid-cols-3">
-          <ArtifactCard
-            eyebrow="Installation"
-            title="Installation view"
-            caption="Installation view with Farraginous on display."
-            image={installationViewImageUrl}
-            alt="Installation view with Farraginous on display in the exhibition."
-            className="lg:col-span-2"
-            mediaClassName="aspect-[16/10]"
-          />
-          <ArtifactCard
-            eyebrow="Credit"
-            title="Program listing"
-            caption="Program listing with composers credit."
-            image={programCreditImageUrl}
-            alt="Program listing showing Daniel Nash under the composers credit."
-            mediaClassName="aspect-[4/5]"
-            imageClassName="object-contain bg-[color:var(--color-background)] p-2"
-            unoptimized
-          />
-          <ArtifactCard
-            eyebrow="Exhibition"
-            title="Exhibition context"
-            caption="Exhibition context."
-            image={exhibitionOverviewImageUrl}
-            alt="Wide exhibition overview showing the broader gallery context."
-            className="lg:col-span-3"
-            mediaClassName="aspect-[16/9]"
-          />
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.8fr)]">
-          <div className="space-y-5">
-            <p className="text-base leading-7 text-[color:var(--color-slate)]/74">
-              Seeing the piece presented publicly changed my understanding of
-              what it had become. I got to watch people encounter it alongside
-              paintings, installation work, and other artists connected to the
-              exhibition, which made the piece feel less like a private system
-              experiment and more like a shared act of interpretation.
+      <Container className="py-20 md:py-28">
+        <MotionReveal className="grid gap-10 lg:grid-cols-[minmax(260px,0.62fr)_minmax(0,1.38fr)] lg:gap-20">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
+              Inside the system
             </p>
-            <p className="text-base leading-7 text-[color:var(--color-slate)]/74">
-              One gentleman told me it helped him empathize more deeply with his
-              mixed-race child. That stayed with me. It suggested the work was
-              doing what I hoped: making in-betweenness felt rather than merely
-              explained.
+            <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl">
+              Body becomes material.
+            </h2>
+            <p className="mt-6 max-w-sm text-base leading-7 text-[color:var(--color-slate)]/62">
+              Tuning and biometrics shaped behavior, but the piece remained
+              grounded in musical feeling rather than technical display.
             </p>
           </div>
 
-          <blockquote className="rounded-[1.5rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/88 px-5 py-5 text-base leading-7 text-[color:var(--color-slate)]">
-            “The work showed me how two cultural systems could remain distinct,
-            still live together, and sound beautiful without one forcing the
-            other into its frame.”
+          <ol className="border-t border-[color:var(--color-slate)]/16">
+            {howItWorksItems.map((item, index) => (
+              <li
+                key={item.title}
+                className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-7 sm:grid-cols-[44px_160px_1fr] sm:gap-7"
+              >
+                <span className="font-mono text-[10px] text-[color:var(--color-orange)]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-serif text-2xl font-medium tracking-[-0.03em] text-[color:var(--color-slate)]">
+                  {item.title}
+                </h3>
+                <p className="text-sm leading-7 text-[color:var(--color-slate)]/64">
+                  {item.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </MotionReveal>
+
+        <MotionReveal>
+          <blockquote className="mt-16 border-l-4 border-[color:var(--color-orange)] py-2 pl-6 font-serif text-2xl italic leading-[1.3] tracking-[-0.025em] text-[color:var(--color-slate)] md:ml-[32%] md:mt-20 md:pl-8 md:text-3xl">
+            Different cultural systems can coexist without one needing to erase
+            the other.
           </blockquote>
-        </div>
-      </ContentSection>
+        </MotionReveal>
+      </Container>
 
-      <ContentSection
-        title="Artist Interview / Exhibition Context"
-        tone="muted"
-      >
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.78fr)]">
-          <div className="space-y-5">
-            <p className="text-base leading-7 text-[color:var(--color-slate)]/74">
-              I was also featured in the Center for Latter-day Saint Arts&apos;{" "}
-              <em>I AM: Creation</em> interview, which provides additional
-              context for the exhibition and the ideas surrounding Farraginous.
+      <section className="border-y border-[color:var(--color-slate)]/12 bg-[color:var(--color-background-soft)] py-20 md:py-28">
+        <Container>
+          <MotionReveal className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
+                Process / system artifacts
+              </p>
+              <h2 className="mt-5 max-w-[10ch] font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl">
+                The apparatus stayed visible.
+              </h2>
+            </div>
+            <p className="max-w-2xl self-end text-base leading-8 text-[color:var(--color-slate)]/62 md:text-lg">
+              The device, patch, and live setup tests show Farraginous as
+              documented creative R&amp;D—not an abstract technology story.
             </p>
-            <p className="text-base leading-7 text-[color:var(--color-slate)]/74">
-              This is supporting context rather than the main artifact, but it
-              helps place the piece within the larger exhibition conversation.
-            </p>
-            <a
-              href={interviewWatchUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-sm font-semibold text-[color:var(--color-teal)] underline decoration-[color:var(--color-teal)]/35 underline-offset-4 transition hover:decoration-[color:var(--color-teal)]"
-            >
-              Watch the interview on YouTube
-            </a>
+          </MotionReveal>
+
+          <div className="mt-14 grid gap-x-7 gap-y-12 lg:grid-cols-12">
+            <MotionReveal className="lg:col-span-4">
+              <ArtifactCard
+                eyebrow="Process artifact"
+                title="Development portrait"
+                caption="Using the Emotiv EPOC+ during development."
+                image={emotivPortraitImageUrl}
+                alt="Portrait of Daniel Nash wearing the Emotiv EPOC+ during development."
+                mediaClassName="aspect-[4/5]"
+                unoptimized
+              />
+            </MotionReveal>
+            <MotionReveal delay={0.05} className="lg:col-span-8">
+              <ArtifactCard
+                eyebrow="Process artifact"
+                title="Signal patch"
+                caption="The Pure Data environment used to map biometric behavior into sound."
+                image={patchImageUrl}
+                alt="Raw Pure Data patch used to shape signal behavior in Farraginous."
+                mediaClassName="aspect-[4/3]"
+                imageClassName="object-contain bg-white p-2 md:p-4 group-hover:scale-100"
+              />
+            </MotionReveal>
+            <MotionReveal className="lg:col-span-6">
+              <ArtifactCard
+                eyebrow="Process artifact"
+                title="Device kit"
+                caption="The EEG device used in the project."
+                image={emotivKitImageUrl}
+                alt="The Emotiv EPOC+ device and kit used in the project."
+                mediaClassName="aspect-[4/3]"
+                unoptimized
+              />
+            </MotionReveal>
+            <MotionReveal delay={0.05} className="lg:col-span-6">
+              <VideoArtifactCard
+                title="Home demo"
+                caption="Blink detection and patch behavior running together in real time."
+                src={homeDemoVideoUrl}
+                poster={homeDemoPosterImageUrl}
+                aspectClassName="aspect-[4/3]"
+              />
+            </MotionReveal>
           </div>
+        </Container>
+      </section>
 
-          <div className="max-w-[540px] lg:justify-self-end">
-            <ResponsiveVideoEmbed
-              title="I AM: Creation interview"
-              src={interviewEmbedUrl}
+      <section className="py-20 md:py-28">
+        <Container>
+          <MotionReveal className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
+                Presented publicly
+              </p>
+              <h2 className="mt-5 max-w-[10ch] font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl">
+                The experiment entered a room.
+              </h2>
+            </div>
+            <div className="space-y-5 self-end">
+              <p className="max-w-2xl text-base leading-8 text-[color:var(--color-slate)]/64">
+                Farraginous was presented as part of the Center for Latter-day
+                Saint Arts exhibition, alongside other artists in a public
+                event setting.
+              </p>
+              <p className="max-w-2xl text-base leading-8 text-[color:var(--color-slate)]/64">
+                Seeing people encounter it changed my understanding of the
+                piece. One visitor told me it helped him empathize more deeply
+                with his mixed-race child. It suggested the work was doing what
+                I hoped: making in-betweenness felt rather than merely
+                explained.
+              </p>
+            </div>
+          </MotionReveal>
+
+          <MotionReveal className="mt-14">
+            <MediaFrame
+              src={exhibitionOverviewImageUrl}
+              alt="Wide exhibition overview showing the broader gallery context."
+              fallbackTitle="Exhibition context"
+              sizes="100vw"
+              className="aspect-[16/9] border border-[color:var(--color-slate)]/12 bg-white"
+              imageClassName="object-cover"
+              expandable
+              expandLabel="Expand exhibition context"
             />
-          </div>
-        </div>
-      </ContentSection>
+            <div className="flex flex-col gap-2 border-b border-[color:var(--color-slate)]/16 py-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--color-slate)]/46 sm:flex-row sm:items-center sm:justify-between">
+              <span>Exhibition context</span>
+              <span>Center for Latter-day Saint Arts</span>
+            </div>
+          </MotionReveal>
 
-      <ContentSection title="Why it belongs in this portfolio" tone="muted">
-        <p className="text-base leading-7 text-[color:var(--color-slate)]/74">
-          This project belongs here not just as a piece of music, but as an
-          example of how I think. Farraginous reflects the same instincts that
-          shape my product work: translating ambiguous inputs into meaningful
-          systems, designing around human signals, and using structure to turn
-          complexity into something people can feel.
-        </p>
-        <p className="text-base leading-7 text-[color:var(--color-slate)]/74">
-          It is a creative work, but it reveals the same systems thinking,
-          experimentation, and narrative intent that drive the rest of my
-          portfolio.
-        </p>
-      </ContentSection>
-    </Container>
+          <div className="mt-12 grid gap-x-7 gap-y-12 lg:grid-cols-[1.4fr_0.6fr]">
+            <MotionReveal>
+              <ArtifactCard
+                eyebrow="Installation"
+                title="Installation view"
+                caption="Farraginous on display within the exhibition."
+                image={installationViewImageUrl}
+                alt="Installation view with Farraginous on display in the exhibition."
+                mediaClassName="aspect-[16/10]"
+              />
+            </MotionReveal>
+            <MotionReveal delay={0.05}>
+              <ArtifactCard
+                eyebrow="Credit"
+                title="Program listing"
+                caption="Program listing with composers credit."
+                image={programCreditImageUrl}
+                alt="Program listing showing Daniel Nash under the composers credit."
+                mediaClassName="aspect-[4/5]"
+                imageClassName="object-contain bg-[color:var(--color-background-soft)] p-2 group-hover:scale-100"
+                unoptimized
+              />
+            </MotionReveal>
+          </div>
+
+          <MotionReveal>
+            <blockquote className="mx-auto mt-20 max-w-4xl border-y border-[color:var(--color-slate)]/16 py-10 text-center font-serif text-2xl italic leading-[1.3] tracking-[-0.03em] text-[color:var(--color-slate)] md:text-4xl">
+              “The work showed me how two cultural systems could remain
+              distinct, still live together, and sound beautiful without one
+              forcing the other into its frame.”
+            </blockquote>
+          </MotionReveal>
+        </Container>
+      </section>
+
+      <section className="bg-[color:var(--color-slate)] py-20 text-[color:var(--color-cream)] md:py-28">
+        <Container>
+          <MotionReveal className="grid gap-10 lg:grid-cols-[minmax(260px,0.62fr)_minmax(0,1.38fr)] lg:gap-16">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-tan)]/62">
+                Artist interview
+              </p>
+              <h2 className="mt-5 max-w-[8ch] font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] md:text-6xl">
+                The wider conversation.
+              </h2>
+              <p className="mt-6 max-w-sm text-base leading-7 text-[color:var(--color-cream)]/60">
+                The Center for Latter-day Saint Arts&apos;{" "}
+                <em>I AM: Creation</em> interview adds context for the
+                exhibition and the ideas surrounding Farraginous.
+              </p>
+              <p className="mt-4 max-w-sm text-sm leading-7 text-[color:var(--color-cream)]/46">
+                Supporting context rather than the main artifact, it places the
+                piece within the exhibition&apos;s larger conversation.
+              </p>
+              <a
+                href={interviewWatchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-7 inline-flex items-center gap-2 border-b border-[color:var(--color-tan)] pb-1 text-sm font-bold text-[color:var(--color-tan)] transition hover:text-white"
+              >
+                Watch the interview
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </div>
+            <div className="border border-white/14 bg-black">
+              <ResponsiveVideoEmbed
+                title="I AM: Creation interview"
+                src={interviewEmbedUrl}
+              />
+            </div>
+          </MotionReveal>
+        </Container>
+      </section>
+
+      <Container className="py-20 md:py-28">
+        <MotionReveal className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
+              Why it belongs here
+            </p>
+            <h2 className="mt-5 max-w-[9ch] font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl">
+              A creative work. The same way of thinking.
+            </h2>
+          </div>
+          <div className="space-y-6 self-end">
+            <p className="max-w-2xl text-lg leading-8 text-[color:var(--color-slate)]/68">
+              Farraginous reflects the same instincts that shape my product
+              work: translating ambiguous inputs into meaningful systems,
+              designing around human signals, and using structure to turn
+              complexity into something people can feel.
+            </p>
+            <p className="max-w-2xl text-base leading-8 text-[color:var(--color-slate)]/60">
+              It is a creative work, but it reveals the systems thinking,
+              experimentation, and narrative intent that drive the rest of my
+              portfolio.
+            </p>
+            <Link
+              href="/creative"
+              className="inline-flex items-center gap-2 border-b border-[color:var(--color-teal)] pb-1 text-sm font-bold text-[color:var(--color-teal)] transition hover:border-[color:var(--color-orange)] hover:text-[color:var(--color-orange)]"
+            >
+              Explore more creative work
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+        </MotionReveal>
+      </Container>
+    </div>
   );
 }

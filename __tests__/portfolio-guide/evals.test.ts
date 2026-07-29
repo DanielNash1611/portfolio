@@ -240,7 +240,76 @@ test("response guardrails scrub absent terms from follow-ups and related-page re
   );
 });
 
-test("response guardrails strip speculative ranking tails after explicit limits", () => {
+test("response guardrails re-ground referential follow-ups in current-page evidence", () => {
+  const pageContext = getPageContextBySlug("ai-platform-mcp");
+  assert.ok(pageContext, "expected ai platform page context");
+
+  const guarded = applyPortfolioGuideResponseGuardrails({
+    request: {
+      message: "What do you mean by that?",
+      pageContext,
+      portfolioContext: getPortfolioContext(),
+      sessionContext: {
+        visitedPages: ["ai-platform-mcp"],
+        clickedPrompts: [],
+        askedQuestions: ["What is the strongest signal on this page?"],
+        inferredInterestTags: ["platform"],
+      },
+      conversation: [
+        {
+          role: "user",
+          content: "What is the strongest signal on this page?",
+        },
+        {
+          role: "assistant",
+          content: "The strongest signal is the move toward reusable AI systems.",
+        },
+      ],
+    },
+    response: {
+      answer: "Could you clarify what you mean?",
+      relatedPages: [],
+    },
+    fallbackRelatedPages: [],
+  });
+
+  assert.match(guarded.answer, /87%|prototype|workflow|reusable/i);
+  assert.doesNotMatch(guarded.answer, /\$16M|\$2\.7M/i);
+});
+
+test("response guardrails keep absent DAU metrics off the current page", () => {
+  const pageContext = getPageContextBySlug("checkout-redesign");
+  assert.ok(pageContext, "expected checkout page context");
+
+  const guarded = applyPortfolioGuideResponseGuardrails({
+    request: {
+      message: "How many daily active users does this page show?",
+      pageContext,
+      portfolioContext: getPortfolioContext(),
+      sessionContext: {
+        visitedPages: [
+          "chatgpt-enterprise",
+          "ai-platform-mcp",
+          "checkout-redesign",
+        ],
+        clickedPrompts: [],
+        askedQuestions: [],
+        inferredInterestTags: ["platform"],
+      },
+    },
+    response: {
+      answer:
+        "This page has no DAU figure, but ChatGPT Enterprise reports 800 daily active users.",
+      relatedPages: [],
+    },
+    fallbackRelatedPages: [],
+  });
+
+  assert.match(guarded.answer, /does not provide.*daily active users/i);
+  assert.doesNotMatch(guarded.answer, /\b800\b|\b1,?000\b/i);
+});
+
+test("response guardrails replace speculative rankings with canonical page evidence", () => {
   const pageContext = getPageContextBySlug("ai-platform-mcp");
   assert.ok(pageContext, "expected ai platform page context");
 
@@ -266,7 +335,7 @@ test("response guardrails strip speculative ranking tails after explicit limits"
 
   assert.equal(
     guarded.answer,
-    "This page does not specify which patterns were reused the most. It names recurring workflow and connector patterns.",
+    "The page does not provide reuse counts, frequencies, or a ranking, so it cannot establish which pattern was reused most. It names Agent-based workflows, Retrieval across structured and unstructured data, MCP-style connector patterns, and Workflow orchestration as supported patterns.",
   );
 });
 

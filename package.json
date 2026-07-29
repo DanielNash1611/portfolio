@@ -16,6 +16,7 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:check": "tsx scripts/check-db.ts",
     "report:portfolio-guide-signals": "tsx scripts/report-portfolio-guide-signals.ts",
+    "report:portfolio-guide-conversations": "tsx scripts/report-portfolio-guide-conversations.ts",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mdx}\"",
     "images:meta": "tsx scripts/read-image-meta.ts",
     "images:build": "tsx scripts/make-derivatives.ts"

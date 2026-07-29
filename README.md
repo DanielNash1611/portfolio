@@ -19,6 +19,9 @@ Copy `.env.example` to `.env.local` and provide values:
 - `HUBSPOT_FORM_ID` - HubSpot form ID that receives LaunchMuse waitlist submissions.
 - `SITE_BASE_URL` - Deployed site URL (e.g., `https://www.danielnash.co`).
 - `DATABASE_URL` - Neon connection string used by the portfolio contact form and other server-side storage.
+- `PORTFOLIO_GUIDE_DURABLE_CONVERSATIONS` - Enables anonymous, site-wide Guide persistence after migration `003` is applied.
+- `PORTFOLIO_GUIDE_PRIVACY_SALT` - Long random value used to HMAC request IPs for durable Guide rate limiting.
+- `CRON_SECRET` - Authorizes the scheduled Guide retention cleanup endpoint.
 - `RESEND_API_KEY` - Resend API key used by the portfolio contact form.
 - `CONTACT_TO_EMAIL` - Private inbox that receives contact submissions.
 - `CONTACT_FROM_EMAIL` - Verified sender used by Resend, ideally on a domain you control.
@@ -77,6 +80,7 @@ Rate limiting is intentionally simple:
 - `npm run db:migrate` - Apply SQL migrations using `DATABASE_URL` (or `DATABASE_URL_UNPOOLED` if you already use it elsewhere).
 - `npm run db:check` - Verify the Neon connection and interaction table state.
 - `npm run report:portfolio-guide-signals -- --since 30d --env production` - Summarize saved guide prompt signals.
+- `npm run report:portfolio-guide-conversations -- --since 30d` - List anonymous Guide conversations; add `--conversation <id-prefix>` to inspect a full transcript and trace.
 - `npm run images:meta` - Rebuild portrait metadata (width/height/alt) from source photos.
 - `npm run images:build` - Generate AVIF/WebP portrait derivatives and avatar thumbs.
 
