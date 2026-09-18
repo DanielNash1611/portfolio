@@ -1473,6 +1473,51 @@ export const creativeEntries: CreativeEntry[] = [
     featured: true,
   },
   {
+    slug: "gravity-astra",
+    href: "/creative/gravity/astra",
+    title: "Gravity × Astra",
+    eyebrow: "Spatial Music / Model-Enabled Iteration",
+    summary:
+      "A second Gravity build where Astra and Blender enabled richer 3D instruments and navigable worlds—while human testing forced a simpler gesture model.",
+    description:
+      "A product and creative-technology follow-up about model-enabled building, Blender-authored assets, spatial interaction, and the decisions that changed after watching people use it.",
+    tags: ["Astra", "Blender", "Spatial Interaction"],
+    heroImage: "/images/gravity/astra/celestial-orbits.webp",
+    heroImageAlt:
+      "Gravity's expanded Celestial field with sculptural performers orbiting a luminous cello in three dimensions.",
+    sections: [
+      {
+        title: "What Astra enabled",
+        body: [
+          "Astra made it practical to carry one product decision across interaction rules, simulation, spatial audio, rendering, accessibility, documentation, and browser validation in a connected loop.",
+          "That wider implementation range turned Gravity from two views of a composition into a space the listener could navigate from the audience, the cello, or alongside an autonomous performer.",
+        ],
+      },
+      {
+        title: "The Blender turn",
+        body: [
+          "Astra brought Blender into the working loop, producing stronger three-dimensional cello and instrument assets, better animation, and a textured cello surface.",
+          "Once those objects had convincing volume, the static backdrop broke the illusion. Atomic and Celestial became navigable 3D environments with galaxies placed at different distances.",
+        ],
+      },
+      {
+        title: "See the system in motion",
+        body: [
+          "A 60-second film brings the interaction model and spatial composition together: hand-launched sounds, independent orbits, listener navigation, performer follow, and movement between the Celestial and Atomic worlds.",
+          "The edit uses the original Gravity session audio with no narration. Its on-screen text and page transcript keep the explanation available with or without sound.",
+        ],
+      },
+      {
+        title: "What testing changed",
+        body: [
+          "Watching an earlier tester try to move through the music clarified that listener perspective belonged to the composition, not just the camera.",
+          "Watching my five-year-old struggle with broad hand gestures exposed a different truth: the interaction had become inconsistent, slow, and clunky. I kept the richer world but pulled the gesture vocabulary back to a smaller, more reliable grammar.",
+        ],
+      },
+    ],
+    featured: true,
+  },
+  {
     slug: "eeg-music",
     href: "/creative/eeg-music",
     title: "Farraginous",

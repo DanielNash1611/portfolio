@@ -37,7 +37,9 @@ const portfolioContext = getPortfolioContext();
 const featuredProjectSlugs =
   portfolioContext.featuredProjects?.map((project) => project.slug) ?? [];
 const studioCreativeEntries = creativeEntries.filter((entry) =>
-  ["jumping-on-coals", "tabletop-symphony", "gravity"].includes(entry.slug),
+  ["jumping-on-coals", "tabletop-symphony", "gravity-astra"].includes(
+    entry.slug,
+  ),
 );
 
 export default function StudioSystemsHomePage(): JSX.Element {

@@ -642,6 +642,16 @@ export default function GravityPage(): JSX.Element {
                   composition, but no one has to hear exactly the same
                   performance.
                 </p>
+                <Link
+                  href="/creative/gravity/astra"
+                  className="group inline-flex items-center gap-2 text-sm font-semibold text-[#071015] underline decoration-[#071015]/28 underline-offset-4 transition hover:decoration-[#071015]"
+                >
+                  Continue to the Astra chapter
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </Link>
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link
