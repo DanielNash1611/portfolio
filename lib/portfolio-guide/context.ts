@@ -1,5 +1,6 @@
 import {
   aboutContent,
+  creativeEntries,
   getWorkEntry,
   homeContent,
   productEntries,
@@ -10,6 +11,17 @@ import {
   type ThinkingEntry,
   type WorkEntry,
 } from "@/content/portfolio";
+import {
+  gravityCapabilities,
+  gravityBlenderEvolution,
+  gravityFilmTranscript,
+  gravityDecisionChanges,
+  gravityWorkingMethod,
+  gravityAuthorship,
+  tabletopProcessSteps,
+  tabletopProductPrinciples,
+  tabletopPublicBoundary,
+} from "@/content/creative-page-content";
 import { portfolioGuideMetadata } from "@/content/projects/portfolio-guide";
 import { CASE_STUDIES } from "@/data/caseStudies";
 import { cases } from "@/data/cases";
@@ -26,7 +38,12 @@ import type {
   RecommendationSummary,
 } from "@/lib/portfolio-guide/types";
 
-type CanonicalSource = "work" | "product" | "legacy-case" | "thinking";
+type CanonicalSource =
+  | "work"
+  | "product"
+  | "legacy-case"
+  | "thinking"
+  | "creative";
 
 type CanonicalProject = {
   slug: string;
@@ -36,6 +53,18 @@ type CanonicalProject = {
 };
 
 const CANONICAL_PROJECTS: CanonicalProject[] = [
+  {
+    slug: "gravity-astra",
+    href: "/creative/gravity/astra",
+    title: "Gravity × Astra",
+    source: "creative",
+  },
+  {
+    slug: "tabletop-symphony",
+    href: "/creative/tabletop-symphony",
+    title: "Tabletop Symphony",
+    source: "creative",
+  },
   {
     slug: "chatgpt-enterprise",
     href: "/work/chatgpt-enterprise",
@@ -611,6 +640,93 @@ function thinkingEntryToPageContext(slug: string): PageContext | null {
   };
 }
 
+function creativeEntryToPageContext(slug: string): PageContext | null {
+  const entry = creativeEntries.find((candidate) => candidate.slug === slug);
+  if (!entry) return null;
+  const overlay = portfolioGuideMetadata[slug] ?? {};
+  const sharedSections: PageAuthoredSection[] =
+    slug === "gravity-astra"
+      ? [
+          {
+            label: "Capabilities",
+            snippets: gravityCapabilities.map(
+              (step) => `${step.title}: ${step.body}`,
+            ),
+          },
+          {
+            label: "Blender evolution",
+            snippets: gravityBlenderEvolution.map(
+              (step) => `${step.title}: ${step.body}`,
+            ),
+          },
+          {
+            label: "Film transcript",
+            snippets: gravityFilmTranscript.map(
+              (cue) => `${cue.time}: ${cue.text}`,
+            ),
+          },
+          {
+            label: "What testing changed",
+            snippets: gravityDecisionChanges.map(
+              (step) =>
+                `${step.label} — before: ${step.before} After: ${step.after}`,
+            ),
+          },
+          {
+            label: "My approach",
+            snippets: gravityWorkingMethod.map(
+              (step) => `${step.title}: ${step.body}`,
+            ),
+          },
+          {
+            label: "Authorship",
+            snippets: [
+              `Astra accelerated: ${gravityAuthorship.accelerated}`,
+              `I remained responsible for: ${gravityAuthorship.responsible}`,
+            ],
+          },
+        ]
+      : [
+          {
+            label: "Creating the alpha",
+            snippets: tabletopProcessSteps.map(
+              (step) => `${step.title}: ${step.body}`,
+            ),
+          },
+          {
+            label: "Experience principles",
+            snippets: tabletopProductPrinciples.map(
+              (step) => `${step.title}: ${step.description}`,
+            ),
+          },
+          {
+            label: "The public boundary",
+            snippets: [
+              tabletopPublicBoundary.shared,
+              tabletopPublicBoundary.private,
+            ],
+          },
+        ];
+  return {
+    ...overlay,
+    slug: entry.slug,
+    href: entry.href,
+    title: entry.title,
+    oneLiner: overlay.oneLiner ?? entry.summary,
+    companyOrProject: entry.title,
+    tags: overlay.tags ?? entry.tags,
+    projectType: "creative-experience",
+    authoredSections: [
+      { label: "Page summary", snippets: [entry.summary, entry.description] },
+      ...entry.sections.map((section) => ({
+        label: section.title,
+        snippets: section.body,
+      })),
+      ...sharedSections,
+    ],
+  };
+}
+
 export function getCanonicalProjects(): CanonicalProject[] {
   return [...CANONICAL_PROJECTS];
 }
@@ -628,6 +744,8 @@ export function getPageContextBySlug(slug: string): PageContext | null {
   }
 
   switch (project.source) {
+    case "creative":
+      return creativeEntryToPageContext(slug);
     case "work":
       return workEntryToPageContext(slug);
     case "product":

@@ -7,14 +7,24 @@ export const ROLE_INTENT_QUICK_SELECTS = [
   "Director of Product",
   "Platform PM",
   "0-to-1 AI Builder",
+  "Creative Technology",
 ] as const;
 
-export type RoleIntentQuickSelect =
-  (typeof ROLE_INTENT_QUICK_SELECTS)[number];
+export type RoleIntentQuickSelect = (typeof ROLE_INTENT_QUICK_SELECTS)[number];
+
+export function isCreativeTechnologyIntent(intent?: VisitorIntent): boolean {
+  return intent?.focusAreas?.includes("creative-technology") ?? false;
+}
 
 type QuickSelectConfig = Omit<VisitorIntent, "rawInput">;
 
 const QUICK_SELECT_MAP: Record<RoleIntentQuickSelect, QuickSelectConfig> = {
+  "Creative Technology": {
+    normalizedTitle: "Creative Technology",
+    roleLenses: ["builder-pm"],
+    focusAreas: ["creative-technology"],
+    emphasis: ["0-to-1", "ux"],
+  },
   "AI Product Manager": {
     normalizedTitle: "AI Product Manager",
     seniority: "pm",
@@ -78,6 +88,15 @@ const TITLE_MATCHES: Array<{
 ];
 
 const FOCUS_KEYWORDS: Record<string, string[]> = {
+  "creative-technology": [
+    "creative technology",
+    "creative technologist",
+    "creative-tech",
+    "interactive experience",
+    "immersive experience",
+    "spatial music",
+    "adaptive music",
+  ],
   "ai-product": [
     "ai product",
     "ai-native",
@@ -168,14 +187,7 @@ const EMPHASIS_KEYWORDS: Record<string, string[]> = {
     "enterprise",
     "operating model",
   ],
-  ux: [
-    "ux",
-    "user experience",
-    "design",
-    "journey",
-    "usability",
-    "interface",
-  ],
+  ux: ["ux", "user experience", "design", "journey", "usability", "interface"],
 };
 
 const ROLE_LENS_KEYWORDS: Record<NarrativeId, string[]> = {
@@ -255,7 +267,9 @@ function inferSeniority(text: string): VisitorIntent["seniority"] {
 }
 
 function inferNormalizedTitle(text: string): string | undefined {
-  const match = TITLE_MATCHES.find(({ keywords }) => containsAny(text, keywords));
+  const match = TITLE_MATCHES.find(({ keywords }) =>
+    containsAny(text, keywords),
+  );
   return match?.title;
 }
 
@@ -331,7 +345,11 @@ function inferRoleLenses(
     return ranked.slice(0, 3);
   }
 
-  if (seniority === "group" || seniority === "director" || seniority === "exec") {
+  if (
+    seniority === "group" ||
+    seniority === "director" ||
+    seniority === "exec"
+  ) {
     return ["product-leader"];
   }
 
@@ -381,19 +399,31 @@ export function normalizeVisitorIntent(
     ...(quickSelectIntent?.emphasis ?? []),
     ...extractSignals(text, EMPHASIS_KEYWORDS),
   ]);
-  const seniority = quickSelectIntent?.seniority ?? inferSeniority(text);
+  const inferredSeniority = inferSeniority(text);
+  const creativeFocus = focusAreas.includes("creative-technology");
+  const explicitCreativeLevel =
+    /\b(director|vice president|vp|chief|cpo|head of|group (?:product manager|pm)|manager of managers|product manager|pm)\b|\b(senior|principal|staff|lead)\s+(creative|product|experience|designer|technologist|engineer)\b/.test(
+      text,
+    );
+  // A creative interest is a lens, not a job level. Preserve explicit levels
+  // while avoiding the generic PM default for visitors exploring experiences.
+  const seniority =
+    quickSelectIntent?.seniority ??
+    (creativeFocus && !explicitCreativeLevel ? undefined : inferredSeniority);
   const roleLenses = inferRoleLenses(
     text,
     seniority,
     focusAreas,
     emphasis,
-    quickSelectIntent?.roleLenses ?? [],
+    quickSelectIntent?.roleLenses ?? (creativeFocus ? ["builder-pm"] : []),
   );
 
   return {
     rawInput: normalizedInput,
     normalizedTitle:
-      quickSelectIntent?.normalizedTitle ?? inferNormalizedTitle(text),
+      quickSelectIntent?.normalizedTitle ??
+      inferNormalizedTitle(text) ??
+      (creativeFocus ? "Creative Technology" : undefined),
     seniority,
     roleLenses,
     focusAreas: focusAreas.length > 0 ? focusAreas : undefined,

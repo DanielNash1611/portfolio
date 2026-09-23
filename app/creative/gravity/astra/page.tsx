@@ -1,164 +1,26 @@
+import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
+import {
+  getPageContextByPath,
+  getPortfolioContext,
+} from "@/lib/portfolio-guide/context";
+import {
+  gravityAuthorship,
+  gravityCapabilities,
+  gravityBlenderEvolution,
+  gravityFilmTranscript,
+  gravityDecisionChanges,
+  gravityWorkingMethod,
+} from "@/content/creative-page-content";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowUpRight,
-  Check,
-  Minus,
-} from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUpRight, Check, Minus } from "lucide-react";
 import GravityEvolutionSlides from "@/components/creative/GravityEvolutionSlides";
 import Container from "@/components/site/Container";
 import MediaFrame from "@/components/site/MediaFrame";
 import MotionReveal from "@/components/site/MotionReveal";
 
 const appUrl = "https://gravity.danielnash.co";
-
-const capabilities = [
-  {
-    number: "01",
-    title: "A space you can enter",
-    body: "Free movement, cello and performer perspectives, and an audible listener position turned the field from a scene into a place.",
-  },
-  {
-    number: "02",
-    title: "Orbits with real depth",
-    body: "Each performer now moves through its own trajectory-defined orbital plane. The renderer and spatial-audio engine read the same position.",
-  },
-  {
-    number: "03",
-    title: "Three-dimensional worlds",
-    body: "The static Atomic and Celestial backdrops became complete environments, with four quantum regions and four galaxies staged at different distances.",
-  },
-  {
-    number: "04",
-    title: "Blender-built musical bodies",
-    body: "Astra made Blender part of the working loop. The cello and six mobile instrument types gained stronger 3D forms, better animation, distinct silhouettes, and a textured cello surface.",
-  },
-  {
-    number: "05",
-    title: "An embodied input layer",
-    body: "Local webcam processing lets a visitor point, grab, follow, turn, zoom, and launch new sounds while keeping mouse and keyboard controls intact.",
-  },
-  {
-    number: "06",
-    title: "A way to study the experience",
-    body: "Local session recording pairs Gravity audio and a camera inset with a timestamped event log, making interaction problems observable instead of anecdotal.",
-  },
-] as const;
-
-const blenderEvolution = [
-  {
-    number: "01",
-    label: "Model",
-    title: "Recognizable bodies",
-    body: "A Blender-authored cello and instrument family replaced flatter geometric approximations with more convincing three-dimensional forms.",
-  },
-  {
-    number: "02",
-    label: "Surface + motion",
-    title: "Texture that could move",
-    body: "The cello gained a material texture, while stronger animation made each instrument feel like a body traveling through space rather than a marker crossing a screen.",
-  },
-  {
-    number: "03",
-    label: "World",
-    title: "Depth all the way out",
-    body: "Once the objects had volume, the static backdrop broke the illusion. Atomic and Celestial became 3D environments with galaxies placed at varying distances.",
-  },
-] as const;
-
-const filmTranscript = [
-  {
-    time: "00–08",
-    text: "Reach into the music. Grab a sound. Pull back. Let go.",
-  },
-  {
-    time: "08–15",
-    text: "Every shape carries a sound. Independent musical patterns, pulled into orbit.",
-  },
-  {
-    time: "15–22",
-    text: "The cello is the center. The other performers move around it, each in their own time.",
-  },
-  {
-    time: "22–31",
-    text: "Move through the music. Two hands change where you listen.",
-  },
-  {
-    time: "31–39",
-    text: "Hear it from inside the orbit. Grab a performer to follow its journey.",
-  },
-  {
-    time: "39–47",
-    text: "One composition. Two worlds. Point to both sides: Celestial becomes Atomic.",
-  },
-  {
-    time: "47–54",
-    text: "Astra opened a new creative door. Music × Blender × hand tracking × spatial audio.",
-  },
-  {
-    time: "54–60",
-    text: "Gravity. Reach into the music.",
-  },
-] as const;
-
-const decisionChanges = [
-  {
-    label: "World switching",
-    before: "Wave or use broad two-hand expansion and contraction gestures.",
-    after:
-      "Point at the two visible side controls together, or choose a world in Explore.",
-  },
-  {
-    label: "Holding and launching",
-    before:
-      "Depend on a precise pinch and let finger closure move the cursor.",
-    after:
-      "Use a relaxed grab, anchor the target before closure, and move with the palm. Pinch remains an alternate input.",
-  },
-  {
-    label: "Feedback",
-    before: "Ask the visitor to infer whether the system understood them.",
-    after:
-      "Show the target, dwell progress, spring tension, release state, and a clear path to cancel.",
-  },
-  {
-    label: "Scope",
-    before: "Treat a larger gesture vocabulary as a more magical experience.",
-    after:
-      "Ship a smaller reliable grammar. Keep swipes and full-hand world gestures as documented experiments.",
-  },
-] as const;
-
-const workingMethod = [
-  {
-    number: "01",
-    title: "Turn the artistic intent into a contract.",
-    body: "I kept the PRD as the center of the work: the cello stays fixed, performers stay autonomous, and every visible position must agree with what the listener hears.",
-  },
-  {
-    number: "02",
-    title: "Let the medium change the stack.",
-    body: "Astra made it practical to bring Blender into the iteration loop, carry richer assets into the browser, and judge the models, motion, materials, and environment as one experience.",
-  },
-  {
-    number: "03",
-    title: "Ask for whole-system changes.",
-    body: "With Astra, a product observation could travel through interaction rules, physics, rendering, audio, accessibility, documentation, and tests in one connected loop.",
-  },
-  {
-    number: "04",
-    title: "Inspect the experience, not just the code.",
-    body: "I used browser captures, full-session recordings, event logs, performance profiles, and repeatable regressions to see where the rendered behavior diverged from the idea.",
-  },
-  {
-    number: "05",
-    title: "Let people overrule the prototype.",
-    body: "Synthetic tests could prove that a gesture fired once. They could not prove that it felt immediate, comfortable, or worth learning. Human behavior made the final call.",
-  },
-] as const;
 
 export const metadata: Metadata = {
   title: "Gravity with Astra",
@@ -188,6 +50,8 @@ export const metadata: Metadata = {
 };
 
 export default function GravityAstraPage(): JSX.Element {
+  const pageContext = getPageContextByPath("/creative/gravity/astra");
+  const portfolioContext = getPortfolioContext();
   return (
     <div className="overflow-hidden bg-[#030708] text-[#eef7f4]">
       <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden border-b border-white/10">
@@ -277,6 +141,17 @@ export default function GravityAstraPage(): JSX.Element {
         </div>
       </section>
 
+      <section className="bg-[color:var(--color-background)] px-5 py-8 sm:px-6 md:px-8 md:py-10">
+        <div className="mx-auto max-w-[1280px]">
+          {pageContext ? (
+            <PortfolioGuide
+              pageContext={pageContext}
+              portfolioContext={portfolioContext}
+            />
+          ) : null}
+        </div>
+      </section>
+
       <section className="bg-[#e9ece5] text-[#0b1516]">
         <Container className="py-20 md:py-28 lg:py-32">
           <MotionReveal className="grid gap-10 lg:grid-cols-[0.76fr_1.24fr] lg:gap-24">
@@ -296,8 +171,8 @@ export default function GravityAstraPage(): JSX.Element {
                 the whole experience rather than one feature at a time.
               </p>
               <p>
-                A product observation could become a revised interaction rule,
-                a physics and audio change, a visual treatment, a browser test,
+                A product observation could become a revised interaction rule, a
+                physics and audio change, a visual treatment, a browser test,
                 and a documented decision in the same working loop. That made a
                 much more ambitious version practical—but it did not make every
                 ambitious idea good.
@@ -306,7 +181,7 @@ export default function GravityAstraPage(): JSX.Element {
           </MotionReveal>
 
           <dl className="mt-16 border-t border-[#0b1516]/18 md:mt-20">
-            {capabilities.map((capability, index) => (
+            {gravityCapabilities.map((capability, index) => (
               <MotionReveal key={capability.number} delay={(index % 3) * 0.035}>
                 <div className="grid gap-4 border-b border-[#0b1516]/14 py-7 md:grid-cols-[4rem_minmax(220px,0.7fr)_minmax(0,1.3fr)] md:items-baseline md:gap-8">
                   <dt className="text-xs font-semibold tracking-[0.18em] text-[#21796f]">
@@ -345,8 +220,8 @@ export default function GravityAstraPage(): JSX.Element {
             </div>
             <div className="self-end">
               <p className="max-w-3xl text-pretty font-serif text-3xl leading-[1.08] tracking-[-0.03em] text-white/90 md:text-5xl">
-                As soon as the instruments had volume, the world around them
-                had to gain depth.
+                As soon as the instruments had volume, the world around them had
+                to gain depth.
               </p>
               <div className="mt-8 max-w-3xl space-y-5 text-base leading-8 text-white/58 md:text-lg">
                 <p>
@@ -360,16 +235,15 @@ export default function GravityAstraPage(): JSX.Element {
                 <p>
                   That changed the ambition of the environment. A static, flat
                   background could no longer support objects that looked and
-                  moved in three dimensions, so the backdrop became a
-                  navigable 3D space with galaxies positioned at different
-                  depths.
+                  moved in three dimensions, so the backdrop became a navigable
+                  3D space with galaxies positioned at different depths.
                 </p>
               </div>
             </div>
           </MotionReveal>
 
           <ol className="mt-16 grid border-y border-white/14 md:mt-20 md:grid-cols-3">
-            {blenderEvolution.map((step, index) => (
+            {gravityBlenderEvolution.map((step, index) => (
               <MotionReveal key={step.number} delay={index * 0.05}>
                 <li
                   className={`h-full py-8 md:px-8 md:py-10 ${
@@ -421,8 +295,7 @@ export default function GravityAstraPage(): JSX.Element {
               <p className="mt-6 max-w-2xl text-base leading-8 text-white/56 md:text-lg">
                 This short film moves from hand-launched sounds to independent
                 orbits, listener navigation, performer follow, and the two
-                three-dimensional worlds enabled by the Astra-and-Blender
-                build.
+                three-dimensional worlds enabled by the Astra-and-Blender build.
               </p>
             </div>
           </MotionReveal>
@@ -474,7 +347,7 @@ export default function GravityAstraPage(): JSX.Element {
                 </span>
               </summary>
               <ol className="mt-5 grid gap-x-10 border-t border-white/10 md:grid-cols-2">
-                {filmTranscript.map((cue) => (
+                {gravityFilmTranscript.map((cue) => (
                   <li
                     key={cue.time}
                     className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-white/10 py-5 text-sm leading-7"
@@ -508,10 +381,10 @@ export default function GravityAstraPage(): JSX.Element {
                   through it, not just switch views from outside.
                 </p>
                 <p>
-                  That instinct clarified the product direction. Perspective
-                  was not a camera feature; it was part of the composition.
-                  Moving closer to a performer should change both what you see
-                  and what you hear.
+                  That instinct clarified the product direction. Perspective was
+                  not a camera feature; it was part of the composition. Moving
+                  closer to a performer should change both what you see and what
+                  you hear.
                 </p>
               </div>
               <div className="mt-9 border-l border-[#7fe0d3]/55 pl-5">
@@ -567,7 +440,10 @@ export default function GravityAstraPage(): JSX.Element {
         </Container>
       </section>
 
-      <section id="decisions" className="scroll-mt-24 bg-[#e3a956] text-[#171006]">
+      <section
+        id="decisions"
+        className="scroll-mt-24 bg-[#e3a956] text-[#171006]"
+      >
         <Container className="py-20 md:py-28 lg:py-32">
           <MotionReveal className="grid gap-10 lg:grid-cols-[0.68fr_1.32fr] lg:gap-24">
             <div>
@@ -605,18 +481,24 @@ export default function GravityAstraPage(): JSX.Element {
               <span>Before testing</span>
               <span>After testing</span>
             </div>
-            {decisionChanges.map((decision, index) => (
+            {gravityDecisionChanges.map((decision, index) => (
               <MotionReveal key={decision.label} delay={(index % 3) * 0.04}>
                 <div className="grid gap-6 border-b border-[#171006]/20 py-7 md:grid-cols-[0.42fr_1fr_1fr] md:gap-8">
                   <h3 className="font-serif text-2xl tracking-[-0.025em]">
                     {decision.label}
                   </h3>
                   <div className="flex gap-3 text-sm leading-7 text-[#171006]/55 md:text-base">
-                    <Minus className="mt-2 h-4 w-4 shrink-0" aria-hidden="true" />
+                    <Minus
+                      className="mt-2 h-4 w-4 shrink-0"
+                      aria-hidden="true"
+                    />
                     <p>{decision.before}</p>
                   </div>
                   <div className="flex gap-3 text-sm leading-7 text-[#171006]/78 md:text-base">
-                    <Check className="mt-1.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                    <Check
+                      className="mt-1.5 h-4 w-4 shrink-0"
+                      aria-hidden="true"
+                    />
                     <p>{decision.after}</p>
                   </div>
                 </div>
@@ -710,7 +592,9 @@ export default function GravityAstraPage(): JSX.Element {
                   expandLabel="Expand the local session recording view"
                 />
                 <figcaption className="border-b border-white/12 py-5">
-                  <h3 className="font-serif text-2xl">An evaluation instrument</h3>
+                  <h3 className="font-serif text-2xl">
+                    An evaluation instrument
+                  </h3>
                   <p className="mt-2 text-sm leading-6 text-white/48">
                     A local recording and matching event log make recognition
                     delays and misunderstood intent inspectable after a session.
@@ -765,7 +649,7 @@ export default function GravityAstraPage(): JSX.Element {
           </MotionReveal>
 
           <ol className="mt-16 border-t border-white/15 md:mt-20">
-            {workingMethod.map((step, index) => (
+            {gravityWorkingMethod.map((step, index) => (
               <MotionReveal key={step.number} delay={(index % 3) * 0.04}>
                 <li className="grid gap-4 border-b border-white/12 py-7 md:grid-cols-[4rem_minmax(260px,0.8fr)_minmax(0,1.2fr)] md:items-baseline md:gap-8">
                   <span className="text-xs font-semibold tracking-[0.18em] text-[#7fe0d3]">
@@ -788,9 +672,7 @@ export default function GravityAstraPage(): JSX.Element {
                 Astra accelerated
               </p>
               <p className="mt-4 max-w-xl font-serif text-2xl leading-tight text-white/88 md:text-3xl">
-                Blender-to-browser asset iteration, cross-system implementation,
-                edge-case exploration, and a deeper automated-and-browser
-                validation loop.
+                {gravityAuthorship.accelerated}
               </p>
             </div>
             <div>
@@ -798,8 +680,7 @@ export default function GravityAstraPage(): JSX.Element {
                 I remained responsible for
               </p>
               <p className="mt-4 max-w-xl font-serif text-2xl leading-tight text-white/88 md:text-3xl">
-                The composition, product thesis, experience principles, human
-                observation, tradeoffs, and the call on what deserved to ship.
+                {gravityAuthorship.responsible}
               </p>
             </div>
           </MotionReveal>
@@ -827,10 +708,10 @@ export default function GravityAstraPage(): JSX.Element {
               Better because I knew what to remove.
             </h2>
             <p className="mt-7 max-w-xl text-pretty text-base leading-8 text-white/62 md:text-lg">
-              Gravity is now a deeper spatial world with dimensional,
-              textured instruments, a more expressive musical system, and a
-              more honest interaction design. The model expanded the build.
-              Watching people use it sharpened the product.
+              Gravity is now a deeper spatial world with dimensional, textured
+              instruments, a more expressive musical system, and a more honest
+              interaction design. The model expanded the build. Watching people
+              use it sharpened the product.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a

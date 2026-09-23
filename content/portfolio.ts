@@ -206,21 +206,37 @@ export const siteConfig = {
 };
 
 export const homeContent = {
-  hero: {
-    eyebrow: "AI Product Leadership",
-    title:
-      "Building AI products that create business value and improve human work",
+  metadata: {
+    title: "Daniel Nash | AI Product Leader, Builder & Composer",
     description:
-      "I build AI-enabled products and adoption strategies that turn emerging capability into measurable outcomes while helping people do better, more creative, and more meaningful work.",
+      "Daniel Nash is an AI product leader, builder, and composer building technology that expands what people can create and accomplish, from enterprise AI to interactive music experiences.",
+  },
+  hero: {
+    eyebrow: "AI product leader, builder, and composer.",
+    title:
+      "I build technology that expands what people can create and accomplish.",
+    description:
+      "I turn emerging AI capability into measurable outcomes, trusted adoption, and better human work.",
     primaryAction: {
       href: "/work",
       label: "Explore selected work",
     },
     secondaryAction: {
-      href: "/resume",
-      label: "View resume",
+      href: "/thinking/the-side-of-ai-i-want-to-be-on",
+      label: "My approach to AI",
     },
   },
+  creativeFeature: {
+    title: "Currently exploring: Gravity",
+    description:
+      "An original composition turned into an interactive spatial experience.",
+    href: "/creative/gravity/astra",
+    image: "/images/gravity/astra/celestial-orbits.webp",
+    imageAlt:
+      "Gravity's Celestial field with sculptural performers orbiting a luminous cello in three dimensions.",
+    actionLabel: "Explore Gravity",
+  },
+  selectedWorkTitle: "Beyond the demo.",
   metrics: [
     {
       label: "ChatGPT Enterprise scale",
@@ -754,7 +770,7 @@ export const productEntries: ProductEntry[] = [
     featuredMetrics: [
       {
         label: "Guide evaluation",
-        value: "33 cases",
+        value: "43 cases",
         detail:
           "Authored cases covering grounding, ownership, seniority, and cross-page behavior.",
       },
@@ -1407,8 +1423,7 @@ export const creativeEntries: CreativeEntry[] = [
       "A high-level look at the product idea, creation process, working alpha, concept evolution, and design system—without publishing the mechanics behind it.",
     tags: ["Adaptive Music", "Tabletop Play", "Creative AI"],
     heroImage: "/images/tabletop-symphony/app-tablet.webp",
-    heroImageAlt:
-      "Tabletop Symphony working alpha running on a tablet.",
+    heroImageAlt: "Tabletop Symphony working alpha running on a tablet.",
     sections: [
       {
         title: "The product idea",

@@ -48,7 +48,7 @@ const reviewAgents = [
 const signals = [
   {
     label: "Portfolio Guide",
-    value: "33 cases",
+    value: "43 cases",
     detail: "Authored evaluation inventory",
   },
   {

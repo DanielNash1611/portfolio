@@ -108,6 +108,13 @@ Update content there when you want to change:
 
 ### Add or update case studies
 
+The Creative Technology quick start follows a five-page path defined in
+`lib/portfolio-guide/recommendations.ts`. Gravity × Astra and Tabletop Symphony
+share their public narrative with the guide through `content/creative-page-content.ts`;
+their claim boundaries live in `content/projects/creative-guide.ts`. Keep the
+rendered story and guide grounding aligned, and run the `creative-` eval cases
+when changing them.
+
 1. Open [`content/portfolio.ts`](/Users/danielnash/Code/DanielNash/Portfolio/portfolio/content/portfolio.ts).
 2. Find the `workEntries` array.
 3. Edit an existing entry or add a new object with:

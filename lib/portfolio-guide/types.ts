@@ -1,6 +1,7 @@
 import type { NarrativeId } from "@/data/positioning";
 
 export type InterestTag =
+  | "creative-technology"
   | "ai-builder"
   | "pm-leadership"
   | "platform"
@@ -10,6 +11,7 @@ export type InterestTag =
 
 export type GuideTone = "site" | "legacy";
 export type GuideProjectType =
+  | "creative-experience"
   | "case-study"
   | "product"
   | "prototype-lab"

@@ -1,4 +1,5 @@
 import { getPageContextBySlug } from "@/lib/portfolio-guide/context";
+import { INTEREST_TAGS } from "@/lib/portfolio-guide/constants";
 import type {
   CopilotConversationMessage,
   CopilotRequest,
@@ -91,7 +92,7 @@ Return strict JSON with this shape:
   "answer": "string",
   "suggestedFollowUps": ["string"],
   "relatedPages": [{"slug": "string", "reason": "string"}],
-  "inferredInterestTags": ["ai-builder" | "pm-leadership" | "platform" | "healthtech" | "0-to-1" | "technical-depth"]
+  "inferredInterestTags": [${INTEREST_TAGS.map((tag) => JSON.stringify(tag)).join(" | ")}]
 }`;
 
 export type PortfolioGuidePromptContext = {
@@ -692,14 +693,7 @@ function uniqueStringArray(input: unknown, limit = 4): string[] {
 
 function uniqueInterestTags(input: unknown): InterestTag[] {
   return uniqueStringArray(input, 6).filter((value): value is InterestTag =>
-    [
-      "ai-builder",
-      "pm-leadership",
-      "platform",
-      "healthtech",
-      "0-to-1",
-      "technical-depth",
-    ].includes(value),
+    INTEREST_TAGS.includes(value as InterestTag),
   );
 }
 

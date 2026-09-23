@@ -2,7 +2,11 @@ import {
   getAllCanonicalPageContexts,
   getCanonicalProjectBySlug,
 } from "@/lib/portfolio-guide/context";
-import { scorePageForVisitorIntent } from "@/lib/portfolio-guide/recommendations";
+import {
+  getGuidedRecommendations,
+  scorePageForVisitorIntent,
+} from "@/lib/portfolio-guide/recommendations";
+import { isCreativeTechnologyIntent } from "@/lib/portfolio-guide/intent";
 import type {
   PageContext,
   PortfolioContext,
@@ -27,8 +31,9 @@ function intersectionSize(left: string[] = [], right: string[] = []): number {
 
 function getFeaturedProjectSlugs(portfolioContext: PortfolioContext): string[] {
   return (
-    portfolioContext.featuredProjects?.map((project) => project.slug).filter(Boolean) ??
-    []
+    portfolioContext.featuredProjects
+      ?.map((project) => project.slug)
+      .filter(Boolean) ?? []
   );
 }
 
@@ -49,7 +54,8 @@ function scoreCandidate(
     featuredProjectSlugs,
   );
   const explicitCrossPageLink =
-    currentPage.crossPageLinks?.find((link) => link.slug === candidate.slug) ?? null;
+    currentPage.crossPageLinks?.find((link) => link.slug === candidate.slug) ??
+    null;
   const relatedSlugs = currentPage.relatedProjectSlugs ?? [];
   const explicitIndex = relatedSlugs.indexOf(candidate.slug);
   const sharedTagCount = intersectionSize(currentPage.tags, candidate.tags);
@@ -141,7 +147,8 @@ function scoreCandidate(
       visitorIntentScore.score === 0 &&
       !explicitCrossPageLink
     ) {
-      reason = "Matches the topics you’ve shown interest in during this session.";
+      reason =
+        "Matches the topics you’ve shown interest in during this session.";
     }
   }
 
@@ -163,13 +170,36 @@ export function getRelatedPages(
   sessionContext: SessionContext,
   limit = 2,
 ): RelatedPage[] {
+  if (
+    sessionContext.visitorIntent &&
+    isCreativeTechnologyIntent(sessionContext.visitorIntent)
+  ) {
+    const remainingTour = getGuidedRecommendations(
+      getAllCanonicalPageContexts(),
+      sessionContext.visitorIntent,
+      {
+        excludeSlugs: [pageContext.slug, ...sessionContext.visitedPages],
+        limit,
+      },
+    );
+    if (remainingTour.length > 0) {
+      return remainingTour.map((step) => ({
+        slug: step.slug,
+        title: step.title,
+        href: getCanonicalProjectBySlug(step.slug)!.href,
+        reason: step.reason,
+      }));
+    }
+  }
   const candidates = getAllCanonicalPageContexts()
     .filter((candidate) => candidate.slug !== pageContext.slug)
     .map((candidate) =>
       scoreCandidate(pageContext, candidate, portfolioContext, sessionContext),
     )
     .filter((candidate) => candidate.score > 0)
-    .filter((candidate) => Boolean(getCanonicalProjectBySlug(candidate.pageContext.slug)));
+    .filter((candidate) =>
+      Boolean(getCanonicalProjectBySlug(candidate.pageContext.slug)),
+    );
 
   const sorted = candidates.sort((left, right) => right.score - left.score);
   const unseen = sorted.filter((candidate) => !candidate.visited);

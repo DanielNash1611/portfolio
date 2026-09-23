@@ -1,47 +1,18 @@
+import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
+import {
+  getPageContextByPath,
+  getPortfolioContext,
+} from "@/lib/portfolio-guide/context";
+import {
+  tabletopPublicBoundary,
+  tabletopProcessSteps,
+  tabletopProductPrinciples,
+} from "@/content/creative-page-content";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowLeft, ArrowUpRight } from "lucide-react";
 import MotionReveal from "@/components/site/MotionReveal";
-
-const processSteps = [
-  {
-    number: "01",
-    title: "Start with attention",
-    body: "Running a world, reading the table, and pacing a story already demand a GM’s full attention. I began with a simple product constraint: the score should support that work without becoming another instrument panel to operate.",
-  },
-  {
-    number: "02",
-    title: "Make emotion legible",
-    body: "I reduced the experience to a small, readable emotional language. Calm, Dramatic, and Intense give the score enough range to feel responsive while staying understandable at a glance.",
-  },
-  {
-    number: "03",
-    title: "Prototype the room, not the demo",
-    body: "Early iterations used replayable scenes and live tabletop conversation to test pacing, trust, and the moments when a GM needs to guide the experience directly.",
-  },
-  {
-    number: "04",
-    title: "Let the system recede",
-    body: "The working alpha became a tap-first companion: clear readiness, visible score state, and direct control when it matters. The complexity stays behind the experience.",
-  },
-] as const;
-
-const productPrinciples = [
-  {
-    title: "Story first",
-    description: "The music serves the scene instead of competing with it.",
-  },
-  {
-    title: "Composer built",
-    description: "Authored musical worlds, shaped to adapt with intention.",
-  },
-  {
-    title: "GM controlled",
-    description:
-      "The storyteller keeps the final say without babysitting audio.",
-  },
-] as const;
 
 const sceneStates = [
   {
@@ -92,6 +63,8 @@ export const metadata: Metadata = {
 };
 
 export default function TabletopSymphonyPage(): JSX.Element {
+  const pageContext = getPageContextByPath("/creative/tabletop-symphony");
+  const portfolioContext = getPortfolioContext();
   return (
     <div className="overflow-hidden bg-[#07111d] text-[#f4ebdd]">
       <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden border-b border-[#d6a84f]/20">
@@ -172,6 +145,17 @@ export default function TabletopSymphonyPage(): JSX.Element {
         </div>
       </section>
 
+      <section className="bg-[color:var(--color-background)] px-5 py-8 sm:px-6 md:px-8 md:py-10">
+        <div className="mx-auto max-w-[1280px]">
+          {pageContext ? (
+            <PortfolioGuide
+              pageContext={pageContext}
+              portfolioContext={portfolioContext}
+            />
+          ) : null}
+        </div>
+      </section>
+
       <section className="bg-[#f4ebdd] text-[#111827]">
         <div className="mx-auto grid max-w-[1280px] gap-12 px-5 py-20 sm:px-6 md:px-8 md:py-28 lg:grid-cols-[minmax(280px,0.66fr)_minmax(0,1.34fr)] lg:gap-24">
           <MotionReveal>
@@ -197,7 +181,7 @@ export default function TabletopSymphonyPage(): JSX.Element {
             </p>
 
             <dl className="mt-12 border-t border-[#111827]/18">
-              {productPrinciples.map((principle) => (
+              {tabletopProductPrinciples.map((principle) => (
                 <div
                   key={principle.title}
                   className="grid gap-2 border-b border-[#111827]/14 py-5 sm:grid-cols-[180px_1fr] sm:gap-8"
@@ -238,7 +222,7 @@ export default function TabletopSymphonyPage(): JSX.Element {
           </MotionReveal>
 
           <ol className="mt-16 border-t border-[#f4ebdd]/15">
-            {processSteps.map((step, index) => (
+            {tabletopProcessSteps.map((step, index) => (
               <MotionReveal key={step.number} delay={index * 0.05}>
                 <li className="grid gap-4 border-b border-[#f4ebdd]/12 py-8 md:grid-cols-[70px_minmax(220px,0.72fr)_minmax(0,1.28fr)] md:gap-8 md:py-10">
                   <span className="font-mono text-xs text-[#d6a84f]">
@@ -496,13 +480,10 @@ export default function TabletopSymphonyPage(): JSX.Element {
 
           <MotionReveal delay={0.08}>
             <p className="max-w-2xl text-lg leading-8 text-[#111827]/68">
-              This page intentionally shares the product premise, experience
-              principles, visual evolution, and current alpha surface.
+              {tabletopPublicBoundary.shared}
             </p>
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#111827]/58">
-              The mechanics, tuning decisions, evaluation data, music structure,
-              and launch strategy stay private while the product is in
-              development.
+              {tabletopPublicBoundary.private}
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">

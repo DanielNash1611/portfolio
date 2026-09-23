@@ -50,6 +50,15 @@ Recommended operating model:
 
 ## Seeded Cases
 
+The `creative-*` cases cover Gravity × Astra and Tabletop Symphony: authorship
+versus AI-assisted implementation, private-alpha status, intentionally private
+details, unsupported commercial outcomes, contaminated history, seniority,
+creative role relevance, and progression through the five-step creative tour.
+Run them with `npm run eval:portfolio-guide:local -- --filter creative-` and,
+after the deterministic checks pass, `npm run eval:portfolio-guide:local-judge -- --filter creative-`.
+The full authored inventory is 43 cases; the stored 12-case historical comparison
+is unchanged.
+
 - `ai-platform-summary`
   Summary stays anchored to the prototype, 87% reuse signal, and platform takeaway.
 - `ai-platform-impact`

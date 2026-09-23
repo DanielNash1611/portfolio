@@ -31,7 +31,8 @@ function getPageDetails(
   recommendation: GuidedRecommendation,
 ): Pick<PageContext, "href" | "projectType"> {
   const page =
-    pageCatalog.find((candidate) => candidate.slug === recommendation.slug) ?? null;
+    pageCatalog.find((candidate) => candidate.slug === recommendation.slug) ??
+    null;
 
   return {
     href: page?.href ?? "/work",
@@ -40,6 +41,8 @@ function getPageDetails(
 }
 
 function getCtaLabel(projectType?: PageContext["projectType"]): string {
+  if (projectType === "creative-experience") return "Explore project";
+  if (projectType === "essay") return "Read essay";
   if (projectType === "product" || projectType === "prototype-lab") {
     return "View product";
   }
@@ -52,8 +55,12 @@ export default function RoleIntentGuide({
   featuredProjectSlugs,
 }: RoleIntentGuideProps): JSX.Element {
   const [draft, setDraft] = useState("");
-  const [visitorIntent, setVisitorIntentState] = useState<VisitorIntent | null>(null);
-  const [recommendedPath, setRecommendedPathState] = useState<GuidedRecommendation[]>([]);
+  const [visitorIntent, setVisitorIntentState] = useState<VisitorIntent | null>(
+    null,
+  );
+  const [recommendedPath, setRecommendedPathState] = useState<
+    GuidedRecommendation[]
+  >([]);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
@@ -69,11 +76,19 @@ export default function RoleIntentGuide({
       return;
     }
 
-    const nextRecommendedPath = getGuidedRecommendations(pageCatalog, nextIntent, {
-      featuredSlugs: featuredProjectSlugs,
-    });
+    const nextRecommendedPath = getGuidedRecommendations(
+      pageCatalog,
+      nextIntent,
+      {
+        featuredSlugs: featuredProjectSlugs,
+      },
+    );
     const nextState = writeGuideSessionState(
-      setVisitorIntent(readGuideSessionState(), nextIntent, nextRecommendedPath),
+      setVisitorIntent(
+        readGuideSessionState(),
+        nextIntent,
+        nextRecommendedPath,
+      ),
     );
 
     setVisitorIntentState(nextState.visitorIntent ?? nextIntent);
@@ -99,7 +114,7 @@ export default function RoleIntentGuide({
 
   const startHere = recommendedPath[0] ?? null;
   const supportingEvidence = recommendedPath.slice(1, 3);
-  const alsoWorthViewing = recommendedPath[3] ?? null;
+  const alsoWorthViewing = recommendedPath.slice(3);
 
   return (
     <section className="relative overflow-hidden rounded-[2rem] border border-black/6 bg-white/84 px-6 py-6 shadow-[0_20px_60px_rgba(58,61,64,0.08)] md:px-8 md:py-8">
@@ -115,7 +130,8 @@ export default function RoleIntentGuide({
           </p>
           <div className="space-y-2">
             <h2 className="text-balance text-2xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-3xl">
-              Tell the site what you&apos;re looking for and I&apos;ll guide you to the most relevant work.
+              Tell the site what you&apos;re looking for and I&apos;ll guide you
+              to the most relevant work.
             </h2>
             <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/68 md:text-base">
               Enter a title, short brief, or pasted job description. This stays
@@ -161,6 +177,7 @@ export default function RoleIntentGuide({
               }}
             >
               <textarea
+                aria-label="Role or area of interest"
                 value={draft}
                 onChange={(event) => setDraft(event.target.value)}
                 rows={4}
@@ -192,7 +209,8 @@ export default function RoleIntentGuide({
                 Quick starts
               </p>
               <p className="text-sm leading-6 text-[color:var(--color-slate)]/66">
-                Choose a common lens and the site will recommend where to start without gating the rest of the portfolio.
+                Choose a common lens and the site will recommend where to start
+                without gating the rest of the portfolio.
               </p>
               <PortfolioGuideChips
                 chips={[...ROLE_INTENT_QUICK_SELECTS]}
@@ -209,28 +227,33 @@ export default function RoleIntentGuide({
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/72">
                   Start here
                 </p>
-                {startHere ? (() => {
-                  const pageDetails = getPageDetails(pageCatalog, startHere);
+                {startHere
+                  ? (() => {
+                      const pageDetails = getPageDetails(
+                        pageCatalog,
+                        startHere,
+                      );
 
-                  return (
-                    <article className="space-y-3 rounded-[1.35rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/82 px-4 py-4">
-                      <div className="space-y-1">
-                        <h3 className="text-lg font-semibold text-[color:var(--color-slate)]">
-                          {startHere.title}
-                        </h3>
-                        <p className="text-sm leading-6 text-[color:var(--color-slate)]/68">
-                          {startHere.reason}
-                        </p>
-                      </div>
-                      <Link
-                        href={pageDetails.href}
-                        className="inline-flex items-center rounded-full border border-[color:var(--color-teal)]/12 bg-white px-4 py-2 text-sm font-semibold text-[color:var(--color-teal)] transition hover:bg-[color:var(--color-background)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-cream)]"
-                      >
-                        {getCtaLabel(pageDetails.projectType)}
-                      </Link>
-                    </article>
-                  );
-                })() : null}
+                      return (
+                        <article className="space-y-3 rounded-[1.35rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/82 px-4 py-4">
+                          <div className="space-y-1">
+                            <h3 className="text-lg font-semibold text-[color:var(--color-slate)]">
+                              {startHere.title}
+                            </h3>
+                            <p className="text-sm leading-6 text-[color:var(--color-slate)]/68">
+                              {startHere.reason}
+                            </p>
+                          </div>
+                          <Link
+                            href={pageDetails.href}
+                            className="inline-flex items-center rounded-full border border-[color:var(--color-teal)]/12 bg-white px-4 py-2 text-sm font-semibold text-[color:var(--color-teal)] transition hover:bg-[color:var(--color-background)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-cream)]"
+                          >
+                            {getCtaLabel(pageDetails.projectType)}
+                          </Link>
+                        </article>
+                      );
+                    })()
+                  : null}
               </div>
 
               {supportingEvidence.length > 0 ? (
@@ -240,7 +263,10 @@ export default function RoleIntentGuide({
                   </p>
                   <div className="grid gap-3">
                     {supportingEvidence.map((recommendation) => {
-                      const pageDetails = getPageDetails(pageCatalog, recommendation);
+                      const pageDetails = getPageDetails(
+                        pageCatalog,
+                        recommendation,
+                      );
 
                       return (
                         <article
@@ -275,35 +301,41 @@ export default function RoleIntentGuide({
                   Why this is grounded
                 </p>
                 <p className="text-sm leading-6 text-[color:var(--color-slate)]/66">
-                  Recommendations are based on real portfolio metadata only: role fit, domain overlap, scope, and actual project evidence. If a page is only partly relevant, the reason will say so.
+                  Recommendations are based on real portfolio metadata only:
+                  role fit, domain overlap, scope, and actual project evidence.
+                  If a page is only partly relevant, the reason will say so.
                 </p>
               </div>
 
-              {alsoWorthViewing ? (() => {
-                const pageDetails = getPageDetails(pageCatalog, alsoWorthViewing);
-
-                return (
-                  <div className="space-y-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/72">
-                      Also worth viewing
-                    </p>
-                    <article className="rounded-[1.25rem] border border-black/6 bg-white/82 px-4 py-4">
+              {alsoWorthViewing.length > 0 ? (
+                <div className="space-y-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-teal)]/72">
+                    Also worth viewing
+                  </p>
+                  {alsoWorthViewing.map((recommendation) => (
+                    <article
+                      key={recommendation.slug}
+                      className="rounded-[1.25rem] border border-black/6 bg-white/82 px-4 py-4"
+                    >
                       <h3 className="text-base font-semibold text-[color:var(--color-slate)]">
-                        {alsoWorthViewing.title}
+                        {recommendation.title}
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-[color:var(--color-slate)]/68">
-                        {alsoWorthViewing.reason}
+                        {recommendation.reason}
                       </p>
                       <Link
-                        href={pageDetails.href}
+                        href={getPageDetails(pageCatalog, recommendation).href}
                         className="mt-3 inline-flex items-center rounded-full border border-[color:var(--color-teal)]/12 bg-[color:var(--color-background)]/86 px-4 py-2 text-sm font-semibold text-[color:var(--color-teal)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-cream)]"
                       >
-                        {getCtaLabel(pageDetails.projectType)}
+                        {getCtaLabel(
+                          getPageDetails(pageCatalog, recommendation)
+                            .projectType,
+                        )}
                       </Link>
                     </article>
-                  </div>
-                );
-              })() : null}
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
         ) : null}

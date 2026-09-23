@@ -5,6 +5,17 @@ import type {
 } from "@/lib/portfolio-guide/types";
 
 const PAGE_SIGNAL_KEYWORDS: Record<InterestTag, string[]> = {
+  "creative-technology": [
+    "creative technology",
+    "creative technologist",
+    "creative-tech",
+    "interactive experience",
+    "immersive experience",
+    "spatial music",
+    "adaptive music",
+    "gravity",
+    "tabletop symphony",
+  ],
   "ai-builder": [
     "prototype",
     "builder",
@@ -38,14 +49,7 @@ const PAGE_SIGNAL_KEYWORDS: Record<InterestTag, string[]> = {
     "literature",
     "hypothesis",
   ],
-  "0-to-1": [
-    "0-to-1",
-    "mvp",
-    "alpha",
-    "concept",
-    "prototype",
-    "incubation",
-  ],
+  "0-to-1": ["0-to-1", "mvp", "alpha", "concept", "prototype", "incubation"],
   "technical-depth": [
     "architecture",
     "retrieval",
@@ -136,7 +140,9 @@ export function getSessionAwarePrompt(
 
   if (sessionState.visitorIntent) {
     const recommendedSlugs = new Set(
-      (sessionState.recommendedPath ?? []).map((recommendation) => recommendation.slug),
+      (sessionState.recommendedPath ?? []).map(
+        (recommendation) => recommendation.slug,
+      ),
     );
     const viewedRecommendedPages = [...distinctVisitedPages].filter((slug) =>
       recommendedSlugs.has(slug),
@@ -167,6 +173,8 @@ export function getSessionAwarePrompt(
     null;
 
   switch (dominantTag) {
+    case "creative-technology":
+      return "What else should I explore for creative technology and experiences?";
     case "pm-leadership":
       return "What else on the site shows leadership examples?";
     case "healthtech":

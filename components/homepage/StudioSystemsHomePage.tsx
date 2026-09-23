@@ -60,27 +60,35 @@ export default function StudioSystemsHomePage(): JSX.Element {
                 <div className="mb-7 flex items-center gap-4">
                   <span className="h-px w-12 bg-[#db6048]" />
                   <p className="text-[11px] font-bold uppercase tracking-[0.31em] text-[#254d4b]">
-                    AI Product Leader
+                    {homeContent.hero.eyebrow}
                   </p>
                 </div>
-                <h1 className="max-w-[13ch] text-balance font-serif text-[clamp(3.25rem,7.2vw,7.6rem)] font-medium leading-[0.88] tracking-[-0.055em]">
-                  Building systems that move business and people forward.
+                <h1 className="max-w-[19ch] text-balance font-serif text-[clamp(2.75rem,5.5vw,5.8rem)] font-medium leading-[0.98] tracking-[-0.05em]">
+                  {homeContent.hero.title}
                 </h1>
-                <div className="mt-8 grid gap-7 border-t border-[#142733]/18 pt-7 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+                <div className="mt-8 space-y-6 border-t border-[#142733]/18 pt-7">
                   <p className="max-w-2xl text-pretty text-base leading-7 text-[#142733]/72 md:text-lg md:leading-8">
-                    I turn emerging AI capability into measurable outcomes,
-                    trusted adoption, and better human work.
+                    {homeContent.hero.description}
                   </p>
-                  <Link
-                    href="/work"
-                    className="group inline-flex w-fit items-center gap-3 bg-[#173f3d] px-5 py-3.5 text-sm font-bold text-[#f3eee4] transition hover:bg-[#db6048] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#db6048] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f3eee4]"
-                  >
-                    Explore selected work
-                    <ArrowRight
-                      className="h-4 w-4 transition group-hover:translate-x-1"
-                      aria-hidden="true"
-                    />
-                  </Link>
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <Link
+                      href={homeContent.hero.primaryAction.href}
+                      className="group inline-flex w-fit items-center gap-3 bg-[#173f3d] px-5 py-3.5 text-sm font-bold text-[#f3eee4] transition hover:bg-[#db6048] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#db6048] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f3eee4]"
+                    >
+                      {homeContent.hero.primaryAction.label}
+                      <ArrowRight
+                        className="h-4 w-4 transition group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </Link>
+                    <Link
+                      href={homeContent.hero.secondaryAction.href}
+                      className="inline-flex min-h-11 items-center gap-2 text-sm font-bold underline decoration-[#142733]/30 underline-offset-4 transition hover:text-[#a63d2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#db6048] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f3eee4]"
+                    >
+                      {homeContent.hero.secondaryAction.label}
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                  </div>
                 </div>
               </div>
 
@@ -118,6 +126,34 @@ export default function StudioSystemsHomePage(): JSX.Element {
           </MotionReveal>
 
           <MotionReveal delay={0.08}>
+            <article className="group my-10 grid gap-6 border-y border-[#142733]/18 py-6 md:grid-cols-[minmax(220px,0.55fr)_minmax(0,1fr)] md:items-center md:gap-9">
+              <MediaFrame
+                src={homeContent.creativeFeature.image}
+                alt={homeContent.creativeFeature.imageAlt}
+                fallbackTitle="Gravity"
+                sizes="(min-width: 768px) 32vw, 100vw"
+                className="aspect-[2/1] bg-[#081213]"
+                imageClassName="transition duration-500 group-hover:scale-[1.025] motion-reduce:transform-none motion-reduce:transition-none"
+              />
+              <div>
+                <h2 className="font-serif text-3xl leading-tight tracking-[-0.035em] md:text-4xl">
+                  {homeContent.creativeFeature.title}
+                </h2>
+                <p className="mt-3 max-w-xl text-base leading-7 text-[#142733]/70">
+                  {homeContent.creativeFeature.description}
+                </p>
+                <Link
+                  href={homeContent.creativeFeature.href}
+                  className="mt-4 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[#173f3d] transition hover:text-[#a63d2f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#db6048] focus-visible:ring-offset-4 focus-visible:ring-offset-[#f3eee4]"
+                >
+                  {homeContent.creativeFeature.actionLabel}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </article>
+          </MotionReveal>
+
+          <MotionReveal delay={0.12}>
             <dl className="grid border-x border-t border-[#142733]/18 sm:grid-cols-2 lg:grid-cols-4">
               {homeContent.metrics.map((metric, index) => (
                 <div
@@ -174,7 +210,7 @@ export default function StudioSystemsHomePage(): JSX.Element {
                   Selected work
                 </p>
                 <h2 className="mt-3 max-w-[14ch] font-serif text-4xl leading-[0.98] tracking-[-0.045em] md:text-6xl">
-                  Evidence, not theater.
+                  {homeContent.selectedWorkTitle}
                 </h2>
               </div>
               <p className="max-w-lg text-sm leading-6 text-[#142733]/65 md:text-base">

@@ -2,7 +2,8 @@ import type { InterestTag } from "@/lib/portfolio-guide/types";
 
 export const GUIDE_SESSION_STORAGE_KEY = "portfolio-guide:v1";
 export const GUIDE_VISITOR_STORAGE_KEY = "portfolio-guide:visitor-id";
-export const GUIDE_INTERACTION_SESSION_STORAGE_KEY = "portfolio-guide:session-id";
+export const GUIDE_INTERACTION_SESSION_STORAGE_KEY =
+  "portfolio-guide:session-id";
 export const GUIDE_SESSION_VERSION = 2;
 export const PORTFOLIO_GUIDE_PROMPT_VERSION = "2026-06-18.durable-v1";
 export const MAX_VISITED_PAGES = 12;
@@ -25,6 +26,7 @@ export const DEFAULT_GUIDE_PROMPTS = [
 ] as const;
 
 export const INTEREST_TAGS: InterestTag[] = [
+  "creative-technology",
   "ai-builder",
   "pm-leadership",
   "platform",

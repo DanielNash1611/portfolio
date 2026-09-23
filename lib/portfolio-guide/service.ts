@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { selectRecommendationsForPage } from "@/lib/portfolio-guide/context";
 import { getRelatedPages } from "@/lib/portfolio-guide/related";
+import { isCreativeTechnologyIntent } from "@/lib/portfolio-guide/intent";
 import {
   buildPortfolioGuideInput,
   extractResponseText,
@@ -710,7 +711,11 @@ export function applyPortfolioGuideResponseGuardrails(input: {
 
   let answer = normalizedAnswer;
   let suggestedFollowUps = response.suggestedFollowUps;
-  let relatedPages = response.relatedPages;
+  // The creative tour is an authored sequence. Model omissions or reordering
+  // must not skip its next step, including the philosophical essay.
+  let relatedPages = isCreativeTechnologyIntent(request.sessionContext.visitorIntent)
+    ? fallbackRelatedPages
+    : response.relatedPages;
   const shouldSuggestResumeGenerator = isRoleFitOrJobDescriptionQuestion(
     request.message,
   );
@@ -924,7 +929,7 @@ export function extractAnswerFromRawFallback(rawText: string): string {
       "",
     );
   const endMarker = withoutAnswerMarker.search(
-    /\s+(?:#{1,3}\s*)?(?:\*\*)?(?:suggested follow-ups?|related pages?|inferred interest tags?|inferredInterestTags)(?:\*\*)?(?:\s*:\s*|\s*\n)/i,
+    /\s+(?:#{1,3}\s*)?(?:\*\*)?(?:suggested\s*follow[\s\u2010-\u2015-]*ups?|suggested\s+next\s+reads?|related\s*pages?|inferred\s*interest\s*tags?)(?:\*\*)?(?:\s*:\s*|\s*\n)/i,
   );
   return (
     endMarker >= 0

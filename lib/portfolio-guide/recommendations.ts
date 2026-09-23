@@ -1,4 +1,5 @@
 import type { NarrativeId } from "@/data/positioning";
+import { isCreativeTechnologyIntent } from "@/lib/portfolio-guide/intent";
 import type {
   GuidedRecommendation,
   InterestTag,
@@ -11,6 +12,35 @@ type VisitorIntentScore = {
   reason: string;
 };
 
+// An editorial path through complementary evidence, not a claim of job fit.
+export const CREATIVE_TECHNOLOGY_TOUR = [
+  {
+    slug: "gravity-astra",
+    reason:
+      "Start with an original composition made spatial and interactive: Blender-built instruments, hand controls, and simpler gestures shaped by human testing.",
+  },
+  {
+    slug: "tabletop-symphony",
+    reason:
+      "Explore a composer-built adaptive score that keeps the storyteller in control. The public page shows the process and working private alpha.",
+  },
+  {
+    slug: "ai-career-operating-system",
+    reason:
+      "See how the same builder approach becomes a concrete AI workflow, with source-grounded retrieval, evaluation, and human review—and explicit implementation limits.",
+  },
+  {
+    slug: "the-side-of-ai-i-want-to-be-on",
+    reason:
+      "Read the point of view connecting these projects: AI should expand creativity and human capability alongside measurable business value.",
+  },
+  {
+    slug: "chatgpt-enterprise",
+    reason:
+      "Finish with enterprise delivery evidence: ChatGPT adoption grew from a controlled pilot to roughly 1,000 licensed users and 800 daily active users.",
+  },
+] as const;
+
 const ROLE_LENS_LABELS: Record<NarrativeId, string> = {
   "senior-product-manager": "broad end-to-end PM work",
   "builder-pm": "0-to-1 and AI builder work",
@@ -18,6 +48,7 @@ const ROLE_LENS_LABELS: Record<NarrativeId, string> = {
 };
 
 const SIGNAL_LABELS: Record<string, string> = {
+  "creative-technology": "creative technology and interactive experiences",
   "ai-product": "AI product work",
   platform: "platform and systems thinking",
   leadership: "leadership and org-shaping work",
@@ -38,6 +69,7 @@ const SIGNAL_LABELS: Record<string, string> = {
 };
 
 const SIGNAL_TO_INTEREST_TAGS: Record<string, InterestTag[]> = {
+  "creative-technology": ["creative-technology"],
   "ai-product": ["ai-builder"],
   platform: ["platform"],
   leadership: ["pm-leadership"],
@@ -67,8 +99,7 @@ function countTagTextMatches(
       normalizedKeyword.length > 2 &&
       normalizedTags.some(
         (tag) =>
-          tag.includes(normalizedKeyword) ||
-          normalizedKeyword.includes(tag),
+          tag.includes(normalizedKeyword) || normalizedKeyword.includes(tag),
       )
     ) {
       return count + 1;
@@ -207,11 +238,29 @@ export function getGuidedRecommendations(
 ): GuidedRecommendation[] {
   const featuredSlugs = options?.featuredSlugs ?? [];
   const excludeSet = new Set(options?.excludeSlugs ?? []);
+  if (isCreativeTechnologyIntent(visitorIntent)) {
+    return CREATIVE_TECHNOLOGY_TOUR.filter((step) => !excludeSet.has(step.slug))
+      .flatMap((step) => {
+        const page = pageCatalog.find(
+          (candidate) => candidate.slug === step.slug,
+        );
+        return page
+          ? [{ slug: page.slug, title: page.title, reason: step.reason }]
+          : [];
+      })
+      .slice(0, options?.limit ?? 5)
+      .map((step, index) => ({ ...step, priority: index + 1 }));
+  }
   const limit = options?.limit ?? 4;
   const ranked = pageCatalog
+    .filter((page) => page.projectType !== "creative-experience")
     .filter((page) => !excludeSet.has(page.slug))
     .map((page) => {
-      const score = scorePageForVisitorIntent(page, visitorIntent, featuredSlugs);
+      const score = scorePageForVisitorIntent(
+        page,
+        visitorIntent,
+        featuredSlugs,
+      );
       return {
         page,
         score: score.score,
@@ -225,11 +274,10 @@ export function getGuidedRecommendations(
       ? ranked.slice(0, Math.min(limit, 3))
       : ranked.slice(0, limit);
 
-  return trimmed
-    .map((candidate, index) => ({
-      slug: candidate.page.slug,
-      title: candidate.page.title,
-      reason: candidate.reason,
-      priority: index + 1,
-    }));
+  return trimmed.map((candidate, index) => ({
+    slug: candidate.page.slug,
+    title: candidate.page.title,
+    reason: candidate.reason,
+    priority: index + 1,
+  }));
 }

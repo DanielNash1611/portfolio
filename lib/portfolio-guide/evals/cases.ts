@@ -1,4 +1,5 @@
 import type { PortfolioGuideEvalCase } from "@/lib/portfolio-guide/evals/types";
+import { creativeGuideEvalCases } from "@/lib/portfolio-guide/evals/creative-cases";
 import {
   CHECKOUT_BUSINESS_IMPACT,
   CHECKOUT_EXECUTION_ARTIFACT,
@@ -24,6 +25,7 @@ const REGEX_27M = {
 };
 
 export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
+  ...creativeGuideEvalCases,
   {
     id: "ai-platform-role-fit-suggests-generator",
     title:
@@ -297,7 +299,8 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
   },
   {
     id: "ai-platform-referential-follow-up",
-    title: "Referential follow-up uses dialogue context without promoting it to evidence",
+    title:
+      "Referential follow-up uses dialogue context without promoting it to evidence",
     summary:
       "Checks that an immediate follow-up can resolve the prior answer while re-grounding the explanation in the current page.",
     category: "contaminated-history",
@@ -343,7 +346,8 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
       { role: "user", content: "Tell me about the AI platform work." },
       {
         role: "assistant",
-        content: "That page discusses MCP-style connectors and reusable AI workflows.",
+        content:
+          "That page discusses MCP-style connectors and reusable AI workflows.",
       },
     ],
     sessionContext: {
