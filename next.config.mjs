@@ -13,9 +13,6 @@ const nextConfig = {
       },
     ],
   },
-  eslint: {
-    dirs: ["app", "components", "lib", "data", "content"],
-  },
   async redirects() {
     return [
       {

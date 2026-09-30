@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run images:meta && next build",
+    "build": "npm run images:meta && next build --webpack",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint app components lib data content",
     "typecheck": "tsc --noEmit",
     "test:portfolio-guide": "tsx --test __tests__/portfolio-guide/*.test.ts",
     "smoke:evidence": "tsx scripts/smoke-test-evidence.ts",
@@ -30,7 +30,7 @@
     "framer-motion": "^11.18.2",
     "gray-matter": "^4.0.3",
     "lucide-react": "0.468.0",
-    "next": "15.5.27",
+    "next": "16.3.8",
     "next-mdx-remote": "^6.0.0",
     "openai": "^4.104.0",
     "react": "19.3.0",
@@ -48,12 +48,15 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "autoprefixer": "^10.4.16",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "15.5.27",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.8",
     "postcss": "^8.4.33",
     "prettier": "^3.1.1",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.20.6",
     "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=22.22.1 <23"
   }
 }
