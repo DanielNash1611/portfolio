@@ -167,7 +167,7 @@ test("download-only flow creates, polls, and downloads without emailing", async 
 
   const status = await statusRoute.GET(
     request("/api/resume-generator/jobs/rsj_ready"),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
   const statusBody = await status.json();
   assert.equal(status.status, 200);
@@ -176,10 +176,13 @@ test("download-only flow creates, polls, and downloads without emailing", async 
 
   const pdf = await pdfRoute.GET(
     request("/api/resume-generator/jobs/rsj_ready/pdf"),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
   assert.equal(pdf.status, 200);
   assert.equal(pdf.headers.get("content-type"), "application/pdf");
+  assert.equal(pdf.headers.get("cache-control"), "no-store");
+  assert.equal(pdf.headers.get("content-length"), String(pdfBytes.byteLength));
+  assert.deepEqual(new Uint8Array(await pdf.arrayBuffer()), pdfBytes);
   assert.equal(calls.includes("https://api.resend.com/emails"), false);
 });
 
@@ -211,7 +214,7 @@ test("email delivery sends without Daniel CC and includes contact links", async 
       method: "POST",
       body: { recipientEmail: "recruiter@acme.com", ccDaniel: false },
     }),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
 
   assert.equal(response.status, 200);
@@ -262,7 +265,7 @@ test("email delivery CCs Daniel only when opted in", async () => {
       method: "POST",
       body: { recipientEmail: "recruiter@acme.com", ccDaniel: true },
     }),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
 
   assert.equal(response.status, 200);
@@ -294,7 +297,7 @@ test("generation failure status is passed through safely", async () => {
 
   const response = await statusRoute.GET(
     request("/api/resume-generator/jobs/rsj_failed"),
-    { params: { jobId: "rsj_failed" } },
+    { params: Promise.resolve({ jobId: "rsj_failed" }) },
   );
   const body = await response.json();
   assert.equal(response.status, 200);
@@ -327,7 +330,7 @@ test("email failure returns 502 while PDF download remains available", async () 
       method: "POST",
       body: { recipientEmail: "recruiter@acme.com", ccDaniel: false },
     }),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
   assert.equal(email.status, 502);
   assert.deepEqual(await email.json(), {
@@ -339,7 +342,7 @@ test("email failure returns 502 while PDF download remains available", async () 
 
   const pdf = await pdfRoute.GET(
     request("/api/resume-generator/jobs/rsj_ready/pdf"),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
   assert.equal(pdf.status, 200);
 });
@@ -355,7 +358,7 @@ test("expired PDF maps to the public 410 response", async () => {
 
   const response = await pdfRoute.GET(
     request("/api/resume-generator/jobs/rsj_expired/pdf"),
-    { params: { jobId: "rsj_expired" } },
+    { params: Promise.resolve({ jobId: "rsj_expired" }) },
   );
   const body = await response.json();
   assert.equal(response.status, 410);
@@ -429,7 +432,7 @@ test("status passes through the mock flag from engine result metadata", async ()
 
   const status = await statusRoute.GET(
     request("/api/resume-generator/jobs/rsj_ready"),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
   const body = await status.json();
   assert.equal(status.status, 200);
@@ -446,7 +449,7 @@ test("real engine result is reported as not mock", async () => {
 
   const status = await statusRoute.GET(
     request("/api/resume-generator/jobs/rsj_ready"),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
   const body = await status.json();
   assert.equal(body.result.mock, false);
@@ -480,7 +483,7 @@ test("email in mock mode labels the subject and body as mock/test output", async
       method: "POST",
       body: { recipientEmail: "recruiter@acme.com", ccDaniel: false },
     }),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
 
   assert.equal(response.status, 200);
@@ -518,7 +521,7 @@ test("email in real mode is not labeled as mock/test output", async () => {
       method: "POST",
       body: { recipientEmail: "recruiter@acme.com", ccDaniel: false },
     }),
-    { params: { jobId: "rsj_ready" } },
+    { params: Promise.resolve({ jobId: "rsj_ready" }) },
   );
 
   assert.ok(resendBody);
@@ -544,3 +547,18 @@ test("production ignores the mock flag and fails safely when real config is miss
   assert.equal(body.error.code, "unavailable");
   assert.match(body.error.message, /real resume engine is not configured/);
 });
+
+for (const [status, code] of [[404, "not_found"], [409, "not_ready"], [410, "expired"]] as const) {
+  test(`PDF download preserves engine ${status} status without caching`, async () => {
+    installFetch(async (url) => {
+      assert.equal(url, "http://resume-customizer.test/api/v1/resume-jobs/test-unavailable/pdf");
+      return new Response(null, { status });
+    });
+    const response = await pdfRoute.GET(request("/api/resume-generator/jobs/test-unavailable/pdf"), {
+      params: Promise.resolve({ jobId: "test-unavailable" }),
+    });
+    assert.equal(response.status, status);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+    assert.equal((await response.json()).error.code, code);
+  });
+}

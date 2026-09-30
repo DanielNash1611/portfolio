@@ -12,7 +12,7 @@ const icons = {
   "product-leader": Users,
 } as const;
 
-const WhatIBuild = (): JSX.Element => {
+const WhatIBuild = (): React.JSX.Element => {
   const prefersReducedMotion = useReducedMotion();
 
   const content = (

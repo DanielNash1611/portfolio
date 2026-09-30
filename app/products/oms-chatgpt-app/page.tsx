@@ -83,7 +83,7 @@ function SectionLead({
   title: string;
   children?: ReactNode;
   invert?: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
       <div>
@@ -119,7 +119,7 @@ function NumberedList({
   items: readonly string[];
   columns?: boolean;
   invert?: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <ol
       className={`border-t ${
@@ -171,7 +171,7 @@ function PrototypeScreen({
   src: string;
   alt: string;
   index: number;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <article className="grid gap-7 border-t border-[color:var(--color-slate)]/16 py-9 lg:grid-cols-[minmax(0,1.22fr)_minmax(240px,0.58fr)] lg:items-center lg:gap-14">
       <div className={index % 2 === 1 ? "lg:order-2" : ""}>
@@ -200,7 +200,7 @@ function PrototypeScreen({
   );
 }
 
-export default function OmsChatGptAppPage(): JSX.Element {
+export default function OmsChatGptAppPage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

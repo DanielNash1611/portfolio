@@ -65,7 +65,7 @@ const slides = [
   },
 ] as const;
 
-export default function GravityEvolutionSlides(): JSX.Element {
+export default function GravityEvolutionSlides(): React.JSX.Element {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeSlide = slides[activeIndex];
 

@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 
-const HomeHero = (): JSX.Element => {
+const HomeHero = (): React.JSX.Element => {
   return (
     <section className="container pt-6 pb-4">
       <Hero

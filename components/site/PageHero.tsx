@@ -29,7 +29,7 @@ export default function PageHero({
   imageClassName,
   imageExpandable,
   compact = false,
-}: PageHeroProps): JSX.Element {
+}: PageHeroProps): React.JSX.Element {
   const actionClassName =
     "inline-flex items-center justify-center border px-5 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-cream)]";
 

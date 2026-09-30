@@ -5,7 +5,7 @@ interface StatusBadgeProps {
   className?: string;
 }
 
-const StatusBadge = ({ label, className }: StatusBadgeProps): JSX.Element => {
+const StatusBadge = ({ label, className }: StatusBadgeProps): React.JSX.Element => {
   return (
     <span
       className={clsx(

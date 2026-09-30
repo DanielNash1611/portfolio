@@ -69,7 +69,7 @@ function TimelineVisual({
   milestone,
 }: {
   milestone: AboutTimelineMilestone;
-}): JSX.Element {
+}): React.JSX.Element {
   const tone = themeTones[milestone.theme];
 
   if (milestone.visual.kind === "image") {
@@ -122,7 +122,7 @@ function TimelineEntry({
   milestone: AboutTimelineMilestone;
   index: number;
   reducedMotion: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
   const tone = themeTones[milestone.theme];
   const isLeft = milestone.side === "left";
 
@@ -237,7 +237,7 @@ export default function AboutJourneyTimeline({
   title,
   description,
   items,
-}: AboutJourneyTimelineProps): JSX.Element {
+}: AboutJourneyTimelineProps): React.JSX.Element {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion() ?? false;
   const { scrollYProgress } = useScroll({

@@ -21,7 +21,7 @@ const steps = [
   },
 ];
 
-export default function EvidenceBridge(): JSX.Element {
+export default function EvidenceBridge(): React.JSX.Element {
   return (
     <section
       className="space-y-10 border-y border-[color:var(--color-slate)]/16 py-10 md:py-14"

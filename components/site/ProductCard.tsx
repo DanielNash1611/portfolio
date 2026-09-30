@@ -12,7 +12,7 @@ type ProductCardProps = {
 export default function ProductCard({
   entry,
   priority = false,
-}: ProductCardProps): JSX.Element {
+}: ProductCardProps): React.JSX.Element {
   return (
     <article className="group flex h-full min-w-0 flex-col border-t border-[color:var(--color-slate)]/20 pt-5">
       <MediaFrame

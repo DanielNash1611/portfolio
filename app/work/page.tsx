@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Selected case studies covering real-world AI systems, platform thinking, workflow modernization, and measurable business impact.",
 };
 
-export default function WorkPage(): JSX.Element {
+export default function WorkPage(): React.JSX.Element {
   return (
     <StudioCollectionPage
       eyebrow="Selected case studies"

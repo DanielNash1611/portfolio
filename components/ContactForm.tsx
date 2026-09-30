@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-const ContactForm = (): JSX.Element => {
+const ContactForm = (): React.JSX.Element => {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState<string>("");
   const [startedAt, setStartedAt] = useState<string>("");

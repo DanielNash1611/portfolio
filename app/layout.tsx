@@ -69,7 +69,7 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
       <body>

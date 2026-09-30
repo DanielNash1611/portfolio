@@ -7,7 +7,7 @@ interface FeatureListProps {
   features: Feature[];
 }
 
-const FeatureList = ({ features }: FeatureListProps): JSX.Element => {
+const FeatureList = ({ features }: FeatureListProps): React.JSX.Element => {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {features.map((feature) => (

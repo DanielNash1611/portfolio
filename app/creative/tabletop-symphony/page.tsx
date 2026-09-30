@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TabletopSymphonyPage(): JSX.Element {
+export default function TabletopSymphonyPage(): React.JSX.Element {
   const pageContext = getPageContextByPath("/creative/tabletop-symphony");
   const portfolioContext = getPortfolioContext();
   return (

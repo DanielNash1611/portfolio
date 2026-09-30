@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "Daniel Nash on why enterprise AI succeeds through workflow fit, trust, enablement, and the systems around the model.",
 };
 
-export default function AiStrategyPage(): JSX.Element {
+export default function AiStrategyPage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

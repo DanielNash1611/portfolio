@@ -17,9 +17,9 @@ function errorResponse(status: number, code: string, message: string) {
 // GET /api/resume-generator/jobs/{jobId}  (contract §3.2)
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { jobId: string } },
+  { params }: { params: Promise<{ jobId: string }> },
 ) {
-  const { jobId } = params;
+  const { jobId } = await params;
 
   let envelope;
   try {

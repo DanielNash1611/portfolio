@@ -180,7 +180,6 @@ export async function pollResumeJob(
 ): Promise<JobStatusResponse> {
   const start = Date.now();
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const status = await getResumeJobStatus(jobId);
     onUpdate?.(status);

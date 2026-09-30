@@ -9,7 +9,7 @@ type MainContainerProps = {
 
 const HEADER_SELECTOR = '[data-site-header="true"]';
 
-const MainContainer = ({ children }: MainContainerProps): JSX.Element => {
+const MainContainer = ({ children }: MainContainerProps): React.JSX.Element => {
   const [headerHeight, setHeaderHeight] = useState<number | null>(null);
 
   useEffect(() => {

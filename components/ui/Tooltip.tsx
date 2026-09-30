@@ -18,7 +18,7 @@ import {
 import type { Placement } from "@floating-ui/react";
 
 type TooltipProps = {
-  children: React.ReactElement;
+  children: React.ReactElement<React.HTMLProps<HTMLElement>>;
   content: React.ReactNode;
   placement?: Placement;
   delay?: number;
@@ -31,7 +31,7 @@ export default function Tooltip({
   placement = "top",
   delay = 150,
   className = ""
-}: TooltipProps): JSX.Element {
+}: TooltipProps): React.JSX.Element {
   const [open, setOpen] = React.useState(false);
   const arrowRef = React.useRef<HTMLDivElement | null>(null);
   const tooltipId = React.useId();

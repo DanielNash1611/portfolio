@@ -10,7 +10,7 @@ type VisualPlaceholderProps = {
 export default function VisualPlaceholder({
   asset,
   className,
-}: VisualPlaceholderProps): JSX.Element {
+}: VisualPlaceholderProps): React.JSX.Element {
   const imageFitClassName =
     asset.imageFit === "contain" ? "object-contain" : "object-cover";
 

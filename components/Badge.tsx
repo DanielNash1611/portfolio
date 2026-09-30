@@ -9,7 +9,7 @@ const Badge = ({
   className,
   variant = "default",
   ...props
-}: BadgeProps): JSX.Element => {
+}: BadgeProps): React.JSX.Element => {
   const base =
     "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-wide";
   const styles =

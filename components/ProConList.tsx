@@ -10,7 +10,7 @@ interface ProConListProps {
   cons: ListItem[];
 }
 
-const ProConList = ({ pros, cons }: ProConListProps): JSX.Element => {
+const ProConList = ({ pros, cons }: ProConListProps): React.JSX.Element => {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <div className="space-y-4 rounded-3xl border border-brand-teal/20 bg-brand-teal/5 p-6">

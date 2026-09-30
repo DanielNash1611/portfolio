@@ -12,7 +12,7 @@ import Container from "@/components/site/Container";
 
 const gameUrl = "https://jumpingoncoals.danielnash.co/";
 
-export default function JumpingOnCoalsHero(): JSX.Element {
+export default function JumpingOnCoalsHero(): React.JSX.Element {
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 900], [0, 86]);

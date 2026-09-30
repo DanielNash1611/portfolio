@@ -95,7 +95,7 @@ export default function PortfolioGuide({
   pageContext,
   portfolioContext,
   tone = "site",
-}: PortfolioGuideProps): JSX.Element {
+}: PortfolioGuideProps): React.JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<GuideConversationMessage[]>([]);

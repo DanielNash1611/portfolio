@@ -15,7 +15,7 @@ export default function PortfolioGuideChips({
   onSelect,
   disabled = false,
   tone = "site",
-}: PortfolioGuideChipsProps): JSX.Element {
+}: PortfolioGuideChipsProps): React.JSX.Element {
   return (
     <div className="flex flex-wrap gap-2">
       {chips.map((chip) => (

@@ -306,7 +306,7 @@ export const metadata: Metadata = {
     "Daniel Nash on why the operating model is part of the product outcome, and how that belief became a practical system for prioritization, planning, and delivery.",
 };
 
-function renderBlock(block: SectionBlock): JSX.Element {
+function renderBlock(block: SectionBlock): React.JSX.Element {
   if (block.type === "list") {
     return (
       <ul className="space-y-4 pt-1">
@@ -340,7 +340,7 @@ function renderBlock(block: SectionBlock): JSX.Element {
   );
 }
 
-export default function ProductPhilosophyPage(): JSX.Element {
+export default function ProductPhilosophyPage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

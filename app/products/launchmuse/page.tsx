@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Focused AI-native product that helps artists turn the meaning behind a release into a cohesive six-week narrative.",
 };
 
-export default function LaunchMusePage(): JSX.Element {
+export default function LaunchMusePage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

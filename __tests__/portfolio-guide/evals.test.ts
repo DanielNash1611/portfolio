@@ -1,3 +1,5 @@
+import { createServer } from "node:http";
+import { once } from "node:events";
 import assert from "node:assert/strict";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -851,15 +853,24 @@ test("eval env loader reads .env.local outside production only", async () => {
   }
 });
 
-test("local provider preflight fails clearly when the model is missing", async () => {
+test("local provider preflight fails clearly when the model is missing", async (t) => {
+  const server = createServer((_request, response) => {
+    response.setHeader("Content-Type", "application/json");
+    response.end(JSON.stringify({ object: "list", data: [{ id: "available-test-model", object: "model" }] }));
+  });
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  t.after(() => new Promise<void>((resolve) => server.close(() => resolve())));
+  const address = server.address();
+  assert.ok(address && typeof address !== "string");
   await assert.rejects(
     () =>
       verifyOpenAiCompatibleProvider({
         label: "local-openai-compatible",
         model: "missing-model",
         apiKey: "ollama",
-        baseURL: "http://127.0.0.1:11434/v1",
+        baseURL: `http://127.0.0.1:${address.port}/v1`,
       }),
-    /Available models:/,
+    /Available models: available-test-model/,
   );
 });

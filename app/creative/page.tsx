@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "Creative technology and music work that deepen Daniel Nash's product portfolio.",
 };
 
-export default function CreativePage(): JSX.Element {
+export default function CreativePage(): React.JSX.Element {
   return (
     <Container className="space-y-12 pb-20 pt-8 md:pb-28">
       <PageHero

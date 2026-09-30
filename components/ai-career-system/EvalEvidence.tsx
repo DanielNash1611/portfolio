@@ -63,7 +63,7 @@ const signals = [
   },
 ];
 
-export default function EvalEvidence(): JSX.Element {
+export default function EvalEvidence(): React.JSX.Element {
   return (
     <section className="space-y-10" aria-labelledby="eval-evidence-heading">
       <div className="grid gap-6 lg:grid-cols-[minmax(260px,0.74fr)_minmax(0,1.26fr)] lg:gap-16">

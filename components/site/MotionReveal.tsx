@@ -12,7 +12,7 @@ export default function MotionReveal({
   children,
   className,
   delay = 0,
-}: MotionRevealProps): JSX.Element {
+}: MotionRevealProps): React.JSX.Element {
   return (
     <div
       className={clsx("motion-reveal", className)}

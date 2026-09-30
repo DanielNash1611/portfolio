@@ -20,7 +20,7 @@ const desktopLinkClasses =
 const mobileLinkClasses =
   "flex w-full justify-between rounded-full px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring focus-visible:ring-[#D17A5F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F2E3D5]";
 
-export const Header = (): JSX.Element => {
+export const Header = (): React.JSX.Element => {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

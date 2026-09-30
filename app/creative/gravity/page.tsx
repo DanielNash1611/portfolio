@@ -160,7 +160,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GravityPage(): JSX.Element {
+export default function GravityPage(): React.JSX.Element {
   return (
     <div className="overflow-hidden pb-20 md:pb-24">
       <GravityHero />

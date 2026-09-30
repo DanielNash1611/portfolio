@@ -17,7 +17,7 @@ const Toast = ({
   message,
   variant = "success",
   onDismiss
-}: ToastProps): JSX.Element => {
+}: ToastProps): React.JSX.Element => {
   const role = variant === "error" ? "alert" : "status";
 
   return (

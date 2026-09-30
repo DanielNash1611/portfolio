@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function JiraProductDiscoveryPage(): Promise<JSX.Element> {
+export default async function JiraProductDiscoveryPage(): Promise<React.JSX.Element> {
   const { frontmatter, content } = await getCaseMdx(slug);
   const caseData = cases.find((item) => item.slug === slug);
 

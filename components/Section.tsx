@@ -13,7 +13,7 @@ const Section = ({
   kicker,
   children,
   className
-}: SectionProps): JSX.Element => {
+}: SectionProps): React.JSX.Element => {
   return (
     <section className={clsx("space-y-6 rounded-3xl border border-brand-slate/10 bg-white/80 p-10 shadow-soft", className)}>
       <div className="space-y-2">

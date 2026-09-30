@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Paper-and-patent scouting product concept for immunology teams, designed for grounded evidence review, novelty checks, and next-step hypothesis support.",
 };
 
-export default function ImmunologyScoutPage(): JSX.Element {
+export default function ImmunologyScoutPage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

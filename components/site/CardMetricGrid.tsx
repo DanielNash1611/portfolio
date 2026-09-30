@@ -13,7 +13,7 @@ export default function CardMetricGrid({
   className,
   itemClassName,
   showDetail = false,
-}: CardMetricGridProps): JSX.Element | null {
+}: CardMetricGridProps): React.JSX.Element | null {
   const items = metrics.slice(0, 3);
 
   if (!items.length) {

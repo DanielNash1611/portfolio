@@ -6,7 +6,7 @@ type EssayCardProps = {
   entry: ThinkingEntry;
 };
 
-export default function EssayCard({ entry }: EssayCardProps): JSX.Element {
+export default function EssayCard({ entry }: EssayCardProps): React.JSX.Element {
   const cardTitle = entry.cardTitle ?? entry.title;
   const cardDescription = entry.cardDescription ?? entry.description;
   const keyIdeas = entry.keyIdeas ?? [];

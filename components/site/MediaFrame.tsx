@@ -32,7 +32,7 @@ export default function MediaFrame({
   expandable = false,
   expandLabel = "Expand image",
   children,
-}: MediaFrameProps): JSX.Element {
+}: MediaFrameProps): React.JSX.Element {
   const [hasError, setHasError] = useState(!src);
   const [isExpanded, setIsExpanded] = useState(false);
 

@@ -32,7 +32,7 @@ const quickLinks = [
   { href: "/music", label: "Music" },
 ];
 
-const Footer = (): JSX.Element => {
+const Footer = (): React.JSX.Element => {
   return (
     <footer className="border-t border-[#2C4F52]/15 bg-[#F2E3D5]/95">
       <div className="container grid gap-8 py-10 md:grid-cols-[1.3fr,0.8fr,0.9fr]">

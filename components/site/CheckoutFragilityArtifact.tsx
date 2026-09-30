@@ -74,7 +74,7 @@ function ScenarioNode({
 }: {
   title: string;
   detail: string;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <article className="rounded-[1.25rem] border border-[color:var(--color-teal)]/10 bg-white/86 px-4 py-4 shadow-[0_14px_36px_rgba(58,61,64,0.06)]">
       <p className="text-sm font-semibold text-[color:var(--color-slate)]">
@@ -93,7 +93,7 @@ function MobileGroup({
 }: {
   title: string;
   items: string[];
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <article className="rounded-[1.25rem] border border-[color:var(--color-teal)]/10 bg-white/88 px-4 py-4 shadow-[0_14px_36px_rgba(58,61,64,0.06)]">
       <p className="text-sm font-semibold text-[color:var(--color-slate)]">
@@ -121,7 +121,7 @@ function CenterCard({
   isExpanded: boolean;
   panelId: string;
   onToggle: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <button
       type="button"
@@ -168,7 +168,7 @@ function CenterCard({
   );
 }
 
-export default function CheckoutFragilityArtifact(): JSX.Element {
+export default function CheckoutFragilityArtifact(): React.JSX.Element {
   const shouldReduceMotion = useReducedMotion();
   const [isExpanded, setIsExpanded] = useState(false);
   const panelId = useId();

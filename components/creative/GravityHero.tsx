@@ -12,7 +12,7 @@ import Container from "@/components/site/Container";
 
 const appUrl = "https://gravity.danielnash.co";
 
-export default function GravityHero(): JSX.Element {
+export default function GravityHero(): React.JSX.Element {
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const imageY = useTransform(scrollY, [0, 900], [0, 74]);

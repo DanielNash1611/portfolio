@@ -43,7 +43,7 @@ type EditorialEssayLayoutProps = {
   afterHero?: ReactNode;
 };
 
-function renderBlock(block: EditorialEssayBlock): JSX.Element {
+function renderBlock(block: EditorialEssayBlock): React.JSX.Element {
   if (block.type === "list") {
     return (
       <ul className="space-y-4 pt-1">
@@ -87,7 +87,7 @@ export default function EditorialEssayLayout({
   articleLabel = "Essay",
   ctaDescription = "The essays are here to make the operating model visible, not to pad the portfolio. Happy to go deeper in a conversation.",
   afterHero,
-}: EditorialEssayLayoutProps): JSX.Element {
+}: EditorialEssayLayoutProps): React.JSX.Element {
   return (
     <>
       <section className="relative overflow-hidden border-y border-[color:var(--color-slate)]/18 py-10 md:py-16">

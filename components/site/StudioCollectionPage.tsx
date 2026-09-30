@@ -39,7 +39,7 @@ export default function StudioCollectionPage({
   collectionTitle,
   proofItems,
   entries,
-}: StudioCollectionPageProps): JSX.Element {
+}: StudioCollectionPageProps): React.JSX.Element {
   const leadEntry = entries[0];
 
   return (

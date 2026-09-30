@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Essays by Daniel Nash on AI product leadership, measurable impact, responsible adoption, human flourishing, and systems thinking.",
 };
 
-export default function ThinkingPage(): JSX.Element {
+export default function ThinkingPage(): React.JSX.Element {
   return (
     <Container className="space-y-12 pb-20 pt-8 md:pb-28">
       <PageHero

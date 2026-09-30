@@ -22,7 +22,7 @@ type CaseStudyTemplateProps = {
 export default function CaseStudyTemplate({
   entry,
   hideHero = false,
-}: CaseStudyTemplateProps): JSX.Element {
+}: CaseStudyTemplateProps): React.JSX.Element {
   const relatedTestimonials = getTestimonialsByIds(entry.testimonialIds);
   const pageContext = getPageContextByPath(entry.href);
   const portfolioContext = getPortfolioContext();

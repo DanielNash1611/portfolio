@@ -11,7 +11,7 @@ import {
 import { narrativeSocialProof } from "@/data/socialProof";
 import { fadeSlide } from "@/lib/motion";
 
-const NarrativeBridge = (): JSX.Element => {
+const NarrativeBridge = (): React.JSX.Element => {
   const prefersReducedMotion = useReducedMotion();
 
   const content = (

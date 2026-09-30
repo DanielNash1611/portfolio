@@ -7,7 +7,7 @@ import MotionReveal from "@/components/site/MotionReveal";
 const actionClassName =
   "group inline-flex items-center justify-center gap-2 border px-5 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]";
 
-export default function AiCareerHero(): JSX.Element {
+export default function AiCareerHero(): React.JSX.Element {
   return (
     <section className="relative isolate overflow-hidden bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
       <div

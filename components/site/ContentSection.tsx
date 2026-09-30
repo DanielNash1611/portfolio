@@ -27,7 +27,7 @@ export default function ContentSection({
   children,
   tone = "default",
   className,
-}: ContentSectionProps): JSX.Element {
+}: ContentSectionProps): React.JSX.Element {
   return (
     <section
       className={clsx(

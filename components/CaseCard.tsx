@@ -48,7 +48,7 @@ const CaseCard = ({
   bestFor,
   ctaLabel = "View case study",
   className,
-}: CaseCardProps): JSX.Element => {
+}: CaseCardProps): React.JSX.Element => {
   const cardLabel = href ? `View ${title}` : title;
   const image = (
     <Image

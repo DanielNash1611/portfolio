@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TheSideOfAiPage(): JSX.Element {
+export default function TheSideOfAiPage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

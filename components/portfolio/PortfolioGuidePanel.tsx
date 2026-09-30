@@ -72,7 +72,7 @@ export default function PortfolioGuidePanel({
   persistenceWarning,
   isHydrating,
   tone = "site",
-}: PortfolioGuidePanelProps): JSX.Element {
+}: PortfolioGuidePanelProps): React.JSX.Element {
   const panelClassName =
     tone === "site"
       ? "rounded-[1.4rem] border border-[color:var(--color-teal)]/10 bg-white/84"

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "Selected music and performance work by Daniel Nash.",
 };
 
-export default function CompositionsPage(): JSX.Element {
+export default function CompositionsPage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

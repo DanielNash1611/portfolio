@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { RESUME_TRACKS } from "@/data/positioning";
 import { fadeSlide } from "@/lib/motion";
 
-const ResumeAccess = (): JSX.Element => {
+const ResumeAccess = (): React.JSX.Element => {
   const prefersReducedMotion = useReducedMotion();
 
   const content = (
