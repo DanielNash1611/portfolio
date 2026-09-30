@@ -180,6 +180,9 @@ test("download-only flow creates, polls, and downloads without emailing", async 
   );
   assert.equal(pdf.status, 200);
   assert.equal(pdf.headers.get("content-type"), "application/pdf");
+  assert.equal(pdf.headers.get("cache-control"), "no-store");
+  assert.equal(pdf.headers.get("content-length"), String(pdfBytes.byteLength));
+  assert.deepEqual(new Uint8Array(await pdf.arrayBuffer()), pdfBytes);
   assert.equal(calls.includes("https://api.resend.com/emails"), false);
 });
 
@@ -544,3 +547,18 @@ test("production ignores the mock flag and fails safely when real config is miss
   assert.equal(body.error.code, "unavailable");
   assert.match(body.error.message, /real resume engine is not configured/);
 });
+
+for (const [status, code] of [[404, "not_found"], [409, "not_ready"], [410, "expired"]] as const) {
+  test(`PDF download preserves engine ${status} status without caching`, async () => {
+    installFetch(async (url) => {
+      assert.equal(url, "http://resume-customizer.test/api/v1/resume-jobs/test-unavailable/pdf");
+      return new Response(null, { status });
+    });
+    const response = await pdfRoute.GET(request("/api/resume-generator/jobs/test-unavailable/pdf"), {
+      params: { jobId: "test-unavailable" },
+    });
+    assert.equal(response.status, status);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+    assert.equal((await response.json()).error.code, code);
+  });
+}

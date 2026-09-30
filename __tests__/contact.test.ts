@@ -317,3 +317,17 @@ test("rate limit lookup failures return a safe error", async () => {
   assert.equal(body.error, "Unable to send your message right now.");
   assert.equal(saved, false);
 });
+
+test("untrusted origins and invalid email never reach storage or delivery", async () => {
+  let saved = false;
+  setContactSubmissionSaverForTests(async () => {
+    saved = true;
+    throw new Error("storage must not be reached");
+  });
+  global.fetch = async () => { throw new Error("delivery must not be reached"); };
+  const forbidden = await POST(createRequest(basePayload, { origin: "https://untrusted.example" }));
+  assert.equal(forbidden.status, 403);
+  const invalid = await POST(createRequest({ ...basePayload, email: "invalid" }));
+  assert.equal(invalid.status, 400);
+  assert.equal(saved, false);
+});
