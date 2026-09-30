@@ -53,7 +53,7 @@ function getCtaLabel(projectType?: PageContext["projectType"]): string {
 export default function RoleIntentGuide({
   pageCatalog,
   featuredProjectSlugs,
-}: RoleIntentGuideProps): JSX.Element {
+}: RoleIntentGuideProps): React.JSX.Element {
   const [draft, setDraft] = useState("");
   const [visitorIntent, setVisitorIntentState] = useState<VisitorIntent | null>(
     null,

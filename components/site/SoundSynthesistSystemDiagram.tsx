@@ -29,7 +29,7 @@ function DiagramCard({
 }: {
   children: ReactNode;
   className?: string;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <article
       className={`rounded-[1.55rem] border border-[color:var(--color-teal)]/10 bg-white/92 px-5 py-5 shadow-[0_12px_28px_rgba(58,61,64,0.05)] ${className ?? ""}`}
@@ -39,7 +39,7 @@ function DiagramCard({
   );
 }
 
-export default function SoundSynthesistSystemDiagram(): JSX.Element {
+export default function SoundSynthesistSystemDiagram(): React.JSX.Element {
   return (
     <section className="rounded-[1.75rem] border border-[color:var(--color-teal)]/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(247,245,242,0.95))] px-5 py-6 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:px-7 md:py-7">
       <div className="space-y-6">
@@ -208,7 +208,7 @@ export default function SoundSynthesistSystemDiagram(): JSX.Element {
   );
 }
 
-function ConnectorLabel({ children }: { children: ReactNode }): JSX.Element {
+function ConnectorLabel({ children }: { children: ReactNode }): React.JSX.Element {
   return (
     <div className="flex items-center gap-3 px-1">
       <span className="h-px flex-1 bg-[color:var(--color-teal)]/12" />
@@ -220,7 +220,7 @@ function ConnectorLabel({ children }: { children: ReactNode }): JSX.Element {
   );
 }
 
-function ArrowBridge(): JSX.Element {
+function ArrowBridge(): React.JSX.Element {
   return (
     <div className="flex items-center justify-center">
       <svg

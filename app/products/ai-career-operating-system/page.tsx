@@ -61,7 +61,7 @@ const boundaries = [
 const actionClassName =
   "group inline-flex items-center justify-center gap-2 border px-5 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]";
 
-export default function AiCareerOperatingSystemPage(): JSX.Element {
+export default function AiCareerOperatingSystemPage(): React.JSX.Element {
   return (
     <div className="overflow-hidden">
       <AiCareerHero />

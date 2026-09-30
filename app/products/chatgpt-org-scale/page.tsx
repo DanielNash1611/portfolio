@@ -114,7 +114,7 @@ const nextSteps = [
   "Introduce agentic workflows that connect ChatGPT to internal systems with robust safeguards and approval flows.",
 ];
 
-export default function ChatGPTOrgScalePage(): JSX.Element {
+export default function ChatGPTOrgScalePage(): React.JSX.Element {
   const socialProof = caseStudySocialProof["chatgpt-org-scale"];
 
   return (

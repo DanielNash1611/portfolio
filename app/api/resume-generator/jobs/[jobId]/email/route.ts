@@ -27,8 +27,9 @@ export const dynamic = "force-dynamic";
 //
 export async function POST(
   request: NextRequest,
-  { params }: { params: { jobId: string } },
+  { params }: { params: Promise<{ jobId: string }> },
 ) {
+  const { jobId } = await params;
   if (!isAllowedOrigin(request)) {
     return NextResponse.json(
       { ok: false, emailed: false, ccDaniel: false, error: "forbidden" },
@@ -83,7 +84,7 @@ export async function POST(
   // Confirm the job exists and is ready before fetching/attaching the PDF.
   let envelope;
   try {
-    envelope = await getEngineJob(params.jobId);
+    envelope = await getEngineJob(jobId);
   } catch (error) {
     if (error instanceof EngineUnavailableError) {
       return NextResponse.json(
@@ -125,7 +126,7 @@ export async function POST(
 
   let pdf;
   try {
-    pdf = await getEnginePdf(params.jobId);
+    pdf = await getEnginePdf(jobId);
   } catch (error) {
     if (error instanceof EngineUnavailableError) {
       return NextResponse.json(

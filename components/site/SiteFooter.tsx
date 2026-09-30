@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import Container from "@/components/site/Container";
 import { siteConfig } from "@/content/portfolio";
 
-export default function SiteFooter(): JSX.Element {
+export default function SiteFooter(): React.JSX.Element {
   return (
     <footer className="border-t border-white/12 bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
       <Container className="py-12 md:py-16">

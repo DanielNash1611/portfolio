@@ -8,7 +8,7 @@ type MetricStripProps = {
 export default function MetricStrip({
   metrics,
   variant = "default",
-}: MetricStripProps): JSX.Element | null {
+}: MetricStripProps): React.JSX.Element | null {
   if (!metrics.length) {
     return null;
   }

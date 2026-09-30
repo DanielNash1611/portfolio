@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 type Props = { portraitSrc: string };
 
-export default function AboutInline({ portraitSrc }: Props): JSX.Element {
+export default function AboutInline({ portraitSrc }: Props): React.JSX.Element {
   const reduce = useReducedMotion();
   const anim = {
     hidden: { opacity: 0, y: 20 },

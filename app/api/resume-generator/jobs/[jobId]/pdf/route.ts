@@ -17,9 +17,9 @@ function errorResponse(status: number, code: string, message: string) {
 // This is the no-email direct download path (contract decision #6).
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { jobId: string } },
+  { params }: { params: Promise<{ jobId: string }> },
 ) {
-  const { jobId } = params;
+  const { jobId } = await params;
 
   let result;
   try {

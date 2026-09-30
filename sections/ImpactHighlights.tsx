@@ -53,7 +53,7 @@ const iconAccents = [
   "border-[#DBBF96]/45 text-[#3A3D40]"
 ] as const;
 
-const ImpactHighlights = (): JSX.Element => {
+const ImpactHighlights = (): React.JSX.Element => {
   const prefersReducedMotion = useReducedMotion();
 
   const sectionContent = (

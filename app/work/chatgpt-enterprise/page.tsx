@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "How Daniel Nash proved enterprise AI value in the contact center, built the operating model for safe scale, and turned one pilot into a broader adoption engine.",
 };
 
-export default function ChatGptEnterprisePage(): JSX.Element {
+export default function ChatGptEnterprisePage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

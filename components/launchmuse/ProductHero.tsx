@@ -18,7 +18,7 @@ const ProductHero = ({
   primaryCta,
   secondaryCta,
   status
-}: ProductHeroProps): JSX.Element => {
+}: ProductHeroProps): React.JSX.Element => {
   const ctaPortrait = getPortrait("cta-right");
 
   const placeholder = (

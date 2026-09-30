@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import Stats from "@/components/Stats";
 import { fadeSlide } from "@/lib/motion";
 
-const HomeStats = (): JSX.Element => {
+const HomeStats = (): React.JSX.Element => {
   const prefersReducedMotion = useReducedMotion();
 
   const content = (

@@ -49,7 +49,7 @@ export default function EssayEvidenceFigure({
   priority = false,
   expandable = true,
   expandLabel,
-}: EssayEvidenceFigureProps): JSX.Element {
+}: EssayEvidenceFigureProps): React.JSX.Element {
   return (
     <figure
       className={clsx("mx-auto space-y-4", widthClasses[width], className)}

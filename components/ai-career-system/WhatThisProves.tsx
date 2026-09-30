@@ -1,7 +1,7 @@
 import Container from "@/components/site/Container";
 import MotionReveal from "@/components/site/MotionReveal";
 
-export default function WhatThisProves(): JSX.Element {
+export default function WhatThisProves(): React.JSX.Element {
   return (
     <section
       className="border-y border-white/12 bg-[#173f3d] text-[color:var(--color-cream)]"

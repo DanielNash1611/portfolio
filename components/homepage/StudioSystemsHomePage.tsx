@@ -42,7 +42,7 @@ const studioCreativeEntries = creativeEntries.filter((entry) =>
   ),
 );
 
-export default function StudioSystemsHomePage(): JSX.Element {
+export default function StudioSystemsHomePage(): React.JSX.Element {
   return (
     <div
       data-home-look="studio"

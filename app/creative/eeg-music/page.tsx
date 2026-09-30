@@ -94,7 +94,7 @@ function ArtifactCard({
   mediaClassName,
   imageClassName,
   unoptimized = false,
-}: ArtifactCardProps): JSX.Element {
+}: ArtifactCardProps): React.JSX.Element {
   return (
     <article
       className={clsx(
@@ -162,7 +162,7 @@ function VideoArtifactCard({
   poster,
   aspectClassName,
   className,
-}: VideoArtifactCardProps): JSX.Element {
+}: VideoArtifactCardProps): React.JSX.Element {
   return (
     <article
       className={clsx(
@@ -194,7 +194,7 @@ function VideoArtifactCard({
   );
 }
 
-export default function EegMusicPage(): JSX.Element {
+export default function EegMusicPage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }

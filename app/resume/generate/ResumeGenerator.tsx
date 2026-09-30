@@ -55,7 +55,7 @@ function formatExpiry(expiresAt: string): string {
   }
 }
 
-export default function ResumeGenerator(): JSX.Element {
+export default function ResumeGenerator(): React.JSX.Element {
   const [jdText, setJdText] = useState("");
   const [roleTitle, setRoleTitle] = useState("");
   const [company, setCompany] = useState("");
@@ -359,7 +359,7 @@ const inputClass =
 const labelClass =
   "block text-sm font-semibold text-[color:var(--color-slate)]";
 
-function ErrorBanner({ error }: { error: FormError }): JSX.Element {
+function ErrorBanner({ error }: { error: FormError }): React.JSX.Element {
   return (
     <div
       role="alert"
@@ -392,7 +392,7 @@ type ResumeFormProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-function ResumeForm(props: ResumeFormProps): JSX.Element {
+function ResumeForm(props: ResumeFormProps): React.JSX.Element {
   const remaining = RESUME_JD_MAX_CHARS - props.jdText.length;
 
   return (
@@ -559,7 +559,7 @@ function DeliveryOption({
   title: string;
   description: string;
   onSelect: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <button
       type="button"
@@ -589,7 +589,7 @@ function StatusTracker({
   status: JobStatusResponse | null;
   isTracking: boolean;
   onCancel: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const current = status?.status ?? "queued";
   const percent = status?.progress?.percent ?? 0;
   const detail = status?.progress?.detail;
@@ -711,7 +711,7 @@ function ReadyPanel({
   emailMessage: string;
   onEmail: () => void;
   onRestart: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const result = status.result!;
   const downloadHref = result.downloadUrl || resumeDownloadUrl(status.jobId);
 
@@ -821,7 +821,7 @@ function TerminalPanel({
   body: string;
   tone: "error" | "warning";
   onRestart: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <div className="space-y-5 rounded-[1.75rem] border border-black/6 bg-white/84 p-6 shadow-[0_24px_60px_rgba(58,61,64,0.08)] md:p-8">
       <div className="space-y-2">

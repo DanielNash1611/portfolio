@@ -10,7 +10,7 @@ type CaseStudyCardProps = {
 
 export default function CaseStudyCard({
   entry,
-}: CaseStudyCardProps): JSX.Element {
+}: CaseStudyCardProps): React.JSX.Element {
   return (
     <article className="group flex h-full min-w-0 flex-col border-t border-[color:var(--color-slate)]/20 pt-5">
       <MediaFrame

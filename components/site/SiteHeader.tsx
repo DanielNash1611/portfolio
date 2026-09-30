@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { siteConfig } from "@/content/portfolio";
 import Container from "@/components/site/Container";
 
-export default function SiteHeader(): JSX.Element {
+export default function SiteHeader(): React.JSX.Element {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

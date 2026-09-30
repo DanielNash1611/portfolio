@@ -28,7 +28,7 @@ type SocialRowProps = {
   className?: string;
 };
 
-const SocialRow = ({ className }: SocialRowProps): JSX.Element => {
+const SocialRow = ({ className }: SocialRowProps): React.JSX.Element => {
   return (
     <div
       className={clsx(

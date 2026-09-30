@@ -24,7 +24,7 @@ function Column({
   title: string;
   items: string[];
   complete: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <div className="space-y-6">
       <h3 className="font-serif text-2xl font-medium tracking-[-0.025em] text-[color:var(--color-slate)] md:text-3xl">
@@ -55,7 +55,7 @@ function Column({
   );
 }
 
-export default function ImplementedNext(): JSX.Element {
+export default function ImplementedNext(): React.JSX.Element {
   return (
     <section
       className="space-y-10 border-y border-[color:var(--color-slate)]/16 py-10 md:py-14"

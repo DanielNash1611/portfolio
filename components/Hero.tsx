@@ -39,7 +39,7 @@ const Hero = ({
   alignment = "left",
   primaryCta,
   secondaryCta,
-}: HeroProps): JSX.Element => {
+}: HeroProps): React.JSX.Element => {
   const alignmentClass =
     alignment === "center" ? "mx-auto text-center" : "text-left";
 

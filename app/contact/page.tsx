@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Send a note about Senior Product Manager, Builder PM, Product Leader, or select speaking opportunities.",
 };
 
-export default function ContactPage(): JSX.Element {
+export default function ContactPage(): React.JSX.Element {
   const ctaPortrait = getPortrait("cta-right");
 
   const placeholder = (

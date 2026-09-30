@@ -15,7 +15,7 @@ export default function ArtifactBlock({
   notes,
   children,
   className,
-}: ArtifactBlockProps): JSX.Element {
+}: ArtifactBlockProps): React.JSX.Element {
   return (
     <section
       className={clsx(

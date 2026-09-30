@@ -66,7 +66,7 @@ export default function Portrait({
   altOverride,
   size,
   portrait
-}: PortraitProps): JSX.Element | null {
+}: PortraitProps): React.JSX.Element | null {
   const data = portrait ?? getPortrait(variant);
 
   if (!data) {

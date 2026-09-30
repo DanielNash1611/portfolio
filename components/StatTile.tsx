@@ -16,7 +16,7 @@ const StatTile = ({
   prefix,
   suffix,
   duration = 1200
-}: StatTileProps): JSX.Element => {
+}: StatTileProps): React.JSX.Element => {
   const [displayValue, setDisplayValue] = useState(0);
 
   const prefersReducedMotion = useMemo(() => {

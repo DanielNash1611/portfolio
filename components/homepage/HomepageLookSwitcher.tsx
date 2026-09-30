@@ -34,7 +34,7 @@ const looks: Array<{
 
 export default function HomepageLookSwitcher({
   activeLook,
-}: HomepageLookSwitcherProps): JSX.Element {
+}: HomepageLookSwitcherProps): React.JSX.Element {
   return (
     <details className="group fixed bottom-4 right-4 z-[70]">
       <summary

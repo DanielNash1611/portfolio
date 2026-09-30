@@ -1,6 +1,6 @@
 ﻿import { getPortrait } from "@/components/Portrait";
 
-export default function Head(): JSX.Element | null {
+export default function Head(): React.JSX.Element | null {
   const heroPortrait = getPortrait("hero");
 
   if (!heroPortrait) {

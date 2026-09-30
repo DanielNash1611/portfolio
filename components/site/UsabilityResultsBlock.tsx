@@ -72,7 +72,7 @@ function ComparisonRow({
   before,
   after,
   beforePrefix,
-}: ComparisonRowProps): JSX.Element {
+}: ComparisonRowProps): React.JSX.Element {
   return (
     <div className="flex items-center justify-between gap-3 rounded-[1rem] border border-black/6 bg-[color:var(--color-background)]/78 px-3 py-3">
       <span className="text-sm font-medium text-[color:var(--color-slate)]/78">
@@ -110,7 +110,7 @@ function EvidenceCard({
   interpretation,
   rows,
   tone = "default",
-}: EvidenceCardProps): JSX.Element {
+}: EvidenceCardProps): React.JSX.Element {
   const toneClasses =
     tone === "nuanced"
       ? {
@@ -160,7 +160,7 @@ function EvidenceCard({
   );
 }
 
-function QuotePanel(): JSX.Element {
+function QuotePanel(): React.JSX.Element {
   return (
     <aside className="h-full rounded-[1.65rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/88 px-5 py-6 shadow-[0_20px_52px_rgba(58,61,64,0.06)] md:px-6">
       <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--color-teal)]/62">
@@ -188,7 +188,7 @@ function QuotePanel(): JSX.Element {
   );
 }
 
-export default function UsabilityResultsBlock(): JSX.Element {
+export default function UsabilityResultsBlock(): React.JSX.Element {
   return (
     <ContentSection
       title="Usability Results: Before vs After"

@@ -163,7 +163,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function JumpingOnCoalsPage(): JSX.Element {
+export default function JumpingOnCoalsPage(): React.JSX.Element {
   return (
     <div className="overflow-hidden pb-20 md:pb-24">
       <JumpingOnCoalsHero />

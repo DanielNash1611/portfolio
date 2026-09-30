@@ -6,7 +6,7 @@ type ResponsiveVideoEmbedProps = {
 export default function ResponsiveVideoEmbed({
   title,
   src,
-}: ResponsiveVideoEmbedProps): JSX.Element {
+}: ResponsiveVideoEmbedProps): React.JSX.Element {
   return (
     <div className="overflow-hidden rounded-[1.5rem] border border-black/6 bg-[color:var(--color-slate)] shadow-[0_24px_60px_rgba(58,61,64,0.18)]">
       <div className="relative aspect-video w-full">

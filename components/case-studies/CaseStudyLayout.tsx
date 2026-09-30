@@ -19,7 +19,7 @@ export function CaseStudyLayout({
   backHref = "/work",
   backLabel = "Back to portfolio",
   className
-}: CaseStudyLayoutProps): JSX.Element {
+}: CaseStudyLayoutProps): React.JSX.Element {
   return (
     <div className={clsx("container space-y-10 py-10 md:space-y-12 md:py-12", className)}>
       {backHref ? (
@@ -67,7 +67,7 @@ export function CaseStudySection({
   contentClassName,
   className,
   ...rest
-}: CaseStudySectionProps): JSX.Element {
+}: CaseStudySectionProps): React.JSX.Element {
   const variants: Record<CaseStudySectionVariant, string> = {
     default: "surface-card bg-surface-default/95 p-8 md:p-10",
     muted: "surface-card border-border-soft bg-surface-subtle/90 p-8 md:p-10",
@@ -95,7 +95,7 @@ type CaseStudyMetaProps = {
   title?: string;
 };
 
-export function CaseStudyMetaPanel({ items, title }: CaseStudyMetaProps): JSX.Element {
+export function CaseStudyMetaPanel({ items, title }: CaseStudyMetaProps): React.JSX.Element {
   if (!items.length) {
     return <></>;
   }
@@ -131,7 +131,7 @@ export function CaseStudyHighlight({
   label,
   value,
   description
-}: CaseStudyHighlightProps): JSX.Element {
+}: CaseStudyHighlightProps): React.JSX.Element {
   return (
     <div className="rounded-2xl border border-brand-teal/15 bg-brand-teal/5 p-5 shadow-subtle">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-teal/70">

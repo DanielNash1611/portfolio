@@ -16,7 +16,7 @@ export default function SectionHeader({
   align = "left",
   className,
   invert = false,
-}: SectionHeaderProps): JSX.Element {
+}: SectionHeaderProps): React.JSX.Element {
   return (
     <div
       className={clsx(

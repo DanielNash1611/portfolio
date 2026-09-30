@@ -14,7 +14,7 @@ export default function FutureCreativeProjectPage({
   title,
   description,
   threads,
-}: FutureCreativeProjectPageProps): JSX.Element {
+}: FutureCreativeProjectPageProps): React.JSX.Element {
   return (
     <div className="min-h-[calc(100svh-5rem)] bg-[#f3eee4] px-5 py-10 text-[#142733] sm:px-6 md:px-8 md:py-16">
       <MotionReveal>

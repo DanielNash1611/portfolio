@@ -28,7 +28,7 @@ function ProductAction({
   action: ActionLink;
   primary?: boolean;
   invert?: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
   const className = clsx(
     "group inline-flex items-center justify-center gap-2 border px-5 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-4",
     invert
@@ -75,7 +75,7 @@ function ProductAction({
 
 export default function ProductTemplate({
   entry,
-}: ProductTemplateProps): JSX.Element {
+}: ProductTemplateProps): React.JSX.Element {
   const pageContext = getPageContextByPath(entry.href);
   const portfolioContext = getPortfolioContext();
   const isLaunchMuse = entry.slug === "launchmuse";

@@ -55,7 +55,7 @@ const productSignals = [
   "Quality guardrails and claim safety",
 ];
 
-export default function ResumePage(): JSX.Element {
+export default function ResumePage(): React.JSX.Element {
   return (
     <Container className="space-y-12 pb-20 pt-8 md:space-y-16 md:pb-28">
       <script

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Live products, product concepts, and AI-native prototypes built or shaped by Daniel Nash.",
 };
 
-export default function ProductsPage(): JSX.Element {
+export default function ProductsPage(): React.JSX.Element {
   return (
     <StudioCollectionPage
       eyebrow="Products & prototypes"

@@ -112,7 +112,7 @@ const nextSteps = [
   "Integrate with OMS and knowledge-base systems in a human-in-the-loop pattern that keeps agents accountable for final outputs.",
 ];
 
-export default function ContactCenterChatGPTPage(): JSX.Element {
+export default function ContactCenterChatGPTPage(): React.JSX.Element {
   const socialProof = caseStudySocialProof["chatgpt-contact-center"];
 
   return (

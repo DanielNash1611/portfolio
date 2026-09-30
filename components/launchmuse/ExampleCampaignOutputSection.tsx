@@ -13,7 +13,7 @@ const calloutParagraphs = [
   "Instead of isolated posts, artists get a connected narrative that builds engagement before, during, and after a release.",
 ];
 
-export default function ExampleCampaignOutputSection(): JSX.Element {
+export default function ExampleCampaignOutputSection(): React.JSX.Element {
   return (
     <ContentSection
       title="Example campaign output"

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Paste or upload a job description to generate a role-specific PDF resume for Daniel Nash, built from verified experience. Download directly with no email required, or opt into email delivery.",
 };
 
-export default function ResumeGeneratePage(): JSX.Element {
+export default function ResumeGeneratePage(): React.JSX.Element {
   return (
     <Container className="space-y-10 pb-20 pt-8 md:pb-28">
       <PageHero

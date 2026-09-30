@@ -12,7 +12,7 @@ const CaseStudyHeader = ({
   subtitle,
   kpis,
   tags
-}: CaseStudyHeaderProps): JSX.Element => {
+}: CaseStudyHeaderProps): React.JSX.Element => {
   const displayTags =
     tags && tags.length > 0
       ? tags

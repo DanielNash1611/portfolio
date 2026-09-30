@@ -47,7 +47,7 @@ const iconAccents = [
   "border-[#D17A5F]/35 text-[#D17A5F]"
 ] as const;
 
-const Stats = ({ items = defaultStats, className }: StatsProps): JSX.Element => {
+const Stats = ({ items = defaultStats, className }: StatsProps): React.JSX.Element => {
   return (
     <div
       className={clsx(

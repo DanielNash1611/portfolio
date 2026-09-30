@@ -6,7 +6,7 @@ import { featuredWork } from "@/data/featuredWork";
 import { NARRATIVE_ORDER, NARRATIVES } from "@/data/positioning";
 import { fadeSlide } from "@/lib/motion";
 
-const FeaturedWork = (): JSX.Element => {
+const FeaturedWork = (): React.JSX.Element => {
   const prefersReducedMotion = useReducedMotion();
   const groupedWork = NARRATIVE_ORDER.map((narrativeId) => {
     const narrative = NARRATIVES.find((item) => item.id === narrativeId);

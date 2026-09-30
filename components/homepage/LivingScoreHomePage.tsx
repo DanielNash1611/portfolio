@@ -53,7 +53,7 @@ const scoreTracks = [
   },
 ] as const;
 
-export default function LivingScoreHomePage(): JSX.Element {
+export default function LivingScoreHomePage(): React.JSX.Element {
   return (
     <div
       data-home-look="score"

@@ -28,7 +28,7 @@ const roleOptions: Exclude<RoleOption, "">[] = [
   "Other"
 ];
 
-const WaitlistForm = (): JSX.Element => {
+const WaitlistForm = (): React.JSX.Element => {
   const [form, setForm] = useState<FormState>({
     email: "",
     name: "",

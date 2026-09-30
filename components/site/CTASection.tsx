@@ -14,7 +14,7 @@ function CTAAction({
 }: {
   action: ActionLink;
   primary: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
   const className = primary
     ? "inline-flex items-center justify-center whitespace-nowrap border border-[color:var(--color-cream)] bg-[color:var(--color-cream)] px-5 py-3 text-sm font-bold text-[color:var(--color-slate)] transition hover:bg-[#e6a286] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]"
     : "inline-flex items-center justify-center whitespace-nowrap border border-white/24 bg-transparent px-5 py-3 text-sm font-bold text-[color:var(--color-cream)] transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]";
@@ -44,7 +44,7 @@ export default function CTASection({
   description,
   primaryAction,
   secondaryAction,
-}: CTASectionProps): JSX.Element {
+}: CTASectionProps): React.JSX.Element {
   return (
     <section className="relative overflow-hidden border-y border-white/12 bg-[color:var(--color-slate)] px-6 py-9 text-[color:var(--color-cream)] md:px-8 md:py-12">
       <div

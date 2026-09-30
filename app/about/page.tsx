@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "About Daniel Nash, an AI product leader focused on measurable business impact, trusted adoption, responsible change, and AI that improves human work.",
 };
 
-export default function AboutPage(): JSX.Element {
+export default function AboutPage(): React.JSX.Element {
   return (
     <Container className="space-y-12 pb-20 pt-8 md:space-y-16 md:pb-28">
       <PageHero

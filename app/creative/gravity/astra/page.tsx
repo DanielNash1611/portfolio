@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GravityAstraPage(): JSX.Element {
+export default function GravityAstraPage(): React.JSX.Element {
   const pageContext = getPageContextByPath("/creative/gravity/astra");
   const portfolioContext = getPortfolioContext();
   return (

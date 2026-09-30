@@ -1,4 +1,4 @@
-export default function CaseStudyOverview(): JSX.Element {
+export default function CaseStudyOverview(): React.JSX.Element {
   return (
     <section
       className="border-y border-[color:var(--color-slate)]/16"

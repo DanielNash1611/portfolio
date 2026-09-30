@@ -19,7 +19,7 @@ const stages = [
   },
 ];
 
-export default function SystemFlow(): JSX.Element {
+export default function SystemFlow(): React.JSX.Element {
   return (
     <div className="rounded-[1.8rem] border border-[color:var(--color-teal)]/10 bg-[color:var(--color-background)]/86 p-5 shadow-[0_22px_60px_rgba(44,79,82,0.08)] md:p-6">
       <div className="mb-5 flex items-center justify-between gap-4">

@@ -100,7 +100,7 @@ function SectionLead({
   title: string;
   children?: ReactNode;
   invert?: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-20">
       <div>
@@ -142,7 +142,7 @@ function StoryImage({
   description?: string;
   className?: string;
   imageClassName?: string;
-}): JSX.Element {
+}): React.JSX.Element {
   return (
     <figure className="group">
       <MediaFrame
@@ -173,7 +173,7 @@ function StoryImage({
   );
 }
 
-export default function AiPlatformMcpPage(): JSX.Element {
+export default function AiPlatformMcpPage(): React.JSX.Element {
   return (
     <div className="overflow-hidden">
       <section className="relative overflow-hidden bg-[#183444] text-[color:var(--color-cream)]">

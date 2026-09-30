@@ -14,7 +14,7 @@ type EssayTemplateProps = {
 
 export default function EssayTemplate({
   entry,
-}: EssayTemplateProps): JSX.Element {
+}: EssayTemplateProps): React.JSX.Element {
   const pageContext = getPageContextByPath(entry.href);
   const portfolioContext = getPortfolioContext();
   const sections: EditorialEssaySection[] = entry.sections.map((section) => ({

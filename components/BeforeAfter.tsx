@@ -15,7 +15,7 @@ const BeforeAfter = ({
   afterSrc,
   beforeLabel = "Before",
   afterLabel = "After"
-}: BeforeAfterProps): JSX.Element => {
+}: BeforeAfterProps): React.JSX.Element => {
   const [position, setPosition] = useState(50);
 
   return (

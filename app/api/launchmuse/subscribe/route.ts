@@ -61,9 +61,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const hutk = cookies().get("hubspotutk")?.value;
-  const forwardedFor = headers().get("x-forwarded-for")?.split(",")[0]?.trim();
-  const ipAddress = forwardedFor || request.ip || undefined;
+  const hutk = (await cookies()).get("hubspotutk")?.value;
+  const forwardedFor = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim();
+  const ipAddress = forwardedFor || undefined;
 
   const hubspotPayload: Record<string, unknown> = {
     submittedAt: Date.now(),

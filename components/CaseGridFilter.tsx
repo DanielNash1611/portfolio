@@ -10,7 +10,7 @@ interface CaseGridFilterProps {
   items: Case[];
 }
 
-const CaseGridFilter = ({ items }: CaseGridFilterProps): JSX.Element => {
+const CaseGridFilter = ({ items }: CaseGridFilterProps): React.JSX.Element => {
   const [activeNarrative, setActiveNarrative] = useState<NarrativeId | "all">(
     "all",
   );

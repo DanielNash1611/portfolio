@@ -20,7 +20,7 @@ const tailoringStages = [
   "Human-approved artifact",
 ];
 
-function PointList({ items }: { items: string[] }): JSX.Element {
+function PointList({ items }: { items: string[] }): React.JSX.Element {
   return (
     <ul className="space-y-3">
       {items.map((item) => (
@@ -39,7 +39,7 @@ function PointList({ items }: { items: string[] }): JSX.Element {
   );
 }
 
-export default function ProductEngines(): JSX.Element {
+export default function ProductEngines(): React.JSX.Element {
   return (
     <section className="space-y-8" aria-labelledby="how-it-works-heading">
       <div className="max-w-3xl space-y-4">

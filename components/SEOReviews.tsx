@@ -65,7 +65,7 @@ const jsonLd = {
   "@graph": [personSchema, resumeGeneratorSchema, ...reviews],
 };
 
-export default function SEOReviews(): JSX.Element {
+export default function SEOReviews(): React.JSX.Element {
   return (
     <script
       type="application/ld+json"

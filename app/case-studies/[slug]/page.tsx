@@ -1,12 +1,13 @@
 import { CASE_STUDIES } from "@/data/caseStudies";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
-export default function CaseStudyPage({
+export default async function CaseStudyPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const cs = CASE_STUDIES.find((c) => c.slug === params.slug);
+  const { slug } = await params;
+  const cs = CASE_STUDIES.find((c) => c.slug === slug);
   if (!cs) return null;
 
   return (

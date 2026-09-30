@@ -19,6 +19,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage(): JSX.Element {
+export default function HomePage(): React.JSX.Element {
   return <StudioSystemsHomePage />;
 }

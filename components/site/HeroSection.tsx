@@ -48,7 +48,7 @@ export default function HeroSection({
   description,
   primaryAction,
   secondaryAction,
-}: HeroSectionProps): JSX.Element {
+}: HeroSectionProps): React.JSX.Element {
   const heroPortrait = getPortrait("hero");
 
   return (

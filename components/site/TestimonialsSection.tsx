@@ -25,7 +25,7 @@ export default function TestimonialsSection({
   testimonials,
   id,
   footerLink,
-}: TestimonialsSectionProps): JSX.Element | null {
+}: TestimonialsSectionProps): React.JSX.Element | null {
   if (!testimonials.length) {
     return null;
   }

@@ -14,7 +14,7 @@ const SocialProofSnippet = ({
   className,
   compact = false,
   showSourceLink = false,
-}: Props): JSX.Element => {
+}: Props): React.JSX.Element => {
   const footerText = compact ? item.title : `${item.title} • ${item.roleLabel}`;
 
   return (

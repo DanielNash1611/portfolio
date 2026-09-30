@@ -10,7 +10,7 @@ type CreativeTemplateProps = {
 
 export default function CreativeTemplate({
   entry,
-}: CreativeTemplateProps): JSX.Element {
+}: CreativeTemplateProps): React.JSX.Element {
   return (
     <div className="space-y-10">
       <PageHero

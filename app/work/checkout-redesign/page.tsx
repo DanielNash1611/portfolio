@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     "How better execution turned a checkout redesign into measurable growth.",
 };
 
-export default function CheckoutRedesignPage(): JSX.Element {
+export default function CheckoutRedesignPage(): React.JSX.Element {
   if (!entry) {
     notFound();
   }
