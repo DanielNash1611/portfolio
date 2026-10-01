@@ -2,6 +2,27 @@ export type AnalyticsEventProps = Record<string, unknown>;
 
 const VISITOR_KEY = "daniel_analytics_visitor_id";
 const SESSION_KEY = "daniel_analytics_session_id";
+const fallbackIds = new Map<string, string>();
+
+function storedId(
+  storageName: "localStorage" | "sessionStorage",
+  key: string,
+  prefix: string,
+): string {
+  try {
+    const storage = window[storageName];
+    const existing = storage.getItem(key);
+    if (existing) return existing;
+    const created = fallbackIds.get(key) ?? createId(prefix);
+    fallbackIds.set(key, created);
+    storage.setItem(key, created);
+    return created;
+  } catch {
+    const created = fallbackIds.get(key) ?? createId(prefix);
+    fallbackIds.set(key, created);
+    return created;
+  }
+}
 
 function createId(prefix: string): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -15,12 +36,7 @@ function getVisitorId(): string {
     return "server";
   }
 
-  const existing = window.localStorage.getItem(VISITOR_KEY);
-  if (existing) return existing;
-
-  const created = createId("visitor");
-  window.localStorage.setItem(VISITOR_KEY, created);
-  return created;
+  return storedId("localStorage", VISITOR_KEY, "visitor");
 }
 
 function getSessionId(): string {
@@ -28,12 +44,7 @@ function getSessionId(): string {
     return "server";
   }
 
-  const existing = window.sessionStorage.getItem(SESSION_KEY);
-  if (existing) return existing;
-
-  const created = createId("session");
-  window.sessionStorage.setItem(SESSION_KEY, created);
-  return created;
+  return storedId("sessionStorage", SESSION_KEY, "session");
 }
 
 function getDeviceClass(): "mobile" | "tablet" | "desktop" {
@@ -73,9 +84,12 @@ export const track = (
   eventName: string,
   properties: AnalyticsEventProps = {},
 ): void => {
-  if (typeof window === "undefined") {
+  if (
+    typeof window === "undefined" ||
+    navigator.doNotTrack === "1" ||
+    process.env.NEXT_PUBLIC_ANALYTICS_DISABLED === "true"
+  )
     return;
-  }
 
   const payload = {
     clientEventId: crypto.randomUUID(),
@@ -98,8 +112,11 @@ export const track = (
 
   if (navigator.sendBeacon) {
     const blob = new Blob([body], { type: "application/json" });
-    navigator.sendBeacon("/api/analytics", blob);
-    return;
+    try {
+      if (navigator.sendBeacon("/api/analytics", blob)) return;
+    } catch {
+      // Browsers can reject beacon delivery; try the fetch fallback.
+    }
   }
 
   void fetch("/api/analytics", {

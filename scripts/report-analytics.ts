@@ -1,7 +1,4 @@
-import {
-  createDatabaseClient,
-  getDatabaseUrl,
-} from "@/lib/db";
+import { createDatabaseClient, getDatabaseUrl } from "@/lib/db";
 import { loadAppEnv } from "@/scripts/load-app-env";
 
 type CountRow = { count: number };
@@ -31,7 +28,7 @@ async function main() {
     `
       SELECT COUNT(DISTINCT visitor_id)::int AS count
       FROM analytics_events
-      WHERE app = 'portfolio' AND occurred_at >= $1
+      WHERE app = 'portfolio' AND app_env = 'production' AND occurred_at < now() AND occurred_at >= $1
     `,
     [since.toISOString()],
   )) as CountRow[];
@@ -40,7 +37,7 @@ async function main() {
     `
       SELECT COUNT(DISTINCT session_id)::int AS count
       FROM analytics_events
-      WHERE app = 'portfolio' AND occurred_at >= $1
+      WHERE app = 'portfolio' AND app_env = 'production' AND occurred_at < now() AND occurred_at >= $1
     `,
     [since.toISOString()],
   )) as CountRow[];
@@ -53,7 +50,7 @@ async function main() {
         COUNT(DISTINCT visitor_id)::int AS visitors
       FROM analytics_events
       WHERE
-        app = 'portfolio'
+        app = 'portfolio' AND app_env = 'production' AND occurred_at < now()
         AND event_name = 'page_viewed'
         AND occurred_at >= $1
         AND page_path IS NOT NULL
@@ -71,7 +68,7 @@ async function main() {
         COUNT(*)::int AS events,
         COUNT(DISTINCT visitor_id)::int AS visitors
       FROM analytics_events
-      WHERE app = 'portfolio' AND occurred_at >= $1
+      WHERE app = 'portfolio' AND app_env = 'production' AND occurred_at < now() AND occurred_at >= $1
       GROUP BY event_name
       ORDER BY events DESC, event_name ASC
     `,
@@ -81,11 +78,11 @@ async function main() {
   const scroll = (await sql.query(
     `
       SELECT
-        (properties->>'threshold')::int AS threshold,
+        CASE WHEN properties->>'threshold' IN ('25','50','75','100') THEN (properties->>'threshold')::int END AS threshold,
         COUNT(DISTINCT visitor_id)::int AS visitors
       FROM analytics_events
       WHERE
-        app = 'portfolio'
+        app = 'portfolio' AND app_env = 'production' AND occurred_at < now()
         AND event_name = 'scroll_depth_reached'
         AND occurred_at >= $1
       GROUP BY threshold
