@@ -23,20 +23,20 @@ CREATE TABLE IF NOT EXISTS analytics_events (
   CHECK (jsonb_typeof(properties) = 'object')
 );
 
-CREATE INDEX IF NOT EXISTS analytics_events_app_created_at_idx
-  ON analytics_events (app, created_at DESC);
+CREATE INDEX IF NOT EXISTS analytics_events_app_occurred_at_idx
+  ON analytics_events (app, occurred_at DESC);
 
-CREATE INDEX IF NOT EXISTS analytics_events_app_event_created_at_idx
-  ON analytics_events (app, event_name, created_at DESC);
+CREATE INDEX IF NOT EXISTS analytics_events_app_event_occurred_at_idx
+  ON analytics_events (app, event_name, occurred_at DESC);
 
-CREATE INDEX IF NOT EXISTS analytics_events_app_session_created_at_idx
-  ON analytics_events (app, session_id, created_at ASC);
+CREATE INDEX IF NOT EXISTS analytics_events_app_session_occurred_at_idx
+  ON analytics_events (app, session_id, occurred_at ASC);
 
-CREATE INDEX IF NOT EXISTS analytics_events_app_visitor_created_at_idx
-  ON analytics_events (app, visitor_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS analytics_events_app_visitor_occurred_at_idx
+  ON analytics_events (app, visitor_id, occurred_at DESC);
 
-CREATE INDEX IF NOT EXISTS analytics_events_page_created_at_idx
-  ON analytics_events (page_path, created_at DESC);
+CREATE INDEX IF NOT EXISTS analytics_events_page_occurred_at_idx
+  ON analytics_events (page_path, occurred_at DESC);
 
 CREATE TABLE IF NOT EXISTS analytics_insights (
   id uuid PRIMARY KEY,
