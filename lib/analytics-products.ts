@@ -297,6 +297,27 @@ export const PRODUCTS = {
       "/login",
       "/other"
     ]
+  },
+  "omschatgptapp-mcp": {
+    "start": [
+      "tool_requested"
+    ],
+    "complete": [
+      "tool_completed"
+    ],
+    "actions": [
+      "tool_failed"
+    ],
+    "origins": [
+      "https://omschatgptapp.vercel.app",
+      "https://omschatgptapp-danash1611-3756s-projects.vercel.app",
+      "https://omschatgptapp-git-main-danash1611-3756s-projects.vercel.app"
+    ],
+    "previewPrefix": "omschatgptapp",
+    "unit": "request",
+    "pages": [
+      "/"
+    ]
   }
 } as const;
 export type ProductApp = keyof typeof PRODUCTS;
