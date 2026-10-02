@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
       },
       variantHint: asOptionalString(payload?.variantHint),
       clientRequestId: randomUUID(),
-    });
+    }, request.headers.get("dnt") === "1" || request.headers.get("sec-gpc") === "1" || request.headers.get("x-daniel-analytics-disabled") === "true");
 
     return NextResponse.json(
       {

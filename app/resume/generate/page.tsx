@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Container from "@/components/site/Container";
 import PageHero from "@/components/site/PageHero";
 import ResumeGenerator from "./ResumeGenerator";
+import ResumeAnalyticsPrivacy from "./ResumeAnalyticsPrivacy";
 
 export const metadata: Metadata = {
   title: "Generate a role-specific resume",
@@ -35,6 +36,7 @@ export default function ResumeGeneratePage(): React.JSX.Element {
       </p>
 
       <ResumeGenerator />
+      <ResumeAnalyticsPrivacy />
     </Container>
   );
 }

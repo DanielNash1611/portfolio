@@ -50,6 +50,7 @@ function authHeaders(token: string): HeadersInit {
 
 export async function createEngineJob(
   req: InternalCreateRequest,
+  analyticsDisabled = false,
 ): Promise<InternalCreateResponse> {
   const config = getResumeEngineConfig();
 
@@ -62,7 +63,7 @@ export async function createEngineJob(
   try {
     response = await fetch(`${config.baseUrl}/api/v1/resume-jobs`, {
       method: "POST",
-      headers: authHeaders(config.token as string),
+      headers: { ...authHeaders(config.token as string), "X-Daniel-Analytics-Disabled": String(analyticsDisabled) },
       body: JSON.stringify(req),
       cache: "no-store",
     });
