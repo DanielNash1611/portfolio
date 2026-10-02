@@ -21,7 +21,8 @@
     "images:meta": "tsx scripts/read-image-meta.ts",
     "images:build": "tsx scripts/make-derivatives.ts",
     "test": "node --import tsx --test __tests__/*.test.ts __tests__/portfolio-guide/*.test.ts",
-    "test:built-site": "tsx scripts/test-built-site.ts"
+    "test:built-site": "tsx scripts/test-built-site.ts",
+    "report:analytics": "tsx scripts/report-analytics.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",

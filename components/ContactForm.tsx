@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Button from "@/components/Button";
+import { track } from "@/lib/analytics";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -43,6 +44,7 @@ const ContactForm = (): React.JSX.Element => {
       }
 
       setStatus("success");
+      track("contact_submitted");
       setMessage("Thanks for reaching out! I’ll be in touch soon.");
       form.reset();
       setStartedAt(Date.now().toString());

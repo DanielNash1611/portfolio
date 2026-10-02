@@ -11,6 +11,7 @@ function normalizeEnvValue(value: string | undefined): string | undefined {
 
 export function getAppEnv(): string {
   return (
+    normalizeEnvValue(process.env.VERCEL_ENV) ??
     normalizeEnvValue(process.env.APP_ENV) ??
     (process.env.NODE_ENV === "production" ? "production" : "local")
   );
@@ -59,4 +60,3 @@ export function getDatabaseClient(): DatabaseClient {
   cachedDatabaseClient = createDatabaseClient(databaseUrl);
   return cachedDatabaseClient;
 }
-

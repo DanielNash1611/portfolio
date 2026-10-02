@@ -5,6 +5,7 @@ import MainContainer from "@/components/MainContainer";
 import SEOReviews from "@/components/SEOReviews";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteHeader from "@/components/site/SiteHeader";
+import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 
 const sans = Manrope({
   subsets: ["latin"],
@@ -73,6 +74,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
       <body>
+        <AnalyticsProvider />
         <SEOReviews />
         <SiteHeader />
         <MainContainer>{children}</MainContainer>
