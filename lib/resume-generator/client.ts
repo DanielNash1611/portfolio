@@ -16,6 +16,11 @@ import type {
 import { isTerminalStatus } from "./types";
 
 const BASE = "/api/resume-generator/jobs";
+let usageDisabledInMemory = false;
+export function disableResumeUsageAnalytics() {
+  usageDisabledInMemory = true;
+  try { window.localStorage.setItem("daniel-analytics:disabled", "true"); } catch { /* disabled for this tab even if storage is blocked */ }
+}
 
 export class ResumeClientError extends Error {
   code: ResumeErrorCode | "network";
@@ -58,10 +63,15 @@ export async function createResumeJob(
   request: CreateJobRequest,
 ): Promise<CreateJobResponse> {
   let response: Response;
+  let analyticsDisabled = usageDisabledInMemory;
+  if (typeof window !== "undefined") {
+    analyticsDisabled ||= navigator.doNotTrack === "1" || (navigator as Navigator & {globalPrivacyControl?: boolean}).globalPrivacyControl === true;
+    try { analyticsDisabled ||= window.localStorage.getItem("daniel-analytics:disabled") === "true"; } catch { /* no persistent preference available */ }
+  }
   try {
     response = await fetch(BASE, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Daniel-Analytics-Disabled": String(analyticsDisabled) },
       body: JSON.stringify(request),
     });
   } catch {
