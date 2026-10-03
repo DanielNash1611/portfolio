@@ -1,6 +1,11 @@
 import path from "node:path";
 import { readdir, readFile } from "node:fs/promises";
-import { createDatabaseClient, getAppEnv, getDatabaseBranchName, getDatabaseUrl } from "@/lib/db";
+import {
+  createDatabaseClient,
+  getAppEnv,
+  getDatabaseBranchName,
+  getDatabaseUrl,
+} from "@/lib/db";
 import { loadAppEnv } from "@/scripts/load-app-env";
 
 const MIGRATIONS_TABLE = "app_migrations";
@@ -24,6 +29,13 @@ async function ensureMigrationsTable(
 }
 
 async function main() {
+  const args = process.argv.slice(2);
+  const only =
+    args.length === 1 && /^--only=[0-9]{3}_[a-z0-9_]+\.sql$/.test(args[0])
+      ? args[0].slice(7)
+      : undefined;
+  if (args.length && !only)
+    throw new Error("Invalid migration arguments; use --only=filename.sql.");
   loadAppEnv();
 
   const databaseUrl = getDatabaseUrl("unpooled");
@@ -38,8 +50,12 @@ async function main() {
 
   const migrationsDir = path.join(process.cwd(), "migrations");
   const migrationFiles = (await readdir(migrationsDir))
-    .filter((filename) => filename.endsWith(".sql"))
+    .filter(
+      (filename) => filename.endsWith(".sql") && (!only || filename === only),
+    )
     .sort();
+  if (only && !migrationFiles.length)
+    throw new Error("Requested migration file does not exist.");
 
   const appliedRows = (await sql.query(
     `SELECT filename FROM ${MIGRATIONS_TABLE} ORDER BY filename ASC`,
@@ -79,7 +95,13 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error("Database migration failed:", error);
+  console.error(
+    error instanceof Error &&
+      /^(Invalid migration|Requested migration|DATABASE_URL_UNPOOLED)/.test(
+        error.message,
+      )
+      ? error.message
+      : "Database migration failed. Check configuration and the validated schema state.",
+  );
   process.exitCode = 1;
 });
-

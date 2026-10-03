@@ -47,6 +47,23 @@ function getSessionId(): string {
   return storedId("sessionStorage", SESSION_KEY, "session");
 }
 
+// Explicit feedback uses the same pseudonymous identity as event collection.
+// Opt-outs return before touching storage or creating identifiers.
+export function feedbackAnalyticsIdentity(): {
+  visitorId: string;
+  sessionId: string;
+} | null {
+  if (
+    typeof window === "undefined" ||
+    navigator.doNotTrack === "1" ||
+    (navigator as Navigator & { globalPrivacyControl?: boolean })
+      .globalPrivacyControl === true ||
+    process.env.NEXT_PUBLIC_ANALYTICS_DISABLED === "true"
+  )
+    return null;
+  return { visitorId: getVisitorId(), sessionId: getSessionId() };
+}
+
 function getDeviceClass(): "mobile" | "tablet" | "desktop" {
   if (typeof window === "undefined") return "desktop";
 
