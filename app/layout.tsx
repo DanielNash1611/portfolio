@@ -6,6 +6,7 @@ import SEOReviews from "@/components/SEOReviews";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteHeader from "@/components/site/SiteHeader";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
+import FeedbackButton from "@/components/feedback/FeedbackButton";
 
 const sans = Manrope({
   subsets: ["latin"],
@@ -79,6 +80,7 @@ export default function RootLayout({
         <SiteHeader />
         <MainContainer>{children}</MainContainer>
         <SiteFooter />
+        <FeedbackButton />
       </body>
     </html>
   );
