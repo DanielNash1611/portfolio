@@ -1,9 +1,33 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import Container from "@/components/site/Container";
 import { siteConfig } from "@/content/portfolio";
 
 export default function SiteFooter(): React.JSX.Element {
+  const pathname = usePathname();
+  const isFieldGuide =
+    pathname.startsWith("/product-system/") &&
+    pathname !== "/product-system/playbook";
+  if (isFieldGuide) {
+    return (
+      <footer className="border-t border-[#142733]/15 bg-[#ece7de] text-[#142733]">
+        <Container className="flex flex-wrap items-center justify-between gap-4 py-6 text-xs">
+          <p>
+            Daniel Nash <span className="text-[#57645f]">· Portfolio</span>
+          </p>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 underline underline-offset-4 hover:text-[#924830]"
+          >
+            Back to portfolio <ArrowUpRight size={14} aria-hidden="true" />
+          </Link>
+        </Container>
+      </footer>
+    );
+  }
   return (
     <footer className="border-t border-white/12 bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
       <Container className="py-12 md:py-16">

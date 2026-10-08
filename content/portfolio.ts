@@ -199,6 +199,7 @@ export const siteConfig = {
     { href: "/work", label: "Work" },
     { href: "/products", label: "Products" },
     { href: "/thinking", label: "Thinking" },
+    { href: "/product-system", label: "Method" },
     { href: "/creative", label: "Creative" },
     { href: "/about", label: "About" },
     { href: "/resume", label: "Resume" },

@@ -20,9 +20,11 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mdx}\"",
     "images:meta": "tsx scripts/read-image-meta.ts",
     "images:build": "tsx scripts/make-derivatives.ts",
-    "test": "node --import tsx --test __tests__/*.test.ts __tests__/portfolio-guide/*.test.ts",
+    "test": "node --import tsx --test __tests__/*.test.ts __tests__/portfolio-guide/*.test.ts __tests__/product-workspace/*.test.ts",
     "test:built-site": "tsx scripts/test-built-site.ts",
-    "report:analytics": "tsx scripts/report-analytics.ts"
+    "report:analytics": "tsx scripts/report-analytics.ts",
+    "test:product-workspace": "tsx --test __tests__/product-workspace/*.test.ts",
+    "eval:product-workspace:live": "tsx scripts/eval-product-workspace.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",

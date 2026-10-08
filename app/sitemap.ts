@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { systemChapters, systemHref } from "@/content/product-system";
 import {
   creativeEntries,
   productEntries,
@@ -14,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/work",
     "/products",
     "/thinking",
+    "/product-system",
     "/creative",
     "/about",
     "/resume",
@@ -27,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const contentRoutes = [
+    ...systemChapters.map((chapter) => systemHref(chapter.slug)),
     ...workEntries.map((entry) => entry.href),
     ...productEntries.map((entry) => entry.href),
     ...thinkingEntries.map((entry) => entry.href),

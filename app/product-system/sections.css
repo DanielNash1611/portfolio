@@ -1,0 +1,276 @@
+/* Broad color fields mark a change in purpose: understand, explore, reflect, act. */
+.system-band-audience,
+.system-band-lab {
+  background: #173f3d;
+  padding-block: 52px;
+}
+.system-band-audience {
+  color: #f3eee4;
+  --system-rule: #f3eee438;
+  --system-muted: #c7d2c9;
+}
+.system-band-audience .system-audience {
+  margin-block: 0;
+  border: 0;
+  padding-block: 0;
+}
+.system-band-audience .system-scene + .system-audience {
+  padding-top: 44px;
+}
+.system-band-audience .system-eyebrow {
+  color: #e6b58b;
+}
+.system-band-audience .system-role-controls select {
+  color: #f3eee4;
+  background: #214b48;
+  border-color: #9aaea2;
+}
+.system-band-audience .system-role-route a strong,
+.system-band-audience .system-text-link {
+  color: #fff4de;
+}
+.system-band-audience .system-share:hover {
+  color: #edc199;
+}
+.system-band-audience .system-share-url {
+  color: #142733;
+}
+.system-band-audience .system-role-route a {
+  padding-block: 18px;
+}
+.system-band-clay {
+  background: #dfc495;
+  padding-block: 60px;
+}
+.system-band-clay .system-closing,
+.system-band-clay .system-exercise {
+  padding-block: 0;
+  border: 0;
+  background: none;
+}
+.system-band-clay .system-exercise {
+  padding-inline: 0;
+}
+.system-band-clay .system-eyebrow {
+  color: #713d2d;
+}
+.system-band-clay .system-exercise > p:not(.system-eyebrow),
+.system-band-clay .system-closing > p:not(.system-eyebrow) {
+  color: #344641;
+}
+.system-band-clay .system-text-link {
+  background: #173f3d;
+  color: #fff5e3;
+  padding: 15px 22px;
+}
+.system-scene {
+  min-width: 0;
+  margin: 0;
+}
+.system-scene-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #1a302e;
+}
+.system-scene-image img {
+  object-fit: cover;
+  transition: transform 700ms ease;
+}
+.system-scene:hover img {
+  transform: scale(1.025);
+}
+.system-scene figcaption {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding-top: 12px;
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--system-muted);
+}
+.system-scene figcaption span:last-child:not(:first-child) {
+  font-size: 9px;
+}
+.system-scene-panoramic .system-scene-image {
+  aspect-ratio: 3.6 / 1;
+}
+.system-chapter .system-chapter-hero-illustrated {
+  max-width: none;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  gap: 55px;
+  padding-top: 48px;
+  padding-bottom: 20px;
+}
+.system-chapter-hero-illustrated .system-chapter-intro h1 {
+  font-size: clamp(42px, 5vw, 70px);
+  margin-block: 22px;
+}
+.system-chapter-intro > p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--system-muted);
+  max-width: 600px;
+}
+.system-band-lab .system-lab {
+  color: #142733;
+  margin-block: 0;
+  border-color: #f3eee426;
+  background: #f3eee4;
+}
+.system-band-lab .lab-heading {
+  background: #173f3d;
+  color: #f3eee4;
+  padding-inline: 0;
+  padding-top: 0;
+  padding-bottom: 27px;
+}
+.system-band-lab .lab-heading .system-eyebrow {
+  color: #e6b58b;
+}
+.system-band-lab .lab-heading .lab-small-label,
+.system-band-lab .lab-loop-footnote {
+  color: #c7d2c9;
+}
+.system-band-lab .lab-loop-footnote {
+  padding-top: 20px;
+}
+.system-band-lab .lab-loop-selector {
+  margin-bottom: 28px;
+  border-color: #f3eee438;
+}
+.system-band-lab .lab-loop-selector button {
+  color: #f3eee4;
+}
+.system-band-lab .lab-loop-selector button span,
+.system-band-lab .lab-loop-selector button svg {
+  color: #e6b58b;
+}
+.system-band-lab .lab-loop-selector button[aria-pressed="true"] {
+  background: #f3eee4;
+  color: #173f3d;
+  border-color: #db6048;
+}
+.system-band-lab .lab-loop-selector button[aria-pressed="true"] span,
+.system-band-lab .lab-loop-selector button[aria-pressed="true"] svg {
+  color: #924830;
+}
+.system-chapter .system-field-notes {
+  margin-block: 70px;
+}
+.system-guide-next {
+  background: #173f3d;
+  color: #fff4de;
+  padding-block: 30px;
+}
+.system-guide-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: #c7d2c9;
+  font-size: 11px;
+}
+.system-guide-next-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding-block: 26px;
+  border-bottom: 1px solid #c7d2c942;
+}
+.system-guide-next-link .system-eyebrow {
+  color: #e6b58b;
+}
+.system-guide-next-link h2 {
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  margin-block: 10px;
+}
+.system-guide-next-link p {
+  color: #c7d2c9;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.system-guide-next-link > svg {
+  flex-shrink: 0;
+  transition: transform 180ms ease;
+}
+.system-guide-next-link:hover > svg {
+  transform: translateX(6px);
+}
+.system-guide-next-link:hover h2 {
+  color: #e6b58b;
+}
+.system-guide-previous {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-block: 20px 0;
+  font-size: 12px;
+  color: #c7d2c9;
+}
+.system-guide-previous:hover {
+  color: #fff4de;
+}
+.system-guide-next a:focus-visible {
+  outline: 2px solid #e6b58b;
+  outline-offset: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .system-guide-next-link > svg {
+    transition: none;
+  }
+  .system-guide-next-link:hover > svg {
+    transform: none;
+  }
+}
+@media (max-width: 900px) {
+  .system-chapter .system-chapter-hero-illustrated {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .system-chapter-hero-illustrated .system-scene-image {
+    aspect-ratio: 2.3 / 1;
+  }
+}
+@media (max-width: 650px) {
+  .system-guide-next {
+    padding-block: 24px;
+  }
+  .system-guide-next-link {
+    gap: 20px;
+  }
+  .system-guide-next-link > svg {
+    width: 28px;
+    height: 28px;
+  }
+  .system-band-audience,
+  .system-band-lab,
+  .system-band-clay {
+    padding-block: 34px;
+  }
+  .system-scene-panoramic .system-scene-image,
+  .system-chapter-hero-illustrated .system-scene-image {
+    aspect-ratio: 16 / 10;
+  }
+  .system-chapter .system-chapter-hero-illustrated {
+    padding-top: 34px;
+  }
+  .system-chapter-hero-illustrated .system-chapter-intro h1 {
+    font-size: clamp(40px, 10vw, 55px);
+  }
+  .system-band-audience .system-scene + .system-audience {
+    padding-top: 30px;
+  }
+  .system-band-lab .lab-heading {
+    gap: 16px;
+  }
+  .system-chapter .system-field-notes {
+    margin-block: 44px;
+  }
+}
