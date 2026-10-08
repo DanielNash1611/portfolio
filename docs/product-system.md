@@ -597,3 +597,12 @@ TypeScript and lint pass (existing framework advisory warnings remain). Built-si
 checks cover all nine Product System routes, four Markdown templates, existing work
 and case-study routes, and resume downloads. Browser navigation preserves demo and
 workspace position across routes.
+
+Live production validation found the floating Feedback button overlapping the
+compact field-guide footer link on phones. The compact footer reserves bottom
+space for that existing control so Back to portfolio remains reachable.
+
+One live AI request with synthetic notes returned only the supported solution.
+Applying it left the opportunity, connection, and lifecycle states empty. Undo
+and clearing the test text restored the blank draft. No provider credentials
+were exposed, and the production quota was recorded in the shared database.

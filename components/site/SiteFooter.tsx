@@ -14,7 +14,7 @@ export default function SiteFooter(): React.JSX.Element {
   if (isFieldGuide) {
     return (
       <footer className="border-t border-[#142733]/15 bg-[#ece7de] text-[#142733]">
-        <Container className="flex flex-wrap items-center justify-between gap-4 py-6 text-xs">
+        <Container className="flex flex-wrap items-center justify-between gap-4 py-6 pb-20 text-xs">
           <p>
             Daniel Nash <span className="text-[#57645f]">· Portfolio</span>
           </p>
