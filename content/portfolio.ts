@@ -825,6 +825,10 @@ export const productEntries: ProductEntry[] = [
     ],
     buildStory: [
       "The system uses a real personal operating context to demonstrate transferable product decisions: source governance, service boundaries, asynchronous jobs, eval design, privacy, and human accountability.",
+      // Daniel approved this addition on 2026-10-09 (Sentinel_702e0ce56d7c8191b47ef2e0af9b2086).
+      // Local implementation verified in child01a11e60-9ce8-7047-9a2a-0b11c3bac016;
+      // ResumeCustomizer docs/application-profile.md describes the capability, without private values.
+      "Added a private local application profile with reviewed facts, source references, confirmation dates, and employer-specific answers. Implemented locally in ResumeCustomizer on October 8, 2026; Daniel directed requirements and reviewed facts, with Codex assisting implementation. This remains a private local workflow.",
       "Authenticated boundaries, source-audited retrieval, structural checks, and human approval are implemented. Durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate remain explicit next investments.",
     ],
     visuals: [
