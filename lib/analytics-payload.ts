@@ -98,6 +98,7 @@ export function normalizeAnalyticsPayload(value: unknown, now = Date.now()) {
     properties.threshold = raw.threshold as number;
   }
   return {
+    isOwner: payload.trafficType === "owner",
     clientEventId: payload.clientEventId,
     visitorId: payload.visitorId,
     sessionId: payload.sessionId,
