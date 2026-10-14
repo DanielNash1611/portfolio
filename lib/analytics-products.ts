@@ -318,6 +318,32 @@ export const PRODUCTS = {
     "pages": [
       "/"
     ]
+  },
+  "just-because": {
+    "start": [
+      "experience_started"
+    ],
+    "complete": [
+      "piece_completed"
+    ],
+    "actions": [
+      "camera_setup_started",
+      "camera_setup_failed",
+      "camera_playback_started",
+      "preview_playback_started",
+      "playback_failed"
+    ],
+    "origins": [
+      "https://justbecause.danielnash.co",
+      "https://just-because-taupe.vercel.app",
+      "https://just-because-danash1611-3756s-projects.vercel.app",
+      "https://just-because-git-main-danash1611-3756s-projects.vercel.app"
+    ],
+    "previewPrefix": "just-because",
+    "unit": "browser session",
+    "pages": [
+      "/"
+    ]
   }
 } as const;
 export type ProductApp = keyof typeof PRODUCTS;
