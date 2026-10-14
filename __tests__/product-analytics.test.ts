@@ -10,6 +10,18 @@ const payload = {
 };
 const now=Date.parse(payload.occurredAt);
 describe("shared product collector",()=>{
+  it("registers Just Because without accepting private authoring routes or preview production traffic",()=>{
+    const origin="https://justbecause.danielnash.co";
+    const event={...payload,app:"just-because",eventName:"piece_completed"};
+    assert.equal(resolveProductOrigin("just-because",origin),"production");
+    assert.equal(resolveProductOrigin("just-because","https://just-because-abc-danash1611-3756s-projects.vercel.app"),"preview");
+    assert.equal(resolveProductOrigin("just-because","https://gravity.danielnash.co"),null);
+    assert.equal(resolveProductOrigin("just-because","https://just-because-abc-other-projects.vercel.app"),null);
+    assert.deepEqual(normalizeProductEvent({...event,properties:{landmarks:[1],recording:"private"}},origin,"production",now)?.properties,{});
+    assert.equal(normalizeProductEvent({...event,pagePath:"/reference.html"},origin,"production",now)?.pagePath,null);
+    assert.equal(normalizeProductEvent({...event,validation:true},origin,"production",now)?.environment,"validation");
+    assert.equal(normalizeProductEvent({...event,eventName:"pose_recorded"},origin,"production",now),null);
+  });
   it("binds app to its exact production and owner-scoped preview origins",()=>{
     assert.equal(resolveProductOrigin("gravity","https://gravity.danielnash.co"), "production");
     assert.equal(resolveProductOrigin("gravity","https://gravity-123-danash1611-3756s-projects.vercel.app"), "preview");
