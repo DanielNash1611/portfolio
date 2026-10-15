@@ -18,7 +18,7 @@ const sourceUrl = "https://github.com/DanielNash1611/jumpingoncoalsgame";
 const submissionUrl = "https://devpost.com/software/jumping-on-coals";
 const demoUrl = "https://www.youtube.com/watch?v=M3uy8KRM_-E";
 const demoEmbedUrl = "https://www.youtube.com/embed/M3uy8KRM_-E";
-const fullExplanationUrl = "/audio/jumping-on-coals-full-explanation.mp3";
+const fullExplanationUrl = "https://km9upglctugamtw6.public.blob.vercel-storage.com/jumping-on-coals-full-explanation.mp3";
 const transcriptUrl = "/audio/jumping-on-coals-full-explanation-transcript.txt";
 
 const streamingLinks = [
