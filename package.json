@@ -24,7 +24,8 @@
     "test:built-site": "tsx scripts/test-built-site.ts",
     "report:analytics": "tsx scripts/report-analytics.ts",
     "test:product-workspace": "tsx --test __tests__/product-workspace/*.test.ts",
-    "eval:product-workspace:live": "tsx scripts/eval-product-workspace.ts"
+    "eval:product-workspace:live": "tsx scripts/eval-product-workspace.ts",
+    "postbuild": "node scripts/report-deploy-assets.mjs"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",
