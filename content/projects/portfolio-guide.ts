@@ -102,11 +102,21 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "The page explicitly identifies durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate as future work.",
         type: "ownership",
       },
+      {
+        // Approved 2026-10-09: Sentinel_702e0ce56d7c8191b47ef2e0af9b2086.
+        // Verified local implementation: child01a11e60-9ce8-7047-9a2a-0b11c3bac016;
+        // ResumeCustomizer docs/application-profile.md, not private profile contents.
+        label: "Private local application profile",
+        detail:
+          "Added a private local application profile with reviewed facts, source references, confirmation dates, and employer-specific answers. Implemented locally in ResumeCustomizer on October 8, 2026; Daniel directed requirements and reviewed facts, with Codex assisting implementation. This remains a private local workflow.",
+        type: "workflow",
+      },
     ],
     claimBoundaries: {
       directOwnership: [
         "Defined the product thesis, user experience, service boundaries, quality criteria, evaluation behavior, and public claim guardrails represented on the page.",
         "Directed the integration of Portfolio recruiter UX with ResumeCustomizer evidence retrieval and role-specific generation.",
+        "Directed requirements and reviewed facts for the private local application profile; Codex assisted implementation.",
       ],
       influence: [
         "Used AI development agents to accelerate implementation and iteration while retaining product and quality accountability.",
@@ -117,11 +127,13 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       implementation: [
         "The repositories support the authenticated API boundaries, evidence retrieval, job lifecycle, specialized reviews, and structural PDF validation described here.",
         "The page does not claim sole hand-coding or independent implementation of every component.",
+        "The application profile was implemented locally in ResumeCustomizer on October 8, 2026. It remains a private local workflow, separate from hosted release status; its private contents are excluded from public portfolio evidence and hosted generation.",
       ],
       explicitUnknowns: [
         "The repositories do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale, or a current full-suite evaluation pass rate.",
         "The 5/12 to 11/12 comparison is a historical, comparable 12-case OpenAI result rather than a current universal quality score.",
         "The Claim-to-Evidence changes must be merged and deployed in both repositories before the public integration is considered launched.",
+        "The private local application profile has no measured time savings, hiring outcomes, external adoption, application-quality gains, or semantic AI-quality gains.",
       ],
     },
     recruiterPrompts: [
