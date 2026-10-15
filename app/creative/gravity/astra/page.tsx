@@ -313,7 +313,7 @@ export default function GravityAstraPage(): React.JSX.Element {
                   className="h-full w-full bg-black object-contain"
                 >
                   <source
-                    src="/videos/gravity/gravity-reach-into-the-music.mp4"
+                    src="https://km9upglctugamtw6.public.blob.vercel-storage.com/gravity-reach-into-the-music.mp4"
                     type="video/mp4"
                   />
                   <track

@@ -157,3 +157,7 @@ when changing them.
 ### Resume files
 
 Drop resume PDFs into [`public/resumes`](/Users/danielnash/Code/DanielNash/Portfolio/portfolio/public/resumes) using the filenames listed in `resumeVariants` inside [`content/portfolio.ts`](/Users/danielnash/Code/DanielNash/Portfolio/portfolio/content/portfolio.ts).
+
+## Deployment media
+
+Large recordings are served from the public Vercel Blob store and preserved under `source-assets/` for authoring. They are excluded from published builds. See [deployment storage notes](docs/deployment-storage.md).

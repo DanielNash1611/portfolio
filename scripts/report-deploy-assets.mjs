@@ -32,3 +32,19 @@ console.log("Audio/video/3D/WASM: " + mediaFiles.length + " files, " + mb(mediaF
 console.log("Top 25 files:");
 for (const f of files.slice(0, 25)) console.log("  " + mb(f.size).padStart(8) + " MiB  " + f.path);
 console.log("=== END STATIC ASSET AUDIT ===\n");
+// Migrated media must stay outside deployment output. The local source copies
+// remain in Git for authoring and checksum verification.
+const manifestPath = "docs/deployment-media.json";
+if (existsSync(manifestPath)) {
+  const { readFile } = await import("node:fs/promises");
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  const total = files.reduce((sum, file) => sum + file.size, 0);
+  if (total > manifest.maxStaticBytes) {
+    throw new Error("Static deployment exceeds its media migration budget: " + mb(total) + " MiB");
+  }
+  for (const asset of manifest.assets) {
+    const published = existsSync("dist") ? join("dist", asset.localPath) : join("public", asset.localPath);
+    if (existsSync(published)) throw new Error("Migrated media was copied into deployment output: " + published);
+  }
+  console.log("Media migration guard passed (" + manifest.assets.length + " external/source-only files).");
+}
