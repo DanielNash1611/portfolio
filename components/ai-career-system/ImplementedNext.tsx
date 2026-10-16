@@ -1,4 +1,11 @@
 import { Check, CircleDashed } from "lucide-react";
+import { productEntries } from "@/content/portfolio";
+
+const deploymentStory = productEntries
+  .find((entry) => entry.slug === "ai-career-operating-system")
+  ?.buildStory?.find((item) =>
+    item.startsWith("Separated large portfolio recordings"),
+  );
 
 const implemented = [
   "Authenticated API boundary",
@@ -92,6 +99,23 @@ export default function ImplementedNext(): React.JSX.Element {
           />
         </div>
       </div>
+
+      {deploymentStory ? (
+        <div className="space-y-3 border-t border-[color:var(--color-slate)]/16 pt-8">
+          <h3 className="font-serif text-2xl font-medium tracking-[-0.025em] text-[color:var(--color-slate)]">
+            Deployment media
+          </h3>
+          <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/70">
+            {deploymentStory}
+          </p>
+          <a
+            href="https://github.com/DanielNash1611/portfolio/pull/11"
+            className="inline-block text-sm font-bold text-[color:var(--color-teal)] underline underline-offset-4"
+          >
+            Review the media migration evidence
+          </a>
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -826,6 +826,7 @@ export const productEntries: ProductEntry[] = [
     buildStory: [
       "The system uses a real personal operating context to demonstrate transferable product decisions: source governance, service boundaries, asynchronous jobs, eval design, privacy, and human accountability.",
       "Authenticated boundaries, source-audited retrieval, structural checks, and human approval are implemented. Durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate remain explicit next investments.",
+      "Separated large portfolio recordings from deployment bundles, preserving the original media with checksum verification and adding asset-budget checks. Documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. Daniel directed the AI-assisted implementation. PR #11 and docs/deployment-storage.md document this inventory, excluding server bundles; this content review did not independently rerun the measurement.",
     ],
     visuals: [
       {

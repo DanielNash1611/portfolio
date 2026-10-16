@@ -102,11 +102,18 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "The page explicitly identifies durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate as future work.",
         type: "ownership",
       },
+      {
+        label: "Documented deployment asset reduction",
+        detail:
+          "Separated large portfolio recordings from deployment bundles, preserving the original media with checksum verification and adding asset-budget checks. Documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. Evidence: merged PR #11 (https://github.com/DanielNash1611/portfolio/pull/11), docs/deployment-storage.md, and docs/deployment-media.json; the inventory excludes server bundles and was not independently rerun by this content review.",
+        type: "metric",
+      },
     ],
     claimBoundaries: {
       directOwnership: [
         "Defined the product thesis, user experience, service boundaries, quality criteria, evaluation behavior, and public claim guardrails represented on the page.",
         "Directed the integration of Portfolio recruiter UX with ResumeCustomizer evidence retrieval and role-specific generation.",
+        "Directed the portfolio media separation and preservation work; implementation was AI-assisted.",
       ],
       influence: [
         "Used AI development agents to accelerate implementation and iteration while retaining product and quality accountability.",
@@ -117,11 +124,14 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       implementation: [
         "The repositories support the authenticated API boundaries, evidence retrieval, job lifecycle, specialized reviews, and structural PDF validation described here.",
         "The page does not claim sole hand-coding or independent implementation of every component.",
+        "Portfolio PR #11 merged on October 15, 2026 at 04:09 UTC (merge 4d33ab9da2a9bece8522a9efee24b3f2b188bfe1). docs/deployment-storage.md and docs/deployment-media.json document media preservation, SHA-256 verification, and static asset-budget checks.",
       ],
       explicitUnknowns: [
         "The repositories do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale, or a current full-suite evaluation pass rate.",
         "The 5/12 to 11/12 comparison is a historical, comparable 12-case OpenAI result rather than a current universal quality score.",
         "The Claim-to-Evidence changes must be merged and deployed in both repositories before the public integration is considered launched.",
+        "The 147.65 MiB to 81.58 MiB figures are repository-documented uncompressed static file inventories, exclude server bundles, and were not independently rerun by this content review.",
+        "Media separation does not establish lower bills, faster pages, reclaimed historical deployment storage, production verification by this review, or semantic AI-quality improvement.",
       ],
     },
     recruiterPrompts: [
