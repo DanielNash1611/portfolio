@@ -62,6 +62,18 @@ including 14 retained historical cases and the current onboarding regression.
 Six historical career cases with absent target records remain held out of the
 active suite. Existing historical reports were not rewritten.
 
+Review of that ownership case found an inappropriate unique expected target for
+the context-free ranker: the question names no AI Platform project, and the
+ranker receives no current-page context. Career OS ownership explicitly separates
+Daniel's direction from AI-assisted implementation; product-philosophy ownership
+also answers the broad question. The original query, target and 7/8 result remain
+unchanged. They are not relabeled into a pass. A separate deterministic service
+regression tests the actual current-page contract: AI Platform ownership plus a
+different project's ownership, complete qualifications and exact citations. It
+also injects an invalid media-block selection and requires the canonical renderer
+to recover both mandatory ownership sources. No retrieval algorithm or threshold
+was changed for this review.
+
 Before activation, prepare both complete indexes, compare lexical and semantic
 retrieval on frozen cases, run source-aware relevance/citation checks, verify the
 deployed authenticated backend, and validate Portfolio in preview. Publication,

@@ -185,3 +185,34 @@ test("stored conversations restore exact citations without a database mutation",
   assert.deepEqual(messages[1].citations, [citation]);
   assert.deepEqual(messages[1].usedEvidenceIds, ["test"]);
 });
+
+test("broad ownership requires current and supporting ownership even when raw ranking prefers another project", async () => {
+  const input = request("What did Daniel own versus AI assisted implementation across the portfolio?");
+  const primaryId = "ai-platform-mcp:ownership";
+  const client = { responses: { create: async (params: { input: Array<{ content: string }> }) => {
+    const packet = JSON.parse(params.input[1].content);
+    assert.equal(packet.currentPage.identity.slug, "ai-platform-mcp");
+    assert.equal(packet.selectionConstraints.requiresSupportingPage, true);
+    assert.ok(packet.approvedBlocks.some((block: { id: string }) => block.id === primaryId));
+    assert.ok(packet.approvedBlocks.some((block: { pageSlug: string; kind: string }) =>
+      block.pageSlug !== "ai-platform-mcp" && block.kind === "ownership"));
+    assert.ok(packet.approvedBlocks.every((block: { kind: string }) => block.kind === "ownership"));
+    // Reject a plausible but wrong-kind ranked source. The renderer must keep
+    // both required ownership sources and their full original qualifications.
+    return { output_text: JSON.stringify({ blockIds: ["ai-career-operating-system:media"] }) };
+  } } } as unknown as OpenAI;
+  const result = await generatePortfolioGuideResponse(input, {
+    apiKey: "fixture", client, hybridSearch: true, semanticSearch: false,
+  });
+  assert.equal(result.normalizationStatus, "canonical-fallback");
+  const citations = result.response.citations!;
+  assert.equal(citations.length, 2);
+  assert.ok(citations.some((citation) => citation.sourceId === primaryId));
+  assert.ok(citations.some((citation) => citation.sourceId !== primaryId));
+  for (const citation of citations) {
+    const block = getPortfolioSearchCatalog().find((block) => block.id === citation.sourceId)!;
+    assert.equal(block.kind, "ownership");
+    assert.equal(citation.excerpt, blockExcerpt(block));
+    assert.ok(result.response.answer.includes(citation.excerpt));
+  }
+});
