@@ -9,6 +9,8 @@ import {
   loadAdaptiveBundle,
   runAdaptiveCase,
 } from "./search-adaptive";
+import { nativeQueryCache, nativeIndexes } from "./search-native";
+import { makeReviewPacket } from "../../../scripts/lib/eval-artifacts";
 
 /** Dedicated limits for the proposed October 17 search evaluation. No live transport. */
 export const SEARCH_RULES = {
@@ -110,7 +112,9 @@ export type FrozenSearchManifest = {
   corpusHashes: { career: string; portfolio: string };
   embeddingInputs: Record<EmbeddingStage, string[]>;
   routingMode: Record<SearchCase, "call" | "bypass">;
-  packetMode?: "adaptive-v1";
+  packetMode?: "adaptive-v1" | "native-review-v2";
+  nativeReuse?: { path: string; sha256: string };
+  executionMode?: "fake";
   publicBundle?: { path: string; sha256: string };
   journalDirectory?: string;
   /** Exact-packet unit mode only. Adaptive mode requires an empty map and
@@ -184,6 +188,11 @@ export const searchSha256 = (text: string | Buffer) =>
   createHash("sha256").update(text).digest("hex");
 export const searchManifestHash = (manifest: FrozenSearchManifest) =>
   searchSha256(JSON.stringify(manifest));
+export const NATIVE_SEARCH_LIMITS = Object.freeze({
+  calls: 10,
+  maximumReservationNano: 765_760_000,
+  incrementalCeilingNano: 1_000_000_000,
+});
 const sha = (x: unknown): x is string =>
   typeof x === "string" && /^[a-f0-9]{64}$/.test(x);
 const integer = (x: unknown): x is number =>
@@ -199,7 +208,7 @@ export function verifyFrozenSearchFiles(manifest: FrozenSearchManifest): void {
     if (searchSha256(readFileSync(file.path)) !== file.sha256)
       throw new Error("frozen_file_changed");
   if (
-    manifest.packetMode === "adaptive-v1" &&
+    Boolean(manifest.packetMode) &&
     adaptiveSourceInventory(
       manifest.repositories[0].path,
       manifest.repositories[1].path,
@@ -230,9 +239,44 @@ export function createSearchBudgetGuard(options: {
   const journal = { ...options.journal };
   const transport = options.transport;
   const scopeSha256 = searchManifestHash(manifest);
-  const stages = Object.keys(SEARCH_RULES) as SearchStage[];
+  const native = manifest.packetMode === "native-review-v2";
+  type Rule = {
+    model: string;
+    endpoint: string;
+    calls: number;
+    inputs: number;
+    input: number;
+    output: number;
+    inputNano: number;
+    outputNano: number;
+  };
+  const rules: Record<SearchStage, Rule> = native
+    ? {
+        ...SEARCH_RULES,
+        "career-index": {
+          ...SEARCH_RULES["career-index"],
+          inputs: 17,
+          input: 8_000,
+        },
+        "query-vectors": { ...SEARCH_RULES["query-vectors"], calls: 0 },
+        routing: { ...SEARCH_RULES.routing, calls: 2 },
+        "source-aware-judge": {
+          ...SEARCH_RULES["source-aware-judge"],
+          calls: 0,
+        },
+      }
+    : SEARCH_RULES;
+  const limits = native
+    ? { ...SEARCH_LIMITS, ...NATIVE_SEARCH_LIMITS }
+    : SEARCH_LIMITS;
+  const stages = (Object.keys(rules) as SearchStage[]).filter(
+    (s) => rules[s].calls > 0,
+  );
+  const embeddingStages = stages.filter(
+    (s) => rules[s].inputs > 0,
+  ) as EmbeddingStage[];
   const timeoutMs = options.timeoutMs ?? 60_000;
-  const adaptive = manifest.packetMode === "adaptive-v1";
+  const adaptive = manifest.packetMode === "adaptive-v1" || native;
   if (manifest.packetMode !== undefined && !adaptive)
     throw new Error("unknown_packet_mode");
   if (
@@ -261,8 +305,8 @@ export function createSearchBudgetGuard(options: {
     manifest.historySha256 !== SEARCH_LIMITS.historySha256 ||
     approval.historySha256 !== manifest.historySha256 ||
     !integer(approval.incrementalCeilingNano) ||
-    approval.incrementalCeilingNano > SEARCH_LIMITS.incrementalCeilingNano ||
-    approval.incrementalCeilingNano < SEARCH_LIMITS.maximumReservationNano ||
+    approval.incrementalCeilingNano > limits.incrementalCeilingNano ||
+    approval.incrementalCeilingNano < limits.maximumReservationNano ||
     !integer(approval.overallCeilingNano) ||
     approval.overallCeilingNano > SEARCH_LIMITS.overallCeilingNano ||
     approval.overallCeilingNano <
@@ -293,7 +337,7 @@ export function createSearchBudgetGuard(options: {
   )
     throw new Error("incomplete_frozen_sources");
   for (const stage of stages) {
-    const rule = SEARCH_RULES[stage];
+    const rule = rules[stage];
     if (rule.inputs) {
       const inputs = manifest.embeddingInputs[stage as EmbeddingStage];
       if (
@@ -330,13 +374,23 @@ export function createSearchBudgetGuard(options: {
   }>;
   if (
     JSON.stringify(queries.map((q) => q.query)) !==
-    JSON.stringify(manifest.embeddingInputs["query-vectors"])
+    JSON.stringify(
+      native
+        ? JSON.parse(
+            readFileSync(manifest.publicBundle!.path, "utf8"),
+          ).queries.map((q: { query: string }) => q.query)
+        : manifest.embeddingInputs["query-vectors"],
+    )
   )
     throw new Error("frozen_queries_mismatch");
   verifyFrozenSearchFiles(manifest);
   const adaptiveBundle = adaptive ? loadAdaptiveBundle(manifest) : undefined;
+  const reusedQueries = native
+    ? nativeQueryCache(manifest, adaptiveBundle!)
+    : [];
   const ledger: SearchEntry[] = [];
   const vectors = new Map<string, number[]>();
+  reusedQueries.forEach((r) => vectors.set(r.hash, [...r.vector]));
   const acceptedCases = new Map<SearchCase, CaseChecks>();
   const bypassedRouting = new Set<SearchCase>();
   let busy = false;
@@ -395,17 +449,15 @@ export function createSearchBudgetGuard(options: {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       verifyFrozenSearchFiles(manifest);
-      if (!Object.hasOwn(SEARCH_RULES, stage) || typeof body !== "string")
+      if (!stages.includes(stage) || typeof body !== "string")
         throw new Error("invalid_stage_or_body");
-      const rule = SEARCH_RULES[stage];
+      const rule = rules[stage];
       if (rule.inputs ? caseId !== undefined : !SEARCH_CASES.includes(caseId!))
         throw new Error("unapproved_case_slot");
       if (!rule.inputs) {
-        const modelStages = [
-          "routing",
-          "relevance-ID-selection",
-          "source-aware-judge",
-        ] as const;
+        const modelStages = native
+          ? ["routing", "relevance-ID-selection"]
+          : ["routing", "relevance-ID-selection", "source-aware-judge"];
         const expectedCase = SEARCH_CASES[acceptedCases.size];
         const completedForCase =
           ledger.filter(
@@ -423,7 +475,7 @@ export function createSearchBudgetGuard(options: {
         throw new Error("duplicate_slot_no_retry");
       if (
         ledger.filter((e) => e.stage === stage).length >= rule.calls ||
-        ledger.length >= SEARCH_LIMITS.calls
+        ledger.length >= limits.calls
       )
         throw new Error("call_cap");
       const inputBound = Buffer.byteLength(body, "utf8") + 1_024;
@@ -465,7 +517,7 @@ export function createSearchBudgetGuard(options: {
           throw new Error("embedding_packet_mismatch");
       } else {
         if (
-          !["career-index", "portfolio-index", "query-vectors"].every((s) =>
+          !embeddingStages.every((s) =>
             ledger.some((e) => e.stage === s && e.status === "complete"),
           )
         )
@@ -491,9 +543,10 @@ export function createSearchBudgetGuard(options: {
         )
           throw new Error("frozen_request_mismatch");
       }
-      const reservation = reserve(stage);
+      const reservation =
+        rule.input * rule.inputNano + rule.output * rule.outputNano;
       if (
-        reserved() + reservation > SEARCH_LIMITS.maximumReservationNano ||
+        reserved() + reservation > limits.maximumReservationNano ||
         reserved() + reservation > approval.incrementalCeilingNano ||
         SEARCH_LIMITS.priorUsageNano + reserved() + reservation >
           approval.overallCeilingNano
@@ -644,10 +697,9 @@ export function createSearchBudgetGuard(options: {
           caseId !== SEARCH_CASES[acceptedCases.size] ||
           bypassedRouting.has(caseId) ||
           ledger.some(
-            (e) =>
-              !SEARCH_RULES[e.stage].inputs && e.slot.endsWith(`:${caseId}`),
+            (e) => !rules[e.stage].inputs && e.slot.endsWith(`:${caseId}`),
           ) ||
-          !["career-index", "portfolio-index", "query-vectors"].every((s) =>
+          !embeddingStages.every((s) =>
             ledger.some((e) => e.stage === s && e.status === "complete"),
           )
         )
@@ -667,10 +719,11 @@ export function createSearchBudgetGuard(options: {
         stopped ||
         busy ||
         caseId !== SEARCH_CASES[acceptedCases.size] ||
-        last?.slot !== `source-aware-judge:${caseId}` ||
+        last?.slot !==
+          `${native ? "relevance-ID-selection" : "source-aware-judge"}:${caseId}` ||
         last.status !== "complete" ||
         !checks ||
-        checks.judgePassed !== true ||
+        (!native && checks.judgePassed !== true) ||
         checks.sourceSafety !== true ||
         checks.citations !== true ||
         checks.qualifications !== true
@@ -731,22 +784,25 @@ export function createSearchBudgetGuard(options: {
       executed = true;
       try {
         const receipts: Record<string, Record<string, unknown>> = {};
-        for (const stage of [
-          "career-index",
-          "portfolio-index",
-          "query-vectors",
-        ] as const)
+        for (const stage of embeddingStages)
           receipts[stage] = await core.call(
             stage,
             undefined,
             JSON.stringify({
-              model: SEARCH_RULES[stage].model,
+              model: rules[stage].model,
               input: manifest.embeddingInputs[stage],
               dimensions: 1536,
               encoding_format: "float",
             }),
           );
-        const indexes = adaptiveIndexes(adaptiveBundle, receipts);
+        const nativeResult = native
+          ? nativeIndexes(adaptiveBundle, receipts, reusedQueries)
+          : undefined;
+        const indexes =
+          nativeResult ?? adaptiveIndexes(adaptiveBundle, receipts);
+        nativeResult?.queries.forEach((r) =>
+          vectors.set(r.hash, [...r.vector]),
+        );
         const rankings = compareSearchRankings(
           adaptiveBundle,
           indexes,
@@ -759,6 +815,7 @@ export function createSearchBudgetGuard(options: {
         const results = [];
         for (const id of SEARCH_CASES) {
           const result = await runAdaptiveCase(adaptiveBundle, indexes, id, {
+            reviewMode: native ? "active-codex-chat" : undefined,
             call: (stage, caseId, body) => core.call(stage, caseId, body),
             queryVector: core.queryVector,
             bypassRouting: core.bypassRouting,
@@ -768,7 +825,31 @@ export function createSearchBudgetGuard(options: {
           core.acceptCase(id, result.checks);
           results.push(result);
         }
-        return { rankings, results, snapshot: snapshot() };
+        if (native)
+          journal.artifact!(
+            "review-packet",
+            makeReviewPacket(
+              "portfolio-guide",
+              results.map((r) => ({
+                ...r.reviewCase!,
+                generation: {
+                  ...(r.reviewCase!.generation as Record<string, unknown>),
+                  sampleKind:
+                    manifest.executionMode === "fake"
+                      ? "synthetic-fake"
+                      : "fresh-api-capture",
+                },
+              })),
+            ),
+          );
+        return {
+          rankings,
+          results,
+          snapshot: snapshot(),
+          qualityStatus: native
+            ? "awaiting-active-codex-chat-review"
+            : "api-judged",
+        };
       } catch (error) {
         try {
           journal.artifact!("failure", {

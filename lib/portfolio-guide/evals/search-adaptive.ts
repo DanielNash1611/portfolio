@@ -39,6 +39,8 @@ import {
 import { extractResponseText } from "../prompt";
 import type { CopilotRequest } from "../types";
 import type { PortfolioGuideEvalCase } from "./types";
+import { nativeQueryCache } from "./search-native";
+import type { ReviewCase } from "../../../scripts/lib/eval-artifacts";
 import type {
   FrozenSearchManifest,
   SearchCase,
@@ -153,7 +155,7 @@ export function loadAdaptiveBundle(
   manifest: FrozenSearchManifest,
 ): PublicSearchBundle {
   if (
-    manifest.packetMode !== "adaptive-v1" ||
+    !["adaptive-v1", "native-review-v2"].includes(manifest.packetMode ?? "") ||
     !manifest.publicBundle ||
     !manifest.files.some(
       (f) =>
@@ -181,9 +183,16 @@ export function loadAdaptiveBundle(
   const proposalFile = manifest.files.find(
     (f) => f.sha256 === manifest.proposalSha256,
   );
+  const originalHash =
+    "7bf8e2bfc95fd9e1eeab770c487650c339135a39962521a46481c20e52e1ea5c";
+  const originalFile = manifest.files.find((f) => f.sha256 === originalHash);
   if (
-    manifest.proposalSha256 !==
-      "7bf8e2bfc95fd9e1eeab770c487650c339135a39962521a46481c20e52e1ea5c" ||
+    (manifest.packetMode !== "native-review-v2" &&
+      manifest.proposalSha256 !== originalHash) ||
+    !originalFile ||
+    JSON.stringify(
+      JSON.parse(readFileSync(originalFile.path, "utf8")).data.questions,
+    ) !== JSON.stringify(bundle.questions) ||
     !proposalFile ||
     JSON.stringify(
       JSON.parse(readFileSync(proposalFile.path, "utf8")).data.questions,
@@ -290,12 +299,19 @@ export function loadAdaptiveBundle(
   const missing = bundle.career.documents.filter(
     (d) => !cache.records.some((r) => r.id === d.id),
   );
+  const native = manifest.packetMode === "native-review-v2";
+  const cachedQueries = native ? nativeQueryCache(manifest, bundle) : [];
+  const missingQueries = bundle.queries.filter(
+    (q) => !cachedQueries.some((r) => r.hash === hashText(q.query)),
+  );
   if (
-    JSON.stringify(missing.map((d) => d.text)) !==
-      JSON.stringify(manifest.embeddingInputs["career-index"]) ||
+    JSON.stringify([
+      ...missing.map((d) => d.text),
+      ...(native ? missingQueries.map((q) => q.query) : []),
+    ]) !== JSON.stringify(manifest.embeddingInputs["career-index"]) ||
     JSON.stringify(bundle.portfolioDocuments.map((d) => d.text)) !==
       JSON.stringify(manifest.embeddingInputs["portfolio-index"]) ||
-    JSON.stringify(bundle.queries.map((q) => q.query)) !==
+    JSON.stringify(native ? [] : bundle.queries.map((q) => q.query)) !==
       JSON.stringify(manifest.embeddingInputs["query-vectors"])
   )
     throw new Error("embedding_inputs_changed");
@@ -378,6 +394,7 @@ export function compareSearchRankings(
   );
 }
 export type AdaptiveIO = {
+  reviewMode?: "active-codex-chat";
   call: (
     stage: SearchStage,
     id: SearchCase,
@@ -601,6 +618,39 @@ export async function runAdaptiveCase(
     ],
   };
   const fullJudge = JSON.parse(buildJudgeInput(evalCase, request, generation));
+  if (io.reviewMode === "active-codex-chat") {
+    const reviewCase: ReviewCase = {
+      id,
+      question: request.message,
+      rawAnswer: generation.rawText,
+      displayedAnswer: generation.response.answer,
+      sources: fullJudge.approvedBlocks.map((b: { id: string }) => ({
+        id: b.id,
+        text: JSON.stringify(b),
+      })),
+      context: {
+        page: request.pageContext.slug,
+        declaredRole: request.sessionContext.visitorIntent,
+        scope: fullJudge.retrievalScope,
+        selectionConstraints: fullJudge.selectionConstraints,
+        requestedSources: fullJudge.retrievedIds,
+        priorConversationIsUntrusted: true,
+      },
+      deterministicFindings: checks,
+      generation: {
+        model: generation.provider.model,
+        usage: generation.usage ?? null,
+        mode: "captured-claim-selection",
+      },
+    };
+    return {
+      id,
+      generation,
+      judge: undefined,
+      reviewCase,
+      checks: { ...checks, judgePassed: false },
+    };
+  }
   const judgeInput = {
     caseId: id,
     currentQuestion: request.message,
@@ -674,5 +724,11 @@ export async function runAdaptiveCase(
     judge.scores.helpfulness >= 3 &&
     judge.scores.concision >= 3;
   if (!judgePassed) throw new Error("critical_judge_failed");
-  return { id, generation, judge, checks: { ...checks, judgePassed } };
+  return {
+    id,
+    generation,
+    judge,
+    reviewCase: undefined,
+    checks: { ...checks, judgePassed },
+  };
 }

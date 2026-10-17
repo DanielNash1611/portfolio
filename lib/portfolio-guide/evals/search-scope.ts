@@ -23,6 +23,7 @@ import {
   searchManifestHash,
   type FrozenSearchManifest,
   type SearchApproval,
+  NATIVE_SEARCH_LIMITS,
 } from "./search-budget";
 
 export const PROPOSED_SEARCH_SHA256 =
@@ -58,6 +59,7 @@ export function prepareSearchScope(options: {
   queries: string;
   output: string;
   requireClean?: boolean;
+  native?: { reuse: string; queryCache: string; originalProposal: string };
 }) {
   const portfolioRoot = resolve(options.portfolioRoot),
     careerRoot = resolve(options.careerRoot),
@@ -76,7 +78,7 @@ export function prepareSearchScope(options: {
   const proposalText = readFileSync(options.proposal, "utf8"),
     queryText = readFileSync(options.queries, "utf8");
   if (
-    hashText(proposalText) !== PROPOSED_SEARCH_SHA256 ||
+    (!options.native && hashText(proposalText) !== PROPOSED_SEARCH_SHA256) ||
     hashText(queryText) !== SEARCH_LIMITS.queriesSha256
   )
     throw new Error("original_proposal_or_queries_changed");
@@ -121,6 +123,28 @@ export function prepareSearchScope(options: {
       ),
     },
   };
+  let reuse: { path: string; sha256: string } | undefined;
+  let missingQueries: string[] = [];
+  if (options.native) {
+    const path = resolve(options.native.reuse);
+    const reused = JSON.parse(readFileSync(path, "utf8"));
+    reuse = { path, sha256: hashText(readFileSync(path, "utf8")) };
+    missingQueries = bundle.queries
+      .filter(
+        (q) =>
+          !reused.vectors.queries.some(
+            (r: { id: string; hash: string }) =>
+              r.id === q.id && r.hash === hashText(q.query),
+          ),
+      )
+      .map((q) => q.query);
+    if (
+      missingQueries.length !== 15 ||
+      hashText(readFileSync(options.native.originalProposal, "utf8")) !==
+        PROPOSED_SEARCH_SHA256
+    )
+      throw new Error("native_reuse_or_original_proposal_changed");
+  }
   const missing = bundle.career.documents.filter(
     (d) => !bundle.career.cache.records.some((r) => r.id === d.id),
   );
@@ -145,6 +169,13 @@ export function prepareSearchScope(options: {
       resolve(options.proposal),
       resolve(options.queries),
       bundlePath,
+      ...(options.native
+        ? [
+            resolve(options.native.reuse),
+            resolve(options.native.queryCache),
+            resolve(options.native.originalProposal),
+          ]
+        : []),
     ]),
   ].sort();
   const manifest: FrozenSearchManifest = {
@@ -164,9 +195,9 @@ export function prepareSearchScope(options: {
       portfolio: corpusHash(bundle.portfolioDocuments),
     },
     embeddingInputs: {
-      "career-index": missing.map((d) => d.text),
+      "career-index": [...missing.map((d) => d.text), ...missingQueries],
       "portfolio-index": bundle.portfolioDocuments.map((d) => d.text),
-      "query-vectors": bundle.queries.map((q) => q.query),
+      "query-vectors": options.native ? [] : bundle.queries.map((q) => q.query),
     },
     routingMode: Object.fromEntries(
       SEARCH_CASES.map((id) => [
@@ -176,7 +207,8 @@ export function prepareSearchScope(options: {
           : "bypass",
       ]),
     ) as FrozenSearchManifest["routingMode"],
-    packetMode: "adaptive-v1",
+    packetMode: options.native ? "native-review-v2" : "adaptive-v1",
+    ...(reuse ? { nativeReuse: reuse } : {}),
     publicBundle: {
       path: bundlePath,
       sha256: hashText(readFileSync(bundlePath, "utf8")),
@@ -191,7 +223,9 @@ export function prepareSearchScope(options: {
     scopeSha256: searchManifestHash(manifest),
     proposalSha256: manifest.proposalSha256,
     historySha256: manifest.historySha256,
-    incrementalCeilingNano: SEARCH_LIMITS.incrementalCeilingNano,
+    incrementalCeilingNano: options.native
+      ? NATIVE_SEARCH_LIMITS.incrementalCeilingNano
+      : SEARCH_LIMITS.incrementalCeilingNano,
     overallCeilingNano: SEARCH_LIMITS.overallCeilingNano,
   };
   save(resolve(output, "manifest.json"), manifest);

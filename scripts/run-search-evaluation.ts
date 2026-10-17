@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { parseArgs } from "node:util";
 import {
@@ -13,7 +13,14 @@ import {
   type FrozenSearchManifest,
   type SearchApproval,
   type SearchTransport,
+  NATIVE_SEARCH_LIMITS,
 } from "../lib/portfolio-guide/evals/search-budget";
+import {
+  validateNativeReview,
+  reviewPrompt,
+  type ReviewPacket,
+} from "./lib/eval-artifacts";
+import { nativeQueryCache } from "../lib/portfolio-guide/evals/search-native";
 import { createFileSearchJournal } from "../lib/portfolio-guide/evals/search-budget-journal";
 import { loadAdaptiveBundle } from "../lib/portfolio-guide/evals/search-adaptive";
 import { createSearchFixtureTransport } from "../lib/portfolio-guide/evals/search-fixture";
@@ -28,11 +35,44 @@ const { values } = parseArgs({
     manifest: { type: "string" },
     approval: { type: "string" },
     "allow-paid": { type: "boolean", default: false },
+    reuse: { type: "string" },
+    "query-cache": { type: "string" },
+    "original-proposal": { type: "string" },
+    review: { type: "string" },
+    from: { type: "string" },
+    "validate-review": { type: "string" },
   },
   strict: true,
 });
 async function main() {
-  if (values.mode === "prepare") {
+  if (["review", "validate-review"].includes(values.mode!)) {
+    const source = values.from ?? values.manifest;
+    if (!source || values["allow-paid"] || values.approval)
+      throw new Error("review_is_offline");
+    const path = statSync(source).isDirectory()
+      ? resolve(source, "artifact-review-packet.json")
+      : source;
+    const packet = JSON.parse(readFileSync(path, "utf8")) as ReviewPacket;
+    const reviewFile = values["validate-review"] ?? values.review;
+    if (!reviewFile) {
+      console.log(reviewPrompt(packet));
+      return;
+    }
+    const reviewed = validateNativeReview(
+      packet,
+      JSON.parse(readFileSync(reviewFile, "utf8")),
+    );
+    console.log(
+      JSON.stringify({
+        valid: true,
+        packetHash: packet.packetHash,
+        cases: reviewed.cases.length,
+        modelCalls: 0,
+      }),
+    );
+    return;
+  }
+  if (["prepare", "prepare-native"].includes(values.mode!)) {
     if (
       !values["career-root"] ||
       !values.proposal ||
@@ -47,6 +87,15 @@ async function main() {
       queries: values.queries,
       output: values.output,
       requireClean: true,
+      ...(values.mode === "prepare-native"
+        ? {
+            native: {
+              reuse: values.reuse ?? "",
+              queryCache: values["query-cache"] ?? "",
+              originalProposal: values["original-proposal"] ?? "",
+            },
+          }
+        : {}),
     });
     console.log(
       JSON.stringify({
@@ -81,6 +130,7 @@ async function main() {
     durableDirectory(resolve(values.output));
     durableDirectory(resolve(values.output, "registry"));
     manifest.executionId = searchSha256(`${manifest.executionId}:FAKE_ONLY`);
+    manifest.executionMode = "fake";
     manifest.journalDirectory = resolve(values.output, "registry");
     approval = {
       approved: true,
@@ -89,14 +139,38 @@ async function main() {
       scopeSha256: searchManifestHash(manifest),
       proposalSha256: manifest.proposalSha256,
       historySha256: manifest.historySha256,
-      incrementalCeilingNano: 2e9,
+      incrementalCeilingNano:
+        manifest.packetMode === "native-review-v2"
+          ? NATIVE_SEARCH_LIMITS.incrementalCeilingNano
+          : 2e9,
       overallCeilingNano: 10e9,
     };
-    transport = createSearchFixtureTransport(bundle);
+    transport = createSearchFixtureTransport(
+      bundle,
+      manifest.packetMode === "native-review-v2"
+        ? nativeQueryCache(manifest, bundle)
+        : undefined,
+    );
   } else {
+    if (manifest.executionMode !== undefined)
+      throw new Error("fake_manifest_cannot_use_live_transport");
     if (!values["allow-paid"] || !values.approval || values.output)
       throw new Error("live_requires_explicit_paid_flag_and_frozen_approval");
     approval = JSON.parse(readFileSync(values.approval, "utf8"));
+    if (manifest.packetMode === "native-review-v2") {
+      const proposalFile = manifest.files.find(
+        (f) => f.sha256 === manifest.proposalSha256,
+      )!;
+      const proposal = JSON.parse(readFileSync(proposalFile.path, "utf8"));
+      const checked = Date.parse(proposal.pricingVerifiedAt);
+      if (
+        proposal.pricingVerified !== true ||
+        !Number.isFinite(checked) ||
+        checked > Date.now() + 300000 ||
+        Date.now() - checked > 86400000
+      )
+        throw new Error("native_price_attestation_expired");
+    }
     // This closure is not invoked until approval, file validation, exclusive
     // claim and the full durable reservation have all succeeded.
     const rawFetch = globalThis.fetch;
@@ -131,7 +205,8 @@ async function main() {
   const result = await guard.execute();
   const report = {
     mode: values.mode,
-    semanticQualityEvidence: values.mode === "live",
+    semanticQualityEvidence:
+      values.mode === "live" && manifest.packetMode !== "native-review-v2",
     ...result,
   };
   journal.artifact!("completed", report);

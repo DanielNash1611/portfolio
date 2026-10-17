@@ -5,10 +5,12 @@ import {
   type PublicSearchBundle,
 } from "./search-adaptive";
 import type { SearchTransport } from "./search-budget";
+import { hashText } from "../../search/hybrid";
 
 /** Structural fake only. Zero vectors deliberately do not claim semantic quality. */
 export function createSearchFixtureTransport(
   bundle: PublicSearchBundle,
+  nativeQueries?: Array<{ hash: string; vector: number[] }>,
 ): SearchTransport {
   return async ({ body }) => {
     const request = JSON.parse(body);
@@ -22,6 +24,31 @@ export function createSearchFixtureTransport(
         })),
         usage: { prompt_tokens: 20, total_tokens: 20 },
       };
+      // Oracle-derived synthetic career vectors keep this structural fixture
+      // consistent with the fourteen real query vectors being reused. This is
+      // fake transport data, never semantic-quality evidence or a live fallback.
+      if (nativeQueries && request.input.length === 17) {
+        const missing = bundle.career.documents.filter(
+          (d) => !bundle.career.cache.records.some((r) => r.id === d.id),
+        );
+        missing.forEach((doc, index) => {
+          const matching = bundle.retrievalCases.career
+            .filter((c) => c.expectedIds.includes(doc.id))
+            .flatMap((c) =>
+              nativeQueries.filter((q) => q.hash === hashText(c.query)),
+            );
+          if (!matching.length) return;
+          const vector = Array.from(
+            { length: 1536 },
+            (_, i) =>
+              matching.reduce((sum, q) => sum + q.vector[i], 0) /
+              matching.length,
+          );
+          const length = Math.hypot(...vector);
+          (result.data as Array<{ embedding: number[] }>)[index].embedding =
+            vector.map((v) => v / length);
+        });
+      }
     } else if (request.model === "gpt-6-luna") {
       const question = JSON.parse(request.input).question;
       const c = bundle.questions.find((c) => c.question === question)!;

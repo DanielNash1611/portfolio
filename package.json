@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test:portfolio-guide": "tsx --test __tests__/portfolio-guide/*.test.ts",
     "smoke:evidence": "tsx scripts/smoke-test-evidence.ts",
-    "eval:portfolio-guide": "tsx scripts/run-portfolio-guide-evals.ts",
+    "eval:portfolio-guide": "npm run test:portfolio-guide",
     "eval:portfolio-guide:local": "tsx scripts/run-portfolio-guide-evals.ts --provider-mode local-answer-no-judge --assistant-model gpt-oss:20b",
     "eval:portfolio-guide:local-judge": "tsx scripts/run-portfolio-guide-evals.ts --provider-mode local-answer-local-judge --assistant-model gpt-oss:20b --judge-model qwen2.5:14b",
     "db:migrate": "tsx scripts/migrate.ts",
@@ -31,7 +31,10 @@
     "search:index:prepare": "node --import tsx scripts/index-portfolio-search.ts --prepare",
     "search:index:require": "node --import tsx scripts/index-portfolio-search.ts --require-semantic",
     "search:index:build": "node --import tsx scripts/index-portfolio-search.ts --build",
-    "eval:search:lexical": "node --import tsx scripts/eval-search-retrieval.ts"
+    "eval:search:lexical": "node --import tsx scripts/eval-search-retrieval.ts",
+    "eval:portfolio-guide:generate": "tsx scripts/run-portfolio-guide-evals.ts",
+    "eval:portfolio-guide:review": "node --import tsx scripts/run-search-evaluation.ts --mode review",
+    "eval:portfolio-guide:native-search": "node --import tsx scripts/run-search-evaluation.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",
