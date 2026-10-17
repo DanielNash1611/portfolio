@@ -101,6 +101,18 @@ export const decisionsEvaluation = {
       snapshot:
         "Repair and full-run manifests identify their own code and source snapshots; release remains held for review and owner configuration verification.",
     },
+    {
+      id: "source-scope-followup",
+      label: "Keep the answer inside its source",
+      date: "October 17, 2026 · UTC",
+      result: "42/43 hard checks; 42/43 local judge",
+      method:
+        "A complete follow-up at bcf571e retained all 43 original questions and rubrics. Manual review still found generic retrieval wording without its disabled-release limit, stronger survey agency and broader platform-delivery claims. The one judge failure alleged metrics absent from the displayed answer; separate source review found a real helped-lead qualifier to retain.",
+      limit:
+        "That combined result remains 41/43. A further source-gated repair passed 285 deterministic tests with four existing skips, including absent-source and already-qualified negatives. Its complete local rerun and actual-answer review are separate evidence; no old answer, grade, paid result or bake-off comparison is replaced.",
+      snapshot:
+        "Frozen bcf571e outputs and grades are retained. The later repair and full-run manifests identify their own snapshot; Production configuration remains unverified after the denied metadata read.",
+    },
   ],
   judgeDisclosure:
     "Judge results also needed scrutiny. Later checks corrected four unchanged answers' source-aware grades, and a persisted Terra check regraded a malformed judge response against the unchanged answer. These are grading corrections, not newly improved answers; original outcomes remain part of the record.",

@@ -939,6 +939,96 @@ function qualifyUnlaunchedSystemClaim(
     .join(" ");
 }
 
+function preserveQualifiedAgency(
+  answer: string,
+  request: CopilotRequest,
+): string {
+  const agency = request.pageContext.claimBoundaries?.directOwnership?.find(
+    (fact) => /helped run[^.!?]*surveys/i.test(fact),
+  );
+  const result = request.pageContext.evidenceHighlights?.find((item) =>
+    /majority[^.!?]*reported increased creativity/i.test(item.detail),
+  )?.detail;
+  const sharedLead = request.pageContext.claimBoundaries?.directOwnership?.find(
+    (fact) => /helped lead[^.!?]*chatgpt rollout/i.test(fact),
+  );
+  if ((!agency || !result) && !sharedLead) return answer;
+  return answer
+    .split(/(?<=[.!?])\s+/)
+    .map((part) => {
+      const overstatesAgency =
+        /\b(?:daniel|he)\s+(?:(?:explicitly|directly)\s+)*(?:led|owned|ran|conducted)\b[^.!?]{0,100}\b(?:guitar center|ai adoption|surveys?)\b/i.test(
+          normalizeText(part),
+        );
+      if (agency && result && overstatesAgency) {
+        return ensureTrailingPeriod(joinOwnershipDetails([agency, result]));
+      }
+      if (sharedLead && /\bchatgpt\s+rollout\b/i.test(normalizeText(part))) {
+        return part.replace(
+          /\b(Daniel|he)(\s+(?:(?:explicitly|directly)\s+)*)led\b/gi,
+          "$1$2helped lead",
+        );
+      }
+      return part;
+    })
+    .join(" ");
+}
+
+function preservePlatformFramingScope(
+  answer: string,
+  request: CopilotRequest,
+): string {
+  const conceptual =
+    request.pageContext.claimBoundaries?.conceptualExploration?.find((fact) =>
+      /prototype evidence[^.!?]*conceptual point of view/i.test(fact),
+    );
+  const implementation =
+    request.pageContext.claimBoundaries?.implementation?.find((fact) =>
+      /prototype-building and platform framing/i.test(fact),
+    );
+  if (!conceptual || !implementation) return answer;
+  let suppliedBoundary = false;
+  return answer
+    .split(/(?<=[.!?])\s+/)
+    .map((part) => {
+      const normalized = normalizeText(part);
+      const artifact =
+        /\b(?:ai[- ]?)?platform layer\b|\b(?:connector|retrieval|permissions?)[^.!?]{0,80}\bframework\b/i.test(
+          normalized,
+        );
+      const delivery =
+        /\b(?:built|building|implemented|created|delivered|new|provides?|enabl\w*|accelerat\w*)\b/i.test(
+          normalized,
+        );
+      if (
+        !artifact ||
+        !delivery ||
+        /\b(?:conceptual|proposed|framing|not establish|does not|doesn't)\b/i.test(
+          normalized,
+        )
+      )
+        return part;
+      const proof = (request.pageContext.evidenceHighlights ?? [])
+        .filter((item) => {
+          const percent = item.detail.match(/\d+\s*%/)?.[0];
+          return percent
+            ? normalized.replace(/\s/g, "").includes(percent.replace(/\s/g, ""))
+            : /\bprototype\b/i.test(normalized) &&
+                /\bprototype\b/i.test(item.detail);
+        })
+        .map((item) => item.detail);
+      if (!suppliedBoundary) {
+        proof.push(conceptual, implementation);
+        suppliedBoundary = true;
+      }
+      return proof.length
+        ? ensureTrailingPeriod(joinOwnershipDetails(proof))
+        : "";
+    })
+    .filter(Boolean)
+    .join(" ");
+}
+
 export function applyPortfolioGuideResponseGuardrails(input: {
   request: CopilotRequest;
   response: CopilotResponse;
@@ -1125,6 +1215,8 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   answer = removeUnsupportedPortfolioGeneratorSourceClaims(answer);
   answer = preserveQualifiedPageMetrics(answer, request);
   answer = qualifyUnlaunchedSystemClaim(answer, request);
+  answer = preserveQualifiedAgency(answer, request);
+  answer = preservePlatformFramingScope(answer, request);
   answer = qualifyStaticInventoryConclusion(answer, request);
 
   if (directResumeRequest) {

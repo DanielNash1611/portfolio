@@ -293,9 +293,17 @@ export function finalizeRoutedAnswer(input: {
     .flatMap(sentences)
     .find((part) => /\bRemote career retrieval is disabled\b/i.test(part));
   const careerRetrievalClaim =
-    /\b(?:ResumeCustomizer[^.!?]{0,120}(?:retriev\w*|evidence engine)|source-audited[^.!?]{0,60}(?:retriev\w*|evidence)|career[^.!?]{0,30}retriev\w*|evidence engine)\b/i;
-  const describesCareerRetrieval = careerRetrievalClaim.test(
-    classificationText(answer),
+    /\b(?:ResumeCustomizer[^.!?]{0,120}(?:retriev\w*|evidence engine)|source-(?:audited|grounded)[^.!?]{0,60}(?:retriev\w*|evidence)|career[^.!?]{0,30}retriev\w*|(?:bounded\s+)?evidence\s+retriev\w*|evidence engine)\b/i;
+  const requiresRetrievalBoundary = (part: string) => {
+    const text = classificationText(part);
+    return (
+      careerRetrievalClaim.test(text) ||
+      (/\bretriev\w*\b/i.test(text) &&
+        !/\b(?:canonical (?:portfolio )?pages?|page grounding)\b/i.test(text))
+    );
+  };
+  const describesCareerRetrieval = sentences(answer).some(
+    requiresRetrievalBoundary,
   );
   const includesAvailability =
     /\bretriev\w*\b[^.!?]{0,100}\b(?:disabled|not connected|isn't connected|not active)\b|\bdisabled\b[^.!?]{0,100}\bretriev\w*\b/i.test(
@@ -309,9 +317,7 @@ export function finalizeRoutedAnswer(input: {
     !includesAvailability
   ) {
     const parts = sentences(answer);
-    const index = parts.findIndex((part) =>
-      careerRetrievalClaim.test(classificationText(part)),
-    );
+    const index = parts.findIndex(requiresRetrievalBoundary);
     parts[index] =
       `${parts[index].replace(/[.!?]+$/, "")}; release boundary: ${releaseBoundary}`;
     answer = parts.join(" ");

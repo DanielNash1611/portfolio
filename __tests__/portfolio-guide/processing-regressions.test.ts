@@ -410,3 +410,111 @@ test("an explicit denial of completion remains a limit rather than a positive la
     "The page does not establish a complete end-to-end proof-engine or a production-ready workflow.";
   assert.equal(processCaptured("ai-career-summary", raw), raw);
 });
+
+test("fresh bounded evidence retrieval retains the supplied disabled-release boundary", () => {
+  assert.match(
+    processCaptured("bcf-ai-career-summary"),
+    /Remote career retrieval is disabled/,
+  );
+});
+
+test("canonical page retrieval alone is not relabeled as remote career retrieval", () => {
+  const raw =
+    "The Guide retrieves canonical portfolio pages; this is page grounding.";
+  assert.equal(processCaptured("bcf-ai-career-summary", raw), raw);
+});
+
+test("unnamed evidence retrieval still carries the supplied disabled-remote boundary", () => {
+  const answer = processCaptured(
+    "bcf-ai-career-summary",
+    "The prototype retrieves approved facts through an authenticated API.",
+  );
+  assert.match(answer, /Remote career retrieval is disabled/);
+});
+
+test("generic retrieval cannot invent availability when no source boundary is supplied", () => {
+  const raw =
+    "The prototype retrieves approved facts through an authenticated API.";
+  assert.equal(
+    processCaptured("bcf-ai-career-summary", raw, (input) => ({
+      ...input,
+      pageContext: {
+        ...input.pageContext,
+        evidenceHighlights: [],
+        claimBoundaries: {},
+      },
+    })),
+    raw,
+  );
+});
+
+test("fresh survey agency retains helped-run wording and its qualified creativity evidence", () => {
+  const answer = processCaptured("bcf-human-flourishing-proof-boundaries");
+  assert.match(answer, /helped run Guitar Center AI adoption surveys/);
+  assert.match(answer, /majority.*reported increased creativity/);
+  assert.match(answer, /personal aspiration|personal convictions/);
+  assert.doesNotMatch(answer, /Daniel explicitly led/);
+});
+
+test("survey correction requires the explicit helped-run source, preserving supported leadership elsewhere", () => {
+  const raw = "Daniel led Guitar Center AI adoption surveys.";
+  const answer = processCaptured(
+    "bcf-human-flourishing-proof-boundaries",
+    raw,
+    (input) => ({
+      ...input,
+      pageContext: {
+        ...input.pageContext,
+        claimBoundaries: {
+          directOwnership: ["Daniel led Guitar Center AI adoption surveys."],
+        },
+      },
+    }),
+  );
+  assert.equal(answer, raw);
+});
+
+test("the rollout essay retains helped-lead agency without changing its supported workflow details", () => {
+  const answer = processCaptured("bcf-ai-strategy-summary");
+  assert.match(answer, /he helped lead a ChatGPT rollout/);
+  assert.match(answer, /pre[\u2010-\u2015-]call preparation and drafting/);
+  assert.match(answer, /champions, training, and feedback loops/);
+  assert.match(
+    answer,
+    /ChatGPT Enterprise case study for concrete rollout metrics/,
+  );
+  assert.doesNotMatch(answer, /he led a ChatGPT rollout/);
+});
+
+test("fresh platform summaries and role answers retain prototype/framing scope rather than claiming a delivered platform", () => {
+  for (const id of [
+    "bcf-ai-platform-summary",
+    "bcf-ai-platform-role-relevance",
+  ]) {
+    const answer = processCaptured(id);
+    assert.match(answer, /conceptual point of view/);
+    assert.match(
+      answer,
+      /does not describe end-to-end production implementation ownership/,
+    );
+    assert.match(answer, /87/);
+    assert.doesNotMatch(
+      answer,
+      /result was a new platform layer|leadership in building a reusable AI[\u2010-\u2015-]platform layer|framework that accelerates subsequent/,
+    );
+  }
+});
+
+test("platform corrections require source scope and preserve explicit conceptual framing", () => {
+  const raw =
+    "The page explores a conceptual platform layer and does not establish a delivered production platform.";
+  assert.equal(processCaptured("bcf-ai-platform-summary", raw), raw);
+  const unsupported = "The result was a new platform layer.";
+  assert.equal(
+    processCaptured("bcf-ai-platform-summary", unsupported, (input) => ({
+      ...input,
+      pageContext: { ...input.pageContext, claimBoundaries: {} },
+    })),
+    unsupported,
+  );
+});
