@@ -282,6 +282,29 @@ export function finalizeRoutedAnswer(input: {
       ? [prefix, ...blocks.map((block) => block.text)].filter(Boolean).join(" ")
       : suppliedAnswer;
   }
+  const releaseBoundary = sourceEvidence
+    .flatMap(sentences)
+    .find((part) => /\bRemote career retrieval is disabled\b/i.test(part));
+  const careerRetrievalClaim =
+    /\b(?:ResumeCustomizer[^.!?]{0,120}(?:retriev\w*|evidence engine)|source-audited[^.!?]{0,60}(?:retriev\w*|evidence)|career[^.!?]{0,30}retriev\w*|evidence engine)\b/i;
+  const describesCareerRetrieval = careerRetrievalClaim.test(answer);
+  const includesAvailability =
+    /\bretriev\w*\b[^.!?]{0,100}\b(?:disabled|not connected|isn't connected|not active)\b|\bdisabled\b[^.!?]{0,100}\bretriev\w*\b/i.test(
+      answer,
+    );
+  if (
+    !fallback &&
+    !careerEvidence?.evidence.length &&
+    releaseBoundary &&
+    describesCareerRetrieval &&
+    !includesAvailability
+  ) {
+    const parts = sentences(answer);
+    const index = parts.findIndex((part) => careerRetrievalClaim.test(part));
+    parts[index] =
+      `${parts[index].replace(/[.!?]+$/, "")}; release boundary: ${releaseBoundary}`;
+    answer = parts.join(" ");
+  }
   if (fallback) {
     answer = answer.replace(fallback, "").trim();
     answer = `${punctuate(boundGuideAnswer(answer, request.message, budget, sourceEvidence))} ${fallback}`;

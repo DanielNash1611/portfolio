@@ -40,6 +40,7 @@ import {
   DECISIONS_MODEL,
   ROUTING_VERSION,
   type DecisionsConfig,
+  type SupportingPage,
 } from "./decisions";
 
 export type PortfolioGuideServiceConfig = {
@@ -313,7 +314,7 @@ function removeUnsupportedPortfolioGeneratorSourceClaims(
 
   return answer
     .replace(
-      /\b(?:the\s+)?(?:tool|generator)(?:\s+flow)?\s+(?:pulls?|uses?|reads?|retrieves?)\s+(?:its\s+)?evidence\s+from\s+(?:the\s+)?current\s+(?:portfolio\s+)?page(?:\s+and\s+(?:other\s+)?portfolio\s+pages)?[^.!?]*[.!?]?/gi,
+      /\b(?:the\s+)?(?:tool|generator)(?:\s+flow)?\s+(?:will\s+)?(?:pulls?|uses?|reads?|retrieves?)(?:\s+in)?\s+(?:its\s+)?evidence\s+from\s+(?:the\s+)?(?:(?:this|current)\s+(?:portfolio\s+)?page|(?:other\s+)?portfolio\s+(?:pages|content))[^.!?]*[.!?]?/gi,
       correction,
     )
     .replace(
@@ -466,11 +467,12 @@ function joinDetailsAsOneSentence(details: string[]): string {
     .join("; ");
 }
 
+// Keep source qualifications within their labeled responsibility category.
+function joinOwnershipDetails(details: string[]): string {
+  return joinDetailsAsOneSentence(details).replace(/[.!?]\s+/g, "; ");
+}
+
 function buildOwnershipAnswer(request: CopilotRequest): string | undefined {
-  // Each labeled category must remain one sentence, including source fields
-  // that already contain several sentences and their attached qualifications.
-  const joinOwnershipDetails = (details: string[]) =>
-    joinDetailsAsOneSentence(details).replace(/[.!?]\s+/g, "; ");
   const direct = pickDistinctDetails(
     request.pageContext.claimBoundaries?.directOwnership ?? [],
     2,
@@ -504,6 +506,51 @@ function buildOwnershipAnswer(request: CopilotRequest): string | undefined {
     `Not explicit: ${unknownDetail ? `${joinOwnershipDetails([unknownDetail])}; ` : ""}the page does not define a full ownership matrix or exact team-by-team split`,
   );
   return parts.map(ensureTrailingPeriod).join(" ");
+}
+
+function buildAvailableSourceOwnershipAnswer(
+  request: CopilotRequest,
+  supportingPages: SupportingPage[],
+): string | undefined {
+  const external = supportingPages.find(
+    (page) => page.claimBoundaries?.directOwnership?.length,
+  );
+  if (!external) return undefined;
+  const pages: SupportingPage[] = [request.pageContext, ...supportingPages];
+  const directed = [request.pageContext, external].flatMap((page) => {
+    const fact = page.claimBoundaries?.directOwnership?.[0];
+    return fact
+      ? [
+          `${page.slug === request.pageContext.slug ? "On" : "Elsewhere in the portfolio,"} ${page.title}: ${fact}`,
+        ]
+      : [];
+  });
+  const assisted = pages.flatMap((page) =>
+    (page.claimBoundaries?.influence ?? [])
+      .filter((fact) => /\bAI development agents|\bAI-assisted\b/i.test(fact))
+      .map((fact) => ({ page, fact })),
+  )[0];
+  const local = pages.flatMap((page) =>
+    [
+      ...(page.claimBoundaries?.explicitUnknowns ?? []),
+      ...(page.evidenceHighlights?.map((item) => item.detail) ?? []),
+    ]
+      .filter((fact) =>
+        /\blocal(?:ly)?\b[^.!?]{0,100}\b(?:prototype|candidate)/i.test(fact),
+      )
+      .map((fact) => ({ page, fact: fact.split(/(?<=[.!?])\s+/)[0] })),
+  )[0];
+  if (!directed.length || !assisted || !local) return undefined;
+  const soleCodeLimit = assisted.page.claimBoundaries?.implementation?.find(
+    (fact) => /does not (?:claim|establish) sole/i.test(fact),
+  );
+  return [
+    `Directed: ${joinOwnershipDetails(directed)}`,
+    `AI-assisted: On ${assisted.page.title}: ${joinOwnershipDetails([assisted.fact, ...(soleCodeLimit ? [soleCodeLimit] : [])])}`,
+    `Local status: On ${local.page.title}: ${joinOwnershipDetails([local.fact])}`,
+  ]
+    .map(ensureTrailingPeriod)
+    .join(" ");
 }
 
 function buildEvidenceSummaryAnswer(
@@ -757,6 +804,7 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   response: CopilotResponse;
   fallbackRelatedPages: RelatedPage[];
   routedSourcesAvailable?: boolean;
+  supportingPages?: SupportingPage[];
 }): CopilotResponse {
   const { request, response, fallbackRelatedPages } = input;
   const preserveRoutedAnswer = Boolean(
@@ -783,6 +831,28 @@ export function applyPortfolioGuideResponseGuardrails(input: {
     request.message,
   );
   const directResumeRequest = isDirectResumeRequest(request.message);
+
+  const falsePageOnlyOwnershipRefusal =
+    /\b(?:can(?:not|'t)|could(?: not|n't))\s+(?:identify|compare|answer|determine|say)\b[^.!?]{0,240}\b(?:across|broader|portfolio)\b|\bonly describes work done on this specific project\b/i.test(
+      normalizeText(answer),
+    );
+  const suppliesAssistanceCredit =
+    /\bAI[- ]assisted\s*:|\bAI development agents\b/i.test(
+      normalizeText(answer),
+    );
+  if (
+    preserveRoutedAnswer &&
+    falsePageOnlyOwnershipRefusal &&
+    !suppliesAssistanceCredit &&
+    (isOwnershipQuestion(request.message) ||
+      /\bwhat did\b[^?]{0,80}\bdirect\b/i.test(request.message))
+  ) {
+    answer =
+      buildAvailableSourceOwnershipAnswer(
+        request,
+        input.supportingPages ?? [],
+      ) ?? answer;
+  }
 
   if (mentionTerm && answerDeniesMention(answer, mentionTerm)) {
     const termPattern = new RegExp(`\\b${escapeRegex(mentionTerm)}\\b`, "i");
@@ -1011,6 +1081,7 @@ export function processPortfolioGuideAnswer(input: {
   relatedPages: RelatedPage[];
   careerEvidence?: EvidenceSearchResponse;
   routingEnabled?: boolean;
+  supportingPages?: SupportingPage[];
 }) {
   const { request, rawText, relatedPages, careerEvidence } = input;
   const parsedResponse = normalizeCopilotResponse(rawText, relatedPages);
@@ -1026,8 +1097,9 @@ export function processPortfolioGuideAnswer(input: {
     fallbackRelatedPages: relatedPages,
     routedSourcesAvailable: Boolean(
       input.routingEnabled &&
-        (relatedPages.length || careerEvidence?.evidence.length),
+        (input.supportingPages?.length || careerEvidence?.evidence.length),
     ),
+    supportingPages: input.supportingPages,
   });
   const rewritten = guardedResponse.answer !== normalizedResponse.answer;
   const finalized = finalizeRoutedAnswer({
@@ -1472,6 +1544,7 @@ export async function generatePortfolioGuideResponse(
     relatedPages,
     careerEvidence: prefetchedEvidence,
     routingEnabled: Boolean(routing.plan),
+    supportingPages: JSON.parse(promptInput).routingContext?.supportingPages,
   });
   if (routing.plan && prefetchedEvidence) {
     evidenceUsed = buildEvidenceSummaries(

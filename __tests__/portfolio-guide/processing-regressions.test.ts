@@ -6,7 +6,11 @@ import {
   getPageContextBySlug,
   getPortfolioContext,
 } from "@/lib/portfolio-guide/context";
-import { generatePortfolioGuideResponse } from "@/lib/portfolio-guide/service";
+import {
+  generatePortfolioGuideResponse,
+  processPortfolioGuideAnswer,
+} from "@/lib/portfolio-guide/service";
+import { buildUnavailableEvidenceResult } from "@/lib/portfolio-guide/tools/evidence";
 import type { CopilotRequest } from "@/lib/portfolio-guide/types";
 
 function request(pageSlug: string, question: string): CopilotRequest {
@@ -154,4 +158,93 @@ test("unrelated runtime evidence is not rewritten as an inventory disclaimer", a
   });
   assert.equal(result.response.answer, rawText);
   assert.doesNotMatch(result.response.answer, /inventory|server bundles/);
+});
+
+test("future-tense generator claims cannot imply Portfolio pages feed the resume", async () => {
+  const result = await replay("fresh-resume-source-claim");
+  assert.doesNotMatch(
+    result.response.answer,
+    /will pull in evidence from this page/,
+  );
+  assert.match(
+    result.response.answer,
+    /does not prove that Portfolio pages directly feed/,
+  );
+  assert.match(result.response.answer, /\/resume\/generate/);
+  assert.match(result.response.answer, /paste.*job description/i);
+});
+
+test("retrieval summaries retain the documented release boundary", async () => {
+  const result = await replay("fresh-retrieval-release-boundary");
+  assert.match(
+    result.response.answer,
+    /Remote career retrieval is disabled.*pending a separately reviewed endpoint/,
+  );
+  assert.match(
+    result.response.answer,
+    /canonical page grounding and resume jobs remain supported/,
+  );
+});
+
+function broadOwnership(rawText?: string, includeSources = true) {
+  const fixture = fixtures.cases.find(
+    (item) => item.caseId === "fresh-broad-ownership-refusal",
+  )!;
+  const supportingPages = includeSources
+    ? [
+        getPageContextBySlug("ai-platform-mcp")!,
+        getPageContextBySlug("chatgpt-enterprise")!,
+      ]
+    : [];
+  return processPortfolioGuideAnswer({
+    request: request(fixture.pageSlug, fixture.question),
+    rawText: rawText ?? fixture.rawText,
+    relatedPages: supportingPages.map(({ slug, title, href }) => ({
+      slug,
+      title,
+      href,
+    })),
+    supportingPages,
+    routingEnabled: true,
+    careerEvidence: buildUnavailableEvidenceResult(
+      fixture.question,
+      "not_configured",
+    ),
+  }).finalized.answer;
+}
+
+test("a false page-only ownership refusal uses only captured canonical sources", () => {
+  const answer = broadOwnership();
+  assert.match(answer, /AI Career Operating System/);
+  assert.match(answer, /From AI experiments to platform foundations/);
+  assert.match(answer, /AI development agents/);
+  assert.match(answer, /does not claim sole hand-coding/);
+  assert.match(
+    answer,
+    /locally implemented candidates|locally tested.*prototype/i,
+  );
+  assert.doesNotMatch(
+    answer,
+    /can't identify|can’t identify|only describes work done on this specific project/,
+  );
+  assert.ok(answer.split(/(?<=[.!?])\s+/).length <= 4);
+});
+
+test("a broad ownership fallback cannot invent unprovided supporting projects", () => {
+  const answer = broadOwnership(undefined, false);
+  assert.doesNotMatch(
+    answer,
+    /From AI experiments to platform foundations|ChatGPT Enterprise/,
+  );
+});
+
+test("a substantive broader answer survives instead of receiving the refusal fallback", () => {
+  const raw =
+    "Directed: On this page Daniel defined product architecture; elsewhere in the portfolio he led a functional prototype. AI-assisted: On this project AI development agents accelerated implementation under human review. Local prototype: Decisions routing remains a local candidate with validation pending.";
+  const answer = broadOwnership(raw);
+  assert.match(
+    answer,
+    /Directed: On this page Daniel defined product architecture; elsewhere in the portfolio he led a functional prototype/,
+  );
+  assert.match(answer, /AI-assisted: On this project/);
 });

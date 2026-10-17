@@ -28,6 +28,27 @@
       "question": "What particularly was Daniel responsible for?",
       "pageSlug": "ai-career-operating-system",
       "rawText": "**Answer:**  \nDaniel was the primary owner of the AI Career Operating System’s product design. He defined the overall product architecture, set the evidence boundaries and claim‑safety rules, designed the evaluation and review workflow, and directed the integration between the Portfolio recruiter UX and the ResumeCustomizer evidence‑retrieval engine. This included authoring the system’s UX, authoring the policy for sourced evidence, configuring the advisory review agents, and establishing the human‑approval gate.  \n\n**Suggested Follow‑Ups**  \n- Which parts of the evaluation pipeline were most impactful?  \n- How did the system’s design influence downstream resume generation?  \n\n**Related Pages**  \n- `ai-platform-mcp` – illustrates similar architecture‑driven AI platform work.  \n- `chatgpt-enterprise` – shows scaling AI initiatives Daniel led.  \n\n**Inferred Interest Tags**  \n- `ai-builder`  \n- `pm-leadership`  \n- `platform`  \n- `technical-depth`"
+    },
+    {
+      "caseId": "fresh-resume-source-claim",
+      "question": "Can I generate a resume for my role?",
+      "pageSlug": "ai-career-operating-system",
+      "rawText": "You can create a role‑specific resume by using the resume generator tool.  \nSimply click the “Generate a resume for my role” link ( /​resume/generate ) and follow the form to paste your job description.  \nThe generator will pull in evidence from this page and elsewhere in the portfolio to tailor the output for the role you’re targeting.",
+      "capturedAtSnapshot": "c56b60afc38f23a04aa8691b41270a17ca56cfa6"
+    },
+    {
+      "caseId": "fresh-retrieval-release-boundary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-career-operating-system",
+      "rawText": "{\n  \"answer\": \"AI Career Operating System is a governed AI workflow that turns approved career evidence into recruiter‑ready artifacts. Daniel defined the product architecture, service boundaries, and evaluation criteria, integrating portfolio UX with a ResumeCustomizer evidence engine that returns source‑audited results and a safe fallback when evidence is missing. The system includes six advisory review agents, a structured PDF check, and a human‑in‑the‑loop final approval layer, and it improved a comparable OpenAI Guide evaluation from 5/12 to 11/12 after grounding and source‑separation changes.\",\n  \"suggestedFollowUps\": [\n    \"Would you like more details on the evaluation metrics or the advisory review agents?\",\n    \"Do you want to see how the system handles source‑audited retrieval?\",\n    \"Are you interested in the planned next‑stage features like durable queueing or hard reject gates?\"\n  ],\n  \"relatedPages\": [\n    {\n      \"slug\": \"ai-platform-mcp\",\n      \"reason\": \"Shows Daniel turning repeated AI workflow needs into reusable system boundaries and product patterns.\"\n    },\n    {\n      \"slug\": \"chatgpt-enterprise\",\n      \"reason\": \"Provides measured organizational adoption, governance, and operating‑model proof at a larger scale.\"\n    }\n  ],\n  \"inferredInterestTags\": [\n    \"ai-builder\",\n    \"pm-leadership\",\n    \"platform\",\n    \"technical-depth\"\n  ]\n}",
+      "capturedAtSnapshot": "c56b60afc38f23a04aa8691b41270a17ca56cfa6"
+    },
+    {
+      "caseId": "fresh-broad-ownership-refusal",
+      "question": "Across the portfolio, what did Daniel direct, what was AI-assisted, and what is still a local prototype?",
+      "pageSlug": "ai-career-operating-system",
+      "rawText": "**Answer**  \nThe AI Career Operating System page does not list or compare Daniel’s roles across the entire portfolio. It only describes work done on this specific project (direct design of the product architecture, integration with ResumeCustomizer, and local‑prototype decisions such as the Decisions API). Therefore, I can’t identify, from this page, which projects Daniel directly led, which were AI‑assisted, or which remain local prototypes across the broader portfolio.  \n\n**Suggested follow‑ups**  \n- Explore the related “AI Platform MCP” and “ChatGPT Enterprise” pages for additional evidence of Daniel’s direct or AI‑assisted involvement.  \n- Ask if you’d like a summary of Daniel’s leadership or AI‑assisted work on those specific projects.  \n\n**Related pages**  \n- { \"slug\": \"ai-platform-mcp\", \"reason\": \"Shows Daniel turning AI prototypes into reusable platform foundations, indicating direct leadership.\" }  \n- { \"slug\": \"chatgpt-enterprise\", \"reason\": \"Highlights Daniel’s direct role in scaling an AI pilot to enterprise adoption.\" }  \n\n**Inferred interest tags**  \n[\"ai-builder\", \"pm-leadership\", \"platform\", \"technical-depth\"]",
+      "capturedAtSnapshot": "c56b60afc38f23a04aa8691b41270a17ca56cfa6"
     }
   ]
 }
