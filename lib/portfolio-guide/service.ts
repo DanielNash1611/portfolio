@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 import { selectRecommendationsForPage } from "@/lib/portfolio-guide/context";
 import { getRelatedPages } from "@/lib/portfolio-guide/related";
 import { isCreativeTechnologyIntent } from "@/lib/portfolio-guide/intent";
@@ -970,7 +971,7 @@ export async function generatePortfolioGuideResponse(
 ): Promise<PortfolioGuideGenerationResult> {
   const {
     apiKey,
-    model = "gpt-5",
+    model = getPortfolioGuideModel(),
     baseURL,
     providerLabel = "openai",
     systemPrompt = PORTFOLIO_GUIDE_SYSTEM_PROMPT,

@@ -16,6 +16,7 @@ import { GUIDE_UNAVAILABLE_MESSAGE } from "@/lib/portfolio-guide/constants";
 // server-to-server boundary the resume generator already uses. No separate key.
 import { getResumeEngineConfig } from "@/lib/resume-generator/config";
 import { isEvidenceMockEnabled } from "@/lib/portfolio-guide/tools/mockEvidence";
+import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 
 type PortfolioGuideSuccessBody =
   | CopilotResponse
@@ -196,7 +197,7 @@ function defaultDependencies(): PortfolioGuideRouteDependencies {
     generateResponse: generatePortfolioGuideResponse,
     buildPromptContext: buildPortfolioGuidePromptContext,
     getApiKey: () => process.env.OPENAI_API_KEY,
-    getModel: () => process.env.OPENAI_MODEL || "gpt-5.4",
+    getModel: () => getPortfolioGuideModel(),
     createRequestId: () => randomUUID(),
     now: () => Date.now(),
     logWarning: (...args: unknown[]) => console.warn(...args),
