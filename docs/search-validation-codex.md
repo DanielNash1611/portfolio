@@ -1,5 +1,13 @@
 # Revised search validation plan — October 17, 2026
 
+The scoped cache reconciliation is now complete. The concrete
+[execution proposal](search-production-execution-proposal.md) retains the approved
+27 career records, 63 qualified portfolio blocks and 29 frozen queries: 39 vectors
+are reusable and 80 texts need new embeddings. It reserves the current native
+pipeline's separate relevance and final-answer stages, followed by active-chat
+Codex review. Inspection required no further user decision; execution remains
+unapproved.
+
 Status: preparation only; no evaluation execution authorized. This supersedes the
 pending 21-call/$2 API proposal, which was never approved or executed live. Do not
 reuse its approval templates, request counts, prices or fixed embedding batches.
