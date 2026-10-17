@@ -1,5 +1,12 @@
 # Search evaluation budget guard — local preparation only
 
+> **Superseded October 17, 2026.** Daniel changed the evaluation workflow to
+> active-chat Codex review. The 21-call/$2 proposal below was never approved or
+> executed against a live provider. Its commands, prices, fixed corpus sizes and
+> approval templates are historical preparation, not the current execution plan.
+> Use [the revised Codex validation plan](search-validation-codex.md). Existing
+> proposal, ledger, manifest and fake-run artifacts remain unchanged for audit.
+
 The October 17 proposed search evaluation has a dedicated, embedding-aware
 guard in `lib/portfolio-guide/evals/search-budget.ts`. It is separate from the
 historical evaluation guard and does not authorize any provider call. The
