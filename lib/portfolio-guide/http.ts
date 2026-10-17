@@ -17,6 +17,7 @@ import { GUIDE_UNAVAILABLE_MESSAGE } from "@/lib/portfolio-guide/constants";
 import { getResumeEngineConfig } from "@/lib/resume-generator/config";
 import { isEvidenceMockEnabled } from "@/lib/portfolio-guide/tools/mockEvidence";
 import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
+import { isRemoteCareerEvidenceEnabled } from "@/lib/portfolio-guide/evidence-config";
 
 type PortfolioGuideSuccessBody =
   | CopilotResponse
@@ -50,6 +51,8 @@ export type PortfolioGuideRouteDependencies = {
   getEvidenceApiUrl?: () => string | undefined;
   /** Optional: API key for the ResumeCustomizer evidence API (server-side only). */
   getEvidenceApiKey?: () => string | undefined;
+  /** Explicit opt-in after the optional evidence endpoint is separately verified. */
+  getEvidenceEnabled?: () => boolean;
   /** Optional: when true, the evidence tool is served by the local non-prod mock. */
   getEvidenceMockEnabled?: () => boolean;
   getDecisionsEnabled?: () => boolean;
@@ -202,10 +205,11 @@ function defaultDependencies(): PortfolioGuideRouteDependencies {
     now: () => Date.now(),
     logWarning: (...args: unknown[]) => console.warn(...args),
     logError: (...args: unknown[]) => console.error(...args),
-    // Reuse the shared ResumeCustomizer connection config so the evidence tool
-    // and the resume generator stay in lockstep on one base URL + bearer token.
+    // Authentication is shared, but evidence search is an optional contract.
+    // Configuring resume jobs alone must not enable an unavailable endpoint.
     getEvidenceApiUrl: () => getResumeEngineConfig().baseUrl ?? undefined,
     getEvidenceApiKey: () => getResumeEngineConfig().token ?? undefined,
+    getEvidenceEnabled: () => isRemoteCareerEvidenceEnabled(),
     getEvidenceMockEnabled: () => isEvidenceMockEnabled(),
     getDecisionsEnabled: () =>
       process.env.PORTFOLIO_GUIDE_DECISIONS_ENABLED !== "false",
@@ -308,7 +312,7 @@ export async function handlePortfolioGuideRequest(
     const evidenceApiUrl = dependencies.getEvidenceApiUrl?.();
     const evidenceApiKey = dependencies.getEvidenceApiKey?.();
     const evidenceConfig =
-      evidenceApiUrl && evidenceApiKey
+      dependencies.getEvidenceEnabled?.() && evidenceApiUrl && evidenceApiKey
         ? { apiUrl: evidenceApiUrl, apiKey: evidenceApiKey }
         : undefined;
     const evidenceMock = dependencies.getEvidenceMockEnabled?.() ?? false;

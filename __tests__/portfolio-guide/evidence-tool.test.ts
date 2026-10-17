@@ -291,6 +291,7 @@ test("evidence API key is not present in handlePortfolioGuideRequest response bo
     logError: () => undefined,
     getEvidenceApiUrl: () => "http://localhost:3001",
     getEvidenceApiKey: () => "super-secret-evidence-key",
+    getEvidenceEnabled: () => true,
     generateResponse: async () => ({
       promptInput: "{}",
       rawText: '{"answer":"Daniel has strong AI experience."}',
@@ -338,7 +339,7 @@ test("handler degrades gracefully when evidence config is absent", async () => {
   assert.equal((result.body as { answer: string }).answer, "Portfolio content answer");
 });
 
-test("handler passes evidence config to generateResponse when both vars are set", async () => {
+test("handler passes evidence config after opt-in when both vars are set", async () => {
   let capturedEvidenceConfig: unknown;
 
   await handlePortfolioGuideRequest(createRequest(), {
@@ -351,6 +352,7 @@ test("handler passes evidence config to generateResponse when both vars are set"
     logError: () => undefined,
     getEvidenceApiUrl: () => "https://resume-customizer.example.com",
     getEvidenceApiKey: () => "test-evidence-key",
+    getEvidenceEnabled: () => true,
     generateResponse: async (_request, config) => {
       capturedEvidenceConfig = config.evidenceConfig;
       return {
@@ -384,6 +386,7 @@ test("handler does not pass evidence config when only URL is set", async () => {
     logError: () => undefined,
     getEvidenceApiUrl: () => "https://resume-customizer.example.com",
     getEvidenceApiKey: () => undefined, // Key missing
+    getEvidenceEnabled: () => true,
     generateResponse: async (_request, config) => {
       capturedEvidenceConfig = config.evidenceConfig;
       return {

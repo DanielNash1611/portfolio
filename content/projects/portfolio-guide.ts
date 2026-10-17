@@ -91,7 +91,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Source-audited retrieval",
         detail:
-          "The Claim-to-Evidence endpoint defaults to public-safe, source-audited results and returns a safe fallback when evidence is insufficient.",
+          "The separate local Claim-to-Evidence prototype defaults to public-safe, source-audited results and returns a safe fallback when evidence is insufficient. Remote career retrieval is disabled in this isolated release pending a separately reviewed endpoint; canonical page grounding and resume jobs remain supported.",
         type: "workflow",
       },
       {
@@ -140,6 +140,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "The repositories do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale, or a current full-suite evaluation pass rate.",
         "The 5/12 to 11/12 comparison is a historical, comparable 12-case OpenAI result rather than a current universal quality score.",
         "The Claim-to-Evidence changes must be merged and deployed in both repositories before the public integration is considered launched.",
+        "The isolated release uses canonical portfolio pages with remote career evidence disabled by default: its selected ResumeCustomizer branch supports resume jobs but does not include /api/evidence/search. The preserved local evidence-search implementation is separate, unshipped work.",
         "The 147.65 MiB to 81.58 MiB figures are repository-documented uncompressed static file inventories, exclude server bundles, and were not independently rerun by this content review.",
         "Media separation does not establish lower bills, faster pages, reclaimed historical deployment storage, production verification by this review, or semantic AI-quality improvement.",
         "Decisions routing and linked resume skills are locally implemented candidates. Historical routing, answer-comparison, targeted repair and deterministic skills checks use different datasets; none establishes the final deployment's quality.",

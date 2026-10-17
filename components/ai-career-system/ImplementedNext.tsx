@@ -9,7 +9,7 @@ const deploymentStory = productEntries
 
 const implemented = [
   "Authenticated API boundary",
-  "Claim-to-Evidence retrieval",
+  "Claim-to-Evidence local prototype",
   "Nine-state job lifecycle",
   "Six specialized review perspectives",
   "Structural PDF validation",
@@ -99,6 +99,14 @@ export default function ImplementedNext(): React.JSX.Element {
           />
         </div>
       </div>
+
+      <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/70">
+        This release candidate uses canonical portfolio pages. Remote career
+        evidence stays disabled until the separate evidence-search endpoint is
+        reviewed and shipped; the selected ResumeCustomizer branch supports the
+        existing resume-job contract. The local retrieval prototype does not
+        establish a launched public integration.
+      </p>
 
       {deploymentStory ? (
         <div className="space-y-3 border-t border-[color:var(--color-slate)]/16 pt-8">

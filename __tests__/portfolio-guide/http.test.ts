@@ -1,9 +1,134 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import {
-  handlePortfolioGuideRequest,
-} from "@/lib/portfolio-guide/http";
+import { handlePortfolioGuideRequest } from "@/lib/portfolio-guide/http";
 import type { CopilotRequest } from "@/lib/portfolio-guide/types";
+import type OpenAI from "openai";
+import { isRemoteCareerEvidenceEnabled } from "@/lib/portfolio-guide/evidence-config";
+import { getResumeEngineConfig } from "@/lib/resume-generator/config";
+import { generatePortfolioGuideResponse } from "@/lib/portfolio-guide/service";
+
+test("remote career evidence requires explicit opt-in independently of resume configuration", () => {
+  for (const value of [undefined, "", "false", "1", "yes"]) {
+    assert.equal(
+      isRemoteCareerEvidenceEnabled({
+        NODE_ENV: "test",
+        PORTFOLIO_GUIDE_CAREER_EVIDENCE_ENABLED: value,
+        RESUME_CUSTOMIZER_API_BASE_URL: "https://resume.test",
+        RESUME_CUSTOMIZER_API_TOKEN: "synthetic-token",
+      }),
+      false,
+    );
+  }
+  assert.equal(
+    isRemoteCareerEvidenceEnabled({
+      NODE_ENV: "test",
+      PORTFOLIO_GUIDE_CAREER_EVIDENCE_ENABLED: " TRUE ",
+    }),
+    true,
+  );
+});
+
+test("page-only guide never calls optional evidence search while resume jobs retain their connection", async () => {
+  const keys = [
+    "RESUME_CUSTOMIZER_API_BASE_URL",
+    "RESUME_CUSTOMIZER_API_TOKEN",
+    "PORTFOLIO_GUIDE_CAREER_EVIDENCE_ENABLED",
+  ];
+  const original = keys.map((key) => process.env[key]);
+  const originalFetch = global.fetch;
+  try {
+    process.env.RESUME_CUSTOMIZER_API_BASE_URL = "https://resume.test";
+    process.env.RESUME_CUSTOMIZER_API_TOKEN = "synthetic-token";
+    delete process.env.PORTFOLIO_GUIDE_CAREER_EVIDENCE_ENABLED;
+    global.fetch = async () => {
+      throw new Error("No remote endpoint may be called");
+    };
+    const result = await handlePortfolioGuideRequest(createRequest(), {
+      logger: { start: async () => undefined, finish: async () => undefined },
+      getApiKey: () => "synthetic-key",
+      getModel: () => "gpt-5.6-terra",
+      getDecisionsEnabled: () => false,
+      getEvidenceMockEnabled: () => false,
+      generateResponse: async (request, config) => {
+        assert.equal(config.evidenceConfig, undefined);
+        return generatePortfolioGuideResponse(request, {
+          ...config,
+          client: {
+            responses: {
+              create: async (params: { tools?: unknown[] }) => {
+                assert.equal(
+                  Boolean(
+                    params.tools?.some(
+                      (tool) =>
+                        (tool as { name?: string }).name ===
+                        "searchCareerEvidence",
+                    ),
+                  ),
+                  false,
+                );
+                return {
+                  output_text: JSON.stringify({
+                    answer: "The page describes Daniel's prototype leadership.",
+                    relatedPages: [],
+                  }),
+                };
+              },
+            },
+          } as unknown as OpenAI,
+        });
+      },
+    });
+    assert.equal(result.status, 200);
+    assert.match(
+      (result.body as { answer: string }).answer,
+      /prototype leadership/,
+    );
+    assert.equal(
+      (result.body as { evidenceUsed?: unknown }).evidenceUsed,
+      undefined,
+    );
+    assert.deepEqual(getResumeEngineConfig(), {
+      baseUrl: "https://resume.test",
+      token: "synthetic-token",
+      configured: true,
+      mockMode: false,
+    });
+  } finally {
+    keys.forEach((key, index) => {
+      if (original[index] === undefined) delete process.env[key];
+      else process.env[key] = original[index];
+    });
+    global.fetch = originalFetch;
+  }
+});
+
+test("explicit endpoint opt-in passes the existing connection configuration", async () => {
+  let received = false;
+  const result = await handlePortfolioGuideRequest(createRequest(), {
+    logger: { start: async () => undefined, finish: async () => undefined },
+    getApiKey: () => "synthetic-key",
+    getEvidenceEnabled: () => true,
+    getEvidenceApiUrl: () => "https://resume.test",
+    getEvidenceApiKey: () => "synthetic-token",
+    generateResponse: async (_request, config) => {
+      assert.deepEqual(config.evidenceConfig, {
+        apiUrl: "https://resume.test",
+        apiKey: "synthetic-token",
+      });
+      received = true;
+      return {
+        promptInput: "{}",
+        rawText: "Page answer",
+        relatedPages: [],
+        response: { answer: "Page answer", relatedPages: [] },
+        normalizationStatus: "raw-fallback",
+        provider: { label: "openai", model: config.model ?? "gpt-5.6-terra" },
+      };
+    },
+  });
+  assert.equal(result.status, 200);
+  assert.equal(received, true);
+});
 
 function createRequest(): CopilotRequest {
   return {
@@ -75,7 +200,8 @@ test("portfolio guide handler returns a grounded answer and logs completion", as
         model: "gpt-5",
       },
     }),
-    buildPromptContext: () => ({ currentQuestion: "What did Daniel own here?" }) as never,
+    buildPromptContext: () =>
+      ({ currentQuestion: "What did Daniel own here?" }) as never,
   });
 
   assert.equal(result.status, 200);
