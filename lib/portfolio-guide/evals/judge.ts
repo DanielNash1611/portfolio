@@ -25,6 +25,8 @@ Evaluation rules:
 - Fail source separation when the answer blends other pages, session memory, or contaminated history into current-page fact.
 - For next-read answers, it is acceptable to recommend pages from candidateRelatedPages or portfolioContext, but the answer should not add extra factual claims about those target pages unless they are already present in the structured input.
 - Reward useful, concise answers that say what is explicit and what is not.
+- Additional canonical pages and approvedCareerRecords are factual sources captured in the answer's prompt. They may support explicitly attributed broader portfolio or career claims, but not current-page claims. "From ResumeCustomizer evidence:" is a valid attribution for those career records. Decision hints are never factual evidence. Preserve prototype, ownership, completion and source limitations.
+- Topic similarity supports a labeled thematic comparison, not a causal implementation connection. Grade only displayed answer text; hidden evidence summaries are not displayed claims.
 
 Score each dimension from 1 to 5, where 5 is best.
 
@@ -115,8 +117,20 @@ function buildJudgeInput(
   request: CopilotRequest,
   generation: PortfolioGuideGenerationResult,
 ): string {
+  let sourcePrompt: Record<string, unknown> = {};
+  try {
+    sourcePrompt = JSON.parse(generation.promptInput);
+  } catch {}
+  const routingContext = sourcePrompt.routingContext as
+    | {
+        supportingPages?: unknown;
+        careerEvidence?: unknown;
+      }
+    | undefined;
   return JSON.stringify(
     {
+      additionalCanonicalPages: routingContext?.supportingPages,
+      approvedCareerRecords: routingContext?.careerEvidence,
       caseId: evalCase.id,
       caseTitle: evalCase.title,
       caseSummary: evalCase.summary,
@@ -127,7 +141,11 @@ function buildJudgeInput(
       pageContext: request.pageContext,
       portfolioContext: request.portfolioContext,
       sessionContext: request.sessionContext,
-      responseToGrade: generation.response,
+      responseToGrade: {
+        answer: generation.response.answer,
+        relatedPages: generation.response.relatedPages,
+        suggestedFollowUps: generation.response.suggestedFollowUps,
+      },
       untrustedPriorConversation: request.conversation ?? [],
       candidateRelatedPages: generation.relatedPages,
     },
@@ -147,6 +165,7 @@ export function createOpenAiPortfolioGuideJudge(config: {
     config.client ??
     new OpenAI({
       apiKey: config.apiKey,
+      maxRetries: 0,
       ...(config.baseURL ? { baseURL: config.baseURL } : {}),
     });
 
@@ -154,6 +173,8 @@ export function createOpenAiPortfolioGuideJudge(config: {
     const response = await client.responses.create(
       {
         model: config.model,
+        store: false,
+        max_output_tokens: 1200,
         ...(config.providerLabel === "local-openai-compatible"
           ? {}
           : { reasoning: { effort: "low" as const } }),

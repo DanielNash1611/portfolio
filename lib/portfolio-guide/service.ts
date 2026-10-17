@@ -31,6 +31,15 @@ import {
   type ConversationHistorySearchResult,
 } from "@/lib/portfolio-guide/tools/conversation-history";
 import type { PortfolioGuideTraceEvent } from "@/lib/portfolio-guide/trace";
+import { finalizeRoutedAnswer } from "./answer-finalization";
+import {
+  routePortfolioQuestion,
+  selectRoutedPages,
+  retrieveSupportingPages,
+  DECISIONS_MODEL,
+  ROUTING_VERSION,
+  type DecisionsConfig,
+} from "./decisions";
 
 export type PortfolioGuideServiceConfig = {
   apiKey: string;
@@ -41,6 +50,7 @@ export type PortfolioGuideServiceConfig = {
   reasoningEffort?: "low" | "medium" | "high";
   client?: OpenAI;
   signal?: AbortSignal;
+  decisions?: DecisionsConfig;
   /** When provided, enables the searchCareerEvidence tool (server-side call to ResumeCustomizer). */
   evidenceConfig?: EvidenceConfig;
   /**
@@ -149,7 +159,7 @@ function isNextReadQuestion(question: string): boolean {
 }
 
 function isConnectionsQuestion(question: string): boolean {
-  return /\b(connect|rest of the portfolio|other work|broader portfolio)\b/i.test(
+  return /\b(?:this (?:page|work|case)|how does this)\b.*\b(?:connect|portfolio|other work)\b/i.test(
     question,
   );
 }
@@ -182,7 +192,10 @@ function isDirectResumeRequest(question: string): boolean {
 function isRoleFitOrJobDescriptionQuestion(question: string): boolean {
   return (
     isDirectResumeRequest(question) ||
-    /\b(?:is daniel (?:a )?fit|daniel fit|fit for (?:this|the) (?:role|job)|can daniel do|can he do|does daniel have .*experience|ai product experience|job description|jd\b|compare daniel to|compare .* (?:jd|job description|role|job)|what resume should i look at|which resume should i look at)\b/i.test(
+    /\b(?:would|could) daniel\b.*\b(?:good|fit|director|lead|head|vp|role)\b/i.test(
+      question,
+    ) ||
+    /\b(?:is daniel (?:a )?fit|daniel fit|fit for (?:this|the) (?:role|job)|can daniel do|can he do|job description|jd\b|compare daniel to|compare .* (?:jd|job description|role|job)|what resume should i look at|which resume should i look at)\b/i.test(
       question,
     )
   );
@@ -456,7 +469,8 @@ function buildOwnershipAnswer(request: CopilotRequest): string | undefined {
     2,
   );
   const influence = request.pageContext.claimBoundaries?.influence?.[0];
-  const implementation = request.pageContext.claimBoundaries?.implementation?.[0];
+  const implementation =
+    request.pageContext.claimBoundaries?.implementation?.[0];
   const unknown = request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
   if (direct.length === 0 && !influence && !implementation && !unknown) {
     return undefined;
@@ -483,7 +497,9 @@ function buildOwnershipAnswer(request: CopilotRequest): string | undefined {
   return parts.map(ensureTrailingPeriod).join(" ");
 }
 
-function buildEvidenceSummaryAnswer(request: CopilotRequest): string | undefined {
+function buildEvidenceSummaryAnswer(
+  request: CopilotRequest,
+): string | undefined {
   const highlights = request.pageContext.evidenceHighlights?.slice(0, 3) ?? [];
   if (highlights.length === 0) {
     return undefined;
@@ -538,7 +554,8 @@ function buildRoleFitAnswer(request: CopilotRequest): string | undefined {
   }
 
   const role =
-    request.sessionContext?.visitorIntent?.normalizedTitle?.trim() || "this role";
+    request.sessionContext?.visitorIntent?.normalizedTitle?.trim() ||
+    "this role";
   const parts: string[] = [];
   if (evidence.length > 0) {
     parts.push(
@@ -700,8 +717,13 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   request: CopilotRequest;
   response: CopilotResponse;
   fallbackRelatedPages: RelatedPage[];
+  routedSourcesAvailable?: boolean;
 }): CopilotResponse {
   const { request, response, fallbackRelatedPages } = input;
+  const preserveRoutedAnswer = Boolean(
+    input.routedSourcesAvailable &&
+      /\bacross (?:the )?portfolio\b/i.test(request.message),
+  );
   const fallbackBySlug = new Map(
     fallbackRelatedPages.map((page) => [page.slug, page]),
   );
@@ -713,7 +735,9 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   let suggestedFollowUps = response.suggestedFollowUps;
   // The creative tour is an authored sequence. Model omissions or reordering
   // must not skip its next step, including the philosophical essay.
-  let relatedPages = isCreativeTechnologyIntent(request.sessionContext.visitorIntent)
+  let relatedPages = isCreativeTechnologyIntent(
+    request.sessionContext.visitorIntent,
+  )
     ? fallbackRelatedPages
     : response.relatedPages;
   const shouldSuggestResumeGenerator = isRoleFitOrJobDescriptionQuestion(
@@ -742,6 +766,7 @@ export function applyPortfolioGuideResponseGuardrails(input: {
   }
 
   if (
+    !preserveRoutedAnswer &&
     (isOwnershipQuestion(request.message) ||
       isRankingQuestion(request.message)) &&
     hasExplicitLimit(answer)
@@ -749,11 +774,11 @@ export function applyPortfolioGuideResponseGuardrails(input: {
     answer = stripSpeculativeTail(answer);
   }
 
-  if (isRankingQuestion(request.message)) {
+  if (!preserveRoutedAnswer && isRankingQuestion(request.message)) {
     answer = buildSafeRankingAnswer(request);
   }
 
-  if (isOwnershipQuestion(request.message)) {
+  if (!preserveRoutedAnswer && isOwnershipQuestion(request.message)) {
     const safeOwnershipAnswer = buildOwnershipAnswer(request);
     answer = safeOwnershipAnswer ?? answer;
 
@@ -803,7 +828,11 @@ export function applyPortfolioGuideResponseGuardrails(input: {
       "This page does not provide a daily active users (DAU) figure. Any DAU metric from another portfolio page is broader context, not evidence for this page.";
   }
 
-  if (shouldSuggestResumeGenerator && !directResumeRequest) {
+  if (
+    !preserveRoutedAnswer &&
+    shouldSuggestResumeGenerator &&
+    !directResumeRequest
+  ) {
     const safeRoleFitAnswer = buildRoleFitAnswer(request);
     if (safeRoleFitAnswer) {
       answer = safeRoleFitAnswer;
@@ -834,7 +863,7 @@ export function applyPortfolioGuideResponseGuardrails(input: {
     }
   }
 
-  if (isConnectionsQuestion(request.message)) {
+  if (!preserveRoutedAnswer && isConnectionsQuestion(request.message)) {
     relatedPages = buildSafeRelatedPages(relatedPages, fallbackRelatedPages);
     const safeConnectionsAnswer = buildConnectionsAnswer({
       request,
@@ -924,10 +953,7 @@ function getResponseDiagnostics(response: unknown): {
 export function extractAnswerFromRawFallback(rawText: string): string {
   const withoutAnswerMarker = rawText
     .trim()
-    .replace(
-      /^\s*(?:#{1,3}\s*)?(?:\*\*)?answer\s*:?\s*(?:\*\*)?\s*/i,
-      "",
-    );
+    .replace(/^\s*(?:#{1,3}\s*)?(?:\*\*)?answer\s*:?\s*(?:\*\*)?\s*/i, "");
   const endMarker = withoutAnswerMarker.search(
     /\s+(?:#{1,3}\s*)?(?:\*\*)?(?:suggested\s*follow[\s\u2010-\u2015-]*ups?|suggested\s+next\s+reads?|related\s*pages?|inferred\s*interest\s*tags?)(?:\*\*)?(?:\s*:\s*|\s*\n)/i,
   );
@@ -961,11 +987,19 @@ export async function generatePortfolioGuideResponse(
   // precedence so localhost testing never hits a (possibly down) real endpoint.
   const evidenceEnabled = Boolean(evidenceConfig) || evidenceMock;
 
-  const relatedPages = getRelatedPages(
+  const routing = await routePortfolioQuestion(
+    request,
+    config.decisions,
+    signal,
+  );
+  const fallbackPages = getRelatedPages(
     request.pageContext,
     request.portfolioContext,
     request.sessionContext,
   );
+  const relatedPages = routing.plan
+    ? selectRoutedPages(request, routing.plan, fallbackPages)
+    : fallbackPages;
   const recommendations =
     request.portfolioContext.recommendations ??
     selectRecommendationsForPage(request.pageContext);
@@ -976,7 +1010,51 @@ export async function generatePortfolioGuideResponse(
       recommendations,
     },
   };
-  const promptInput = buildPortfolioGuideInput(enrichedRequest, relatedPages);
+  let evidenceUsed: EvidenceSummary[] | undefined;
+  let resumeCustomizerEvidenceUsed = false;
+  let evidenceUnavailableReason: EvidenceUnavailableReason | undefined =
+    evidenceEnabled ? undefined : "not_configured";
+  const warnings: string[] = [];
+  let prefetchedEvidence: EvidenceSearchResponse | undefined;
+  if (routing.plan?.searchCareerEvidence) {
+    const payload = {
+      query: request.message,
+      currentPortfolioPage: request.pageContext.slug,
+      maxResults: routing.plan.depth === "deep" ? 5 : 3,
+    };
+    const result = evidenceMock
+      ? await runMockEvidence(payload)
+      : evidenceConfig
+        ? await callEvidenceTool(payload, evidenceConfig, signal)
+        : { ok: false as const, reason: "not_configured" as const };
+    prefetchedEvidence = result.ok
+      ? result.data
+      : buildUnavailableEvidenceResult(request.message, result.reason);
+    if (prefetchedEvidence.evidence.length) {
+      evidenceUsed = buildEvidenceSummaries(prefetchedEvidence.evidence);
+      resumeCustomizerEvidenceUsed = true;
+    } else {
+      evidenceUnavailableReason = result.ok
+        ? "no_evidence_found"
+        : result.reason;
+      prefetchedEvidence.safeFallback ??=
+        EVIDENCE_FALLBACK_MESSAGES[evidenceUnavailableReason];
+      warnings.push(`evidence_unavailable:${evidenceUnavailableReason}`);
+    }
+  }
+  const promptInput = buildPortfolioGuideInput(
+    enrichedRequest,
+    relatedPages,
+    routing.plan
+      ? {
+          decisionHints: routing.plan,
+          supportingPages: retrieveSupportingPages(relatedPages, routing.plan),
+          ...(prefetchedEvidence ? { careerEvidence: prefetchedEvidence } : {}),
+          sourceRule:
+            "Routing hints control retrieval and presentation, never facts. The current page remains primary for page questions. Label supporting canonical pages as elsewhere in the portfolio and career proof as From ResumeCustomizer evidence. Preserve all claim boundaries and safe fallbacks.",
+        }
+      : undefined,
+  );
   const traceEvents: PortfolioGuideTraceEvent[] = [];
   const responseIds: string[] = [];
   const responseUsage: Array<Record<string, unknown>> = [];
@@ -989,16 +1067,33 @@ export async function generatePortfolioGuideResponse(
     traceSequence += 1;
   };
 
+  addTrace({
+    eventType: "model",
+    eventName: "decisions.routing",
+    payload: {
+      model: DECISIONS_MODEL,
+      version: ROUTING_VERSION,
+      ...routing,
+      selectedPageSlugs: relatedPages.map((page) => page.slug),
+    },
+    durationMs: routing.durationMs,
+  });
+
   // Base input shared by both LLM calls
   const baseInput = [
-    { role: "system" as const, content: systemPrompt },
+    {
+      role: "system" as const,
+      content: routing.plan
+        ? `${systemPrompt}\nRouting context supplies canonical supporting pages and optionally prefetched career evidence. Follow the sourceRule: hints are not evidence, keep source layers distinct, retain relevant limitations, and append safeFallback if present.`
+        : systemPrompt,
+    },
     { role: "user" as const, content: promptInput },
   ];
 
   // First call: include only the allowlisted tools available for this request.
   type ResponsesCreateParams = Parameters<typeof client.responses.create>[0];
   const availableTools: NonNullable<ResponsesCreateParams["tools"]> = [];
-  if (evidenceEnabled) {
+  if (evidenceEnabled && !prefetchedEvidence) {
     availableTools.push(SEARCH_CAREER_EVIDENCE_TOOL_DEFINITION);
   }
   if (conversationHistorySearch) {
@@ -1066,7 +1161,8 @@ export async function generatePortfolioGuideResponse(
         eventName: `${stage}.error`,
         payload: {
           stage,
-          message: error instanceof Error ? error.message : "Unknown model error",
+          message:
+            error instanceof Error ? error.message : "Unknown model error",
         },
         durationMs: Date.now() - startedAt,
       });
@@ -1091,11 +1187,6 @@ export async function generatePortfolioGuideResponse(
   // chatbot to a page-context answer instead of crashing the route with a
   // generic "Unexpected server error." Page context is always available.
   let finalResponse: unknown = firstResponse;
-  let evidenceUsed: EvidenceSummary[] | undefined;
-  let resumeCustomizerEvidenceUsed = false;
-  let evidenceUnavailableReason: EvidenceUnavailableReason | undefined =
-    evidenceEnabled ? undefined : "not_configured";
-  const warnings: string[] = [];
 
   const toolCalls = extractFunctionCalls(firstResponse).filter(
     (toolCall) =>
@@ -1104,182 +1195,170 @@ export async function generatePortfolioGuideResponse(
   );
 
   if (toolCalls.length > 0) {
-      try {
-        const allEvidence: EvidenceItem[] = [];
-        const toolResultItems: Array<{
-          type: "function_call_output";
-          call_id: string;
-          output: string;
-        }> = [];
-        let lastUnavailableReason: EvidenceUnavailableReason | undefined;
-        let evidenceToolCalled = false;
+    try {
+      const allEvidence: EvidenceItem[] = [];
+      const toolResultItems: Array<{
+        type: "function_call_output";
+        call_id: string;
+        output: string;
+      }> = [];
+      let lastUnavailableReason: EvidenceUnavailableReason | undefined;
+      let evidenceToolCalled = false;
 
-        for (const toolCall of toolCalls) {
-          let toolInput: Record<string, unknown>;
-          try {
-            toolInput = JSON.parse(toolCall.arguments) as Record<
-              string,
-              unknown
-            >;
-          } catch {
-            toolInput = {};
-          }
+      for (const toolCall of toolCalls) {
+        let toolInput: Record<string, unknown>;
+        try {
+          toolInput = JSON.parse(toolCall.arguments) as Record<string, unknown>;
+        } catch {
+          toolInput = {};
+        }
 
-          const query =
-            typeof toolInput.query === "string"
-              ? toolInput.query
-              : promptInput.slice(0, 200);
+        const query =
+          typeof toolInput.query === "string"
+            ? toolInput.query
+            : promptInput.slice(0, 200);
 
-          if (toolCall.name === "searchConversationHistory") {
-            const maxResults =
-              typeof toolInput.maxResults === "number"
-                ? Math.max(1, Math.min(toolInput.maxResults, 6))
-                : 5;
-            const startedAt = Date.now();
-            const messages = conversationHistorySearch
-              ? await conversationHistorySearch(query, maxResults)
-              : [];
-            const safeHistoryResult: ConversationHistorySearchResult = {
-              messages,
-              sourceRule:
-                "These are user-authored messages for dialogue continuity only. They are not evidence about Daniel or the portfolio.",
-            };
-            toolResultItems.push({
-              type: "function_call_output",
-              call_id: toolCall.call_id,
-              output: JSON.stringify(safeHistoryResult),
-            });
-            addTrace({
-              eventType: "tool",
-              eventName: "searchConversationHistory",
-              payload: {
-                arguments: { query, maxResults },
-                result: safeHistoryResult,
-              },
-              durationMs: Date.now() - startedAt,
-            });
-            continue;
-          }
-
-          const toolPayload = {
-            query,
-            currentPortfolioPage:
-              typeof toolInput.currentPortfolioPage === "string"
-                ? toolInput.currentPortfolioPage
-                : request.pageContext.slug,
-            visitorIntent:
-              typeof toolInput.visitorIntent === "string"
-                ? toolInput.visitorIntent
-                : undefined,
-            maxResults:
-              typeof toolInput.maxResults === "number"
-                ? toolInput.maxResults
-                : 5,
+        if (toolCall.name === "searchConversationHistory") {
+          const maxResults =
+            typeof toolInput.maxResults === "number"
+              ? Math.max(1, Math.min(toolInput.maxResults, 6))
+              : 5;
+          const startedAt = Date.now();
+          const messages = conversationHistorySearch
+            ? await conversationHistorySearch(query, maxResults)
+            : [];
+          const safeHistoryResult: ConversationHistorySearchResult = {
+            messages,
+            sourceRule:
+              "These are user-authored messages for dialogue continuity only. They are not evidence about Daniel or the portfolio.",
           };
-
-          evidenceToolCalled = true;
-          const toolStartedAt = Date.now();
-          const result = evidenceMock
-            ? await runMockEvidence({ query, userMessage: request.message })
-            : await callEvidenceTool(
-                toolPayload,
-                evidenceConfig as EvidenceConfig,
-                signal,
-              );
-
-          let safeResult: EvidenceSearchResponse;
-          if (result.ok) {
-            safeResult = result.data;
-            if (safeResult.evidence.length === 0) {
-              lastUnavailableReason = "no_evidence_found";
-              if (!safeResult.safeFallback) {
-                safeResult = {
-                  ...safeResult,
-                  safeFallback:
-                    EVIDENCE_FALLBACK_MESSAGES.no_evidence_found,
-                };
-              }
-            }
-          } else {
-            lastUnavailableReason = result.reason;
-            warnings.push(
-              `evidence_unavailable:${result.reason}${
-                result.status ? `:${result.status}` : ""
-              }`,
-            );
-            safeResult = buildUnavailableEvidenceResult(query, result.reason);
-          }
-
-          if (safeResult.evidence.length > 0) {
-            allEvidence.push(...safeResult.evidence);
-          }
-
           toolResultItems.push({
             type: "function_call_output",
             call_id: toolCall.call_id,
-            output: JSON.stringify(safeResult),
+            output: JSON.stringify(safeHistoryResult),
           });
           addTrace({
             eventType: "tool",
-            eventName: "searchCareerEvidence",
-            payload: { arguments: toolPayload, result: safeResult },
-            durationMs: Date.now() - toolStartedAt,
+            eventName: "searchConversationHistory",
+            payload: {
+              arguments: { query, maxResults },
+              result: safeHistoryResult,
+            },
+            durationMs: Date.now() - startedAt,
           });
+          continue;
         }
 
-        if (allEvidence.length > 0) {
-          evidenceUsed = buildEvidenceSummaries(allEvidence);
-          resumeCustomizerEvidenceUsed = true;
-        } else if (evidenceToolCalled) {
-          evidenceUnavailableReason =
-            lastUnavailableReason ?? "no_evidence_found";
+        const toolPayload = {
+          query,
+          currentPortfolioPage:
+            typeof toolInput.currentPortfolioPage === "string"
+              ? toolInput.currentPortfolioPage
+              : request.pageContext.slug,
+          visitorIntent:
+            typeof toolInput.visitorIntent === "string"
+              ? toolInput.visitorIntent
+              : undefined,
+          maxResults:
+            typeof toolInput.maxResults === "number" ? toolInput.maxResults : 5,
+        };
+
+        evidenceToolCalled = true;
+        const toolStartedAt = Date.now();
+        const result = evidenceMock
+          ? await runMockEvidence({ query, userMessage: request.message })
+          : await callEvidenceTool(
+              toolPayload,
+              evidenceConfig as EvidenceConfig,
+              signal,
+            );
+
+        let safeResult: EvidenceSearchResponse;
+        if (result.ok) {
+          safeResult = result.data;
+          if (safeResult.evidence.length === 0) {
+            lastUnavailableReason = "no_evidence_found";
+            if (!safeResult.safeFallback) {
+              safeResult = {
+                ...safeResult,
+                safeFallback: EVIDENCE_FALLBACK_MESSAGES.no_evidence_found,
+              };
+            }
+          }
+        } else {
+          lastUnavailableReason = result.reason;
+          warnings.push(
+            `evidence_unavailable:${result.reason}${
+              result.status ? `:${result.status}` : ""
+            }`,
+          );
+          safeResult = buildUnavailableEvidenceResult(query, result.reason);
         }
 
-        // Second call: replay the model's full first-turn output (reasoning
-        // items + function_call items, in order) followed by our tool results,
-        // then ask for the synthesized answer with no tools.
-        //
-        // Echoing the whole output (not just the function_call items) is
-        // required for reasoning models: the Responses API rejects a
-        // function_call that is replayed without its sibling reasoning item.
-        const secondCallInput = [
-          ...baseInput,
-          ...getResponseOutput(firstResponse),
-          ...toolResultItems,
-        ] as ResponsesCreateParams["input"];
+        if (safeResult.evidence.length > 0) {
+          allEvidence.push(...safeResult.evidence);
+        }
 
-        finalResponse = await runModelCall(
-          "synthesis",
-          {
-            model,
-            reasoning: { effort: reasoningEffort },
-            input: secondCallInput,
-            ...providerStorageParams,
-          },
-        );
-      } catch (error) {
-        // The evidence augmentation or the synthesis call failed. Recover with
-        // a single page-context-only completion so the visitor still gets a
-        // useful, grounded answer rather than a server error.
-        console.warn(
-          "[portfolio-guide] evidence augmentation failed; falling back to page context",
-          error,
-        );
-        evidenceUsed = undefined;
-        resumeCustomizerEvidenceUsed = false;
-        evidenceUnavailableReason = "evidence_layer_error";
-        warnings.push("evidence_layer_error");
-
-        finalResponse = await runModelCall(
-          "page_context_fallback",
-          {
-            model,
-            reasoning: { effort: reasoningEffort },
-            input: baseInput,
-            ...providerStorageParams,
-          },
-        );
+        toolResultItems.push({
+          type: "function_call_output",
+          call_id: toolCall.call_id,
+          output: JSON.stringify(safeResult),
+        });
+        addTrace({
+          eventType: "tool",
+          eventName: "searchCareerEvidence",
+          payload: { arguments: toolPayload, result: safeResult },
+          durationMs: Date.now() - toolStartedAt,
+        });
       }
+
+      if (allEvidence.length > 0) {
+        evidenceUsed = buildEvidenceSummaries(allEvidence);
+        resumeCustomizerEvidenceUsed = true;
+      } else if (evidenceToolCalled) {
+        evidenceUnavailableReason =
+          lastUnavailableReason ?? "no_evidence_found";
+      }
+
+      // Second call: replay the model's full first-turn output (reasoning
+      // items + function_call items, in order) followed by our tool results,
+      // then ask for the synthesized answer with no tools.
+      //
+      // Echoing the whole output (not just the function_call items) is
+      // required for reasoning models: the Responses API rejects a
+      // function_call that is replayed without its sibling reasoning item.
+      const secondCallInput = [
+        ...baseInput,
+        ...getResponseOutput(firstResponse),
+        ...toolResultItems,
+      ] as ResponsesCreateParams["input"];
+
+      finalResponse = await runModelCall("synthesis", {
+        model,
+        reasoning: { effort: reasoningEffort },
+        input: secondCallInput,
+        ...providerStorageParams,
+      });
+    } catch (error) {
+      // The evidence augmentation or the synthesis call failed. Recover with
+      // a single page-context-only completion so the visitor still gets a
+      // useful, grounded answer rather than a server error.
+      console.warn(
+        "[portfolio-guide] evidence augmentation failed; falling back to page context",
+        error,
+      );
+      evidenceUsed = undefined;
+      resumeCustomizerEvidenceUsed = false;
+      evidenceUnavailableReason = "evidence_layer_error";
+      warnings.push("evidence_layer_error");
+
+      finalResponse = await runModelCall("page_context_fallback", {
+        model,
+        reasoning: { effort: reasoningEffort },
+        input: baseInput,
+        ...providerStorageParams,
+      });
+    }
   }
   // toolCalls.length === 0: the model answered from page context without
   // requesting deeper evidence. Not an error.
@@ -1300,7 +1379,46 @@ export async function generatePortfolioGuideResponse(
     request: enrichedRequest,
     response: normalizedResponse,
     fallbackRelatedPages: relatedPages,
+    routedSourcesAvailable: Boolean(
+      routing.plan &&
+        (relatedPages.length || prefetchedEvidence?.evidence.length),
+    ),
   });
+  const rewritten = guardedResponse.answer !== normalizedResponse.answer;
+  const finalized = finalizeRoutedAnswer({
+    request,
+    answer: guardedResponse.answer,
+    careerEvidence: prefetchedEvidence,
+    includeCareerEvidence: Boolean(
+      routing.plan &&
+        rewritten &&
+        prefetchedEvidence?.evidence.length &&
+        !isDirectResumeRequest(request.message) &&
+        !isConnectionsQuestion(request.message) &&
+        !isNextReadQuestion(request.message),
+    ),
+    broaderQuestion:
+      /\b(?:career|experience|background|across|compare)\b/i.test(
+        request.message,
+      ),
+  });
+  if (routing.plan && prefetchedEvidence) {
+    evidenceUsed = buildEvidenceSummaries(
+      prefetchedEvidence.evidence.filter(
+        (item) =>
+          finalized.careerEvidenceIds?.includes(item.id) ||
+          finalized.answer.includes(item.claim),
+      ),
+    );
+    if (!evidenceUsed.length) evidenceUsed = undefined;
+    resumeCustomizerEvidenceUsed = Boolean(evidenceUsed?.length);
+  }
+  if (finalized.answer !== guardedResponse.answer)
+    addTrace({
+      eventType: "guardrail",
+      eventName: "routing_evidence_attribution",
+      payload: { before: guardedResponse.answer, after: finalized.answer },
+    });
   const normalizationStatus = parsedResponse
     ? "normalized-json"
     : "raw-fallback";
@@ -1325,14 +1443,13 @@ export async function generatePortfolioGuideResponse(
   const evidenceMeta: EvidenceMetadata = {
     pageContextUsed: true,
     resumeCustomizerEvidenceUsed,
-    ...(evidenceUnavailableReason
-      ? { evidenceUnavailableReason }
-      : {}),
+    ...(evidenceUnavailableReason ? { evidenceUnavailableReason } : {}),
     ...(warnings.length > 0 ? { warnings } : {}),
   };
 
   const finalCopilotResponse: CopilotResponse = {
     ...guardedResponse,
+    answer: finalized.answer,
     ...(evidenceUsed ? { evidenceUsed } : {}),
     evidenceMeta,
   };
@@ -1349,7 +1466,10 @@ export async function generatePortfolioGuideResponse(
       ...(baseURL ? { baseURL } : {}),
     },
     responseIds,
-    usage: { responses: responseUsage },
+    usage: {
+      responses: responseUsage,
+      ...(routing.usage ? { decisions: routing.usage } : {}),
+    },
     traceEvents,
   };
 }

@@ -51,6 +51,8 @@ export type PortfolioGuideRouteDependencies = {
   getEvidenceApiKey?: () => string | undefined;
   /** Optional: when true, the evidence tool is served by the local non-prod mock. */
   getEvidenceMockEnabled?: () => boolean;
+  getDecisionsEnabled?: () => boolean;
+  signal?: AbortSignal;
 };
 
 function isStringArray(input: unknown): input is string[] {
@@ -204,6 +206,8 @@ function defaultDependencies(): PortfolioGuideRouteDependencies {
     getEvidenceApiUrl: () => getResumeEngineConfig().baseUrl ?? undefined,
     getEvidenceApiKey: () => getResumeEngineConfig().token ?? undefined,
     getEvidenceMockEnabled: () => isEvidenceMockEnabled(),
+    getDecisionsEnabled: () =>
+      process.env.PORTFOLIO_GUIDE_DECISIONS_ENABLED !== "false",
   };
 }
 
@@ -311,8 +315,13 @@ export async function handlePortfolioGuideRequest(
     const generation = await dependencies.generateResponse(payload, {
       apiKey,
       model,
+      signal: dependencies.signal,
       evidenceConfig,
       evidenceMock,
+      decisions: {
+        enabled: dependencies.getDecisionsEnabled?.() ?? false,
+        apiKey,
+      },
     });
     const promptContext = payload.debug
       ? dependencies.buildPromptContext(payload, generation.relatedPages)
@@ -330,7 +339,10 @@ export async function handlePortfolioGuideRequest(
         answer: generation.response.answer.trim(),
         promptSnapshot: {
           pageTitle: payload.pageContext.title,
-          context: JSON.parse(generation.promptInput) as Record<string, unknown>,
+          context: JSON.parse(generation.promptInput) as Record<
+            string,
+            unknown
+          >,
         },
         responsePayload: generation.response,
         responseIds: generation.responseIds,
