@@ -25,11 +25,23 @@ export function boundGuideAnswer(
   answer: string,
   question: string,
   maxSentences = 4,
+  sourceEvidence: string[] = [],
 ): string {
   const normalizedAnswer = normalizeComparisonLabels(answer);
   const parts = sentences(normalizedAnswer);
   if (parts.length <= maxSentences) return normalizedAnswer.trim();
   const words = new Set(question.toLowerCase().match(/[a-z]{4,}/g) ?? []);
+  const evidenceWords = sourceEvidence.map(
+    (detail) =>
+      new Set(
+        (detail.toLowerCase().match(/[a-z]{6,}/g) ?? []).filter(
+          (word) =>
+            !/^(?:claims?|explicit|provides?|supports?|describes?|current|states|source|evidence|portfolio)$/.test(
+              word,
+            ),
+        ),
+      ),
+  );
   const directResumeQuestion = /\b(?:resume|cv)\b/i.test(question);
   const responsibilityOrStatusQuestion =
     /\b(?:own(?:ership|ed)?|responsib\w*|direct|assist\w*|prototype|implemented)\b/i.test(
@@ -59,6 +71,26 @@ export function boundGuideAnswer(
     const overlap = [...words].filter((word) =>
       part.toLowerCase().includes(word),
     ).length;
+    // Match a concrete source finding, rather than rewarding a generic
+    // paragraph for accumulating keywords from several unrelated findings.
+    const evidenceOverlap = Math.max(
+      0,
+      ...evidenceWords.map((tokens) =>
+        tokens.size
+          ? [...tokens].filter((word) => part.toLowerCase().includes(word))
+              .length / tokens.size
+          : 0,
+      ),
+    );
+    const qualifiedEvidence =
+      /\b(?:majority|minority)\b/i.test(part) &&
+      evidenceWords.some((tokens) =>
+        [...tokens].some(
+          (word) =>
+            /^(?:majority|minority)$/.test(word) &&
+            part.toLowerCase().includes(word),
+        ),
+      );
     groups.push({
       parts: [part],
       start: index,
@@ -70,6 +102,10 @@ export function boundGuideAnswer(
           ? 100
           : 0) +
         (limitSignal.test(part) ? 20 : 0) +
+        // Keep concrete, source-matched proof (including qualified survey
+        // findings without numeric percentages) alongside its limitations.
+        Math.round(evidenceOverlap * 32) +
+        (qualifiedEvidence ? 8 : 0) +
         (/\/resume\/generate|couldn't reach|isn't connected/i.test(part)
           ? 30
           : 0) +
@@ -89,14 +125,32 @@ export function boundGuideAnswer(
         overlap,
     });
   });
+  const contrastsExperienceAndConviction =
+    /\b(?:personal|convictions?|aspirations?)\b/i.test(question) &&
+    /\b(?:grounded|experience|professional|evidence|proof)\b/i.test(question);
+  const perspectiveGroups = new Set(
+    contrastsExperienceAndConviction
+      ? groups.filter((group) =>
+          /\b(?:personal|convictions?|aspirations?)\b/i.test(
+            group.parts.join(" "),
+          ),
+        )
+      : [],
+  );
+  for (const group of perspectiveGroups) group.priority += 50;
   const selected: typeof groups = [];
   let available = maxSentences;
+  let perspectiveSelected = false;
   for (const group of [...groups].sort(
     (a, b) => b.priority - a.priority || a.start - b.start,
   )) {
+    // A proof-versus-conviction question needs both facets. Repeated belief
+    // summaries must not displace the concrete professional evidence.
+    if (perspectiveGroups.has(group) && perspectiveSelected) continue;
     if (group.parts.length <= available) {
       selected.push(group);
       available -= group.parts.length;
+      perspectiveSelected ||= perspectiveGroups.has(group);
     }
   }
   // Source limitations take precedence if a single qualified block is longer
@@ -193,6 +247,8 @@ export function finalizeRoutedAnswer(input: {
   let blocks: ReturnType<typeof careerProofBlocks> = [];
   const fallback = careerEvidence?.safeFallback;
   const budget = Math.max(1, 4 - (fallback ? sentences(fallback).length : 0));
+  const sourceEvidence =
+    request.pageContext.evidenceHighlights?.map((item) => item.detail) ?? [];
   if (input.includeCareerEvidence && careerEvidence?.evidence.length) {
     const pageFocused =
       /\b(?:this page|this work|here|this connect|role|fit|director|job description)\b/i.test(
@@ -228,9 +284,9 @@ export function finalizeRoutedAnswer(input: {
   }
   if (fallback) {
     answer = answer.replace(fallback, "").trim();
-    answer = `${punctuate(boundGuideAnswer(answer, request.message, budget))} ${fallback}`;
+    answer = `${punctuate(boundGuideAnswer(answer, request.message, budget, sourceEvidence))} ${fallback}`;
   } else {
-    answer = boundGuideAnswer(answer, request.message);
+    answer = boundGuideAnswer(answer, request.message, 4, sourceEvidence);
   }
   return {
     answer,

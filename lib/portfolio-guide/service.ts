@@ -132,7 +132,9 @@ function answerDeniesMention(answer: string, term: string): boolean {
 }
 
 function isOwnershipQuestion(question: string): boolean {
-  return /\b(what did .* own|ownership|who owned)\b/i.test(question);
+  return /\b(what did .* own|ownership|who owned)\b|\b(?:what|which|who)\b[^?]{0,80}\bresponsible for\b|\b(?:his|daniel['’]s) responsibilities\b/i.test(
+    question,
+  );
 }
 
 function isRankingQuestion(question: string): boolean {
@@ -465,35 +467,41 @@ function joinDetailsAsOneSentence(details: string[]): string {
 }
 
 function buildOwnershipAnswer(request: CopilotRequest): string | undefined {
+  // Each labeled category must remain one sentence, including source fields
+  // that already contain several sentences and their attached qualifications.
+  const joinOwnershipDetails = (details: string[]) =>
+    joinDetailsAsOneSentence(details).replace(/[.!?]\s+/g, "; ");
   const direct = pickDistinctDetails(
     request.pageContext.claimBoundaries?.directOwnership ?? [],
     2,
   );
   const influence = request.pageContext.claimBoundaries?.influence?.[0];
-  const implementation =
-    request.pageContext.claimBoundaries?.implementation?.[0];
+  const implementation = pickDistinctDetails(
+    request.pageContext.claimBoundaries?.implementation ?? [],
+    2,
+  );
   const unknown = request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
-  if (direct.length === 0 && !influence && !implementation && !unknown) {
+  if (direct.length === 0 && !influence && !implementation.length && !unknown) {
     return undefined;
   }
   const parts: string[] = [];
   if (direct.length > 0) {
     parts.push(
-      `The page shows Daniel leading: ${joinDetailsAsOneSentence(direct)}`,
+      `The page shows Daniel leading: ${joinOwnershipDetails(direct)}`,
     );
   }
   if (influence) {
-    parts.push(`Influence: ${influence}`);
+    parts.push(`Influence: ${joinOwnershipDetails([influence])}`);
+  }
+  if (implementation.length) {
+    parts.push(`Implementation: ${joinOwnershipDetails(implementation)}`);
   }
   const unknownDetail =
     unknown && !/ownership matrix|ownership split|team-by-team/i.test(unknown)
       ? unknown
       : undefined;
-  const unprovenDetails = joinDetailsAsOneSentence(
-    [implementation, unknownDetail].filter(Boolean) as string[],
-  );
   parts.push(
-    `Not explicit: ${unprovenDetails ? `${unprovenDetails}; ` : ""}the page does not define a full ownership matrix or exact team-by-team split`,
+    `Not explicit: ${unknownDetail ? `${joinOwnershipDetails([unknownDetail])}; ` : ""}the page does not define a full ownership matrix or exact team-by-team split`,
   );
   return parts.map(ensureTrailingPeriod).join(" ");
 }
@@ -714,6 +722,36 @@ function answerIncludesExplicitMetric(
   });
 }
 
+function qualifyStaticInventoryConclusion(
+  answer: string,
+  request: CopilotRequest,
+): string {
+  const limits = request.pageContext.claimBoundaries?.explicitUnknowns ?? [];
+  const inventoryLimit = limits.find((text) =>
+    /uncompressed static file inventor/i.test(text),
+  );
+  const outcomeLimit = limits.find((text) =>
+    /media separation does not establish/i.test(text),
+  );
+  if (!inventoryLimit || !outcomeLimit) return answer;
+  let changed = false;
+  const corrected = answer
+    .split(/(?<=[.!?])\s+/)
+    .map((part) => {
+      if (!/\bMiB\b/.test(part)) return part;
+      const next = part.replace(
+        /,\s*(?:illustrating|demonstrating|showing|proving|delivering|yielding|resulting in)\b[^.!?]*(?:quality|performance|speed|savings)[^.!?]*(?=[.!?]|$)/gi,
+        "",
+      );
+      changed ||= next !== part;
+      return next;
+    })
+    .join(" ");
+  return changed
+    ? `${ensureTrailingPeriod(corrected)} Measurement boundary: ${ensureTrailingPeriod(joinDetailsAsOneSentence([inventoryLimit, outcomeLimit]))}`
+    : answer;
+}
+
 export function applyPortfolioGuideResponseGuardrails(input: {
   request: CopilotRequest;
   response: CopilotResponse;
@@ -878,6 +916,7 @@ export function applyPortfolioGuideResponseGuardrails(input: {
 
   answer = removeResumeGenerationCompletionClaims(answer);
   answer = removeUnsupportedPortfolioGeneratorSourceClaims(answer);
+  answer = qualifyStaticInventoryConclusion(answer, request);
 
   if (directResumeRequest) {
     if (!includesResumeGeneratorPath(answer)) {
@@ -963,6 +1002,59 @@ export function extractAnswerFromRawFallback(rawText: string): string {
       ? withoutAnswerMarker.slice(0, endMarker)
       : withoutAnswerMarker
   ).trim();
+}
+
+/** Pure postprocessing over the captured request, raw output and source packet. */
+export function processPortfolioGuideAnswer(input: {
+  request: CopilotRequest;
+  rawText: string;
+  relatedPages: RelatedPage[];
+  careerEvidence?: EvidenceSearchResponse;
+  routingEnabled?: boolean;
+}) {
+  const { request, rawText, relatedPages, careerEvidence } = input;
+  const parsedResponse = normalizeCopilotResponse(rawText, relatedPages);
+  const normalizedResponse =
+    parsedResponse ??
+    ({
+      answer: extractAnswerFromRawFallback(rawText),
+      relatedPages,
+    } satisfies CopilotResponse);
+  const guardedResponse = applyPortfolioGuideResponseGuardrails({
+    request,
+    response: normalizedResponse,
+    fallbackRelatedPages: relatedPages,
+    routedSourcesAvailable: Boolean(
+      input.routingEnabled &&
+        (relatedPages.length || careerEvidence?.evidence.length),
+    ),
+  });
+  const rewritten = guardedResponse.answer !== normalizedResponse.answer;
+  const finalized = finalizeRoutedAnswer({
+    request,
+    answer: guardedResponse.answer,
+    careerEvidence,
+    includeCareerEvidence: Boolean(
+      input.routingEnabled &&
+        rewritten &&
+        careerEvidence?.evidence.length &&
+        !isDirectResumeRequest(request.message) &&
+        !isConnectionsQuestion(request.message) &&
+        !isNextReadQuestion(request.message),
+    ),
+    broaderQuestion:
+      /\b(?:career|experience|background|across|compare)\b/i.test(
+        request.message,
+      ),
+  });
+  return {
+    normalizedResponse,
+    guardedResponse,
+    finalized,
+    normalizationStatus: parsedResponse
+      ? ("normalized-json" as const)
+      : ("raw-fallback" as const),
+  };
 }
 
 export async function generatePortfolioGuideResponse(
@@ -1369,39 +1461,17 @@ export async function generatePortfolioGuideResponse(
     throw new Error("No portfolio guide response was returned.");
   }
 
-  const parsedResponse = normalizeCopilotResponse(rawText, relatedPages);
-  const normalizedResponse =
-    parsedResponse ??
-    ({
-      answer: extractAnswerFromRawFallback(rawText),
-      relatedPages,
-    } satisfies CopilotResponse);
-  const guardedResponse = applyPortfolioGuideResponseGuardrails({
+  const {
+    normalizedResponse,
+    guardedResponse,
+    finalized,
+    normalizationStatus,
+  } = processPortfolioGuideAnswer({
     request: enrichedRequest,
-    response: normalizedResponse,
-    fallbackRelatedPages: relatedPages,
-    routedSourcesAvailable: Boolean(
-      routing.plan &&
-        (relatedPages.length || prefetchedEvidence?.evidence.length),
-    ),
-  });
-  const rewritten = guardedResponse.answer !== normalizedResponse.answer;
-  const finalized = finalizeRoutedAnswer({
-    request,
-    answer: guardedResponse.answer,
+    rawText,
+    relatedPages,
     careerEvidence: prefetchedEvidence,
-    includeCareerEvidence: Boolean(
-      routing.plan &&
-        rewritten &&
-        prefetchedEvidence?.evidence.length &&
-        !isDirectResumeRequest(request.message) &&
-        !isConnectionsQuestion(request.message) &&
-        !isNextReadQuestion(request.message),
-    ),
-    broaderQuestion:
-      /\b(?:career|experience|background|across|compare)\b/i.test(
-        request.message,
-      ),
+    routingEnabled: Boolean(routing.plan),
   });
   if (routing.plan && prefetchedEvidence) {
     evidenceUsed = buildEvidenceSummaries(
@@ -1420,9 +1490,6 @@ export async function generatePortfolioGuideResponse(
       eventName: "routing_evidence_attribution",
       payload: { before: guardedResponse.answer, after: finalized.answer },
     });
-  const normalizationStatus = parsedResponse
-    ? "normalized-json"
-    : "raw-fallback";
 
   if (
     guardedResponse.answer !== normalizedResponse.answer ||

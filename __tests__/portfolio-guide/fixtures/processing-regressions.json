@@ -1,0 +1,33 @@
+{
+  "provenance": {
+    "snapshot": "94652efd91cd068c1182d9cfa3de2fdf23eee21d",
+    "model": "gpt-oss:20b",
+    "inputs": "Synthetic questions and authored public portfolio sources; unchanged raw outputs from the completed local run"
+  },
+  "cases": [
+    {
+      "caseId": "ai-platform-responsibility-specific",
+      "question": "What particularly was Daniel responsible for?",
+      "pageSlug": "ai-platform-mcp",
+      "rawText": "Daniel was the lead product manager who **built the original AI prototype** that won a hackathon and **mapped the recurring AI workflow patterns across pilots** into reusable platform principles.  \nHe directed the design, shipping, and governance of system patterns such as agent‑based workflows, structured/unstructured retrieval, and approval gates, translating those technical concepts into product‑ready strategies for executives and cross‑functional teams.  \nThe page does not specify team size, org structure, or which patterns shipped most; those details are not documented here.  \n\n**Suggested follow‑ups**  \n- Which specific reusable patterns were adopted company‑wide?  \n- How did the prototype evolve into a production platform?  \n\n**Related pages**  \n- `{ slug: \"chatgpt-enterprise\", reason: \"This case pairs with ChatGPT Enterprise because it shows the platform and workflow thinking that later supports broader AI operating‑model work.\" }`  \n\n**Inferred interest tags**: `[\"ai-builder\", \"platform\", \"0-to-1\", \"technical-depth\"]`"
+    },
+    {
+      "caseId": "human-flourishing-proof-boundaries",
+      "question": "What's grounded in experience here, and what's personal conviction?",
+      "pageSlug": "the-side-of-ai-i-want-to-be-on",
+      "rawText": "**What the page actually says**\n\n* Daniel’s own writing (authoredContent) explains that he wants AI to create measurable business value *and* help people learn, create, and work more meaningfully.  \n* He cites a specific professional activity: running a Guitar Center AI‑adoption survey where a *majority* of respondents reported increased creativity (EvidenceHighlight “Qualified creativity signal”).  \n* He describes the broader professional focus—enterprise AI adoption, agentic workflows, productivity tools, and experiments to help people work more effectively (EvidenceHighlight “Professional grounding”).  \n* He frames responsible adoption as a product requirement: transparency about role changes, support, review paths, guardrails, and accountability (EvidenceHighlight “Responsible adoption standard”).  \n\n**What is grounded in experience**\n\n* Daniel directly owned the Guitar Center survey and worked on enterprise AI adoption, agentic workflows, and productivity tools (claimBoundaries “directOwnership”).  \n* His leadership perspective on connecting measurable AI value with trust and responsible change is a professional stance rather than a personal belief (claimBoundaries “influence”).  \n\n**What is personal conviction / future‑facing exploration**\n\n* The essay repeatedly calls out faith‑inspired views on dignity, human flourishing, and the need to expand AI beyond automation. These are presented as personal convictions, not proven outcomes (claimBoundaries “conceptualExploration”).  \n* He acknowledges that many of the “human flourishing” experiments (scripture study, knowledge access, life‑sciences discovery) are future‑facing ideas rather than shipped products (claimBoundaries “explicitUnknowns”).  \n\n**Bottom line**\n\n* The page provides concrete evidence of Daniel’s professional involvement in AI adoption and a clear, measurable creativity signal from a real survey.  \n* His broader AI‑philosophy and faith‑inspired goals are expressed as convictions, not proven outcomes.  \n\n**Suggested follow‑ups**\n\n1. Ask about specific business metrics from the Guitar Center survey (e.g., % of respondents reporting creativity gains).  \n2. Inquire how he has translated those insights into a product roadmap or adoption plan.\n\n**Related pages**\n\n- { \"slug\": \"chatgpt-enterprise\", \"reason\": \"Provides measured rollout, adoption, and operating‑model evidence that underpins the responsible‑adoption stance.\" }\n- { \"slug\": \"ai-strategy\", \"reason\": \"Deepens the workflow‑first argument that Daniel uses to guide AI initiatives.\" }\n\n**inferredInterestTags** [\"pm-leadership\", \"ai-builder\"]"
+    },
+    {
+      "caseId": "ai-career-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-career-operating-system",
+      "rawText": "The AI Career Operating System is a governed workflow that turns approved career evidence into recruiter‑ready artifacts. It connects portfolio proof, a source‑audited evidence engine, and role‑aware resume generation while keeping human review as the final approval layer. Daniel defined the product architecture, service boundaries, and evaluation criteria, and directed the integration of the portfolio UX with the ResumeCustomizer evidence retrieval and PDF rendering pipeline. The page documents a 43‑case evaluation inventory, a 5/12 → 11/12 improvement in a comparable OpenAI Guide run, and a 147.65 MiB → 81.58 MiB reduction in uncompressed static assets, illustrating tangible quality and performance gains."
+    },
+    {
+      "caseId": "ai-career-ownership",
+      "question": "What particularly was Daniel responsible for?",
+      "pageSlug": "ai-career-operating-system",
+      "rawText": "**Answer:**  \nDaniel was the primary owner of the AI Career Operating System’s product design. He defined the overall product architecture, set the evidence boundaries and claim‑safety rules, designed the evaluation and review workflow, and directed the integration between the Portfolio recruiter UX and the ResumeCustomizer evidence‑retrieval engine. This included authoring the system’s UX, authoring the policy for sourced evidence, configuring the advisory review agents, and establishing the human‑approval gate.  \n\n**Suggested Follow‑Ups**  \n- Which parts of the evaluation pipeline were most impactful?  \n- How did the system’s design influence downstream resume generation?  \n\n**Related Pages**  \n- `ai-platform-mcp` – illustrates similar architecture‑driven AI platform work.  \n- `chatgpt-enterprise` – shows scaling AI initiatives Daniel led.  \n\n**Inferred Interest Tags**  \n- `ai-builder`  \n- `pm-leadership`  \n- `platform`  \n- `technical-depth`"
+    }
+  ]
+}

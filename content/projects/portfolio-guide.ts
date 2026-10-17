@@ -54,7 +54,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       "Hiring teams need fast access to credible proof, while AI-generated application materials introduce risks around unsupported claims, generic output, and unclear ownership.",
     actions: [
       "Separated recruiter-facing UX from the long-running resume engine through authenticated server-to-server APIs.",
-      "Kept authored page content primary while adding public-safe, source-audited evidence retrieval for deeper questions.",
+      "Kept authored page content primary while developing a separate public-safe, source-audited career-retrieval prototype; remote retrieval is disabled in this release candidate pending endpoint review.",
       "Defined role-aware generation, six configured advisory review agents, structural PDF checks, and explicit human accountability.",
     ],
     outcomes: [
@@ -109,7 +109,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Documented deployment asset reduction",
         detail:
-          "Separated large portfolio recordings from deployment bundles, preserving the original media with checksum verification and adding asset-budget checks. Documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. Evidence: merged PR #11 (https://github.com/DanielNash1611/portfolio/pull/11), docs/deployment-storage.md, and docs/deployment-media.json; the inventory excludes server bundles and was not independently rerun by this content review.",
+          "Separated large portfolio recordings from deployment bundles, preserving the original media with checksum verification and adding asset-budget checks. Documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. Evidence: merged PR #11 (https://github.com/DanielNash1611/portfolio/pull/11), docs/deployment-storage.md, and docs/deployment-media.json; the inventory excludes server bundles and was not independently rerun by this content review. This file inventory establishes no runtime, billing, storage-reclamation or semantic AI-quality outcome.",
         type: "metric",
       },
       {
@@ -132,7 +132,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "Durable queueing, joined recruiter-funnel analytics, shared page-to-evidence identifiers, and a hard reject gate are documented next investments.",
       ],
       implementation: [
-        "The repositories support the authenticated API boundaries, evidence retrieval, job lifecycle, specialized reviews, and structural PDF validation described here.",
+        "The selected branches support authenticated resume-job API boundaries, the job lifecycle, specialized reviews and structural PDF validation; remote career retrieval remains disabled while the separate endpoint awaits review.",
         "The page does not claim sole hand-coding or independent implementation of every component.",
         "Portfolio PR #11 merged on October 15, 2026 at 04:09 UTC (merge 4d33ab9da2a9bece8522a9efee24b3f2b188bfe1). docs/deployment-storage.md and docs/deployment-media.json document media preservation, SHA-256 verification, and static asset-budget checks.",
       ],
@@ -319,7 +319,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Implemented and next",
         snippets: [
-          "Implemented: authenticated API boundaries, public-safe evidence retrieval, a nine-state generation lifecycle, six specialized review perspectives, and structural PDF checks.",
+          "Implemented: authenticated resume-job API boundaries, a nine-state generation lifecycle, six specialized review perspectives, and structural PDF checks. Public-safe career retrieval remains a separate local prototype and is disabled in this candidate pending endpoint review.",
           "Needs implementation or instrumentation: durable job state and queueing, shared evidence identifiers, joined recruiter-funnel measurement, versioned latency and failure metrics, and a hard gate or explicit override for rejected output.",
         ],
       },
