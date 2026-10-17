@@ -4,7 +4,7 @@ export const decisionsEvaluation = {
   introduction:
     "I used evaluations to separate a working routing mechanism from a useful answer. More relevant evidence could make an answer more helpful while making it too long or losing a source limitation. That mixed result shaped the next product decisions.",
   status:
-    "Local implementation and saved evaluations; combined release validation is pending.",
+    "Local candidate with saved evaluations; current validation exposed output-processing limits, and release review is pending.",
   stages: [
     {
       id: "baseline",
@@ -67,15 +67,15 @@ export const decisionsEvaluation = {
     },
     {
       id: "final",
-      label: "Final combined release",
-      date: "Pending",
-      result: "No final quality claim yet",
+      label: "Current release validation",
+      date: "October 17, 2026 · UTC",
+      result: "32/32 routing; 5/6 enabled vs 6/6 disabled",
       method:
-        "The isolated candidate must pass its complete frozen evaluation inventory after the last change. Production-model checks and rollout verification remain separate from historical results.",
+        "Six synthetic, public-safe scenarios ran once per routing arm using gpt-5.6-terra, Luna routing and a source-aware gpt-6.1-sol paired judge. The enabled ownership answer lost its AI-assisted implementation distinction during sentence bounding, even though the raw answer contained it. The 41 API requests price to about $0.57 from reported token/cache usage at published standard rates; the invoice was not independently reconciled.",
       limit:
-        "No incomplete run is reported as passed, and no earlier result establishes the final deployment's behavior.",
+        "Routing worked on this small authored set, but enabled answer quality was not a win. A deterministic repair replayed all 12 unchanged raw answers with byte-identical prompts and changed only that ownership answer. The original failed grade is retained; the repair has no new paid quality score. Complete current local validation, service compatibility and deployed configuration remain separate gates.",
       snapshot:
-        "Release revision and final evaluation record will be added after validation.",
+        "Canary snapshot 7371d60; original answers, grades, usage and the separate repair replay are retained locally.",
     },
   ],
   judgeDisclosure:
