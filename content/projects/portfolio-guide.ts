@@ -4,7 +4,10 @@ import type {
   PageContext,
 } from "@/lib/portfolio-guide/types";
 import { creativeGuideMetadata } from "@/content/projects/creative-guide";
-import { decisionsEvaluation } from "@/content/projects/decisions-evaluation";
+import {
+  decisionsEvaluation,
+  modelBakeoff,
+} from "@/content/projects/decisions-evaluation";
 
 type GuideOverlay = Partial<
   Pick<
@@ -286,6 +289,23 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           ),
           decisionsEvaluation.judgeDisclosure,
           decisionsEvaluation.methodology,
+        ],
+      },
+      {
+        label: "Historical answer-model bake-off",
+        snippets: [
+          modelBakeoff.date,
+          modelBakeoff.introduction,
+          modelBakeoff.method,
+          ...modelBakeoff.models.map(
+            (row) =>
+              `${row.model}: ${row.trials} trials, deterministic ${row.deterministic}, source-aware judged ${row.judged}, median workflow ${row.medianSeconds} seconds, mean helpfulness ${row.helpfulness}/5.`,
+          ),
+          modelBakeoff.interpretation,
+          modelBakeoff.latencyLimit,
+          modelBakeoff.costLimit,
+          modelBakeoff.auditLimit,
+          modelBakeoff.selection,
         ],
       },
       {
