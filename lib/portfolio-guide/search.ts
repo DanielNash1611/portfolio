@@ -6,6 +6,8 @@ import {
   readIndex,
   rankHybrid,
   type SearchDocument,
+  type EmbeddingIndex,
+  validIndex,
 } from "../search/hybrid";
 import type { CopilotRequest } from "./types";
 export type QuestionScope = {
@@ -198,5 +200,31 @@ export async function searchPortfolio(
           : options.semantic === true
             ? "index_unavailable"
             : "lexical_disabled_semantic",
+  };
+}
+
+/** Offline replay uses the same ranker/catalog, with no embedding fallback. */
+export function searchPortfolioFromIndex(
+  scope: QuestionScope,
+  index: EmbeddingIndex,
+  queryVector: number[],
+) {
+  const docs = getPortfolioSearchDocuments();
+  if (
+    !validIndex(index, docs) ||
+    queryVector.length !== 1536 ||
+    !queryVector.every(Number.isFinite)
+  )
+    throw new Error("Invalid replay index/vector");
+  const catalog = getPortfolioSearchCatalog();
+  const hits = rankHybrid(docs, scope.query, {
+    index,
+    queryVector,
+    projectId: scope.kind === "broad" ? undefined : scope.projectId,
+    limit: 8,
+  });
+  return {
+    blocks: hits.map((hit) => catalog.find((block) => block.id === hit.id)!),
+    mode: "hybrid",
   };
 }

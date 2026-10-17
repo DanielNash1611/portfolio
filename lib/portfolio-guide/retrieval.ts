@@ -19,6 +19,12 @@ export async function retrieveGuideSources(
     signal?: AbortSignal;
     semantic?: boolean;
     evidenceConfig?: EvidenceConfig;
+    portfolioSearch?: (
+      scope: ReturnType<typeof resolveQuestionScope>,
+    ) => Promise<Awaited<ReturnType<typeof searchPortfolio>>>;
+    careerSearch?: (
+      payload: Parameters<typeof callEvidenceTool>[0],
+    ) => ReturnType<typeof callEvidenceTool>;
   },
 ) {
   const scope = resolveQuestionScope(request);
@@ -27,25 +33,27 @@ export async function retrieveGuideSources(
     if (role) scope.query += `\nDeclared role requirements: ${role}`;
   }
   const [portfolio, career] = await Promise.all([
-    searchPortfolio(scope, config),
-    scope.kind !== "page" && config.evidenceConfig
-      ? callEvidenceTool(
-          {
-            query: scope.query,
-            currentPortfolioPage: request.pageContext.slug,
-            questionScope: scope.kind,
-            targetProjectId: scope.projectId,
-            maxResults: 6,
-          },
-          config.evidenceConfig,
-          config.signal,
-        )
+    config.portfolioSearch
+      ? config.portfolioSearch(scope)
+      : searchPortfolio(scope, config),
+    scope.kind !== "page" && (config.evidenceConfig || config.careerSearch)
+      ? (
+          config.careerSearch ??
+          ((payload) =>
+            callEvidenceTool(payload, config.evidenceConfig!, config.signal))
+        )({
+          query: scope.query,
+          currentPortfolioPage: request.pageContext.slug,
+          questionScope: scope.kind,
+          targetProjectId: scope.projectId,
+          maxResults: 6,
+        })
       : Promise.resolve(undefined),
   ]);
   const evidenceUnavailableReason: EvidenceUnavailableReason | undefined =
     scope.kind === "page"
       ? undefined
-      : !config.evidenceConfig
+      : !config.evidenceConfig && !config.careerSearch
         ? "not_configured"
         : career && !career.ok
           ? career.reason

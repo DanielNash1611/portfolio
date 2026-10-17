@@ -9,7 +9,7 @@ import type {
   PortfolioGuideEvalRubricScores,
 } from "@/lib/portfolio-guide/evals/types";
 
-const EVAL_JUDGE_SYSTEM_PROMPT = `You are a strict evaluator for a portfolio site assistant.
+export const EVAL_JUDGE_SYSTEM_PROMPT = `You are a strict evaluator for a portfolio site assistant.
 
 Use only the structured inputs provided in the prompt. Do not use outside knowledge.
 
@@ -80,7 +80,9 @@ function uniqueStrings(input: unknown): string[] {
     .slice(0, 6);
 }
 
-function normalizeJudgeResult(rawText: string): PortfolioGuideEvalJudgeResult {
+export function normalizeJudgeResult(
+  rawText: string,
+): PortfolioGuideEvalJudgeResult {
   const parsed = JSON.parse(sanitizeJsonCandidate(rawText)) as {
     verdict?: unknown;
     summary?: unknown;
@@ -112,7 +114,7 @@ function normalizeJudgeResult(rawText: string): PortfolioGuideEvalJudgeResult {
   };
 }
 
-function buildJudgeInput(
+export function buildJudgeInput(
   evalCase: PortfolioGuideEvalCase,
   request: CopilotRequest,
   generation: PortfolioGuideGenerationResult,
@@ -129,6 +131,9 @@ function buildJudgeInput(
     | undefined;
   return JSON.stringify(
     {
+      approvedBlocks: sourcePrompt.approvedBlocks,
+      selectionConstraints: sourcePrompt.selectionConstraints,
+      retrievedIds: sourcePrompt.retrievedIds,
       additionalCanonicalPages: routingContext?.supportingPages,
       approvedCareerRecords: routingContext?.careerEvidence,
       caseId: evalCase.id,
@@ -142,6 +147,7 @@ function buildJudgeInput(
       portfolioContext: request.portfolioContext,
       sessionContext: request.sessionContext,
       responseToGrade: {
+        citations: generation.response.citations,
         answer: generation.response.answer,
         relatedPages: generation.response.relatedPages,
         suggestedFollowUps: generation.response.suggestedFollowUps,

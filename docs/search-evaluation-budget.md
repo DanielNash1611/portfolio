@@ -3,8 +3,10 @@
 The October 17 proposed search evaluation has a dedicated, embedding-aware
 guard in `lib/portfolio-guide/evals/search-budget.ts`. It is separate from the
 historical evaluation guard and does not authorize any provider call. The
-proposal remains pending Daniel's approval. No live execution entrypoint,
-credential discovery, default fetch, deployment, or activation is included.
+proposal remains pending Daniel's approval. The adaptive CLI is prepared for
+review. Its fake mode never accesses credentials; live transport is unreachable
+without matching approval, pricing attestation, frozen source validation and a
+durable reservation. Nothing is deployed or activated.
 
 ## Fixed maximums
 
@@ -34,7 +36,8 @@ Pricing still requires verification immediately before an approved execution.
 
 - Every run requires explicit hash-bound approval, verified pricing, a new
   execution ID, the known history pin, frozen commit heads and file hashes, and
-  exact embedding texts and model packet hashes. Files/heads are checked before
+  exact embedding texts and a pinned static adaptive builder (or exact packet
+  hashes for isolated guard unit tests). Files/heads are checked before
   admission and after a reply; exact-query cache reads also recheck them.
 - Limits and case identities are frozen at runtime. Exact batch sizes are
   2/63/29, dimensions 1,536, encoding float. Embedding requests use one canonical
@@ -48,7 +51,7 @@ Pricing still requires verification immediately before an approved execution.
   denied requests and replies arriving after timeout. Raw files and all ledger
   events remain immutable. A crash leaves the execution consumed.
 - The journal registry must already exist and have been durably provisioned.
-  The eventual reviewed harness must pin one shared registry for all invocations;
+  The reviewed manifest pins one shared registry for all live invocations;
   changing registries or deleting claims is not a retry mechanism.
 - Only one raw transport attempt is allowed at a time. No SDK retry, resume,
   replacement case, tools, streaming, background requests, alternate endpoint,
@@ -68,27 +71,73 @@ Pricing still requires verification immediately before an approved execution.
   by exact query SHA; a miss stops without transport. Returned vectors and
   snapshots are copies.
 
-## Remaining execution blocker
+## Adaptive runner and approval gate
 
-The exact-packet guard is reviewed and tested with fake transports. It is **not
-ready to run the complete adaptive paid evaluation**: real-vector retrieval
-changes selection packets, and fresh answers change judge packets. Those bytes
-cannot honestly be frozen before the embedding and answer results exist.
+`search-adaptive.ts` is statically imported by the guard. Adaptive mode exposes
+`execute()` and rejects caller-supplied packets, case approvals and routing
+bypasses. The builder reuses the application's existing service, routing,
+rankers, qualified-block renderer and judge prompt. ResumeCustomizer receives an
+explicit frozen public catalog in process, so its source loaders never resolve
+against the Portfolio working directory. No local server or live career API is
+needed. Fresh indexes are journal artifacts and do not activate application flags.
 
-Before any live run, implement and independently review a statically imported,
-deterministic packet builder bound to the frozen public corpus, questions,
-application routing/retrieval/rendering code and immutable prior receipts. The
-guard must construct those adaptive packets itself, without accepting arbitrary
-caller bodies. Keep the same six cases and maximum 21-call/$2 scope. Do not use
-placeholder packet hashes or relax the current check to execute the proposal.
+The manifest includes a closed source inventory, both commit heads, the original
+proposal/query hashes, complete public source blocks, 25 reusable career vectors
+and the exact 2/63/29 new embedding texts. Construction independently compares
+the public catalog/cache and original cases against those sources. Every packet
+and full reservation is durably recorded before the sole transport attempt.
+Real vector receipts construct indexes; those indexes and exact cached queries
+construct selection packets; actual rendered answers construct source-aware
+judge packets. Complete blocks/qualifications and current-page boundaries are
+retained in judge packets within the unchanged 48,000-token byte bound.
 
-The complete manifest also needs a reviewed inventory of all transitive source,
-public cache, builder/harness and guard files. A corpus-hash label by itself is
-not proof that an arbitrary caller supplied the complete source inventory. The
-injected transport and journal are trusted reviewed adapters: this component
-cannot prevent hidden retries inside a replacement transport, forged approval
-objects, or an operator changing the shared registry. There is no such live
-adapter or approved execution manifest in this change.
+All 23 original retrieval cases are replayed locally in lexical and hybrid modes.
+A newly failing previously passing retrieval case stops the run. Original
+Portfolio ownership labeling and its 7/8 lexical result remain visible. Each fresh
+case must pass valid allowlisted IDs, exact citation text/title/kind/URL, complete
+qualification and source checks before judging. A malformed routing plan or
+judge schema, failed judge, unrequested tool call or cache miss stops before any
+later provider call. No fallback can create a replacement call.
+
+Current routing policy bypasses four cases: the complete path uses **17 calls**
+(3 embedding, 2 routing, 6 selection, 6 judge) and **$1.55808** in full
+reservations. The proposed maximum remains 21 calls/$1.56128 reserved under $2;
+unused routing slots cannot be reassigned. Fake zero vectors test structure and
+control flow only; they provide no semantic-quality evidence.
+
+Run from the isolated Portfolio candidate. Preparation requires clean checkouts
+and a new output directory whose parent exists:
+
+```sh
+node --import tsx scripts/run-search-evaluation.ts --mode prepare \
+  --career-root ../resumecustomizer-search \
+  --proposal ../review-evidence/semantic-search-preparation-20261017/paid-test-proposal.json \
+  --queries ../review-evidence/semantic-search-preparation-20261017/paid-test-queries.json \
+  --output ../review-evidence/semantic-search-preparation-20261017/adaptive-execution
+```
+
+The generated `approval-pending.json` has `approved:false` and
+`pricingVerified:false`. It cannot admit transport. After Daniel approves this
+same frozen scope and current pricing is verified, save the matching approval
+record separately; preserve its execution ID and hashes. Then the runnable live
+command is:
+
+```sh
+node --import tsx scripts/run-search-evaluation.ts --mode live --allow-paid \
+  --manifest ../review-evidence/semantic-search-preparation-20261017/adaptive-execution/manifest.json \
+  --approval ../review-evidence/semantic-search-preparation-20261017/adaptive-execution/approval-approved.json
+```
+
+Only the private single-attempt live transport reads the existing
+`OPENAI_API_KEY`, after approval/reservation. Redirects are errors. Global fetch
+is poisoned during execution; injected Responses/routing/retrieval adapters
+prevent SDK, tool, live data and lazy embedding fallbacks. No dotenv files are
+loaded. Never delete a registry claim to retry or resume.
+
+For a credential-free CLI proof, use `--mode fake --manifest <same manifest>`
+and `--output <new fake directory>`. This uses a distinct fake execution ID and
+registry without consuming the live identity. Approval remains the only pending
+human decision; preparation or fake success never grants it.
 
 ## Offline verification
 
@@ -97,6 +146,13 @@ uses fake responses and temporary local Git/journal fixtures. It covers the
 complete maximum plan, every stage's limits, reservations, uncertainty, no
 retries, cache misses, frozen hashes, routing bypasses, critical case gates and
 durable journal behavior. No model-quality score is inferred from these tests.
+
+`node --import tsx --test __tests__/portfolio-guide/search-adaptive.test.ts`
+exercises the actual runner with global-fetch and credential traps, all six
+cases, adaptive packets, immutable receipts, routing/model failures, malformed
+judge responses, cache misses, missing inventory and CLI approval rejection.
+These integration fixtures require the isolated ResumeCustomizer candidate and
+original local proposal; they explicitly skip when those local fixtures are absent.
 
 The query fixture is byte-identical to the original proposed query file:
 `90dd9aae3586e56ad3a764d976ec0f57d5de6399227216301e98a725881478ce`.

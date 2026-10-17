@@ -61,6 +61,10 @@ export type PortfolioGuideServiceConfig = {
   evidenceConfig?: EvidenceConfig;
   hybridSearch?: boolean;
   semanticSearch?: boolean;
+  /** In-process deterministic replay; never exposed as an HTTP request option. */
+  retrieveSources?: (
+    request: CopilotRequest,
+  ) => ReturnType<typeof retrieveGuideSources>;
   /**
    * When true, the evidence tool is served by the in-process local mock instead
    * of a real ResumeCustomizer call. Non-production only; lets the whole
@@ -247,12 +251,14 @@ export async function generatePortfolioGuideResponse(
   let prefetchedEvidence: EvidenceSearchResponse | undefined;
   let retrieval: Awaited<ReturnType<typeof retrieveGuideSources>> | undefined;
   if (config.hybridSearch) {
-    retrieval = await retrieveGuideSources(enrichedRequest, {
-      apiKey,
-      signal,
-      semantic: config.semanticSearch !== false,
-      evidenceConfig,
-    });
+    retrieval = config.retrieveSources
+      ? await config.retrieveSources(enrichedRequest)
+      : await retrieveGuideSources(enrichedRequest, {
+          apiKey,
+          signal,
+          semantic: config.semanticSearch !== false,
+          evidenceConfig,
+        });
     enrichedRequest = {
       ...retrieval.request,
       portfolioContext: {

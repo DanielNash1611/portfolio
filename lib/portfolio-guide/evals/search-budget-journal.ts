@@ -83,5 +83,15 @@ export function createFileSearchJournal(
         throw new Error("invalid_journal_slot");
       writeExclusive(`raw-${slot.replace(":", "--")}.json`, response);
     },
+    request(slot: string, body: string) {
+      if (!/^[a-zA-Z0-9-]+:[a-zA-Z0-9-]+$/.test(slot))
+        throw new Error("invalid_journal_slot");
+      writeExclusive(`request-${slot.replace(":", "--")}.json`, { body });
+    },
+    artifact(name: string, value: unknown) {
+      if (!/^[a-zA-Z0-9-]+$/.test(name))
+        throw new Error("invalid_artifact_name");
+      writeExclusive(`artifact-${name}.json`, value);
+    },
   };
 }

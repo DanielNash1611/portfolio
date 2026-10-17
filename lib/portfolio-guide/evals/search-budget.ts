@@ -1,7 +1,14 @@
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { isAbsolute } from "node:path";
+import { isAbsolute, resolve } from "node:path";
+import {
+  adaptiveIndexes,
+  adaptiveSourceInventory,
+  compareSearchRankings,
+  loadAdaptiveBundle,
+  runAdaptiveCase,
+} from "./search-adaptive";
 
 /** Dedicated limits for the proposed October 17 search evaluation. No live transport. */
 export const SEARCH_RULES = {
@@ -103,9 +110,11 @@ export type FrozenSearchManifest = {
   corpusHashes: { career: string; portfolio: string };
   embeddingInputs: Record<EmbeddingStage, string[]>;
   routingMode: Record<SearchCase, "call" | "bypass">;
-  /** SHA of the exact deterministic routing/selection/judge packet for each case.
-   * If real vectors are needed to build these, freeze in a second, separately
-   * reviewed phase; this guard never permits an unbound adaptive payload. */
+  packetMode?: "adaptive-v1";
+  publicBundle?: { path: string; sha256: string };
+  journalDirectory?: string;
+  /** Exact-packet unit mode only. Adaptive mode requires an empty map and
+   * constructs packets through the pinned static builder inside execute(). */
   requestSha256: Record<
     "routing" | "relevance-ID-selection" | "source-aware-judge",
     Record<SearchCase, string>
@@ -161,6 +170,8 @@ export type SearchJournal = {
   append: (snapshot: SearchSnapshot) => void;
   /** Persist exact HTTP status and body before parsing, including non-2xx replies. */
   raw: (slot: string, response: SearchReply) => void;
+  request?: (slot: string, body: string) => void;
+  artifact?: (name: string, value: unknown) => void;
 };
 export type SearchReply = { status: number; body: string };
 export type SearchTransport = (request: {
@@ -187,6 +198,14 @@ export function verifyFrozenSearchFiles(manifest: FrozenSearchManifest): void {
   for (const file of manifest.files)
     if (searchSha256(readFileSync(file.path)) !== file.sha256)
       throw new Error("frozen_file_changed");
+  if (
+    manifest.packetMode === "adaptive-v1" &&
+    adaptiveSourceInventory(
+      manifest.repositories[0].path,
+      manifest.repositories[1].path,
+    ).some((path) => !manifest.files.some((file) => file.path === path))
+  )
+    throw new Error("frozen_source_inventory_changed");
   for (const repository of manifest.repositories)
     if (
       execFileSync("git", ["-C", repository.path, "rev-parse", "HEAD"], {
@@ -213,6 +232,24 @@ export function createSearchBudgetGuard(options: {
   const scopeSha256 = searchManifestHash(manifest);
   const stages = Object.keys(SEARCH_RULES) as SearchStage[];
   const timeoutMs = options.timeoutMs ?? 60_000;
+  const adaptive = manifest.packetMode === "adaptive-v1";
+  if (manifest.packetMode !== undefined && !adaptive)
+    throw new Error("unknown_packet_mode");
+  if (
+    adaptive &&
+    (typeof journal.request !== "function" ||
+      typeof journal.artifact !== "function" ||
+      Object.keys(manifest.requestSha256).length !== 0 ||
+      !manifest.files.some(
+        (f) =>
+          f.path ===
+          resolve(
+            manifest.repositories[0].path,
+            "lib/portfolio-guide/evals/search-adaptive.ts",
+          ),
+      ))
+  )
+    throw new Error("frozen_adaptive_builder_and_journal_required");
   if (
     approval.approved !== true ||
     approval.pricingVerified !== true ||
@@ -266,6 +303,7 @@ export function createSearchBudgetGuard(options: {
       )
         throw new Error("invalid_frozen_embedding_inputs");
     } else if (
+      !adaptive &&
       SEARCH_CASES.some(
         (id) =>
           !sha(
@@ -296,6 +334,7 @@ export function createSearchBudgetGuard(options: {
   )
     throw new Error("frozen_queries_mismatch");
   verifyFrozenSearchFiles(manifest);
+  const adaptiveBundle = adaptive ? loadAdaptiveBundle(manifest) : undefined;
   const ledger: SearchEntry[] = [];
   const vectors = new Map<string, number[]>();
   const acceptedCases = new Map<SearchCase, CaseChecks>();
@@ -444,10 +483,11 @@ export function createSearchBudgetGuard(options: {
         )
           throw new Error("output_cap");
         if (
+          !adaptive &&
           searchSha256(body) !==
-          manifest.requestSha256[stage as keyof typeof manifest.requestSha256][
-            caseId!
-          ]
+            manifest.requestSha256[
+              stage as keyof typeof manifest.requestSha256
+            ][caseId!]
         )
           throw new Error("frozen_request_mismatch");
       }
@@ -470,6 +510,7 @@ export function createSearchBudgetGuard(options: {
       };
       ledger.push(entry);
       journal.append(snapshot()); // Required durable write before a single transport attempt.
+      journal.request?.(slot, body);
       active = new AbortController();
       const controller = active;
       const result = await Promise.race([
@@ -588,7 +629,7 @@ export function createSearchBudgetGuard(options: {
       busy = false;
     }
   }
-  return {
+  const core = {
     call,
     snapshot,
     stop,
@@ -659,6 +700,90 @@ export function createSearchBudgetGuard(options: {
         throw new Error("query_cache_miss_no_transport");
       }
       return [...vector];
+    },
+  };
+  let executed = false;
+  return {
+    ...core,
+    call: adaptive
+      ? async () => {
+          stop("arbitrary_adaptive_packet");
+          throw new Error("adaptive_packets_are_runner_owned");
+        }
+      : core.call,
+    acceptCase: adaptive
+      ? () => {
+          stop("external_case_gate");
+          throw new Error("adaptive_case_gates_are_runner_owned");
+        }
+      : core.acceptCase,
+    bypassRouting: adaptive
+      ? () => {
+          stop("external_routing_bypass");
+          throw new Error("adaptive_bypasses_are_runner_owned");
+        }
+      : core.bypassRouting,
+    async execute() {
+      if (!adaptiveBundle || executed || stopped) {
+        stop("invalid_adaptive_execution");
+        throw new Error("adaptive_execution_not_available_or_already_used");
+      }
+      executed = true;
+      try {
+        const receipts: Record<string, Record<string, unknown>> = {};
+        for (const stage of [
+          "career-index",
+          "portfolio-index",
+          "query-vectors",
+        ] as const)
+          receipts[stage] = await core.call(
+            stage,
+            undefined,
+            JSON.stringify({
+              model: SEARCH_RULES[stage].model,
+              input: manifest.embeddingInputs[stage],
+              dimensions: 1536,
+              encoding_format: "float",
+            }),
+          );
+        const indexes = adaptiveIndexes(adaptiveBundle, receipts);
+        const rankings = compareSearchRankings(
+          adaptiveBundle,
+          indexes,
+          core.queryVector,
+        );
+        journal.artifact!("indexes", indexes);
+        journal.artifact!("rankings", rankings);
+        if (rankings.some((r) => r.lexicalPass && !r.hybridPass))
+          throw new Error("retrieval_regression");
+        const results = [];
+        for (const id of SEARCH_CASES) {
+          const result = await runAdaptiveCase(adaptiveBundle, indexes, id, {
+            call: (stage, caseId, body) => core.call(stage, caseId, body),
+            queryVector: core.queryVector,
+            bypassRouting: core.bypassRouting,
+            record: (name, value) => journal.artifact!(name, value),
+          });
+          journal.artifact!(`case-${id}`, result);
+          core.acceptCase(id, result.checks);
+          results.push(result);
+        }
+        return { rankings, results, snapshot: snapshot() };
+      } catch (error) {
+        try {
+          journal.artifact!("failure", {
+            code:
+              error instanceof Error && /^[a-z_]+$/.test(error.message)
+                ? error.message
+                : "adaptive_validation_failed",
+            snapshot: snapshot(),
+          });
+        } catch {
+          /* Durable reservations remain authoritative. */
+        }
+        stop("adaptive_execution_failed");
+        throw new Error("adaptive_execution_failed_no_retry");
+      }
     },
   };
 }
