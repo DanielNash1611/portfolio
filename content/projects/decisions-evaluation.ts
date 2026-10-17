@@ -149,6 +149,18 @@ export const decisionsEvaluation = {
       snapshot:
         "All historical stages and the separate 72-trial model bake-off are retained. Owner Production configuration confirmation remains pending.",
     },
+    {
+      id: "terra-claim-selection-result",
+      label: "Constrained facts still needed a useful answer",
+      date: "October 17, 2026 · UTC",
+      result: "Terra: 2/4 candidate vs 3/4 baseline",
+      method:
+        "A new four-question comparison at 09db575 used eight Terra answer calls, four blinded Sol paired judgments and one Luna routing request shared across identical comparison inputs. It covered the three latest local claim failures and the original ownership-credit question. Terra selected valid approved block IDs in all four candidate answers, retaining their qualifications and implementation credit.",
+      limit:
+        "The candidate still failed relevance and concision: the judge preferred the baseline in three cases and the candidate in one. All three original page cases exceeded the unchanged four-sentence limit, and the impact answer missed one requested proof signal. Both ownership answers stayed on the current project despite the broader question. The small run established no universal quality gain or Production readiness; no automatic paid retry or regrade followed.",
+      snapshot:
+        "The a611b35 baseline code and 09db575 candidate used the same scoped public request per pair, with no remote career retrieval. Original rubrics, raw outputs, original paid 6/6-versus-5/6 grades and all historical bake-off evidence remain unchanged. Quality and owner Production configuration gates remain open.",
+    },
   ],
   judgeDisclosure:
     "Judge results also needed scrutiny. Later checks corrected four unchanged answers' source-aware grades, and a persisted Terra check regraded a malformed judge response against the unchanged answer. These are grading corrections, not newly improved answers; original outcomes remain part of the record.",
