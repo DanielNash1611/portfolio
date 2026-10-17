@@ -16,16 +16,25 @@ function punctuate(text: string): string {
   return /[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`;
 }
 
+function normalizeComparisonLabels(text: string): string {
+  return text.replace(/\bvs\.(?=\s)/gi, "versus");
+}
+
 /** Keep qualifiers with their proof; do not cut a long answer at an arbitrary character. */
 export function boundGuideAnswer(
   answer: string,
   question: string,
   maxSentences = 4,
 ): string {
-  const parts = sentences(answer);
-  if (parts.length <= maxSentences) return answer.trim();
+  const normalizedAnswer = normalizeComparisonLabels(answer);
+  const parts = sentences(normalizedAnswer);
+  if (parts.length <= maxSentences) return normalizedAnswer.trim();
   const words = new Set(question.toLowerCase().match(/[a-z]{4,}/g) ?? []);
   const directResumeQuestion = /\b(?:resume|cv)\b/i.test(question);
+  const responsibilityOrStatusQuestion =
+    /\b(?:own(?:ership|ed)?|responsib\w*|direct|assist\w*|prototype|implemented)\b/i.test(
+      question,
+    );
   const groups: Array<{ parts: string[]; start: number; priority: number }> =
     [];
   parts.forEach((part, index) => {
@@ -33,6 +42,11 @@ export function boundGuideAnswer(
     if (
       limitSignal.test(part) &&
       groups.length &&
+      // A different project's self-qualified proof is a complete block, not
+      // a limitation attached to the preceding project's claim.
+      !/^(?:The|This|That)\s+[^.!?]{1,80}\s+(?:case|project|page|record|study)\s+(?:also\s+)?(?:supports|shows|describes|documents|demonstrates|provides)\b/i.test(
+        part,
+      ) &&
       !/^(?:Boundary|Limit|Not established|Missing support):/i.test(
         groups.at(-1)!.parts[0],
       )
@@ -49,6 +63,12 @@ export function boundGuideAnswer(
       parts: [part],
       start: index,
       priority:
+        (responsibilityOrStatusQuestion &&
+        /^(?:Directed|Direct ownership|AI-assisted|Implemented(?: versus local prototype)?|Local prototype):/i.test(
+          part,
+        )
+          ? 100
+          : 0) +
         (limitSignal.test(part) ? 20 : 0) +
         (/\/resume\/generate|couldn't reach|isn't connected/i.test(part)
           ? 30
@@ -166,7 +186,9 @@ export function finalizeRoutedAnswer(input: {
   const { request, careerEvidence } = input;
   // The guide renders plain text. Keep labels readable when a model adds
   // Markdown emphasis, and remove it before counting sentence punctuation.
-  const suppliedAnswer = input.answer.replace(/\*\*([^*]+)\*\*/g, "$1");
+  const suppliedAnswer = normalizeComparisonLabels(
+    input.answer.replace(/\*\*([^*]+)\*\*/g, "$1"),
+  );
   let answer = suppliedAnswer;
   let blocks: ReturnType<typeof careerProofBlocks> = [];
   const fallback = careerEvidence?.safeFallback;

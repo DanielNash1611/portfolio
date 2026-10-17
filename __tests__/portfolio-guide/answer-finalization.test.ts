@@ -80,6 +80,35 @@ test("sentence bounding keeps the required job-description instruction on a dire
   assert.ok(final.answer.split(/(?<=[.!?])\s+/).length <= 4);
 });
 
+test("multi-part ownership answers retain direction, AI assistance and implemented-versus-prototype status", () => {
+  const result = finalizeRoutedAnswer({
+    request: request(
+      "Across the portfolio, what did Daniel direct, what was AI-assisted, and what is still a local prototype?",
+    ),
+    answer:
+      "**Directed:** Daniel set the product direction and service boundaries.\n**AI-assisted:** Development agents implemented the workflow under Daniel's human review.\n**Implemented vs. local prototype:** Existing API boundaries are implemented; routing is a local prototype with validation pending. The Platform case also supports a prototype, but does not establish production ownership.",
+    careerEvidence: {
+      ...evidence,
+      evidence: [],
+      safeFallback: "Only canonical portfolio sources are available here.",
+    },
+    includeCareerEvidence: false,
+    broaderQuestion: true,
+  });
+  assert.match(result.answer, /Directed: Daniel set the product direction/);
+  assert.match(result.answer, /AI-assisted: Development agents implemented/);
+  assert.match(
+    result.answer,
+    /Implemented (?:vs\.|versus) local prototype: Existing API boundaries are implemented/,
+  );
+  assert.match(result.answer, /local prototype with validation pending/);
+  assert.match(
+    result.answer,
+    /Only canonical portfolio sources are available here\.$/,
+  );
+  assert.ok(result.answer.split(/(?<=[.!?])\s+/).length <= 4);
+});
+
 test("broad research answers replace unrelated page framing with attributed proof and its scientific limit", () => {
   const result = finalizeRoutedAnswer({
     request: request("Does Daniel have experience with life science research?"),
