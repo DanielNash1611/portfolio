@@ -30,6 +30,7 @@ import {
   buildClaimInventory,
   CLAIM_SELECTION_PROMPT,
   claimSelectionFormat,
+  claimSelectionConstraints,
   renderClaimSelection,
 } from "./factual-answers";
 import {
@@ -160,6 +161,7 @@ export function processPortfolioGuideAnswer(input: {
   careerEvidence?: EvidenceSearchResponse;
   routingEnabled?: boolean;
   supportingPages?: SupportingPage[];
+  evidenceUnavailableReason?: EvidenceUnavailableReason;
 }) {
   const result = renderClaimSelection({
     ...input,
@@ -179,6 +181,7 @@ export function processPortfolioGuideAnswer(input: {
         .map((id) => id.slice(7)),
     },
     normalizationStatus: result.status,
+    selectionDiagnostics: result.selectionDiagnostics,
   };
 }
 
@@ -278,6 +281,14 @@ export async function generatePortfolioGuideResponse(
         supportingPages,
         prefetchedEvidence,
       ),
+      selectionConstraints: claimSelectionConstraints(
+        enrichedRequest,
+        buildClaimInventory(
+          enrichedRequest,
+          supportingPages,
+          prefetchedEvidence,
+        ),
+      ),
       candidateRelatedPages: relatedPages,
       ...(routing.plan
         ? {
@@ -321,7 +332,7 @@ export async function generatePortfolioGuideResponse(
     {
       role: "system" as const,
       content: routing.plan
-        ? `${systemPrompt}\nRouting context supplies canonical supporting pages and optionally prefetched career evidence. Follow the sourceRule: hints are not evidence, keep source layers distinct, retain relevant limitations, and append safeFallback if present.`
+        ? `${systemPrompt}\nRouting context supplies canonical supporting pages and optionally prefetched career evidence. Hints are not evidence; keep source layers distinct and select IDs only. The renderer preserves the relevant limits and availability notices.`
         : systemPrompt,
     },
     { role: "user" as const, content: promptInput },
@@ -420,6 +431,7 @@ export async function generatePortfolioGuideResponse(
           supportingPages,
           prefetchedEvidence,
         ),
+        enrichedRequest,
       ),
     },
     max_output_tokens: 600,
@@ -600,6 +612,7 @@ export async function generatePortfolioGuideResponse(
               supportingPages,
               prefetchedEvidence,
             ),
+            enrichedRequest,
           ),
         },
         max_output_tokens: 600,
@@ -642,6 +655,7 @@ export async function generatePortfolioGuideResponse(
     guardedResponse,
     finalized,
     normalizationStatus,
+    selectionDiagnostics,
   } = processPortfolioGuideAnswer({
     request: enrichedRequest,
     rawText,
@@ -649,6 +663,12 @@ export async function generatePortfolioGuideResponse(
     careerEvidence: prefetchedEvidence,
     routingEnabled: Boolean(routing.plan),
     supportingPages,
+    evidenceUnavailableReason,
+  });
+  addTrace({
+    eventType: "guardrail",
+    eventName: "claim_selection_validated",
+    payload: selectionDiagnostics,
   });
   if (prefetchedEvidence) {
     evidenceUsed = buildEvidenceSummaries(

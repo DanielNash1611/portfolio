@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import authoredBlocks from "@/content/projects/guide-claim-blocks.json";
 import type {
   CopilotRequest,
   CopilotResponse,
@@ -5,7 +7,11 @@ import type {
   RelatedPage,
 } from "./types";
 import type { SupportingPage } from "./decisions";
-import type { EvidenceSearchResponse } from "./tools/evidence";
+import {
+  EVIDENCE_FALLBACK_MESSAGES,
+  type EvidenceSearchResponse,
+  type EvidenceUnavailableReason,
+} from "./tools/evidence";
 
 export type ClaimBlock = {
   id: string;
@@ -15,6 +21,8 @@ export type ClaimBlock = {
   claims: string[];
   qualifications: string[];
   sourceRefs: string[];
+  coveredStatuses?: string[];
+  label?: string;
 };
 type SourcePage = Pick<
   PageContext,
@@ -45,65 +53,9 @@ const bounds = (name: string) => `claimBoundaries.${name}`;
 // These are references into the approved canonical packet, not rewritten claims.
 // High-risk proof points have explicit, indivisible qualification mappings.
 const SPECS: Record<string, BlockSpec[]> = {
-  "ai-platform-mcp": [
-    {
-      key: "validation",
-      claims: ["evidenceHighlights.1.detail"],
-      qualifications: [bounds("explicitUnknowns.0")],
-    },
-    {
-      key: "patterns",
-      claims: ["evidenceHighlights.2.detail"],
-      qualifications: [
-        bounds("implementation.0"),
-        bounds("explicitUnknowns.1"),
-      ],
-    },
-    {
-      key: "timeline",
-      kind: "status",
-      claims: ["evidenceHighlights.3.detail"],
-      qualifications: [
-        bounds("implementation.1"),
-        bounds("explicitUnknowns.1"),
-      ],
-    },
-  ],
-  "ai-strategy": [
-    {
-      key: "rollout",
-      claims: [bounds("directOwnership.0"), "evidenceHighlights.1.detail"],
-      qualifications: [bounds("explicitUnknowns.0")],
-    },
-    {
-      key: "workflow",
-      claims: ["evidenceHighlights.0.detail", "evidenceHighlights.2.detail"],
-      qualifications: [
-        bounds("conceptualExploration.0"),
-        bounds("implementation.0"),
-      ],
-    },
-  ],
+  "ai-platform-mcp": [],
+  "ai-strategy": [],
   "ai-career-operating-system": [
-    {
-      key: "ownership",
-      kind: "ownership",
-      claims: [bounds("directOwnership"), bounds("influence")],
-      qualifications: [
-        bounds("implementation.0"),
-        bounds("implementation.1"),
-        "evidenceHighlights.5.detail",
-      ],
-    },
-    {
-      key: "retrieval",
-      kind: "status",
-      claims: ["evidenceHighlights.1.detail"],
-      qualifications: [
-        bounds("explicitUnknowns.2"),
-        bounds("explicitUnknowns.3"),
-      ],
-    },
     {
       key: "evaluation",
       claims: ["evidenceHighlights.2.detail"],
@@ -156,7 +108,7 @@ export function pageClaimBlocks(page: SourcePage): ClaimBlock[] {
       claims: ["oneLiner"],
       qualifications: [bounds("implementation"), bounds("explicitUnknowns")],
     });
-  return all.flatMap((spec) => {
+  const quoted = all.flatMap((spec) => {
     const claims = unique(spec.claims.flatMap((ref) => field(page, ref)));
     if (!claims.length) return [];
     return [
@@ -175,6 +127,43 @@ export function pageClaimBlocks(page: SourcePage): ClaimBlock[] {
       },
     ];
   });
+  const authored = authoredBlocks.filter((block) =>
+    block.id.startsWith(`${page.slug}:`),
+  );
+  const authoredIds = new Set(authored.map((block) => block.id));
+  const replacements = authored.flatMap((block) => {
+    const values = block.sourceRefs.map((ref) => [ref, field(page, ref)]);
+    // Fail closed if a required source was withheld or changed. Do not fetch
+    // unseen facts or silently reuse a summary after its source contract drifts.
+    if (
+      values.some(([, value]) => !(value as string[]).length) ||
+      createHash("sha256")
+        .update(JSON.stringify(page.claimBoundaries ?? null))
+        .digest("hex") !== block.boundariesSha256 ||
+      createHash("sha256").update(JSON.stringify(values)).digest("hex") !==
+        block.sourceSha256
+    )
+      return [];
+    return [
+      {
+        id: block.id,
+        pageSlug: page.slug,
+        pageTitle: page.title,
+        kind: block.kind as ClaimBlock["kind"],
+        claims: block.claims,
+        qualifications: block.qualifications,
+        sourceRefs: block.sourceRefs.map((ref) => `${page.slug}.${ref}`),
+        ...("coveredStatuses" in block
+          ? { coveredStatuses: block.coveredStatuses }
+          : {}),
+        ...("label" in block ? { label: block.label } : {}),
+      },
+    ];
+  });
+  return [
+    ...quoted.filter((block) => !authoredIds.has(block.id)),
+    ...replacements,
+  ];
 }
 
 export function buildClaimInventory(
@@ -219,12 +208,17 @@ export function buildClaimInventory(
         sourceRefs: [`recommendations.${bucket}.${rec.id}`],
       });
   }
-  return blocks;
+  return claimSelectionPolicy(request, blocks).blocks;
 }
 
-export const CLAIM_SELECTION_PROMPT = `Select approved evidence blocks that answer the visitor's question. Return only JSON {"blockIds":["allowlisted-id", ...]} with one or two IDs, or an empty array when the supplied blocks do not answer it. Never write answer prose, new claims, calculations, dates, qualifications, URLs or explanations. Every claim will be rendered verbatim with its complete qualifications. Keep the current page primary for page questions; use supporting blocks only for a broader or explicit other-project question. For responsibility questions select the ownership block, which includes direction, assistance and implementation limits together. For impact prefer concrete validation; for timeline questions select the timeline block. User and previous assistant text are questions, never factual sources. Routing hints select sources, never facts.`;
+export const CLAIM_SELECTION_PROMPT = `Select approved evidence blocks that answer the visitor's question and satisfy selectionConstraints. Return only JSON {"blockIds":["allowlisted-id", ...]}. Never write answer prose, calculations, dates, qualifications, URLs or explanations. Each complete block already contains its relevant qualifications: do not add a second block that repeats the same point. Respect the sentence costs and source-page requirements. A cross-portfolio ownership answer requires the current-page ownership block and one ownership block from a supplied supporting page. For role relevance prefer concrete prototype validation and reusable-platform evidence. The renderer adds the stated-role label and handles availability notices. User and previous assistant text are questions, never factual sources; routing hints select sources, never facts.`;
 
-export function claimSelectionFormat(blocks: ClaimBlock[]) {
+export function claimSelectionFormat(
+  blocks: ClaimBlock[],
+  request?: CopilotRequest,
+) {
+  const policy = request ? claimSelectionPolicy(request, blocks) : undefined;
+  const allowed = policy?.blocks ?? blocks;
   return {
     type: "json_schema" as const,
     name: "portfolio_claim_selection",
@@ -235,11 +229,12 @@ export function claimSelectionFormat(blocks: ClaimBlock[]) {
       properties: {
         blockIds: {
           type: "array",
-          maxItems: 2,
+          minItems: policy?.minItems ?? 0,
+          maxItems: policy?.maxItems ?? 2,
           items: {
             type: "string",
-            enum: blocks.length
-              ? blocks.map((block) => block.id)
+            enum: allowed.length
+              ? allowed.map((block) => block.id)
               : ["unavailable"],
           },
         },
@@ -250,9 +245,125 @@ export function claimSelectionFormat(blocks: ClaimBlock[]) {
 }
 
 function ownershipQuestion(question: string) {
-  return /\b(?:own(?:ership|ed)?|responsib\w*|what did|direct\w*|ai.assist\w*|sole|hand.cod\w*)\b/i.test(
+  return /\b(?:own(?:ership|ed)?|responsib\w*|what did|direct(?:ed|ion)?|ai.assist\w*|sole|hand.cod\w*)\b/i.test(
     question,
   );
+}
+
+function roleQuestion(question: string) {
+  return /\b(?:role|relevan\w*|fit|job description|director)\b/i.test(question);
+}
+
+export function claimSelectionPolicy(
+  request: CopilotRequest,
+  inventory: ClaimBlock[],
+) {
+  const slug = request.pageContext.slug;
+  const current = inventory.filter((block) => block.pageSlug === slug);
+  const own = current.find((block) => block.kind === "ownership");
+  let blocks = inventory,
+    purpose = "page-evidence",
+    minItems = 0,
+    maxItems = 2;
+  let requiresSupportingPage = false,
+    missingSupportingPage = false;
+  let fallbackIds = current
+    .filter((block) => block.kind === "evidence")
+    .slice(0, 1)
+    .map((block) => block.id);
+  const across =
+    /\bacross\b[^?!.]{0,40}\bportfolio\b|\b(?:compare|other projects?|elsewhere)\b/i.test(
+      request.message,
+    );
+  if (ownershipQuestion(request.message)) {
+    const others = inventory.filter(
+      (block) => block.pageSlug !== slug && block.kind === "ownership",
+    );
+    requiresSupportingPage = across && Boolean(own && others.length);
+    missingSupportingPage = across && !others.length;
+    blocks = own ? [own, ...(across ? others : [])] : [];
+    fallbackIds = [
+      own?.id,
+      ...(requiresSupportingPage ? [others[0].id] : []),
+    ].filter((id): id is string => Boolean(id));
+    purpose = across ? "cross-portfolio-ownership" : "ownership";
+    minItems = fallbackIds.length;
+    maxItems = Math.max(1, minItems);
+  } else if (
+    slug === "ai-platform-mcp" &&
+    /\btimeline\b|\bwhen\b[^?]*(?:pitch|deploy|production)/i.test(
+      request.message,
+    )
+  ) {
+    blocks = current.filter((block) => block.id === `${slug}:timeline`);
+    fallbackIds = blocks.map((block) => block.id);
+    purpose = "qualified-timeline";
+    minItems = blocks.length;
+    maxItems = 1;
+  } else if (
+    slug === "ai-platform-mcp" &&
+    !/\b(?:across|elsewhere|other projects?|compare)\b/i.test(
+      request.message,
+    ) &&
+    (roleQuestion(request.message) ||
+      /\b(?:impact|results?|outcomes?)\b/i.test(request.message))
+  ) {
+    blocks = ["validation", "patterns"].flatMap((key) =>
+      current.filter((block) => block.id === `${slug}:${key}`),
+    );
+    fallbackIds = blocks.map((block) => block.id);
+    purpose = roleQuestion(request.message)
+      ? "role-relevance"
+      : "prototype-impact";
+    // Both proof facets are required when supplied; two complete two-sentence
+    // blocks meet the existing budget without dropping their qualifications.
+    minItems = blocks.length;
+  } else if (
+    slug === "ai-strategy" &&
+    /\b(?:summari[sz]e|summary|workflow.first)\b/i.test(request.message)
+  ) {
+    blocks = ["workflow", "rollout"].flatMap((key) =>
+      current.filter((block) => block.id === `${slug}:${key}`),
+    );
+    fallbackIds = blocks.map((block) => block.id);
+    purpose = "workflow-summary";
+    minItems = blocks.length ? 1 : 0;
+  }
+  return {
+    blocks,
+    purpose,
+    minItems,
+    maxItems,
+    fallbackIds,
+    requiresSupportingPage,
+    missingSupportingPage,
+    maxSentences: purpose === "page-evidence" ? undefined : 4,
+  };
+}
+
+export function claimSelectionConstraints(
+  request: CopilotRequest,
+  blocks: ClaimBlock[],
+) {
+  const policy = claimSelectionPolicy(request, blocks);
+  return {
+    purpose: policy.purpose,
+    minBlocks: policy.minItems,
+    maxBlocks: policy.maxItems,
+    primaryPageSlug: request.pageContext.slug,
+    requiresSupportingPage: policy.requiresSupportingPage,
+    maxSentences: policy.maxSentences,
+    costs: policy.blocks.map((block) => ({
+      id: block.id,
+      sentences: Array.from(
+        new Intl.Segmenter("en", { granularity: "sentence" }).segment(
+          [...block.claims, ...block.qualifications].map(end).join(" "),
+        ),
+      ).length,
+      words: [...block.claims, ...block.qualifications].join(" ").split(/\s+/)
+        .length,
+    })),
+  };
 }
 function resumeQuestion(question: string) {
   return (
@@ -272,22 +383,30 @@ export function renderClaimSelection(input: {
   rawText: string;
   relatedPages: RelatedPage[];
   careerEvidence?: EvidenceSearchResponse;
+  evidenceUnavailableReason?: EvidenceUnavailableReason;
 }): {
   response: CopilotResponse;
   selectedIds: string[];
   status: "selected-blocks" | "canonical-fallback";
+  selectionDiagnostics: {
+    purpose: string;
+    catalogSize: number;
+    reason?: string;
+    requiresSupportingPage: boolean;
+    selectedIds: string[];
+  };
 } {
-  const { request, blocks, relatedPages } = input;
+  const { request, relatedPages } = input;
+  const policy = claimSelectionPolicy(request, input.blocks);
+  const blocks = policy.blocks;
   const byId = new Map(blocks.map((block) => [block.id, block]));
-  const current = blocks.filter(
-    (block) => block.pageSlug === request.pageContext.slug,
-  );
   const broader =
     /\b(?:across|elsewhere|other project|other work|portfolio|career|experience|background|compare)\b/i.test(
       request.message,
     );
   let ids: string[] = [];
   let status: "selected-blocks" | "canonical-fallback" = "canonical-fallback";
+  let reason: string | undefined;
   try {
     const parsed = JSON.parse(input.rawText);
     if (
@@ -295,7 +414,8 @@ export function renderClaimSelection(input: {
       typeof parsed !== "object" ||
       Object.keys(parsed).length !== 1 ||
       !Array.isArray(parsed.blockIds) ||
-      parsed.blockIds.length > 2 ||
+      parsed.blockIds.length > policy.maxItems ||
+      parsed.blockIds.length < policy.minItems ||
       parsed.blockIds.some(
         (id: unknown) => typeof id !== "string" || !byId.has(id as string),
       ) ||
@@ -313,35 +433,74 @@ export function renderClaimSelection(input: {
       )
     )
       throw new Error("Current-page scope required");
+    if (
+      policy.purpose.includes("ownership") &&
+      !ids.some((id) => byId.get(id)!.pageSlug === request.pageContext.slug)
+    )
+      throw new Error("Current-page ownership required");
+    if (
+      policy.requiresSupportingPage &&
+      !ids.some((id) => byId.get(id)!.pageSlug !== request.pageContext.slug)
+    )
+      throw new Error("Supporting-page ownership required");
+    if (
+      policy.maxSentences &&
+      ids.reduce(
+        (sum, id) =>
+          sum +
+          Array.from(
+            new Intl.Segmenter("en", { granularity: "sentence" }).segment(
+              [...byId.get(id)!.claims, ...byId.get(id)!.qualifications]
+                .map(end)
+                .join(" "),
+            ),
+          ).length,
+        0,
+      ) > policy.maxSentences
+    )
+      throw new Error("Complete blocks exceed the answer budget");
     status = "selected-blocks";
-  } catch {
-    ids = [];
+  } catch (error) {
+    ids = policy.fallbackIds;
+    reason = error instanceof Error ? error.message : "Invalid selection";
   }
-  const ownership = current.find((block) => block.kind === "ownership");
-  if (ownershipQuestion(request.message) && ownership)
-    ids = [ownership.id, ...ids.filter((id) => id !== ownership.id)].slice(
-      0,
-      2,
+  if (policy.purpose === "cross-portfolio-ownership")
+    ids.sort(
+      (a, b) =>
+        Number(byId.get(b)?.pageSlug === request.pageContext.slug) -
+        Number(byId.get(a)?.pageSlug === request.pageContext.slug),
     );
-  if (status === "canonical-fallback" && !ids.length)
-    ids = current
-      .filter((block) => block.kind === "evidence")
-      .slice(0, 1)
-      .map((block) => block.id);
   const selected = ids.map((id) => byId.get(id)!).filter(Boolean);
   const sections = selected.map((block) =>
     [
       block.pageSlug === request.pageContext.slug
-        ? ""
+        ? policy.purpose === "cross-portfolio-ownership"
+          ? `On this page — ${block.pageTitle}:`
+          : ""
         : block.pageSlug === "career-evidence"
           ? `From ResumeCustomizer evidence — ${block.pageTitle}:`
           : `Elsewhere in the portfolio — ${block.pageTitle}:`,
+      ...(policy.purpose === "role-relevance" && block.label
+        ? [`${block.label}:`]
+        : []),
       ...block.claims.map(end),
       ...block.qualifications.map(end),
     ]
       .filter(Boolean)
       .join(" "),
   );
+  if (policy.purpose === "role-relevance" && sections.length) {
+    const role = request.sessionContext.visitorIntent?.normalizedTitle?.trim();
+    const roleLabel =
+      role && /^[A-Za-z][A-Za-z '&/-]{1,79}$/.test(role)
+        ? role
+        : "the role you entered";
+    sections[0] = `For ${roleLabel}, relevant page evidence:\n${sections[0]}`;
+  }
+  if (policy.missingSupportingPage)
+    sections.push(
+      "No supporting project evidence was supplied for the broader ownership comparison.",
+    );
   if (navigationQuestion(request.message))
     sections.splice(
       0,
@@ -370,7 +529,14 @@ export function renderClaimSelection(input: {
     sections.push(
       "For a role-specific PDF resume, use /resume/generate and paste the job description in the generator flow, not in a URL. A resume is ready only after that flow runs.",
     );
-  if (input.careerEvidence?.safeFallback)
+  const unavailableStatusAlreadyRendered =
+    input.evidenceUnavailableReason === "not_configured" &&
+    input.careerEvidence?.safeFallback ===
+      EVIDENCE_FALLBACK_MESSAGES.not_configured &&
+    selected.some((block) =>
+      block.coveredStatuses?.includes("career-retrieval-unavailable"),
+    );
+  if (input.careerEvidence?.safeFallback && !unavailableStatusAlreadyRendered)
     sections.push(input.careerEvidence.safeFallback);
   const usedCareer = selected.filter(
     (block) => block.pageSlug === "career-evidence",
@@ -378,6 +544,13 @@ export function renderClaimSelection(input: {
   return {
     selectedIds: ids,
     status,
+    selectionDiagnostics: {
+      purpose: policy.purpose,
+      catalogSize: blocks.length,
+      reason,
+      requiresSupportingPage: policy.requiresSupportingPage,
+      selectedIds: ids,
+    },
     response: {
       answer: sections.join("\n\n"),
       relatedPages,

@@ -161,6 +161,18 @@ export const decisionsEvaluation = {
       snapshot:
         "The a611b35 baseline code and 09db575 candidate used the same scoped public request per pair, with no remote career retrieval. Original rubrics, raw outputs, original paid 6/6-versus-5/6 grades and all historical bake-off evidence remain unchanged. Quality and owner Production configuration gates remain open.",
     },
+    {
+      id: "concise-claim-block-replay",
+      label: "Narrow the selection before adding prose",
+      date: "October 17, 2026 · UTC",
+      result: "3/3 unchanged hard rubrics in saved-output replay",
+      method:
+        "A bounded local follow-up replaced broad bundles with concise authored claim-and-qualification blocks, pinned to the supplied approved source fields. Page catalogs now expose relevant proof blocks, role answers name the stated role, and across-portfolio ownership requires a supplied supporting project. The same four saved Terra ID outputs drove deterministic replay; no new model calls were made.",
+      limit:
+        "The original paid 2/4 candidate and 3/4 baseline judge results remain unchanged. Two saved selections use canonical fallback under the narrower catalog, so replay does not establish how Terra will select under the new schema or what a fresh judge would conclude. The spending-admission block and owner Production configuration gate remain open.",
+      snapshot:
+        "All paid raw answers, source/selection traces, original rubrics, earlier comparisons and the separate model bake-off are retained. New local checks are distinct from live semantic evidence.",
+    },
   ],
   judgeDisclosure:
     "Judge results also needed scrutiny. Later checks corrected four unchanged answers' source-aware grades, and a persisted Terra check regraded a malformed judge response against the unchanged answer. These are grading corrections, not newly improved answers; original outcomes remain part of the record.",

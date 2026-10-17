@@ -348,7 +348,7 @@ test("failed routing retains existing prompt and evidence tool availability", as
   );
 });
 
-test("malformed Director-role prose uses canonical ownership and does not attribute unused career evidence", async () => {
+test("malformed Director-role prose uses canonical role evidence and does not attribute unused career evidence", async () => {
   const client = {
     responses: {
       create: async () => ({
@@ -377,7 +377,7 @@ test("malformed Director-role prose uses canonical ownership and does not attrib
   );
   assert.match(
     result.response.answer,
-    /does not describe end-to-end production implementation ownership/,
+    /not end-to-end production implementation ownership/,
   );
   assert.equal(
     result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,

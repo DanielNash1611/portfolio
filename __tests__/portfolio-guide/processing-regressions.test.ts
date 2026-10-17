@@ -49,7 +49,7 @@ test("every canonical block comes from supplied source fields and retains all ma
     assert.equal(new Set(blocks.map((block) => block.id)).size, blocks.length);
     for (const block of blocks) {
       const output = render(
-        request(page.slug),
+        request(page.slug, "Tell me about this page"),
         JSON.stringify({ blockIds: [block.id] }),
       );
       for (const text of [...block.claims, ...block.qualifications])
@@ -97,7 +97,7 @@ test("selection rejects prose, unknown IDs, extra fields, duplicates and oversiz
 
 test("timeline is exact approved dates and vision/engineering/outcome limits, with no inferred interval", () => {
   const result = render(
-    request("ai-platform-mcp", "Show the impact"),
+    request("ai-platform-mcp", "What is the platform timeline?"),
     '{"blockIds":["ai-platform-mcp:timeline"]}',
   );
   assert.equal(result.status, "selected-blocks");
@@ -107,12 +107,12 @@ test("timeline is exact approved dates and vision/engineering/outcome limits, wi
   );
   assert.match(
     result.response.answer,
-    /does not establish.*full original vision/,
+    /do not establish.*full original vision/,
   );
   assert.match(result.response.answer, /end-to-end production engineering/);
   assert.match(
     result.response.answer,
-    /does not establish faster or more reliable scaling/,
+    /quantified adoption, performance or scaling gains/,
   );
   assert.doesNotMatch(
     result.response.answer,
@@ -132,7 +132,7 @@ test("role relevance renders prototype intent and reusable patterns without busi
   assert.match(result.response.answer, /reusable platform foundations/);
   assert.match(
     result.response.answer,
-    /does not describe end-to-end production implementation ownership/,
+    /not end-to-end production implementation ownership/,
   );
   assert.doesNotMatch(
     result.response.answer,
@@ -160,22 +160,22 @@ test("ownership selection cannot omit direction, AI assistance, no sole coding, 
     "invalid",
   ]) {
     const result = render(req, raw);
-    assert.match(result.response.answer, /Defined the product thesis/);
+    assert.match(
+      result.response.answer,
+      /defined AI Career Operating System.s product direction/,
+    );
     assert.match(result.response.answer, /AI development agents/);
-    assert.match(result.response.answer, /does not claim sole hand-coding/);
+    assert.match(result.response.answer, /no claim of sole hand-coding/);
+    assert.match(result.response.answer, /support authenticated resume jobs/);
     assert.match(
       result.response.answer,
-      /support authenticated resume-job API/,
-    );
-    assert.match(result.response.answer, /locally tested Decisions API/);
-    assert.match(
-      result.response.answer,
-      /Final combined-release validation remains pending/,
+      /Decisions routing.*remain local or unshipped/,
     );
     assert.match(
       result.response.answer,
-      /remote career retrieval remains disabled/,
+      /final combined-release validation is pending/,
     );
+    assert.match(result.response.answer, /remote retrieval is disabled/);
   }
 });
 
@@ -301,8 +301,11 @@ test("the exact three local failures and original paid ownership raw response us
     );
     if (captured.caseId === "original-paid-ownership-credit") {
       assert.match(output.response.answer, /AI development agents/);
-      assert.match(output.response.answer, /does not claim sole hand-coding/);
-      assert.match(output.response.answer, /locally tested Decisions API/);
+      assert.match(output.response.answer, /no claim of sole hand-coding/);
+      assert.match(
+        output.response.answer,
+        /Decisions routing.*remain local or unshipped/,
+      );
     }
   }
 });
