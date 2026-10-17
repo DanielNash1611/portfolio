@@ -82,6 +82,8 @@ type SnapshotRow = {
   page_title: string | null;
   suggested_follow_ups: string[] | null;
   related_pages: GuideConversationMessage["relatedPages"] | null;
+  citations?: GuideConversationMessage["citations"] | null;
+  used_evidence_ids?: string[] | null;
 };
 
 function rows<T>(result: unknown): T[] {
@@ -114,19 +116,25 @@ export function hashConversationAccessToken(token: string): string {
 export function hashPortfolioGuideIp(ip: string): string {
   const salt = process.env.PORTFOLIO_GUIDE_PRIVACY_SALT?.trim();
   if (!salt) {
-    throw new Error("PORTFOLIO_GUIDE_PRIVACY_SALT is required for durable conversations.");
+    throw new Error(
+      "PORTFOLIO_GUIDE_PRIVACY_SALT is required for durable conversations.",
+    );
   }
   return createHmac("sha256", salt).update(ip).digest("hex");
 }
 
-function normalizeMemory(value: GuideSessionSignals | null): GuideSessionSignals {
+function normalizeMemory(
+  value: GuideSessionSignals | null,
+): GuideSessionSignals {
   return {
     visitedPages: value?.visitedPages ?? [],
     clickedPrompts: value?.clickedPrompts ?? [],
     askedQuestions: value?.askedQuestions ?? [],
     inferredInterestTags: value?.inferredInterestTags ?? [],
     ...(value?.visitorIntent ? { visitorIntent: value.visitorIntent } : {}),
-    ...(value?.recommendedPath ? { recommendedPath: value.recommendedPath } : {}),
+    ...(value?.recommendedPath
+      ? { recommendedPath: value.recommendedPath }
+      : {}),
     ...(value?.lastVisitedAt ? { lastVisitedAt: value.lastVisitedAt } : {}),
   };
 }
@@ -154,14 +162,16 @@ function isUniqueViolation(error: unknown): boolean {
 export function createPortfolioGuideConversationStore(options?: {
   sql?: SqlQueryRunner;
 }) {
-  const sql =
-    options?.sql ?? {
-      query: (query: string, params?: unknown[]) =>
-        getDatabaseClient().query(query, params),
-    };
+  const sql = options?.sql ?? {
+    query: (query: string, params?: unknown[]) =>
+      getDatabaseClient().query(query, params),
+  };
 
   return {
-    async create(): Promise<{ conversation: DurableConversation; token: string }> {
+    async create(): Promise<{
+      conversation: DurableConversation;
+      token: string;
+    }> {
       const token = generateConversationAccessToken();
       const row = first<ConversationRow>(
         await sql.query(
@@ -198,7 +208,9 @@ export function createPortfolioGuideConversationStore(options?: {
       return row ? toConversation(row) : null;
     },
 
-    async loadMessages(conversationId: string): Promise<GuideConversationMessage[]> {
+    async loadMessages(
+      conversationId: string,
+    ): Promise<GuideConversationMessage[]> {
       const result = await sql.query(
         `
           SELECT
@@ -210,7 +222,9 @@ export function createPortfolioGuideConversationStore(options?: {
             page_slug,
             prompt_snapshot->>'pageTitle' AS page_title,
             response_payload->'suggestedFollowUps' AS suggested_follow_ups,
-            response_payload->'relatedPages' AS related_pages
+            response_payload->'relatedPages' AS related_pages,
+            response_payload->'citations' AS citations,
+            response_payload->'usedEvidenceIds' AS used_evidence_ids
           FROM portfolio_guide_interactions
           WHERE conversation_id = $1
             AND response_status = 'answered'
@@ -240,6 +254,8 @@ export function createPortfolioGuideConversationStore(options?: {
           pageTitle: row.page_title ?? undefined,
           suggestedFollowUps: row.suggested_follow_ups ?? undefined,
           relatedPages: row.related_pages ?? undefined,
+          citations: row.citations ?? undefined,
+          usedEvidenceIds: row.used_evidence_ids ?? undefined,
         },
       ]);
     },
@@ -248,7 +264,9 @@ export function createPortfolioGuideConversationStore(options?: {
       conversationId: string,
       query: string,
       maxResults = 5,
-    ): Promise<Array<{ content: string; pageSlug: string; createdAt: string }>> {
+    ): Promise<
+      Array<{ content: string; pageSlug: string; createdAt: string }>
+    > {
       const normalizedQuery = query.trim().slice(0, 300);
       if (!normalizedQuery) {
         return [];
@@ -319,7 +337,10 @@ export function createPortfolioGuideConversationStore(options?: {
           [input.conversationId, input.clientTurnId],
         ),
       );
-      if (existing?.response_status === "answered" && existing.response_payload) {
+      if (
+        existing?.response_status === "answered" &&
+        existing.response_payload
+      ) {
         return {
           kind: "existing",
           interactionId: existing.id,
@@ -366,7 +387,8 @@ export function createPortfolioGuideConversationStore(options?: {
         ),
       ]);
 
-      const conversationCount = first<{ count: number }>(conversationRate)?.count ?? 0;
+      const conversationCount =
+        first<{ count: number }>(conversationRate)?.count ?? 0;
       const ipCount = first<{ count: number }>(ipRate)?.count ?? 0;
       const globalCount = first<{ count: number }>(globalRate)?.count ?? 0;
       if (
@@ -434,14 +456,13 @@ export function createPortfolioGuideConversationStore(options?: {
               FROM portfolio_guide_trace_events
               WHERE interaction_id = $2
             `,
-            [
-              randomUUID(),
-              existing.id,
-              JSON.stringify({ previousErrorCode }),
-            ],
+            [randomUUID(), existing.id, JSON.stringify({ previousErrorCode })],
           );
         } catch (error) {
-          console.warn("Portfolio Guide retry trace could not be stored:", error);
+          console.warn(
+            "Portfolio Guide retry trace could not be stored:",
+            error,
+          );
         }
 
         return {
@@ -482,8 +503,12 @@ export function createPortfolioGuideConversationStore(options?: {
           [
             interactionId,
             requestId,
-            process.env.APP_ENV?.trim() || (process.env.NODE_ENV === "production" ? "production" : "local"),
-            process.env.DATABASE_BRANCH_NAME?.trim() || (process.env.NODE_ENV === "production" ? "production" : "development"),
+            process.env.APP_ENV?.trim() ||
+              (process.env.NODE_ENV === "production" ? "production" : "local"),
+            process.env.DATABASE_BRANCH_NAME?.trim() ||
+              (process.env.NODE_ENV === "production"
+                ? "production"
+                : "development"),
             `conversation_${input.conversationId}`,
             input.conversationId,
             input.request.pageContext.slug,
@@ -498,7 +523,9 @@ export function createPortfolioGuideConversationStore(options?: {
             visitorIntent?.focusAreas ?? [],
             input.request.sessionContext.inferredInterestTags,
             input.request.sessionContext.visitedPages,
-            input.request.sessionContext.recommendedPath?.map((page) => page.slug) ?? [],
+            input.request.sessionContext.recommendedPath?.map(
+              (page) => page.slug,
+            ) ?? [],
             input.model,
             input.conversationId,
             input.clientTurnId,
@@ -518,7 +545,10 @@ export function createPortfolioGuideConversationStore(options?: {
             [input.conversationId, input.clientTurnId],
           ),
         );
-        if (duplicate?.response_status === "answered" && duplicate.response_payload) {
+        if (
+          duplicate?.response_status === "answered" &&
+          duplicate.response_payload
+        ) {
           return {
             kind: "existing",
             interactionId: duplicate.id,
@@ -557,7 +587,10 @@ export function createPortfolioGuideConversationStore(options?: {
     },
 
     async hardDelete(conversationId: string): Promise<void> {
-      await sql.query(`DELETE FROM portfolio_guide_conversations WHERE id = $1`, [conversationId]);
+      await sql.query(
+        `DELETE FROM portfolio_guide_conversations WHERE id = $1`,
+        [conversationId],
+      );
     },
 
     async listDeletionCandidates(
@@ -582,9 +615,13 @@ export function createPortfolioGuideConversationStore(options?: {
         `,
         [Math.max(1, Math.min(limit, 200))],
       );
-      return rows<{ id: string; status: string; response_ids: string[] }>(result).map(
-        (row) => ({ id: row.id, status: row.status, responseIds: row.response_ids }),
-      );
+      return rows<{ id: string; status: string; response_ids: string[] }>(
+        result,
+      ).map((row) => ({
+        id: row.id,
+        status: row.status,
+        responseIds: row.response_ids,
+      }));
     },
 
     async cleanupExpired(): Promise<{ deleted: number }> {

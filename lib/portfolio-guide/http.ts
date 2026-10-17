@@ -56,6 +56,7 @@ export type PortfolioGuideRouteDependencies = {
   /** Optional: when true, the evidence tool is served by the local non-prod mock. */
   getEvidenceMockEnabled?: () => boolean;
   getDecisionsEnabled?: () => boolean;
+  getHybridSearchEnabled?: () => boolean;
   signal?: AbortSignal;
 };
 
@@ -210,6 +211,8 @@ function defaultDependencies(): PortfolioGuideRouteDependencies {
     getEvidenceApiUrl: () => getResumeEngineConfig().baseUrl ?? undefined,
     getEvidenceApiKey: () => getResumeEngineConfig().token ?? undefined,
     getEvidenceEnabled: () => isRemoteCareerEvidenceEnabled(),
+    getHybridSearchEnabled: () =>
+      process.env.PORTFOLIO_GUIDE_HYBRID_SEARCH_ENABLED === "true",
     getEvidenceMockEnabled: () => isEvidenceMockEnabled(),
     getDecisionsEnabled: () =>
       process.env.PORTFOLIO_GUIDE_DECISIONS_ENABLED !== "false",
@@ -323,6 +326,7 @@ export async function handlePortfolioGuideRequest(
       signal: dependencies.signal,
       evidenceConfig,
       evidenceMock,
+      hybridSearch: dependencies.getHybridSearchEnabled?.() ?? false,
       decisions: {
         enabled: dependencies.getDecisionsEnabled?.() ?? false,
         apiKey,

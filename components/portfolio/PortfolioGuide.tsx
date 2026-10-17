@@ -11,7 +11,10 @@ import {
   GUIDE_UNAVAILABLE_MESSAGE,
   MAX_CONVERSATION_CONTEXT_MESSAGES,
 } from "@/lib/portfolio-guide/constants";
-import { getSessionAwarePrompt, inferInterestTags } from "@/lib/portfolio-guide/infer-tags";
+import {
+  getSessionAwarePrompt,
+  inferInterestTags,
+} from "@/lib/portfolio-guide/infer-tags";
 import {
   appendSiteWideConversationMessages,
   createEmptyGuideSessionState,
@@ -47,16 +50,26 @@ function createConversationMessage(
   content: string,
   options?: Pick<
     GuideConversationMessage,
-    "suggestedFollowUps" | "relatedPages" | "turnId" | "pageSlug" | "pageTitle"
+    | "suggestedFollowUps"
+    | "relatedPages"
+    | "turnId"
+    | "pageSlug"
+    | "pageTitle"
+    | "citations"
+    | "usedEvidenceIds"
   > & { id?: string },
 ): GuideConversationMessage {
   return {
-    id: options?.id ?? `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    id:
+      options?.id ??
+      `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     role,
     content,
     createdAt: new Date().toISOString(),
     suggestedFollowUps: options?.suggestedFollowUps,
     relatedPages: options?.relatedPages,
+    citations: options?.citations,
+    usedEvidenceIds: options?.usedEvidenceIds,
     turnId: options?.turnId,
     pageSlug: options?.pageSlug,
     pageTitle: options?.pageTitle,
@@ -64,13 +77,19 @@ function createConversationMessage(
 }
 
 function createClientTurnId(): string {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+  if (
+    typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
+  ) {
     return crypto.randomUUID();
   }
   return `turn_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
 }
 
-function uniquePrompts(prompts: Array<string | null | undefined>, limit = 6): string[] {
+function uniquePrompts(
+  prompts: Array<string | null | undefined>,
+  limit = 6,
+): string[] {
   const seen = new Set<string>();
   const result: string[] = [];
 
@@ -103,19 +122,28 @@ export default function PortfolioGuide({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [lastMessage, setLastMessage] = useState<string>("");
   const [lastClientTurnId, setLastClientTurnId] = useState<string>("");
-  const [loadingLabel, setLoadingLabel] = useState("Grounding this answer in the page…");
+  const [loadingLabel, setLoadingLabel] = useState(
+    "Grounding this answer in the page…",
+  );
   const [extraPrompt, setExtraPrompt] = useState<string | null>(null);
-  const [visitorIntent, setVisitorIntent] = useState<VisitorIntent | null>(null);
+  const [visitorIntent, setVisitorIntent] = useState<VisitorIntent | null>(
+    null,
+  );
   const [persistenceStatus, setPersistenceStatus] =
     useState<GuidePersistenceStatus>("disabled");
-  const [persistenceWarning, setPersistenceWarning] = useState<string | null>(null);
+  const [persistenceWarning, setPersistenceWarning] = useState<string | null>(
+    null,
+  );
   const [isHydrating, setIsHydrating] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     const initialTags = inferInterestTags({ pageContext });
     let nextState = writeGuideSessionState(
-      recordTagSignals(recordPageVisit(readGuideSessionState(), pageContext.slug), initialTags),
+      recordTagSignals(
+        recordPageVisit(readGuideSessionState(), pageContext.slug),
+        initialTags,
+      ),
     );
     const localMessages = getSiteWideConversation(nextState);
     setMessages(localMessages);
@@ -246,6 +274,8 @@ export default function PortfolioGuide({
         answer?: string;
         suggestedFollowUps?: string[];
         relatedPages?: GuideConversationMessage["relatedPages"];
+        citations?: GuideConversationMessage["citations"];
+        usedEvidenceIds?: string[];
         inferredInterestTags?: PageContext["interestTags"];
         error?: string;
         code?: string;
@@ -303,6 +333,8 @@ export default function PortfolioGuide({
               pageTitle: pageContext.title,
               suggestedFollowUps: data.suggestedFollowUps,
               relatedPages: data.relatedPages,
+              citations: data.citations,
+              usedEvidenceIds: data.usedEvidenceIds,
             }),
           ],
         ),
@@ -339,7 +371,9 @@ export default function PortfolioGuide({
       setPersistenceWarning(data.persistenceWarning ?? null);
     } catch {
       setPersistenceStatus("degraded");
-      setPersistenceWarning("A new temporary conversation was started in this browser.");
+      setPersistenceWarning(
+        "A new temporary conversation was started in this browser.",
+      );
     }
     const nextState = writeGuideSessionState(createEmptyGuideSessionState());
     setMessages([]);
@@ -387,14 +421,19 @@ export default function PortfolioGuide({
       : "rounded-[1.75rem] border border-brand-slate/10 bg-white/92 px-6 py-5 shadow-soft md:px-7";
 
   return (
-    <section className="space-y-4" aria-labelledby={`portfolio-guide-${pageContext.slug}`}>
+    <section
+      className="space-y-4"
+      aria-labelledby={`portfolio-guide-${pageContext.slug}`}
+    >
       <div className={clsx("space-y-4", cardClassName)}>
         <div className="space-y-2">
           <h2
             id={`portfolio-guide-${pageContext.slug}`}
             className={clsx(
               "text-xl font-semibold tracking-tight",
-              tone === "site" ? "text-[color:var(--color-slate)]" : "text-brand-teal",
+              tone === "site"
+                ? "text-[color:var(--color-slate)]"
+                : "text-brand-teal",
             )}
           >
             {DEFAULT_GUIDE_TITLE}
@@ -453,7 +492,9 @@ export default function PortfolioGuide({
           onDraftChange={setDraft}
           onSubmit={() => void submitMessage(draft, "input")}
           onFollowUp={(message) => void submitMessage(message, "follow-up")}
-          onRetry={() => void submitMessage(lastMessage, "input", lastClientTurnId)}
+          onRetry={() =>
+            void submitMessage(lastMessage, "input", lastClientTurnId)
+          }
           onNewConversation={() => void startNewConversation()}
           onDeleteConversation={() => void deleteConversation()}
           isLoading={status === "loading"}

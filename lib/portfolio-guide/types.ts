@@ -199,6 +199,7 @@ export type CopilotConversationMessage = {
 };
 
 export type CopilotRequest = {
+  scope?: "page" | "portfolio";
   message: string;
   pageContext: PageContext;
   portfolioContext: PortfolioContext;
@@ -222,7 +223,19 @@ export type EvidenceSummary = {
  * augmented with source-audited ResumeCustomizer evidence, and surfaces why the
  * deeper layer was skipped when applicable. Never contains secrets.
  */
+export type GuideCitation = {
+  sourceId: string;
+  title: string;
+  url?: string;
+  excerpt: string;
+  kind: "portfolio" | "approved_career";
+};
 export type EvidenceMetadata = {
+  retrievedEvidenceIds?: string[];
+  retrievalMode?: string;
+  careerRetrievalMode?: string;
+  scope?: string;
+
   /** True whenever the answer was grounded in the current/related page context. */
   pageContextUsed: boolean;
   /** True only when source-audited ResumeCustomizer evidence was woven in. */
@@ -234,6 +247,8 @@ export type EvidenceMetadata = {
 };
 
 export type CopilotResponse = {
+  citations?: GuideCitation[];
+  usedEvidenceIds?: string[];
   answer: string;
   suggestedFollowUps?: string[];
   relatedPages?: RelatedPage[];
@@ -255,6 +270,8 @@ export type GuideConversationMessage = CopilotConversationMessage & {
   pageTitle?: string;
   suggestedFollowUps?: string[];
   relatedPages?: RelatedPage[];
+  citations?: GuideCitation[];
+  usedEvidenceIds?: string[];
 };
 
 export type GuideSessionSignals = Pick<

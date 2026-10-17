@@ -144,7 +144,9 @@ export default function PortfolioGuidePanel({
             onClick={() => {
               if (
                 typeof window === "undefined" ||
-                window.confirm("Delete this conversation and its saved history?")
+                window.confirm(
+                  "Delete this conversation and its saved history?",
+                )
               ) {
                 onDeleteConversation();
               }
@@ -163,7 +165,12 @@ export default function PortfolioGuidePanel({
       </div>
 
       {persistenceWarning ? (
-        <div className={clsx("rounded-xl border px-3 py-2 text-xs leading-5", statusClassName)}>
+        <div
+          className={clsx(
+            "rounded-xl border px-3 py-2 text-xs leading-5",
+            statusClassName,
+          )}
+        >
           {persistenceWarning}
         </div>
       ) : null}
@@ -185,7 +192,36 @@ export default function PortfolioGuidePanel({
                   {message.pageTitle}
                 </p>
               ) : null}
-              <p className="whitespace-pre-line">{message.content}</p>
+              <p className="whitespace-pre-line [overflow-wrap:anywhere]">
+                {message.content}
+              </p>
+
+              {message.role === "assistant" && message.citations?.length ? (
+                <div className="mt-4 space-y-2 text-xs">
+                  <p className="font-semibold">Evidence used</p>
+                  {message.citations.map((citation) => (
+                    <details key={citation.sourceId}>
+                      <summary className="cursor-pointer">
+                        {citation.title}
+                      </summary>
+                      <p className="mt-2 whitespace-pre-line [overflow-wrap:anywhere]">
+                        {citation.excerpt}
+                      </p>
+                      {citation.url &&
+                      (/^\/(?![\/\\])/.test(citation.url) ||
+                        /^https:\/\/www\.danielnash\.co\//.test(
+                          citation.url,
+                        )) ? (
+                        <Link className="underline" href={citation.url}>
+                          {citation.kind === "approved_career"
+                            ? "Related project context"
+                            : "View source page"}
+                        </Link>
+                      ) : null}
+                    </details>
+                  ))}
+                </div>
+              ) : null}
 
               {message.role === "assistant" && message.relatedPages?.length ? (
                 <div className="mt-4 space-y-2">
@@ -211,7 +247,8 @@ export default function PortfolioGuidePanel({
                 </div>
               ) : null}
 
-              {message.role === "assistant" && message.suggestedFollowUps?.length ? (
+              {message.role === "assistant" &&
+              message.suggestedFollowUps?.length ? (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {message.suggestedFollowUps.map((followUp) => {
                     const actionHref = getFollowUpActionHref(followUp);
@@ -223,7 +260,11 @@ export default function PortfolioGuidePanel({
                     );
 
                     return actionHref ? (
-                      <Link key={followUp} href={actionHref} className={className}>
+                      <Link
+                        key={followUp}
+                        href={actionHref}
+                        className={className}
+                      >
                         {followUp}
                       </Link>
                     ) : (
@@ -245,9 +286,9 @@ export default function PortfolioGuidePanel({
       ) : (
         <div className={emptyStateClassName}>
           <p className="text-sm leading-6">
-            Ask a specific question about this page. Answers stay
-            grounded in page evidence and can point to one useful adjacent page
-            when that adds clarity.
+            Ask a specific question about this page. Answers stay grounded in
+            page evidence and can point to one useful adjacent page when that
+            adds clarity.
           </p>
         </div>
       )}
@@ -269,7 +310,9 @@ export default function PortfolioGuidePanel({
                 key={item}
                 className={clsx(
                   "h-2.5 w-2.5 rounded-full animate-pulse",
-                  tone === "site" ? "bg-[color:var(--color-teal)]/55" : "bg-brand-teal/55",
+                  tone === "site"
+                    ? "bg-[color:var(--color-teal)]/55"
+                    : "bg-brand-teal/55",
                 )}
               />
             ))}
@@ -315,7 +358,9 @@ export default function PortfolioGuidePanel({
           htmlFor="portfolio-guide-question"
           className={clsx(
             "block text-sm font-semibold",
-            tone === "site" ? "text-[color:var(--color-slate)]" : "text-brand-teal",
+            tone === "site"
+              ? "text-[color:var(--color-slate)]"
+              : "text-brand-teal",
           )}
         >
           Ask a question
