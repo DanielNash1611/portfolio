@@ -29,8 +29,6 @@ export type CanaryPacket = {
 };
 export type CanaryApproval = EvaluationApproval & {
   targetModelConfirmed: boolean;
-  tokenCountingPricingVerified: boolean;
-  tokenCountingChargeUsd: number;
 };
 export type CanaryJournal = {
   /** Must atomically refuse a previously claimed run. */
@@ -96,17 +94,14 @@ export async function runGuardedCanary(options: {
     (options.approval.approved !== true ||
       options.approval.pricingVerified !== true ||
       options.approval.targetModelConfirmed !== true ||
-      options.approval.tokenCountingPricingVerified !== true ||
-      options.approval.tokenCountingChargeUsd !== 0 ||
       options.approval.scopeSha256 !== options.scopeSha256 ||
       !options.apiKey)
   )
     throw new Error(
-      "Live run requires confirmed model, verified generation/counting prices, matching scope and existing API access.",
+      "Live run requires confirmed model, verified generation prices, matching scope and existing API access.",
     );
   journal.claim(options.scopeSha256, dryRun ? "dry-run" : "live");
   const rawFetch = options.transport ?? fetch;
-  let countCalls = 0;
   const fixtureFetch: typeof fetch = async (input, init) => {
     const body = JSON.parse(init!.body as string);
     const output = String(input).endsWith("/decisions")
@@ -173,66 +168,6 @@ export async function runGuardedCanary(options: {
     scopeSha256: options.scopeSha256,
     fetch: dryRun ? fixtureFetch : rawFetch,
     onChange: journal.budget,
-    countInputTokens: async (body, requestSha256) => {
-      if (++countCalls > 30)
-        throw new Error("Token-count request ceiling exhausted.");
-      const parsed = JSON.parse(body);
-      if (dryRun)
-        return { inputTokens: 1000, requestSha256, model: parsed.model };
-      const payload = Object.fromEntries(
-        [
-          "model",
-          "input",
-          "instructions",
-          "tools",
-          "tool_choice",
-          "text",
-          "parallel_tool_calls",
-        ]
-          .filter((k) => parsed[k] !== undefined)
-          .map((k) => [k, parsed[k]]),
-      );
-      journal.result(`count-${countCalls}-request`, {
-        requestSha256,
-        model: parsed.model,
-        status: "pending",
-        chargeUsd: 0,
-      });
-      const response = await rawFetch(
-        "https://api.openai.com/v1/responses/input_tokens",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${options.apiKey}`,
-          },
-          body: JSON.stringify(payload),
-          signal: AbortSignal.timeout(15000),
-        },
-      );
-      if (!response.ok)
-        throw new Error(
-          `Token counter HTTP ${response.status}; no generation retry.`,
-        );
-      const count = await response.json();
-      if (
-        count.object !== "response.input_tokens" ||
-        !Number.isInteger(count.input_tokens) ||
-        count.input_tokens < 0
-      )
-        throw new Error("Invalid token-count response.");
-      journal.result(`count-${countCalls}-response`, {
-        requestSha256,
-        model: parsed.model,
-        inputTokens: count.input_tokens,
-        chargeUsd: 0,
-      });
-      return {
-        inputTokens: count.input_tokens,
-        requestSha256,
-        model: parsed.model,
-      };
-    },
   });
   const post = async (body: Record<string, unknown>, signal?: AbortSignal) => {
     const response = await budget.fetch("https://api.openai.com/v1/responses", {
@@ -321,6 +256,7 @@ export async function runGuardedCanary(options: {
       };
       const response = await post({
         model: packet.models.judge,
+        text: { format: { type: "json_object" } },
         reasoning: { effort: "low" },
         metadata: { eval_case: row.evalCase.id, eval_role: "paired-judge" },
         input: [
@@ -407,7 +343,6 @@ export async function runGuardedCanary(options: {
       workflows: workflows.length,
       pairedJudgments: judgments.length,
       routing,
-      countCalls,
       budget: budget.snapshot(),
       deploymentVerified: false,
     };
@@ -421,7 +356,6 @@ export async function runGuardedCanary(options: {
           ? error.message.replace(/sk-[A-Za-z0-9_-]+/g, "[redacted]")
           : "Evaluation stopped",
       budget: budget.snapshot(),
-      countCalls,
     });
     throw new Error(
       "Canary stopped; original results and budget reservations retained. Inspect the local stopped record.",

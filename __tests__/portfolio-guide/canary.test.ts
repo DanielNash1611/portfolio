@@ -20,8 +20,6 @@ const approval: CanaryApproval = {
   ceilingUsd: 10,
   scopeSha256,
   targetModelConfirmed: false,
-  tokenCountingPricingVerified: false,
-  tokenCountingChargeUsd: -1,
 };
 function packet(): CanaryPacket {
   const request: CopilotRequest = {
@@ -101,8 +99,9 @@ test("dry canary exercises bounded adapter without external transport or API acc
   assert.equal(result.workflows, 6);
   assert.equal(result.pairedJudgments, 6);
   assert.equal(result.routing.length, 32);
-  assert.ok(result.countCalls <= 30);
-  assert.ok(result.budget.reservedUsd <= 7.776);
+  assert.equal(result.budget.counts.answer, 12);
+  assert.equal(result.budget.counts.judge, 6);
+  assert.ok(result.budget.reservedUsd <= 8.2284);
   assert.ok(result.budget.ledger.every((e) => e.status === "complete"));
   assert.ok(log.records["synthetic-0-judge-original"]);
   await assert.rejects(
@@ -116,14 +115,14 @@ test("dry canary exercises bounded adapter without external transport or API acc
     /already claimed/,
   );
 });
-test("live adapter blocks unconfirmed model/counting pricing before transport or journal claim", async () => {
+test("live adapter blocks unconfirmed model/generation pricing before transport or journal claim", async () => {
   let touched = false;
   for (const change of [
     approval,
     {
       ...approval,
       approved: true,
-      pricingVerified: true,
+      pricingVerified: false,
       targetModelConfirmed: true,
     },
   ]) {

@@ -33,8 +33,6 @@ async function main() {
         ceilingUsd: 10,
         scopeSha256,
         targetModelConfirmed: false,
-        tokenCountingPricingVerified: false,
-        tokenCountingChargeUsd: -1,
       };
   const out = path.resolve(values["out-dir"]);
   const ledgerPath = path.join(out, "budget-ledger.json");

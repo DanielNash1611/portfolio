@@ -55,19 +55,19 @@ test("guard reserves the complete role maximum and retains nonsecret usage", asy
   const budget = guard();
   await budget.fetch(endpoint, init());
   const result = budget.snapshot();
-  assert.equal(result.reservedUsd, 0.3);
-  assert.equal(result.ledger[0].usageCostUpperBoundNano, 2_500_000);
+  assert.equal(result.reservedUsd, 0.3442);
+  assert.equal(result.ledger[0].usageCostUpperBoundNano, 805_000);
   assert.equal(result.ledger[0].status, "complete");
   assert.doesNotMatch(JSON.stringify(result), /Synthetic public-safe/);
 });
-test("full planned call ceilings reserve $7.776 and reject an extra call", async () => {
+test("full planned call ceilings reserve $8.2284 and reject an extra call", async () => {
   const budget = guard({}, async (_input, options) =>
     Response.json({
       model: JSON.parse(options!.body as string).model,
       usage: { input_tokens: 100, output_tokens: 0 },
     }),
   );
-  for (let i = 0; i < 24; i++) await budget.fetch(endpoint, init(payload(i)));
+  for (let i = 0; i < 12; i++) await budget.fetch(endpoint, init(payload(i)));
   for (let i = 0; i < 6; i++)
     await budget.fetch(endpoint, init(payload(i, "gpt-6.1-sol")));
   for (let i = 0; i < 36; i++)
@@ -75,8 +75,8 @@ test("full planned call ceilings reserve $7.776 and reject an extra call", async
       "https://api.openai.com/v1/decisions",
       init(JSON.stringify({ model: "gpt-6-luna", input: String(i) })),
     );
-  assert.equal(budget.snapshot().reservedUsd, 7.776);
-  await assert.rejects(budget.fetch(endpoint, init(payload(24))), /call limit/);
+  assert.equal(budget.snapshot().reservedUsd, 8.2284);
+  await assert.rejects(budget.fetch(endpoint, init(payload(12))), /call limit/);
 });
 test("budget rejects insufficient allowance, unknown models, excess tokens and external tools before transport", async () => {
   const budget = guard({ ceilingUsd: 0.29 });
@@ -90,7 +90,7 @@ test("budget rejects insufficient allowance, unknown models, excess tokens and e
       store: false,
       service_tier: "default",
       max_output_tokens: 1200,
-      input: "x".repeat(24000),
+      input: "x".repeat(100000),
     }),
     JSON.stringify({
       model: "gpt-5.6-terra",
@@ -127,7 +127,7 @@ test("duplicate calls, concurrent calls and unknown usage cannot silently retry"
   const missing = guard({}, async () => Response.json({}));
   await assert.rejects(missing.fetch(endpoint, init()), /usage/);
   await assert.rejects(missing.fetch(endpoint, init(payload(1))), /stopped/);
-  assert.equal(missing.snapshot().reservedUsd, 0.3);
+  assert.equal(missing.snapshot().reservedUsd, 0.3442);
 });
 test("transport errors and exceeded usage keep the reservation and stop further calls", async () => {
   for (const transport of [
@@ -141,7 +141,7 @@ test("transport errors and exceeded usage keep the reservation and stop further 
     const budget = guard({}, transport);
     await assert.rejects(budget.fetch(endpoint, init()));
     assert.equal(budget.snapshot().stopped, true);
-    assert.equal(budget.snapshot().reservedUsd, 0.3);
+    assert.equal(budget.snapshot().reservedUsd, 0.3442);
     await assert.rejects(budget.fetch(endpoint, init(payload(1))), /stopped/);
   }
 });
@@ -182,7 +182,7 @@ test("reservation is persisted before transport, and journal failure prevents a 
   assert.equal(failedJournal.snapshot().stopped, true);
 });
 
-test("large requests require a matching verified token-count receipt and never lose evidence to fit", async () => {
+test("the unchanged large evidence packet is admitted by a conservative byte bound without extra API calls", async () => {
   const largeBody = JSON.stringify({
     model: "gpt-5.6-terra",
     store: false,
@@ -190,17 +190,12 @@ test("large requests require a matching verified token-count receipt and never l
     max_output_tokens: 1200,
     input: "x".repeat(70000),
   });
-  let transported = false;
+  let calls = 0;
   const budget = createEvaluationBudgetGuard({
     approval,
     scopeSha256,
-    countInputTokens: async (_body, requestSha256) => ({
-      inputTokens: 20000,
-      requestSha256,
-      model: "gpt-5.6-terra",
-    }),
     fetch: async (_input, options) => {
-      transported = true;
+      calls++;
       assert.equal(options!.body, largeBody);
       return Response.json({
         usage: { input_tokens: 20000, output_tokens: 1 },
@@ -208,24 +203,12 @@ test("large requests require a matching verified token-count receipt and never l
     },
   });
   await budget.fetch(endpoint, init(largeBody));
-  assert.equal(transported, true);
+  assert.equal(calls, 1);
   assert.equal(
     budget.snapshot().ledger[0].inputTokenSource,
-    "verified-counter",
+    "byte-upper-bound",
   );
-  const mismatch = createEvaluationBudgetGuard({
-    approval,
-    scopeSha256,
-    countInputTokens: async () => ({
-      inputTokens: 1,
-      requestSha256: "wrong",
-      model: "gpt-5.6-terra",
-    }),
-    fetch: async () => {
-      throw new Error("must not reach transport");
-    },
-  });
-  await assert.rejects(mismatch.fetch(endpoint, init(largeBody)), /receipt/);
-  assert.equal(mismatch.snapshot().stopped, true);
-  assert.equal(mismatch.snapshot().reservedUsd, 0);
+  const oversized = largeBody.replace("x".repeat(70000), "x".repeat(100000));
+  await assert.rejects(budget.fetch(endpoint, init(oversized)), /input bound/);
+  assert.equal(calls, 1);
 });

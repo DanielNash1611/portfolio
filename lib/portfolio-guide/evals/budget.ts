@@ -3,19 +3,19 @@ import { createHash } from "node:crypto";
 const ROLES = {
   answer: {
     model: "gpt-5.6-terra",
-    calls: 24,
-    input: 24_000,
+    calls: 12,
+    input: 100_000,
     output: 1_200,
-    inputNano: 10_000,
-    outputNano: 50_000,
+    inputNano: 3_250,
+    outputNano: 16_000,
   },
   judge: {
     model: "gpt-6.1-sol",
     calls: 6,
-    input: 24_000,
+    input: 100_000,
     output: 1_200,
-    inputNano: 3_000,
-    outputNano: 12_000,
+    inputNano: 6_500,
+    outputNano: 19_500,
   },
   routing: {
     model: "gpt-6-luna",
@@ -39,11 +39,12 @@ type LedgerEntry = {
   requestSha256: string;
   reservedNano: number;
   inputTokenUpperBound: number;
-  inputTokenSource?: "byte-upper-bound" | "verified-counter";
+  inputTokenSource: "byte-upper-bound";
   status: "reserved" | "complete" | "unknown";
   inputTokens?: number;
   outputTokens?: number;
   usageCostUpperBoundNano?: number;
+  usage?: Record<string, unknown>;
 };
 export type EvaluationBudgetSnapshot = {
   ceilingUsd: number;
@@ -59,15 +60,6 @@ export function createEvaluationBudgetGuard(options: {
   scopeSha256: string;
   fetch: typeof fetch;
   onChange?: (snapshot: EvaluationBudgetSnapshot) => void;
-  /** Exact provider count for this payload; caller verifies counting pricing first. */
-  countInputTokens?: (
-    body: string,
-    requestSha256: string,
-  ) => Promise<{
-    inputTokens: number;
-    requestSha256: string;
-    model: string;
-  }>;
 }) {
   const { approval } = options;
   const ledger: LedgerEntry[] = [];
@@ -161,34 +153,7 @@ export function createEvaluationBudgetGuard(options: {
       throw new Error("Approved role-specific call limit exhausted.");
     if (ledger.some((item) => item.requestSha256 === requestSha256))
       throw new Error("Duplicate request/retry requires separate review.");
-    let inputBound = Buffer.byteLength(init.body, "utf8") + 1_024;
-    let inputTokenSource: LedgerEntry["inputTokenSource"] = "byte-upper-bound";
-    if (
-      inputBound > rule.input &&
-      role !== "routing" &&
-      options.countInputTokens
-    ) {
-      busy = true;
-      try {
-        const count = await options.countInputTokens(init.body, requestSha256);
-        if (
-          count.requestSha256 !== requestSha256 ||
-          count.model !== body.model ||
-          !Number.isInteger(count.inputTokens) ||
-          count.inputTokens < 0
-        )
-          throw new Error(
-            "Input token receipt does not match this exact model and payload.",
-          );
-        inputBound = count.inputTokens + 64;
-        inputTokenSource = "verified-counter";
-      } catch (error) {
-        stopped = true;
-        throw error;
-      } finally {
-        busy = false;
-      }
-    }
+    const inputBound = Buffer.byteLength(init.body, "utf8") + 1_024;
     if (inputBound > rule.input)
       throw new Error(
         "Conservative input bound exceeds the frozen token limit; revise the packet before calling.",
@@ -206,7 +171,7 @@ export function createEvaluationBudgetGuard(options: {
       requestSha256,
       reservedNano,
       inputTokenUpperBound: inputBound,
-      inputTokenSource,
+      inputTokenSource: "byte-upper-bound",
       status: "reserved",
     };
     ledger.push(entry);
@@ -221,6 +186,12 @@ export function createEvaluationBudgetGuard(options: {
         );
       const data = await result.clone().json();
       const usage = data.usage;
+      if (
+        role !== "routing" &&
+        data.service_tier &&
+        data.service_tier !== "default"
+      )
+        throw new Error("Unexpected processing tier; stop for pricing review.");
       const inputTokens = usage?.input_tokens;
       const outputTokens =
         usage?.output_tokens ?? (role === "routing" ? 0 : undefined);
@@ -242,6 +213,7 @@ export function createEvaluationBudgetGuard(options: {
         status: "complete",
         inputTokens,
         outputTokens,
+        usage,
         usageCostUpperBoundNano:
           inputTokens * rule.inputNano + outputTokens * rule.outputNano,
       });
