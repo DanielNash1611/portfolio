@@ -99,3 +99,12 @@ approval is not required. Validation and Production configuration/runtime
 verification are the current gates. No publication or deployment proceeds until
 the parent resolves the configuration gate with the owner. The metadata 403 is
 not bypassed and no secret or account setting is changed by this revision.
+
+
+## Evidence-block simplification — October 17 approval
+
+Daniel approved the simplification at 15:28 UTC (Sentinel_f443bd27bca88191a87958289bf8f58e). Factual generation now selects at most two IDs from the actual supplied canonical claim inventory. A deterministic renderer emits the source claims and their complete mapped qualifications; it never displays free-form model answer text. Invalid JSON, invented/duplicate IDs or invalid scope receive a canonical fallback. Ownership requests retain direction, AI assistance, no-sole-coding and implementation/status evidence as one block. Resume actions remain actions; recommendations use canonical metadata. The source highlight's helping-lead wording now agrees with its existing authored essay and direct-ownership boundary.
+
+This replaces the prose-repair chain and the sentence-ranking finalizer. The old formatting, phrase and shortening tests are replaced by selection, provenance, scope, exact captured-failure and complete-qualification contracts. Original evaluation questions, rubrics and saved scores are not changed. Security, request cancellation, bounded Decisions routing, supported resume jobs and the independent default-off career-evidence setting remain intact. No remote career search is part of the comparison.
+
+The prior 41-call paid ledger is complete and reconciles to a conservative usage bound of $1.1103225; its $8.2076 original reservation remains unchanged. A separate frozen four-scenario comparison covers the three latest local failures and the ownership-credit question. Eight Terra answer reservations, four existing Sol paired-judge reservations and one shared Luna Decisions reservation total $5.4488; with completed prior usage, the maximum admitted total is $6.5591225, below the original TOTAL $10 ceiling. No new ceiling or credential is introduced. Unknown prior or new usage, changed scope, malformed grades or insufficient conservative allowance stops execution; no automatic retry or regrade is permitted. Actual results are a separate completion record, not a replacement for earlier grades.

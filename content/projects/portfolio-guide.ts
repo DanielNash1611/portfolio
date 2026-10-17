@@ -1088,7 +1088,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Grounded enterprise example",
         detail:
-          "It ties the argument back to leading early ChatGPT rollout work in the contact center, including pre-call preparation and drafting workflows.",
+          "It ties the argument back to helping lead early ChatGPT rollout work in the contact center, including pre-call preparation and drafting workflows.",
         type: "outcome",
       },
       {

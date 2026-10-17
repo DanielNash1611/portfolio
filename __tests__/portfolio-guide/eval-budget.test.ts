@@ -212,3 +212,70 @@ test("the unchanged large evidence packet is admitted by a conservative byte bou
   await assert.rejects(budget.fetch(endpoint, init(oversized)), /input bound/);
   assert.equal(calls, 1);
 });
+
+test("completed prior usage consumes the total approval while original reservations remain immutable", async () => {
+  const prior = guard();
+  await prior.fetch(endpoint, init());
+  const ledger = prior.snapshot();
+  const serialized = JSON.stringify(ledger);
+  let transported = false;
+  const cumulative = createEvaluationBudgetGuard({
+    approval: { ...approval, ceilingUsd: 0.3449 },
+    scopeSha256,
+    priorCompletedLedgers: [ledger],
+    fetch: async () => {
+      transported = true;
+      return Response.json({ usage: { input_tokens: 100, output_tokens: 30 } });
+    },
+  });
+  await assert.rejects(cumulative.fetch(endpoint, init(payload(1))), /budget/);
+  assert.equal(transported, false);
+  assert.equal(cumulative.snapshot().priorUsageCostUpperBoundUsd, 0.000805);
+  assert.equal(JSON.stringify(ledger), serialized);
+});
+
+test("unknown, missing, inconsistent or duplicated prior usage stops before a new transport", async () => {
+  const prior = guard();
+  await prior.fetch(endpoint, init());
+  const original = prior.snapshot();
+  for (const mutate of [
+    (state: typeof original) => {
+      state.ledger[0].status = "unknown";
+    },
+    (state: typeof original) => {
+      delete state.ledger[0].inputTokens;
+    },
+    (state: typeof original) => {
+      state.ledger[0].usageCostUpperBoundNano = 0;
+    },
+    (state: typeof original) => {
+      state.reservedUsd = 0;
+    },
+    (state: typeof original) => {
+      state.counts.answer = 2;
+    },
+  ]) {
+    const changed = structuredClone(original);
+    mutate(changed);
+    assert.throws(() =>
+      createEvaluationBudgetGuard({
+        approval,
+        scopeSha256,
+        priorCompletedLedgers: [changed],
+        fetch: async () => {
+          throw new Error("transport must not run");
+        },
+      }),
+    );
+  }
+  assert.throws(
+    () =>
+      createEvaluationBudgetGuard({
+        approval,
+        scopeSha256,
+        priorCompletedLedgers: [original, original],
+        fetch: async () => Response.json({}),
+      }),
+    /duplicate/,
+  );
+});

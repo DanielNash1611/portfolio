@@ -2,13 +2,7 @@ import OpenAI from "openai";
 import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 import { selectRecommendationsForPage } from "@/lib/portfolio-guide/context";
 import { getRelatedPages } from "@/lib/portfolio-guide/related";
-import { isCreativeTechnologyIntent } from "@/lib/portfolio-guide/intent";
-import {
-  buildPortfolioGuideInput,
-  extractResponseText,
-  normalizeCopilotResponse,
-  PORTFOLIO_GUIDE_SYSTEM_PROMPT,
-} from "@/lib/portfolio-guide/prompt";
+import { extractResponseText } from "@/lib/portfolio-guide/prompt";
 import type {
   CopilotRequest,
   CopilotResponse,
@@ -32,7 +26,12 @@ import {
   type ConversationHistorySearchResult,
 } from "@/lib/portfolio-guide/tools/conversation-history";
 import type { PortfolioGuideTraceEvent } from "@/lib/portfolio-guide/trace";
-import { finalizeRoutedAnswer } from "./answer-finalization";
+import {
+  buildClaimInventory,
+  CLAIM_SELECTION_PROMPT,
+  claimSelectionFormat,
+  renderClaimSelection,
+} from "./factual-answers";
 import {
   routePortfolioQuestion,
   selectRoutedPages,
@@ -78,1251 +77,16 @@ export type PortfolioGuideGenerationResult = {
   rawText: string;
   relatedPages: RelatedPage[];
   response: CopilotResponse;
-  normalizationStatus: "normalized-json" | "raw-fallback";
+  normalizationStatus:
+    | "normalized-json"
+    | "raw-fallback"
+    | "selected-blocks"
+    | "canonical-fallback";
   provider: PortfolioGuideProviderInfo;
   responseIds?: string[];
   usage?: Record<string, unknown>;
   traceEvents?: PortfolioGuideTraceEvent[];
 };
-
-const RESUME_GENERATOR_PATH = "/resume/generate";
-const RESUME_GENERATOR_FOLLOW_UPS = [
-  "Generate a resume for my role",
-  "Compare Daniel to this job description",
-  "Show the strongest proof points",
-  "Contact Daniel",
-] as const;
-
-function normalizeText(text: string): string {
-  return text
-    .normalize("NFKC")
-    .replace(/[\u2018\u2019]/g, "'")
-    .replace(/[\u201C\u201D]/g, '"')
-    .replace(/[\u2010-\u2015]/g, "-")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase();
-}
-
-function escapeRegex(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function extractMentionedTerm(question: string): string | undefined {
-  const match = question.match(
-    /\bmention(?:ed|s)?\b(?:\s+the term)?\s+["“]?([a-z0-9-]+)["”]?/i,
-  );
-
-  return match?.[1]?.trim();
-}
-
-function answerDeniesMention(answer: string, term: string): boolean {
-  const normalized = normalizeText(answer);
-  const escapedTerm = escapeRegex(normalizeText(term));
-
-  return (
-    new RegExp(
-      `\\b(?:no|does not|doesn't|do not|don't|not on this page|i don't see)\\b[\\s\\S]{0,80}\\b${escapedTerm}\\b`,
-      "i",
-    ).test(normalized) ||
-    new RegExp(
-      `\\b${escapedTerm}\\b[\\s\\S]{0,40}\\b(?:is not|isn't)\\b`,
-      "i",
-    ).test(normalized)
-  );
-}
-
-function isOwnershipQuestion(question: string): boolean {
-  return /\b(what did .* own|ownership|who owned)\b|\b(?:what|which|who)\b[^?]{0,80}\bresponsible for\b|\b(?:his|daniel['’]s) responsibilities\b/i.test(
-    question,
-  );
-}
-
-function isRankingQuestion(question: string): boolean {
-  return /\b(reused most|most reused|which .* most|rank(?:ing)?|most use)\b/i.test(
-    question,
-  );
-}
-
-function isImpactQuestion(question: string): boolean {
-  return /\b(impact|results|outcome|outcomes)\b/i.test(question);
-}
-
-function isSeniorityQuestion(question: string): boolean {
-  return /\b(how senior|seniority|level of work)\b/i.test(question);
-}
-
-function isImpliedNotProvenQuestion(question: string): boolean {
-  return /\b(implied|not proven|proven|inference)\b/i.test(question);
-}
-
-function isNextReadQuestion(question: string): boolean {
-  return /\b(what should i (?:read|view) next|read next|view next|next read)\b/i.test(
-    question,
-  );
-}
-
-function isConnectionsQuestion(question: string): boolean {
-  return /\b(?:this (?:page|work|case)|how does this)\b.*\b(?:connect|portfolio|other work)\b/i.test(
-    question,
-  );
-}
-
-function isEvidenceSummaryQuestion(question: string): boolean {
-  return /\b(what evidence|strongest (?:signals|evidence|proof)|evidence (?:is|shown)|proof (?:is|shown)|signals on this page)\b/i.test(
-    question,
-  );
-}
-
-function isReferentialFollowUpQuestion(question: string): boolean {
-  return /\b(what do you mean|what did you mean|explain that|elaborate|say more|why is that|how so|that point|your (?:last|previous) answer|you (?:said|mentioned)|what about that)\b/i.test(
-    question,
-  );
-}
-
-function isDailyActiveUsersQuestion(question: string): boolean {
-  return /\b(daily active users?|dau)\b/i.test(question);
-}
-
-function isDirectResumeRequest(question: string): boolean {
-  return (
-    /\b(?:resume|cv)\b/i.test(question) &&
-    /\b(?:role|job|jd|job description|specific|tailor|tailored|custom|generate|get|download|look at|send|pdf)\b/i.test(
-      question,
-    )
-  );
-}
-
-function isRoleFitOrJobDescriptionQuestion(question: string): boolean {
-  return (
-    isDirectResumeRequest(question) ||
-    /\b(?:would|could) daniel\b.*\b(?:good|fit|director|lead|head|vp|role)\b/i.test(
-      question,
-    ) ||
-    /\b(?:is daniel (?:a )?fit|daniel fit|fit for (?:this|the) (?:role|job)|can daniel do|can he do|job description|jd\b|compare daniel to|compare .* (?:jd|job description|role|job)|what resume should i look at|which resume should i look at)\b/i.test(
-      question,
-    )
-  );
-}
-
-function isEvidenceOrOwnershipOnlyQuestion(question: string): boolean {
-  return (
-    !isRoleFitOrJobDescriptionQuestion(question) &&
-    (isOwnershipQuestion(question) ||
-      isSeniorityQuestion(question) ||
-      isImpliedNotProvenQuestion(question) ||
-      /\b(?:strongest signals|evidence|proof|signals on this page|what did .* responsible|responsib)\b/i.test(
-        question,
-      ))
-  );
-}
-
-function hasExplicitLimit(answer: string): boolean {
-  return /\b(does not|doesn't|did not|didn't)\b.*\b(specify|say|rank|define|provide|mention|quantify)\b|\bno\b.*\b(figure|ranking|counts?)\b|\bnot explicit\b/i.test(
-    answer,
-  );
-}
-
-function stripSpeculativeTail(answer: string): string {
-  const sentences = answer
-    .match(/[^.!?]+[.!?]?/g)
-    ?.map((sentence) => sentence.trim()) ?? [answer.trim()];
-  const filtered = sentences.filter(
-    (sentence) =>
-      !/(^inference:|\blikely\b|\bprobably\b|\bmight\b|\bmost broadly\b|\bappeared frequently\b|\bsaw the most use\b)/i.test(
-        sentence,
-      ),
-  );
-
-  return filtered.join(" ").trim() || answer.trim();
-}
-
-function buildSafeRankingAnswer(request: CopilotRequest): string {
-  const namedPatterns = (request.pageContext.tools ?? [])
-    .map((value) => value.trim())
-    .filter(Boolean)
-    .slice(0, 4);
-  if (namedPatterns.length === 0) {
-    return "The page does not provide reuse counts, frequencies, or a supported ranking, so it cannot establish which pattern was reused most.";
-  }
-  const listed =
-    namedPatterns.length === 1
-      ? namedPatterns[0]
-      : `${namedPatterns.slice(0, -1).join(", ")}, and ${namedPatterns.at(-1)}`;
-  return `The page does not provide reuse counts, frequencies, or a ranking, so it cannot establish which pattern was reused most. It names ${listed} as supported patterns.`;
-}
-
-function hasExplicitOwnershipLimit(answer: string): boolean {
-  return /\b(full|formal) ownership matrix\b|\bexact ownership split\b|\bteam-by-team breakdown\b|\bdoes not define\b.*\bownership\b|\bdoes not provide\b.*\bownership\b/i.test(
-    answer,
-  );
-}
-
-function hasExplicitUnknownLimit(answer: string): boolean {
-  return /\bnot proven\b|\bnot explicit\b|\bdoes not define\b|\bdoesn't define\b|\bdoes not specify\b|\bdoesn't specify\b|\bdoes not show\b|\bdoesn't show\b/i.test(
-    answer,
-  );
-}
-
-function softenOwnershipClaims(answer: string, subjectName: string): string {
-  return answer
-    .replace(
-      new RegExp(`\\b${escapeRegex(subjectName)}\\s+owned\\b`, "gi"),
-      `The page shows ${subjectName} leading`,
-    )
-    .replace(
-      new RegExp(
-        `\\b${escapeRegex(subjectName)}\\s+designed and implemented\\b`,
-        "gi",
-      ),
-      `The page describes ${subjectName} driving`,
-    )
-    .replace(
-      new RegExp(
-        `\\b${escapeRegex(subjectName)}\\s+built\\b([\\s\\S]{0,80})\\bend[- ]to[- ]end\\b`,
-        "gi",
-      ),
-      `${subjectName} helped build$1`,
-    );
-}
-
-function ensureTrailingPeriod(text: string): string {
-  return /[.!?]$/.test(text) ? text : `${text}.`;
-}
-
-function includesResumeGeneratorPath(answer: string): boolean {
-  return normalizeText(answer).includes(RESUME_GENERATOR_PATH);
-}
-
-function removeResumeGenerationCompletionClaims(answer: string): string {
-  return answer
-    .replace(
-      /\b(?:i|i've|we|we've|the bot|portfolio guide)\s+(?:generated|created|built|made|rendered|emailed|downloaded)\b[^.!?]*(?:resume|pdf)[.!?]?/gi,
-      `The generator flow at ${RESUME_GENERATOR_PATH} can create the role-specific PDF resume after a job description is submitted.`,
-    )
-    .replace(
-      /\b(?:your|the)\s+(?:role-specific\s+)?(?:resume|pdf)\s+(?:is|has been)\s+(?:ready|generated|created|rendered|emailed|downloaded)[.!?]?/gi,
-      `A role-specific PDF resume is only ready after the generator flow runs.`,
-    );
-}
-
-function removeUnsupportedPortfolioGeneratorSourceClaims(
-  answer: string,
-): string {
-  const correction =
-    "The current page does not prove that Portfolio pages directly feed the generated resume.";
-
-  return answer
-    .replace(
-      /\b(?:the\s+)?(?:tool|generator)(?:\s+flow)?\s+(?:will\s+)?(?:pulls?|uses?|reads?|retrieves?)(?:\s+in)?\s+(?:its\s+)?evidence\s+from\s+(?:the\s+)?(?:(?:this|current)\s+(?:portfolio\s+)?page|(?:other\s+)?portfolio\s+(?:pages|content))[^.!?]*[.!?]?/gi,
-      correction,
-    )
-    .replace(
-      /\bportfolio\s+(?:pages|content)\s+(?:directly\s+)?(?:power|powers|feed|feeds|supply|supplies)\s+(?:the\s+)?(?:resume\s+)?generator[^.!?]*[.!?]?/gi,
-      correction,
-    );
-}
-
-function uniqueFollowUps(
-  items: Array<string | undefined>,
-  limit = 4,
-): string[] {
-  const seen = new Set<string>();
-  const results: string[] = [];
-
-  for (const item of items) {
-    const value = item?.trim();
-    if (!value) {
-      continue;
-    }
-
-    const key = normalizeText(value);
-    if (seen.has(key)) {
-      continue;
-    }
-
-    seen.add(key);
-    results.push(value);
-    if (results.length >= limit) {
-      break;
-    }
-  }
-
-  return results;
-}
-
-function isResumeGeneratorFollowUp(label: string): boolean {
-  const normalized = normalizeText(label);
-
-  return (
-    normalized.includes("generate a resume") ||
-    normalized.includes("role-specific resume") ||
-    normalized.includes("resume for my role") ||
-    normalized.includes("compare daniel to this job description") ||
-    normalized.includes(RESUME_GENERATOR_PATH)
-  );
-}
-
-function addResumeGeneratorFollowUps(existing: string[] | undefined): string[] {
-  return uniqueFollowUps([...RESUME_GENERATOR_FOLLOW_UPS, ...(existing ?? [])]);
-}
-
-function removeResumeGeneratorFollowUps(
-  existing: string[] | undefined,
-): string[] | undefined {
-  const filtered = existing?.filter((item) => !isResumeGeneratorFollowUp(item));
-
-  return filtered && filtered.length > 0 ? filtered : undefined;
-}
-
-function normalizeReasonForAnswer(reason: string): string {
-  return reason.trim().replace(/\s+/g, " ").replace(/[.]$/, "");
-}
-
-function buildSafeRelatedPages(
-  responsePages: RelatedPage[] | undefined,
-  fallbackRelatedPages: RelatedPage[],
-): RelatedPage[] {
-  const fallbackBySlug = new Map(
-    fallbackRelatedPages.map((page) => [page.slug, page]),
-  );
-  const selectedPages =
-    responsePages && responsePages.length > 0
-      ? responsePages
-      : fallbackRelatedPages;
-
-  return selectedPages
-    .map((page) => {
-      const fallbackPage = fallbackBySlug.get(page.slug);
-
-      return {
-        ...page,
-        ...(fallbackPage?.reason ? { reason: fallbackPage.reason } : {}),
-      };
-    })
-    .slice(0, 2);
-}
-
-function buildNextReadAnswer(input: {
-  currentPageTitle: string;
-  relatedPages: RelatedPage[];
-}): string | undefined {
-  const [firstPage, secondPage] = input.relatedPages;
-
-  if (!firstPage) {
-    return undefined;
-  }
-
-  const firstReason = normalizeReasonForAnswer(
-    firstPage.reason ?? "it is a useful follow-on to this page",
-  );
-
-  if (!secondPage) {
-    return ensureTrailingPeriod(
-      `As a next read, start with ${firstPage.title}. ${ensureTrailingPeriod(firstReason)}`,
-    );
-  }
-
-  const secondReason = normalizeReasonForAnswer(
-    secondPage.reason ?? "it is another useful complement",
-  );
-
-  return [
-    ensureTrailingPeriod(
-      `As a next read, start with ${firstPage.title}. ${ensureTrailingPeriod(firstReason)}`,
-    ),
-    ensureTrailingPeriod(
-      `If you want a second example after ${input.currentPageTitle}, ${secondPage.title} is another good complement. ${ensureTrailingPeriod(secondReason)}`,
-    ),
-  ].join(" ");
-}
-
-function pickDistinctDetails(
-  items: Array<string | undefined>,
-  limit: number,
-): string[] {
-  const seen = new Set<string>();
-  const results: string[] = [];
-
-  for (const item of items) {
-    const value = item?.trim();
-    if (!value || seen.has(value)) {
-      continue;
-    }
-
-    seen.add(value);
-    results.push(value);
-    if (results.length >= limit) {
-      break;
-    }
-  }
-
-  return results;
-}
-
-function joinDetailsAsOneSentence(details: string[]): string {
-  return details
-    .map((detail) => detail.trim().replace(/[.!?]+$/, ""))
-    .filter(Boolean)
-    .join("; ");
-}
-
-// Keep source qualifications within their labeled responsibility category.
-function joinOwnershipDetails(details: string[]): string {
-  return joinDetailsAsOneSentence(details).replace(/[.!?]\s+/g, "; ");
-}
-
-function buildOwnershipAnswer(request: CopilotRequest): string | undefined {
-  const direct = pickDistinctDetails(
-    request.pageContext.claimBoundaries?.directOwnership ?? [],
-    2,
-  );
-  const influence = request.pageContext.claimBoundaries?.influence?.[0];
-  const implementation = pickDistinctDetails(
-    request.pageContext.claimBoundaries?.implementation ?? [],
-    2,
-  );
-  const unknown = request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
-  if (direct.length === 0 && !influence && !implementation.length && !unknown) {
-    return undefined;
-  }
-  const parts: string[] = [];
-  if (direct.length > 0) {
-    parts.push(
-      `The page shows Daniel leading: ${joinOwnershipDetails(direct)}`,
-    );
-  }
-  if (influence) {
-    parts.push(`Influence: ${joinOwnershipDetails([influence])}`);
-  }
-  if (implementation.length) {
-    parts.push(`Implementation: ${joinOwnershipDetails(implementation)}`);
-  }
-  const unknownDetail =
-    unknown && !/ownership matrix|ownership split|team-by-team/i.test(unknown)
-      ? unknown
-      : undefined;
-  parts.push(
-    `Not explicit: ${unknownDetail ? `${joinOwnershipDetails([unknownDetail])}; ` : ""}the page does not define a full ownership matrix or exact team-by-team split`,
-  );
-  return parts.map(ensureTrailingPeriod).join(" ");
-}
-
-function buildAvailableSourceOwnershipAnswer(
-  request: CopilotRequest,
-  supportingPages: SupportingPage[],
-): string | undefined {
-  const external = supportingPages.find(
-    (page) => page.claimBoundaries?.directOwnership?.length,
-  );
-  if (!external) return undefined;
-  const pages: SupportingPage[] = [request.pageContext, ...supportingPages];
-  const directed = [request.pageContext, external].flatMap((page) => {
-    const fact = page.claimBoundaries?.directOwnership?.[0];
-    return fact
-      ? [
-          `${page.slug === request.pageContext.slug ? "On" : "Elsewhere in the portfolio,"} ${page.title}: ${fact}`,
-        ]
-      : [];
-  });
-  const assisted = pages.flatMap((page) =>
-    (page.claimBoundaries?.influence ?? [])
-      .filter((fact) => /\bAI development agents|\bAI-assisted\b/i.test(fact))
-      .map((fact) => ({ page, fact })),
-  )[0];
-  const local = pages.flatMap((page) =>
-    [
-      ...(page.claimBoundaries?.explicitUnknowns ?? []),
-      ...(page.evidenceHighlights?.map((item) => item.detail) ?? []),
-    ]
-      .filter((fact) =>
-        /\blocal(?:ly)?\b[^.!?]{0,100}\b(?:prototype|candidate)/i.test(fact),
-      )
-      .map((fact) => ({ page, fact: fact.split(/(?<=[.!?])\s+/)[0] })),
-  )[0];
-  if (!directed.length || !assisted || !local) return undefined;
-  const soleCodeLimit = assisted.page.claimBoundaries?.implementation?.find(
-    (fact) => /does not (?:claim|establish) sole/i.test(fact),
-  );
-  return [
-    `Directed: ${joinOwnershipDetails(directed)}`,
-    `AI-assisted: On ${assisted.page.title}: ${joinOwnershipDetails([assisted.fact, ...(soleCodeLimit ? [soleCodeLimit] : [])])}`,
-    `Local status: On ${local.page.title}: ${joinOwnershipDetails([local.fact])}`,
-  ]
-    .map(ensureTrailingPeriod)
-    .join(" ");
-}
-
-function buildEvidenceSummaryAnswer(
-  request: CopilotRequest,
-): string | undefined {
-  const highlights = request.pageContext.evidenceHighlights?.slice(0, 3) ?? [];
-  if (highlights.length === 0) {
-    return undefined;
-  }
-
-  return highlights
-    .map((highlight) =>
-      ensureTrailingPeriod(`${highlight.label}: ${highlight.detail}`),
-    )
-    .join(" ");
-}
-
-function buildReferentialFollowUpAnswer(
-  request: CopilotRequest,
-): string | undefined {
-  if (!request.conversation?.some((message) => message.role === "assistant")) {
-    return undefined;
-  }
-
-  const highlights = request.pageContext.evidenceHighlights?.slice(0, 3) ?? [];
-  if (highlights.length === 0) {
-    return undefined;
-  }
-
-  return [
-    ensureTrailingPeriod(
-      `By that, I mean the current page's evidence: ${joinDetailsAsOneSentence(
-        highlights.map((highlight) => highlight.detail),
-      )}`,
-    ),
-    "Those page facts—not the earlier assistant wording—are the basis for the explanation.",
-  ].join(" ");
-}
-
-function pageHasDailyActiveUsersMetric(request: CopilotRequest): boolean {
-  return (request.pageContext.metrics ?? []).some((metric) =>
-    /\b(daily active users?|dau)\b/i.test(metric),
-  );
-}
-
-function buildRoleFitAnswer(request: CopilotRequest): string | undefined {
-  const evidence =
-    request.pageContext.evidenceHighlights
-      ?.slice(0, 3)
-      .map((highlight) => highlight.detail) ?? [];
-  const leadership = request.pageContext.leadershipSignals?.slice(0, 2) ?? [];
-  const boundary =
-    request.pageContext.claimBoundaries?.implementation?.[0] ??
-    request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
-  if (evidence.length === 0 && leadership.length === 0) {
-    return undefined;
-  }
-
-  const role =
-    request.sessionContext?.visitorIntent?.normalizedTitle?.trim() ||
-    "this role";
-  const parts: string[] = [];
-  if (evidence.length > 0) {
-    parts.push(
-      `For ${role}, this page supports fit through ${joinDetailsAsOneSentence(evidence)}`,
-    );
-  }
-  if (leadership.length > 0) {
-    parts.push(
-      `Leadership signals include ${joinDetailsAsOneSentence(leadership)}`,
-    );
-  }
-  if (boundary) {
-    parts.push(`Boundary: ${boundary}`);
-  }
-  return parts.map(ensureTrailingPeriod).join(" ");
-}
-
-function summarizeRecommendation(rec: {
-  name: string;
-  title: string;
-  short: string;
-}): string {
-  const firstTitleSegment = rec.title.split(/[,|·]/)[0].trim();
-  const titleClause = firstTitleSegment ? ` (${firstTitleSegment})` : "";
-  return `${rec.name}${titleClause}: "${rec.short.replace(/^["“]|["”]$/g, "")}"`;
-}
-
-function buildSeniorityAnswer(request: CopilotRequest): string | undefined {
-  const signals = pickDistinctDetails(
-    [
-      request.pageContext.claimBoundaries?.directOwnership?.[0],
-      request.pageContext.claimBoundaries?.directOwnership?.[1],
-      request.pageContext.evidenceHighlights?.[2]?.detail,
-      request.pageContext.evidenceHighlights?.[1]?.detail,
-    ],
-    2,
-  );
-  const unknown = request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
-  const recommendations = request.portfolioContext.recommendations;
-  const currentRec = recommendations?.currentPage[0];
-  const projectRec = recommendations?.projectLinked[0];
-
-  if (signals.length === 0 && !unknown && !currentRec && !projectRec) {
-    return undefined;
-  }
-
-  const parts: string[] = [];
-
-  if (signals.length > 0) {
-    parts.push(`Signals on the page: ${joinDetailsAsOneSentence(signals)}`);
-  }
-
-  if (currentRec) {
-    parts.push(
-      `Direct evidence on this page — ${summarizeRecommendation(currentRec)}`,
-    );
-  }
-
-  if (projectRec) {
-    parts.push(
-      `Direct recommendation tied to this project — ${summarizeRecommendation(projectRec)}`,
-    );
-  }
-
-  if (unknown) {
-    parts.push(`Not proven here: ${unknown}`);
-  }
-
-  return parts.map(ensureTrailingPeriod).join(" ");
-}
-
-function buildImpliedNotProvenAnswer(
-  request: CopilotRequest,
-): string | undefined {
-  const explicitProof = pickDistinctDetails(
-    [
-      request.pageContext.evidenceHighlights?.[0]?.detail,
-      request.pageContext.evidenceHighlights?.[1]?.detail,
-    ],
-    2,
-  );
-  const implied =
-    request.pageContext.claimBoundaries?.conceptualExploration?.[0];
-  const unknown = request.pageContext.claimBoundaries?.explicitUnknowns?.[0];
-
-  if (explicitProof.length === 0 && !implied && !unknown) {
-    return undefined;
-  }
-
-  const parts: string[] = [];
-
-  if (explicitProof.length > 0) {
-    parts.push(`Explicit on the page: ${explicitProof.join(" ")}`);
-  }
-
-  if (implied || unknown) {
-    const impliedPart = pickDistinctDetails([implied, unknown], 2).join(" ");
-    if (impliedPart) {
-      parts.push(`Implied, not proven: ${impliedPart}`);
-    }
-  }
-
-  return parts.map(ensureTrailingPeriod).join(" ");
-}
-
-function buildConnectionsAnswer(input: {
-  request: CopilotRequest;
-  relatedPages: RelatedPage[];
-}): string | undefined {
-  const [firstPage, secondPage] = input.relatedPages;
-  const currentPageLead =
-    input.request.pageContext.oneLiner ??
-    input.request.pageContext.evidenceHighlights?.[0]?.detail;
-
-  if (!currentPageLead && !firstPage) {
-    return undefined;
-  }
-
-  const parts: string[] = [];
-
-  if (currentPageLead) {
-    parts.push(
-      ensureTrailingPeriod(`This page stands on its own as ${currentPageLead}`),
-    );
-  }
-
-  if (firstPage?.reason) {
-    parts.push(ensureTrailingPeriod(firstPage.reason));
-  }
-
-  if (secondPage?.reason) {
-    parts.push(ensureTrailingPeriod(secondPage.reason));
-  }
-
-  return parts.join(" ");
-}
-
-function answerIncludesExplicitMetric(
-  answer: string,
-  pageMetrics: string[] | undefined,
-): boolean {
-  if (!pageMetrics || pageMetrics.length === 0) {
-    return false;
-  }
-
-  return pageMetrics.some((metric) => {
-    const numericMatches =
-      metric.match(
-        /\b\d+(?:[.,]\d+)?%?|\$\d+(?:\.\d+)?\s*[mb]?|\b(?:eight|nine|twelve|sixteen)\b/gi,
-      ) ?? [];
-
-    return numericMatches.some((token) =>
-      normalizeText(answer).includes(normalizeText(token)),
-    );
-  });
-}
-
-function qualifyStaticInventoryConclusion(
-  answer: string,
-  request: CopilotRequest,
-): string {
-  const limits = request.pageContext.claimBoundaries?.explicitUnknowns ?? [];
-  const inventoryLimit = limits.find((text) =>
-    /uncompressed static file inventor/i.test(text),
-  );
-  const outcomeLimit = limits.find((text) =>
-    /media separation does not establish/i.test(text),
-  );
-  if (!inventoryLimit || !outcomeLimit) return answer;
-  const parts = answer.split(/(?<=[.!?])\s+/);
-  const inventoryIndex = parts.findIndex(
-    (part) =>
-      /\bMiB\b/i.test(part) &&
-      /\b(?:static|files?|assets?|inventory|media|bundles?)\b/i.test(part),
-  );
-  if (inventoryIndex < 0) return answer;
-  const amounts =
-    /\b\d+(?:\.\d+)?\s*MiB\s*(?:to|→|->)\s*\d+(?:\.\d+)?\s*MiB\b/i;
-  const documentedAmounts = inventoryLimit.match(amounts)?.[0];
-  if (documentedAmounts) {
-    parts[inventoryIndex] = parts[inventoryIndex].replace(
-      amounts,
-      documentedAmounts,
-    );
-  }
-  parts[inventoryIndex] = parts[inventoryIndex].replace(
-    /,\s*(?:illustrating|demonstrating|showing|proving|delivering|yielding|resulting in)\b[^.!?]*(?:quality|performance|speed|savings)[^.!?]*(?=[.!?]|$)/gi,
-    "",
-  );
-  // Only remove conclusions attributed to this inventory, not separate runtime
-  // measurements or explicit denials of the unsupported inference.
-  const derivedConclusion =
-    /\b(?:this|that|the)\s+(?:reduction|decrease|inventory|separation)|\b(?:media separation|smaller (?:static )?bundles)\b/i;
-  const unsupportedOutcome =
-    /\b(?:faster|speed|performance|quality|savings|bills?|reclaim\w*|production verification)\b/i;
-  const deniesOutcome =
-    /\b(?:does not|doesn't|cannot|can't|no evidence|not establish|not prove|not demonstrate)\b/i;
-  const assertsUnsupportedOutcome = (part: string) =>
-    normalizeText(part)
-      .split(/[,;]|\b(?:but|yet)\b/)
-      .some((clause) => {
-        const outcome = clause.search(unsupportedOutcome);
-        const denial = clause.search(deniesOutcome);
-        return outcome >= 0 && (denial < 0 || denial > outcome);
-      });
-  const corrected = parts.filter(
-    (part, index) =>
-      index <= inventoryIndex ||
-      index > inventoryIndex + 2 ||
-      !derivedConclusion.test(normalizeText(part)) ||
-      !assertsUnsupportedOutcome(part),
-  );
-  if (
-    !/exclude server bundles/i.test(answer) ||
-    !/not independently rerun/i.test(answer) ||
-    !/media separation does not establish/i.test(answer)
-  ) {
-    corrected[inventoryIndex] =
-      `${corrected[inventoryIndex].replace(/[.!?]+$/, "")}; measurement boundary: ${joinOwnershipDetails([inventoryLimit, outcomeLimit])}.`;
-  }
-  return corrected.join(" ");
-}
-
-function suppliesSubstantiveAssistanceCredit(answer: string): boolean {
-  const normalized = normalizeText(answer);
-  const clause = normalized
-    .match(/\b(?:ai[- ]assisted\s*:|ai development agents\b)([^.!?]*)/i)?.[1]
-    ?.split(";")[0]
-    .trim();
-  if (!clause) return false;
-  const onlyMissingCredit =
-    /^(?:unknown|undocumented|not (?:documented|specified|established|known|identified|disclosed|clear)|none|n\/a)\b|^(?:i|we) (?:don't|do not|can't|cannot) (?:know|identify|determine)\b/.test(
-      clause,
-    );
-  const missingCredit =
-    /\b(?:unknown|undocumented|not documented|not specified|not identified)\b/.test(
-      clause,
-    );
-  const substantiveAction =
-    /\b(?:accelerated|implemented|built|coded|helped|assisted|generated|reviewed|contributed|supported)\b/.test(
-      clause,
-    );
-  return !onlyMissingCredit && (!missingCredit || substantiveAction);
-}
-
-function preserveQualifiedPageMetrics(
-  answer: string,
-  request: CopilotRequest,
-): string {
-  const metrics = request.pageContext.metrics ?? [];
-  const compact = (text: string) =>
-    normalizeText(text)
-      .replace(/million\b/g, "m")
-      .replace(/[~\s,]/g, "");
-  const mentionsMetric = (part: string, metric: string) => {
-    const value = metric.split(":").slice(1).join(":").split("(")[0];
-    const money = value.match(/\$\d+(?:\.\d+)?\s*(?:million|m)\b/i)?.[0];
-    if (money) return compact(part).includes(compact(money));
-    const percent = value.match(/\d+(?:\.\d+)?\s*%/)?.[0];
-    if (percent) return compact(part).includes(compact(percent));
-    const times = metric.match(/\b\d+:\d{2}\b/g);
-    return Boolean(times?.length && times.every((time) => part.includes(time)));
-  };
-  return answer
-    .split(/(?<=[.!?])\s+/)
-    .map((part) => {
-      const omittedEstimate =
-        metrics.some(
-          (metric) =>
-            /estimated/i.test(metric) &&
-            /annualized/i.test(metric) &&
-            mentionsMetric(part, metric),
-        ) && !/\bestimat\w*/i.test(part);
-      const inventedTimeUnit = metrics.some((metric) => {
-        const times = metric.match(/\b\d+:\d{2}\b/g);
-        return (
-          times &&
-          times.length > 1 &&
-          times.every((time) => part.includes(time)) &&
-          !/\b(?:seconds?|minutes?|milliseconds?)\b/i.test(metric) &&
-          /\b\d+:\d{2}\s*(?:seconds?|minutes?|milliseconds?)\b/i.test(part)
-        );
-      });
-      if (!omittedEstimate && !inventedTimeUnit) return part;
-      const seen = new Set<string>();
-      const supported = metrics.filter((metric) => {
-        const key = metric.split("(")[0];
-        if (!mentionsMetric(part, metric) || seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-      return supported.length
-        ? `The page reports ${joinOwnershipDetails(supported)}.`
-        : part;
-    })
-    .join(" ");
-}
-
-function qualifyUnlaunchedSystemClaim(
-  answer: string,
-  request: CopilotRequest,
-): string {
-  const launchBoundary =
-    request.pageContext.claimBoundaries?.explicitUnknowns?.find((fact) =>
-      /before[^.!?]*public integration[^.!?]*launched/i.test(fact),
-    );
-  if (!launchBoundary) return answer;
-  return answer
-    .split(/(?<=[.!?])\s+/)
-    .map((part) => {
-      const normalized = normalizeText(part);
-      const claim =
-        /\b(?:complete,?\s+(?:end-to-end\s+)?proof-engine|(?:fully operational|production-ready|complete)\s+(?:end-to-end\s+)?(?:system|workflow|integration))\b/i.exec(
-          normalized,
-        );
-      if (
-        !claim ||
-        /\b(?:not|isn't|doesn't|does not|no)\b[^.!?;]{0,30}$/.test(
-          normalized.slice(0, claim.index),
-        )
-      )
-        return part;
-      return ensureTrailingPeriod(launchBoundary);
-    })
-    .join(" ");
-}
-
-function preserveQualifiedAgency(
-  answer: string,
-  request: CopilotRequest,
-): string {
-  const agency = request.pageContext.claimBoundaries?.directOwnership?.find(
-    (fact) => /helped run[^.!?]*surveys/i.test(fact),
-  );
-  const result = request.pageContext.evidenceHighlights?.find((item) =>
-    /majority[^.!?]*reported increased creativity/i.test(item.detail),
-  )?.detail;
-  const sharedLead = request.pageContext.claimBoundaries?.directOwnership?.find(
-    (fact) => /helped lead[^.!?]*chatgpt rollout/i.test(fact),
-  );
-  const workedOnActivities =
-    request.pageContext.claimBoundaries?.directOwnership?.find((fact) =>
-      /has worked on enterprise AI adoption, agentic workflows, productivity tools/i.test(
-        fact,
-      ),
-    );
-  if ((!agency || !result) && !sharedLead && !workedOnActivities) return answer;
-  const deniedAgency = (prefix: string) =>
-    /\b(?:does not|do not|doesn't|cannot|no evidence|not established)\b/i.test(
-      normalizeText(prefix)
-        .split(/\b(?:but|yet)\b|;/)
-        .at(-1) ?? "",
-    );
-  return answer
-    .split(/(?<=[.!?])\s+/)
-    .map((part) => {
-      const normalizedPart = normalizeText(part);
-      const overstatesAgency =
-        /\b(?:daniel|he)\s+(?:(?:explicitly|directly)\s+)*(?:led|owned|ran|conducted)\b[^.!?]{0,100}\b(?:guitar center|ai adoption|surveys?)\b/i.exec(
-          normalizedPart,
-        );
-      if (
-        agency &&
-        result &&
-        overstatesAgency &&
-        !deniedAgency(normalizedPart.slice(0, overstatesAgency.index))
-      ) {
-        return ensureTrailingPeriod(joinOwnershipDetails([agency, result]));
-      }
-      let qualified = part;
-      if (sharedLead && /\bchatgpt\s+rollout\b/i.test(normalizeText(part))) {
-        qualified = qualified
-          .replace(
-            /\b(Daniel|he)(\s+(?:(?:explicitly|directly)\s+)*)led\b/gi,
-            (match, subject, gap, offset, text) =>
-              deniedAgency(text.slice(0, offset))
-                ? match
-                : `${subject}${gap}helped lead`,
-          )
-          .replace(
-            /\bleading(\s+(?:(?:an?|the)\s+)?(?:early\s+)?ChatGPT\s+rollout)\b/gi,
-            (match, activity, offset, text) =>
-              deniedAgency(text.slice(0, offset))
-                ? match
-                : `helping lead${activity}`,
-          );
-      }
-      // The composite activity list has worked-on evidence. This does not
-      // downgrade separately approved broader enterprise-AI leadership.
-      const activityList = normalizeText(part);
-      if (
-        workedOnActivities &&
-        /\benterprise ai\b/.test(activityList) &&
-        /\bagentic/.test(activityList) &&
-        /\bproductivity/.test(activityList)
-      ) {
-        qualified = qualified.replace(
-          /\bwork (he|Daniel) has led\b/gi,
-          (match, subject, offset, text) =>
-            deniedAgency(text.slice(0, offset))
-              ? match
-              : `work ${subject} has worked on`,
-        );
-      }
-      return qualified;
-    })
-    .join(" ");
-}
-
-function preservePlatformFramingScope(
-  answer: string,
-  request: CopilotRequest,
-): string {
-  const conceptual =
-    request.pageContext.claimBoundaries?.conceptualExploration?.find((fact) =>
-      /prototype evidence[^.!?]*conceptual point of view/i.test(fact),
-    );
-  const implementation =
-    request.pageContext.claimBoundaries?.implementation?.find((fact) =>
-      /prototype-building and platform framing/i.test(fact),
-    );
-  if (!conceptual || !implementation) return answer;
-  const productionTimeline = request.pageContext.evidenceHighlights?.find(
-    (item) => item.label === "Qualified prototype-to-production timeline",
-  )?.detail;
-  const outcomeLimit =
-    request.pageContext.claimBoundaries?.explicitUnknowns?.find((fact) =>
-      /production timeline does not establish faster or more reliable scaling/i.test(
-        fact,
-      ),
-    );
-  let suppliedBoundary = false;
-  return answer
-    .split(/(?<=[.!?])\s+/)
-    .map((part) => {
-      const normalized = normalizeText(part);
-      const artifact =
-        /\b(?:platform|architecture|middle[- ]layer|framework)\b/i.test(
-          normalized,
-        );
-      const delivery =
-        /\b(?:built|building|implemented|created|delivered|new|provides?|enabl\w*|accelerat\w*|turned|result|shipped|deployed|owned)\b/i.test(
-          normalized,
-        );
-      const clauses = normalized.split(/[;]|\b(?:but|yet)\b/);
-      const denies =
-        /\b(?:does not|do not|doesn't|not establish|not describe|cannot)\b/;
-      const deniesScope = (pattern: RegExp) =>
-        clauses.some((clause) => {
-          const limit = clause.search(denies);
-          const scope = clause.search(pattern);
-          return limit >= 0 && scope > limit;
-        });
-      const assertsScaling = clauses.some((clause) => {
-        const claim = clause.search(
-          /\bscal\w*\b[^.!?]*(?:more quickly|more reliably|reliably|faster)\b/,
-        );
-        const limit = clause.search(denies);
-        return claim >= 0 && (limit < 0 || limit > claim);
-      });
-      const qualifiedProduction =
-        productionTimeline &&
-        deniesScope(/full original vision/) &&
-        deniesScope(/end-to-end production (?:engineering|implementation)/) &&
-        !assertsScaling;
-      if (
-        !artifact ||
-        !delivery ||
-        qualifiedProduction ||
-        (!assertsScaling &&
-          /\b(?:conceptual|proposed|framing)\b/i.test(normalized))
-      )
-        return part;
-      const proof = (request.pageContext.evidenceHighlights ?? [])
-        .filter((item) => {
-          const percent = item.detail.match(/\d+\s*%/)?.[0];
-          return percent
-            ? normalized.replace(/\s/g, "").includes(percent.replace(/\s/g, ""))
-            : /\bprototype\b/i.test(normalized) &&
-                /\bprototype\b/i.test(item.detail);
-        })
-        .map((item) => item.detail);
-      if (!suppliedBoundary) {
-        proof.push(
-          ...(productionTimeline ? [productionTimeline] : [conceptual]),
-          implementation,
-          ...(productionTimeline && outcomeLimit ? [outcomeLimit] : []),
-        );
-        suppliedBoundary = true;
-      }
-      return proof.length
-        ? ensureTrailingPeriod(joinOwnershipDetails(proof))
-        : "";
-    })
-    .filter(Boolean)
-    .join(" ");
-}
-
-export function applyPortfolioGuideResponseGuardrails(input: {
-  request: CopilotRequest;
-  response: CopilotResponse;
-  fallbackRelatedPages: RelatedPage[];
-  routedSourcesAvailable?: boolean;
-  supportingPages?: SupportingPage[];
-}): CopilotResponse {
-  const { request, response, fallbackRelatedPages } = input;
-  const preserveRoutedAnswer = Boolean(
-    input.routedSourcesAvailable &&
-      /\bacross (?:the )?portfolio\b/i.test(request.message),
-  );
-  const fallbackBySlug = new Map(
-    fallbackRelatedPages.map((page) => [page.slug, page]),
-  );
-  const mentionTerm = extractMentionedTerm(request.message);
-  const normalizedAnswer = response.answer.trim();
-  const portfolioSubject = request.portfolioContext.portfolioSubject;
-
-  let answer = normalizedAnswer;
-  let suggestedFollowUps = response.suggestedFollowUps;
-  // The creative tour is an authored sequence. Model omissions or reordering
-  // must not skip its next step, including the philosophical essay.
-  let relatedPages = isCreativeTechnologyIntent(
-    request.sessionContext.visitorIntent,
-  )
-    ? fallbackRelatedPages
-    : response.relatedPages;
-  const shouldSuggestResumeGenerator = isRoleFitOrJobDescriptionQuestion(
-    request.message,
-  );
-  const directResumeRequest = isDirectResumeRequest(request.message);
-
-  const falsePageOnlyOwnershipRefusal =
-    /\b(?:can(?:not|'t)|could(?: not|n't))\s+(?:identify|compare|answer|determine|say)\b[^.!?]{0,240}\b(?:across|broader|portfolio)\b|\bonly describes work done on this specific project\b/i.test(
-      normalizeText(answer),
-    );
-  const suppliesAssistanceCredit = suppliesSubstantiveAssistanceCredit(answer);
-  if (
-    preserveRoutedAnswer &&
-    falsePageOnlyOwnershipRefusal &&
-    !suppliesAssistanceCredit &&
-    (isOwnershipQuestion(request.message) ||
-      /\bwhat did\b[^?]{0,80}\bdirect\b/i.test(request.message))
-  ) {
-    answer =
-      buildAvailableSourceOwnershipAnswer(
-        request,
-        input.supportingPages ?? [],
-      ) ?? answer;
-  }
-
-  if (mentionTerm && answerDeniesMention(answer, mentionTerm)) {
-    const termPattern = new RegExp(`\\b${escapeRegex(mentionTerm)}\\b`, "i");
-
-    suggestedFollowUps = suggestedFollowUps?.filter(
-      (item) => !termPattern.test(normalizeText(item)),
-    );
-    relatedPages = relatedPages?.map((page) => {
-      if (!page.reason || !termPattern.test(normalizeText(page.reason))) {
-        return page;
-      }
-
-      const fallbackPage = fallbackBySlug.get(page.slug);
-
-      return {
-        ...page,
-        reason: fallbackPage?.reason ?? page.reason,
-      };
-    });
-  }
-
-  if (
-    !preserveRoutedAnswer &&
-    (isOwnershipQuestion(request.message) ||
-      isRankingQuestion(request.message)) &&
-    hasExplicitLimit(answer)
-  ) {
-    answer = stripSpeculativeTail(answer);
-  }
-
-  if (!preserveRoutedAnswer && isRankingQuestion(request.message)) {
-    answer = buildSafeRankingAnswer(request);
-  }
-
-  if (!preserveRoutedAnswer && isOwnershipQuestion(request.message)) {
-    const safeOwnershipAnswer = buildOwnershipAnswer(request);
-    answer = safeOwnershipAnswer ?? answer;
-
-    if (!safeOwnershipAnswer && portfolioSubject) {
-      answer = softenOwnershipClaims(answer, portfolioSubject.shortName);
-      answer = softenOwnershipClaims(answer, portfolioSubject.name);
-    }
-
-    if (!hasExplicitOwnershipLimit(answer)) {
-      answer = `${ensureTrailingPeriod(answer)} The page does not define a full ownership matrix or exact team-by-team split.`;
-    }
-  }
-
-  if (isSeniorityQuestion(request.message)) {
-    const safeSeniorityAnswer = buildSeniorityAnswer(request);
-    if (safeSeniorityAnswer) {
-      answer = safeSeniorityAnswer;
-    }
-  }
-
-  if (isImpliedNotProvenQuestion(request.message)) {
-    const safeImpliedAnswer = buildImpliedNotProvenAnswer(request);
-    if (safeImpliedAnswer) {
-      answer = safeImpliedAnswer;
-    }
-  }
-
-  if (isEvidenceSummaryQuestion(request.message)) {
-    const safeEvidenceAnswer = buildEvidenceSummaryAnswer(request);
-    if (safeEvidenceAnswer) {
-      answer = safeEvidenceAnswer;
-    }
-  }
-
-  if (isReferentialFollowUpQuestion(request.message)) {
-    const safeReferentialAnswer = buildReferentialFollowUpAnswer(request);
-    if (safeReferentialAnswer) {
-      answer = safeReferentialAnswer;
-    }
-  }
-
-  if (
-    isDailyActiveUsersQuestion(request.message) &&
-    !pageHasDailyActiveUsersMetric(request)
-  ) {
-    answer =
-      "This page does not provide a daily active users (DAU) figure. Any DAU metric from another portfolio page is broader context, not evidence for this page.";
-  }
-
-  if (
-    !preserveRoutedAnswer &&
-    shouldSuggestResumeGenerator &&
-    !directResumeRequest
-  ) {
-    const safeRoleFitAnswer = buildRoleFitAnswer(request);
-    if (safeRoleFitAnswer) {
-      answer = safeRoleFitAnswer;
-    }
-  }
-
-  if (
-    isImpactQuestion(request.message) &&
-    request.pageContext.slug === "ai-platform-mcp" &&
-    !answerIncludesExplicitMetric(answer, request.pageContext.metrics)
-  ) {
-    answer = `${ensureTrailingPeriod(answer)} The page explicitly cites a hackathon-winning prototype and an 87% would-use-again signal as the customer validation behind this work.`;
-  }
-
-  if (isNextReadQuestion(request.message)) {
-    relatedPages = buildSafeRelatedPages(relatedPages, fallbackRelatedPages);
-    suggestedFollowUps = suggestedFollowUps?.filter(
-      (item) => !/\b(read|view) next\b/i.test(item),
-    );
-
-    const safeNextReadAnswer = buildNextReadAnswer({
-      currentPageTitle: request.pageContext.title,
-      relatedPages,
-    });
-
-    if (safeNextReadAnswer) {
-      answer = safeNextReadAnswer;
-    }
-  }
-
-  if (!preserveRoutedAnswer && isConnectionsQuestion(request.message)) {
-    relatedPages = buildSafeRelatedPages(relatedPages, fallbackRelatedPages);
-    const safeConnectionsAnswer = buildConnectionsAnswer({
-      request,
-      relatedPages,
-    });
-
-    if (safeConnectionsAnswer) {
-      answer = safeConnectionsAnswer;
-    }
-  }
-
-  answer = removeResumeGenerationCompletionClaims(answer);
-  answer = removeUnsupportedPortfolioGeneratorSourceClaims(answer);
-  answer = preserveQualifiedPageMetrics(answer, request);
-  answer = qualifyUnlaunchedSystemClaim(answer, request);
-  answer = preserveQualifiedAgency(answer, request);
-  answer = preservePlatformFramingScope(answer, request);
-  answer = qualifyStaticInventoryConclusion(answer, request);
-
-  if (directResumeRequest) {
-    if (!includesResumeGeneratorPath(answer)) {
-      answer = `${ensureTrailingPeriod(answer)} For a role-specific PDF resume, use ${RESUME_GENERATOR_PATH}; paste the job description in the generator flow, not in a URL.`;
-    } else if (!/\bpaste\b/i.test(answer)) {
-      answer = `${ensureTrailingPeriod(answer)} Paste the job description in the generator flow, not in a URL.`;
-    }
-  }
-
-  if (shouldSuggestResumeGenerator) {
-    suggestedFollowUps = addResumeGeneratorFollowUps(suggestedFollowUps);
-  } else if (isEvidenceOrOwnershipOnlyQuestion(request.message)) {
-    suggestedFollowUps = removeResumeGeneratorFollowUps(suggestedFollowUps);
-  }
-
-  return {
-    ...response,
-    answer,
-    ...(suggestedFollowUps ? { suggestedFollowUps } : {}),
-    ...(relatedPages ? { relatedPages } : {}),
-  };
-}
-
-// ── Tool-calling helpers ──────────────────────────────────────────────────────
 
 type FunctionCallItem = {
   type: "function_call";
@@ -1372,21 +136,23 @@ function getResponseDiagnostics(response: unknown): {
   };
 }
 
-export function extractAnswerFromRawFallback(rawText: string): string {
-  const withoutAnswerMarker = rawText
-    .trim()
-    .replace(/^\s*(?:#{1,3}\s*)?(?:\*\*)?answer\s*:?\s*(?:\*\*)?\s*/i, "");
-  const endMarker = withoutAnswerMarker.search(
-    /\s+(?:#{1,3}\s*)?(?:\*\*)?(?:suggested\s*follow[\s\u2010-\u2015-]*ups?|suggested\s+next\s+reads?|related\s*pages?|inferred\s*interest\s*tags?)(?:\*\*)?(?:\s*:\s*|\s*\n)/i,
-  );
-  return (
-    endMarker >= 0
-      ? withoutAnswerMarker.slice(0, endMarker)
-      : withoutAnswerMarker
-  ).trim();
+/** Legacy callers receive the same canonical fallback as malformed selections. */
+export function applyPortfolioGuideResponseGuardrails(input: {
+  request: CopilotRequest;
+  response: CopilotResponse;
+  fallbackRelatedPages: RelatedPage[];
+  routedSourcesAvailable?: boolean;
+  supportingPages?: SupportingPage[];
+}): CopilotResponse {
+  return renderClaimSelection({
+    request: input.request,
+    blocks: buildClaimInventory(input.request, input.supportingPages),
+    rawText: "",
+    relatedPages: input.fallbackRelatedPages,
+  }).response;
 }
 
-/** Pure postprocessing over the captured request, raw output and source packet. */
+/** Only allowlisted IDs influence factual text; model prose is never rendered. */
 export function processPortfolioGuideAnswer(input: {
   request: CopilotRequest;
   rawText: string;
@@ -1395,49 +161,24 @@ export function processPortfolioGuideAnswer(input: {
   routingEnabled?: boolean;
   supportingPages?: SupportingPage[];
 }) {
-  const { request, rawText, relatedPages, careerEvidence } = input;
-  const parsedResponse = normalizeCopilotResponse(rawText, relatedPages);
-  const normalizedResponse =
-    parsedResponse ??
-    ({
-      answer: extractAnswerFromRawFallback(rawText),
-      relatedPages,
-    } satisfies CopilotResponse);
-  const guardedResponse = applyPortfolioGuideResponseGuardrails({
-    request,
-    response: normalizedResponse,
-    fallbackRelatedPages: relatedPages,
-    routedSourcesAvailable: Boolean(
-      input.routingEnabled &&
-        (input.supportingPages?.length || careerEvidence?.evidence.length),
+  const result = renderClaimSelection({
+    ...input,
+    blocks: buildClaimInventory(
+      input.request,
+      input.supportingPages,
+      input.careerEvidence,
     ),
-    supportingPages: input.supportingPages,
-  });
-  const rewritten = guardedResponse.answer !== normalizedResponse.answer;
-  const finalized = finalizeRoutedAnswer({
-    request,
-    answer: guardedResponse.answer,
-    careerEvidence,
-    includeCareerEvidence: Boolean(
-      input.routingEnabled &&
-        rewritten &&
-        careerEvidence?.evidence.length &&
-        !isDirectResumeRequest(request.message) &&
-        !isConnectionsQuestion(request.message) &&
-        !isNextReadQuestion(request.message),
-    ),
-    broaderQuestion:
-      /\b(?:career|experience|background|across|compare)\b/i.test(
-        request.message,
-      ),
   });
   return {
-    normalizedResponse,
-    guardedResponse,
-    finalized,
-    normalizationStatus: parsedResponse
-      ? ("normalized-json" as const)
-      : ("raw-fallback" as const),
+    normalizedResponse: { answer: input.rawText } as CopilotResponse,
+    guardedResponse: result.response,
+    finalized: {
+      answer: result.response.answer,
+      careerEvidenceIds: result.selectedIds
+        .filter((id) => id.startsWith("career:"))
+        .map((id) => id.slice(7)),
+    },
+    normalizationStatus: result.status,
   };
 }
 
@@ -1450,7 +191,7 @@ export async function generatePortfolioGuideResponse(
     model = getPortfolioGuideModel(),
     baseURL,
     providerLabel = "openai",
-    systemPrompt = PORTFOLIO_GUIDE_SYSTEM_PROMPT,
+    systemPrompt = CLAIM_SELECTION_PROMPT,
     reasoningEffort = "low",
     client = new OpenAI({ apiKey, baseURL }),
     signal,
@@ -1519,19 +260,38 @@ export async function generatePortfolioGuideResponse(
       warnings.push(`evidence_unavailable:${evidenceUnavailableReason}`);
     }
   }
-  const promptInput = buildPortfolioGuideInput(
-    enrichedRequest,
-    relatedPages,
-    routing.plan
-      ? {
-          decisionHints: routing.plan,
-          supportingPages: retrieveSupportingPages(relatedPages, routing.plan),
-          ...(prefetchedEvidence ? { careerEvidence: prefetchedEvidence } : {}),
-          sourceRule:
-            "Routing hints control retrieval and presentation, never facts. The current page remains primary for page questions. Label supporting canonical pages as elsewhere in the portfolio and career proof as From ResumeCustomizer evidence. Preserve all claim boundaries and safe fallbacks.",
-        }
-      : undefined,
-  );
+  const supportingPages = routing.plan
+    ? retrieveSupportingPages(relatedPages, routing.plan)
+    : [];
+  const selectionInput = () =>
+    JSON.stringify({
+      currentQuestion: request.message,
+      currentPage: {
+        identity: {
+          slug: request.pageContext.slug,
+          title: request.pageContext.title,
+        },
+      },
+      visitorRole: request.sessionContext.visitorIntent?.normalizedTitle,
+      approvedBlocks: buildClaimInventory(
+        enrichedRequest,
+        supportingPages,
+        prefetchedEvidence,
+      ),
+      candidateRelatedPages: relatedPages,
+      ...(routing.plan
+        ? {
+            routingContext: {
+              decisionHints: routing.plan,
+              supportingPages,
+              ...(prefetchedEvidence
+                ? { careerEvidence: prefetchedEvidence }
+                : {}),
+            },
+          }
+        : {}),
+    });
+  let promptInput = selectionInput();
   const traceEvents: PortfolioGuideTraceEvent[] = [];
   const responseIds: string[] = [];
   const responseUsage: Array<Record<string, unknown>> = [];
@@ -1653,6 +413,16 @@ export async function generatePortfolioGuideResponse(
     input: baseInput,
     ...(availableTools.length > 0 ? { tools: availableTools } : {}),
     ...providerStorageParams,
+    text: {
+      format: claimSelectionFormat(
+        buildClaimInventory(
+          enrichedRequest,
+          supportingPages,
+          prefetchedEvidence,
+        ),
+      ),
+    },
+    max_output_tokens: 600,
   };
 
   const firstResponse = await runModelCall("initial", firstCallParams);
@@ -1775,6 +545,7 @@ export async function generatePortfolioGuideResponse(
         if (safeResult.evidence.length > 0) {
           allEvidence.push(...safeResult.evidence);
         }
+        prefetchedEvidence = safeResult;
 
         toolResultItems.push({
           type: "function_call_output",
@@ -1790,6 +561,11 @@ export async function generatePortfolioGuideResponse(
       }
 
       if (allEvidence.length > 0) {
+        prefetchedEvidence = {
+          ...prefetchedEvidence,
+          evidence: allEvidence,
+          answerability: "high",
+        } as EvidenceSearchResponse;
         evidenceUsed = buildEvidenceSummaries(allEvidence);
         resumeCustomizerEvidenceUsed = true;
       } else if (evidenceToolCalled) {
@@ -1804,10 +580,12 @@ export async function generatePortfolioGuideResponse(
       // Echoing the whole output (not just the function_call items) is
       // required for reasoning models: the Responses API rejects a
       // function_call that is replayed without its sibling reasoning item.
+      promptInput = selectionInput();
       const secondCallInput = [
         ...baseInput,
         ...getResponseOutput(firstResponse),
         ...toolResultItems,
+        { role: "user", content: promptInput },
       ] as ResponsesCreateParams["input"];
 
       finalResponse = await runModelCall("synthesis", {
@@ -1815,6 +593,16 @@ export async function generatePortfolioGuideResponse(
         reasoning: { effort: reasoningEffort },
         input: secondCallInput,
         ...providerStorageParams,
+        text: {
+          format: claimSelectionFormat(
+            buildClaimInventory(
+              enrichedRequest,
+              supportingPages,
+              prefetchedEvidence,
+            ),
+          ),
+        },
+        max_output_tokens: 600,
       });
     } catch (error) {
       // The evidence augmentation or the synthesis call failed. Recover with
@@ -1825,6 +613,10 @@ export async function generatePortfolioGuideResponse(
         error,
       );
       evidenceUsed = undefined;
+      prefetchedEvidence = buildUnavailableEvidenceResult(
+        request.message,
+        "evidence_layer_error",
+      );
       resumeCustomizerEvidenceUsed = false;
       evidenceUnavailableReason = "evidence_layer_error";
       warnings.push("evidence_layer_error");
@@ -1856,9 +648,9 @@ export async function generatePortfolioGuideResponse(
     relatedPages,
     careerEvidence: prefetchedEvidence,
     routingEnabled: Boolean(routing.plan),
-    supportingPages: JSON.parse(promptInput).routingContext?.supportingPages,
+    supportingPages,
   });
-  if (routing.plan && prefetchedEvidence) {
+  if (prefetchedEvidence) {
     evidenceUsed = buildEvidenceSummaries(
       prefetchedEvidence.evidence.filter(
         (item) =>

@@ -103,7 +103,7 @@ function makeFakeClient(behavior: FakeBehavior): OpenAI {
   let calls = 0;
   return {
     responses: {
-      create: async () => {
+      create: async (params: { input: Array<{ content?: string }> }) => {
         calls += 1;
         if (calls === 1) {
           return behavior.firstCallsTool
@@ -130,10 +130,12 @@ function makeFakeClient(behavior: FakeBehavior): OpenAI {
           throw new Error("synthesis call failed");
         }
 
+        const packet = JSON.parse(params.input.at(-1)!.content!);
+        const block = packet.approvedBlocks.find((item: { id: string }) =>
+          item.id.startsWith("career:"),
+        );
         return {
-          output_text: JSON.stringify({
-            answer: behavior.answerText ?? "Page-grounded answer.",
-          }),
+          output_text: JSON.stringify({ blockIds: block ? [block.id] : [] }),
         };
       },
     },
@@ -172,7 +174,10 @@ test("page-only answer works when evidence layer is not configured", async () =>
 
   assert.equal(result.response.answer.length > 0, true);
   assert.equal(result.response.evidenceMeta?.pageContextUsed, true);
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, false);
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    false,
+  );
   assert.equal(
     result.response.evidenceMeta?.evidenceUnavailableReason,
     "not_configured",
@@ -189,7 +194,10 @@ test("page-only answer works when the model does not call the evidence tool", as
 
   assert.equal(result.response.answer.length > 0, true);
   assert.equal(result.response.evidenceMeta?.pageContextUsed, true);
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, false);
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    false,
+  );
   // The model chose not to request deeper evidence — not an error.
   assert.equal(
     result.response.evidenceMeta?.evidenceUnavailableReason,
@@ -211,9 +219,18 @@ test("evidence answer is used when ResumeCustomizer returns mock evidence", asyn
       }),
   );
 
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, true);
-  assert.equal(result.response.evidenceMeta?.evidenceUnavailableReason, undefined);
-  assert.equal(result.response.evidenceUsed?.[0]?.project, "ChatGPT Enterprise");
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    true,
+  );
+  assert.equal(
+    result.response.evidenceMeta?.evidenceUnavailableReason,
+    undefined,
+  );
+  assert.equal(
+    result.response.evidenceUsed?.[0]?.project,
+    "ChatGPT Enterprise",
+  );
   assert.equal(result.response.evidenceUsed?.[0]?.hasMetrics, true);
 });
 
@@ -234,7 +251,10 @@ test("ResumeCustomizer network failure degrades to page context, never throws", 
   );
 
   assert.equal(result.response.answer.length > 0, true);
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, false);
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    false,
+  );
   assert.equal(
     result.response.evidenceMeta?.evidenceUnavailableReason,
     "network_error",
@@ -286,7 +306,10 @@ test("unexpected response shape (the original crash) returns a safe answer", asy
   );
 
   assert.equal(result.response.answer.length > 0, true);
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, false);
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    false,
+  );
   assert.equal(
     result.response.evidenceMeta?.evidenceUnavailableReason,
     "invalid_shape",
@@ -300,13 +323,19 @@ test("synthesis call failure recovers with a page-context answer", async () => {
       generatePortfolioGuideResponse(createRequest(), {
         apiKey: "openai-key",
         model: "gpt-test",
-        client: makeFakeClient({ firstCallsTool: true, secondCallThrows: true }),
+        client: makeFakeClient({
+          firstCallsTool: true,
+          secondCallThrows: true,
+        }),
         evidenceConfig: EVIDENCE_CONFIG,
       }),
   );
 
   assert.equal(result.response.answer.length > 0, true);
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, false);
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    false,
+  );
   assert.equal(
     result.response.evidenceMeta?.evidenceUnavailableReason,
     "evidence_layer_error",
@@ -341,7 +370,11 @@ test("synthesis call replays the model's reasoning items alongside the tool call
             ],
           };
         }
-        return { output_text: JSON.stringify({ answer: "Synthesized." }) };
+        return {
+          output_text: JSON.stringify({
+            blockIds: ["career:chatgpt-enterprise-pilot"],
+          }),
+        };
       },
     },
   } as unknown as OpenAI;
@@ -357,7 +390,10 @@ test("synthesis call replays the model's reasoning items alongside the tool call
       }),
   );
 
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, true);
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    true,
+  );
   const secondInput = capturedInputs[1] ?? [];
   assert.ok(
     secondInput.some((item) => item?.type === "reasoning"),
@@ -388,7 +424,10 @@ test("empty evidence yields a clear not-found-in-evidence note", async () => {
   );
 
   assert.equal(result.response.answer.length > 0, true);
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, false);
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    false,
+  );
   assert.equal(
     result.response.evidenceMeta?.evidenceUnavailableReason,
     "no_evidence_found",

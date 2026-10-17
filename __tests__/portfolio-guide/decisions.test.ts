@@ -348,7 +348,7 @@ test("failed routing retains existing prompt and evidence tool availability", as
   );
 });
 
-test("Director role-fit guardrails remove blended implementation claims and retain labeled career evidence", async () => {
+test("malformed Director-role prose uses canonical ownership and does not attribute unused career evidence", async () => {
   const client = {
     responses: {
       create: async () => ({
@@ -375,11 +375,17 @@ test("Director role-fit guardrails remove blended implementation claims and reta
     result.response.answer,
     /team of 50|shipped the production platform/,
   );
-  assert.match(result.response.answer, /Boundary:/);
-  assert.match(result.response.answer, /From ResumeCustomizer evidence:/);
+  assert.match(
+    result.response.answer,
+    /does not describe end-to-end production implementation ownership/,
+  );
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    false,
+  );
   assert.ok(
     result.traceEvents?.some(
-      (event) => event.eventName === "routing_evidence_attribution",
+      (event) => event.eventName === "response_guardrails_applied",
     ),
   );
 });

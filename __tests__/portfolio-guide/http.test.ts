@@ -81,7 +81,7 @@ test("page-only guide never calls optional evidence search while resume jobs ret
     assert.equal(result.status, 200);
     assert.match(
       (result.body as { answer: string }).answer,
-      /prototype leadership/,
+      /approved evidence does not establish/,
     );
     assert.equal(
       (result.body as { evidenceUsed?: unknown }).evidenceUsed,

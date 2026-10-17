@@ -125,6 +125,30 @@ export const decisionsEvaluation = {
       snapshot:
         "Frozen 3cec994 answers and grades remain separate from the source-alignment revision and its later validation; Production configuration is still a separate gate.",
     },
+    {
+      id: "source-alignment-full-review",
+      label: "Paraphrase repairs reached their limit",
+      date: "October 17, 2026 · UTC",
+      result: "39/43 hard checks; 41/43 local judge",
+      method:
+        "The frozen a611b35 run completed all 43 original questions with gpt-oss:20b answers and qwen2.5:14b judging. Actual-answer review still found an incorrect 16-month timeline, unsupported measurable-business-outcome language and a missing helped-lead qualifier. Each claim originated in raw local generation and survived processing; the combined recorded result remains 38/43.",
+      limit:
+        "Four literal or coverage failures and one recommendation advisory remain separately recorded. These local failures are not evidence that Terra made the same claims. The earlier paid Terra canary retained its own 6/6 disabled and 5/6 enabled grades; the enabled ownership failure was a demonstrated processing loss of credit.",
+      snapshot:
+        "Original a611b35 questions, raw answers, displayed text, rubrics and grades remain immutable alongside every prior comparison and bake-off.",
+    },
+    {
+      id: "evidence-block-simplification",
+      label: "Select evidence before rendering the answer",
+      date: "October 17, 2026 · UTC",
+      result: "Approved simplification; validation separate",
+      method:
+        "Daniel approved replacing expanding prose repairs with selection of approved claim-block IDs. The renderer keeps each source claim and its qualifications together, rejects invented IDs and free-form answer text, and uses a canonical fallback. The existing budget guard reconciles completed prior usage before admitting a small Terra/Luna regression comparison.",
+      limit:
+        "Deterministic contracts do not establish Terra answer quality or Production readiness. The comparison uses synthetic questions and public-safe approved evidence, with remote career retrieval disabled and no automatic paid retries. Its actual outcomes are recorded separately after completion.",
+      snapshot:
+        "All historical stages and the separate 72-trial model bake-off are retained. Owner Production configuration confirmation remains pending.",
+    },
   ],
   judgeDisclosure:
     "Judge results also needed scrutiny. Later checks corrected four unchanged answers' source-aware grades, and a persisted Terra check regraded a malformed judge response against the unchanged answer. These are grading corrections, not newly improved answers; original outcomes remain part of the record.",

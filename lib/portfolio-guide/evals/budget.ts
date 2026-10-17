@@ -52,7 +52,71 @@ export type EvaluationBudgetSnapshot = {
   stopped: boolean;
   counts: Record<Role, number>;
   ledger: LedgerEntry[];
+  priorUsageCostUpperBoundUsd?: number;
+  totalAdmittedUpperBoundUsd?: number;
 };
+
+/** Completed runs settle to a conservative usage bound; unknown runs never settle. */
+export function reconcileCompletedEvaluationLedgers(
+  prior: EvaluationBudgetSnapshot[],
+): number {
+  const seen = new Set<string>();
+  let costNano = 0;
+  for (const run of prior) {
+    if (
+      run.stopped ||
+      !Array.isArray(run.ledger) ||
+      !run.ledger.length ||
+      Object.keys(ROLES).some(
+        (role) =>
+          run.counts[role as Role] !==
+          run.ledger.filter((entry) => entry.role === role).length,
+      )
+    )
+      throw new Error(
+        "Prior evaluation ledger is incomplete; stop for budget reconciliation.",
+      );
+    let reservations = 0;
+    for (const entry of run.ledger) {
+      const rule = ROLES[entry.role];
+      if (
+        !rule ||
+        entry.status !== "complete" ||
+        entry.model !== rule.model ||
+        !/^[a-f0-9]{64}$/.test(entry.requestSha256) ||
+        seen.has(entry.requestSha256) ||
+        !Number.isSafeInteger(entry.inputTokens) ||
+        entry.inputTokens! < 0 ||
+        entry.inputTokens! > entry.inputTokenUpperBound ||
+        !Number.isSafeInteger(entry.inputTokenUpperBound) ||
+        entry.inputTokenUpperBound > rule.input ||
+        !Number.isSafeInteger(entry.outputTokens) ||
+        entry.outputTokens! < 0 ||
+        entry.outputTokens! > rule.output ||
+        entry.reservedNano !==
+          rule.input * rule.inputNano + rule.output * rule.outputNano ||
+        !entry.usage ||
+        entry.usage.input_tokens !== entry.inputTokens ||
+        (entry.usage.output_tokens ??
+          (entry.role === "routing" ? 0 : undefined)) !== entry.outputTokens
+      )
+        throw new Error(
+          "Unknown, duplicate or invalid prior usage; no further paid calls.",
+        );
+      seen.add(entry.requestSha256);
+      const upper =
+        entry.inputTokens! * rule.inputNano +
+        entry.outputTokens! * rule.outputNano;
+      if (entry.usageCostUpperBoundNano !== upper || upper > entry.reservedNano)
+        throw new Error("Prior usage bound cannot be established; stop.");
+      costNano += upper;
+      reservations += entry.reservedNano;
+    }
+    if (Math.round(run.reservedUsd * 1e9) !== reservations)
+      throw new Error("Prior reservations do not reconcile; stop.");
+  }
+  return costNano;
+}
 
 /** Offline until explicitly approved. A conservative admission guard, not a provider billing cap. */
 export function createEvaluationBudgetGuard(options: {
@@ -60,6 +124,7 @@ export function createEvaluationBudgetGuard(options: {
   scopeSha256: string;
   fetch: typeof fetch;
   onChange?: (snapshot: EvaluationBudgetSnapshot) => void;
+  priorCompletedLedgers?: EvaluationBudgetSnapshot[];
 }) {
   const { approval } = options;
   const ledger: LedgerEntry[] = [];
@@ -67,6 +132,9 @@ export function createEvaluationBudgetGuard(options: {
   let stopped = false;
   const counts = { answer: 0, judge: 0, routing: 0 };
   const ceilingNano = Math.floor(approval.ceilingUsd * 1e9);
+  const priorUsageNano = reconcileCompletedEvaluationLedgers(
+    options.priorCompletedLedgers ?? [],
+  );
   const reserved = () =>
     ledger.reduce((sum, item) => sum + item.reservedNano, 0);
   const snapshot = (): EvaluationBudgetSnapshot => ({
@@ -75,6 +143,8 @@ export function createEvaluationBudgetGuard(options: {
     stopped,
     counts: { ...counts },
     ledger: ledger.map((item) => ({ ...item })),
+    priorUsageCostUpperBoundUsd: priorUsageNano / 1e9,
+    totalAdmittedUpperBoundUsd: (priorUsageNano + reserved()) / 1e9,
   });
   const guardedFetch: typeof fetch = async (input, init) => {
     if (
@@ -161,7 +231,7 @@ export function createEvaluationBudgetGuard(options: {
     // Reserve each role's complete maximum, never refund reservations during this run.
     const reservedNano =
       rule.input * rule.inputNano + rule.output * rule.outputNano;
-    if (reserved() + reservedNano > ceilingNano)
+    if (priorUsageNano + reserved() + reservedNano > ceilingNano)
       throw new Error(
         "Insufficient approved budget to reserve this complete request.",
       );
