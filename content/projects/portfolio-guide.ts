@@ -4,6 +4,10 @@ import type {
   PageContext,
 } from "@/lib/portfolio-guide/types";
 import { creativeGuideMetadata } from "@/content/projects/creative-guide";
+import {
+  decisionsEvaluation,
+  modelBakeoff,
+} from "@/content/projects/decisions-evaluation";
 
 type GuideOverlay = Partial<
   Pick<
@@ -50,7 +54,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       "Hiring teams need fast access to credible proof, while AI-generated application materials introduce risks around unsupported claims, generic output, and unclear ownership.",
     actions: [
       "Separated recruiter-facing UX from the long-running resume engine through authenticated server-to-server APIs.",
-      "Kept authored page content primary while adding public-safe, source-audited evidence retrieval for deeper questions.",
+      "Kept authored page content primary while developing a separate public-safe, source-audited career-retrieval prototype; remote retrieval is disabled in this release candidate pending endpoint review.",
       "Defined role-aware generation, six configured advisory review agents, structural PDF checks, and explicit human accountability.",
     ],
     outcomes: [
@@ -87,7 +91,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Source-audited retrieval",
         detail:
-          "The Claim-to-Evidence endpoint defaults to public-safe, source-audited results and returns a safe fallback when evidence is insufficient.",
+          "The separate local Claim-to-Evidence prototype defaults to public-safe, source-audited results and returns a safe fallback when evidence is insufficient. Remote career retrieval is disabled in this isolated release pending a separately reviewed endpoint; canonical page grounding and resume jobs remain supported.",
         type: "workflow",
       },
       {
@@ -102,11 +106,24 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "The page explicitly identifies durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate as future work.",
         type: "ownership",
       },
+      {
+        label: "Documented deployment asset reduction",
+        detail:
+          "Separated large portfolio recordings from deployment bundles, preserving the original media with checksum verification and adding asset-budget checks. Documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. Evidence: merged PR #11 (https://github.com/DanielNash1611/portfolio/pull/11), docs/deployment-storage.md, and docs/deployment-media.json; the inventory excludes server bundles and was not independently rerun by this content review. This file inventory establishes no runtime, billing, storage-reclamation or semantic AI-quality outcome.",
+        type: "metric",
+      },
+      {
+        label: "Decisions API local prototype",
+        detail:
+          "A locally tested Decisions API layer routed ambiguous questions before answer generation. Saved evaluations exposed mixed answer-quality results, prompting source-attribution, qualifier and concision fixes. Final combined-release validation remains pending.",
+        type: "workflow",
+      },
     ],
     claimBoundaries: {
       directOwnership: [
         "Defined the product thesis, user experience, service boundaries, quality criteria, evaluation behavior, and public claim guardrails represented on the page.",
         "Directed the integration of Portfolio recruiter UX with ResumeCustomizer evidence retrieval and role-specific generation.",
+        "Directed the portfolio media separation and preservation work; implementation was AI-assisted.",
       ],
       influence: [
         "Used AI development agents to accelerate implementation and iteration while retaining product and quality accountability.",
@@ -115,13 +132,18 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "Durable queueing, joined recruiter-funnel analytics, shared page-to-evidence identifiers, and a hard reject gate are documented next investments.",
       ],
       implementation: [
-        "The repositories support the authenticated API boundaries, evidence retrieval, job lifecycle, specialized reviews, and structural PDF validation described here.",
+        "The selected branches support authenticated resume-job API boundaries, the job lifecycle, specialized reviews and structural PDF validation; remote career retrieval remains disabled while the separate endpoint awaits review.",
         "The page does not claim sole hand-coding or independent implementation of every component.",
+        "Portfolio PR #11 merged on October 15, 2026 at 04:09 UTC (merge 4d33ab9da2a9bece8522a9efee24b3f2b188bfe1). docs/deployment-storage.md and docs/deployment-media.json document media preservation, SHA-256 verification, and static asset-budget checks.",
       ],
       explicitUnknowns: [
         "The repositories do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale, or a current full-suite evaluation pass rate.",
         "The 5/12 to 11/12 comparison is a historical, comparable 12-case OpenAI result rather than a current universal quality score.",
         "The Claim-to-Evidence changes must be merged and deployed in both repositories before the public integration is considered launched.",
+        "The isolated release uses canonical portfolio pages with remote career evidence disabled by default: its selected ResumeCustomizer branch supports resume jobs but does not include /api/evidence/search. The preserved local evidence-search implementation is separate, unshipped work.",
+        "The 147.65 MiB to 81.58 MiB figures are repository-documented uncompressed static file inventories, exclude server bundles, and were not independently rerun by this content review.",
+        "Media separation does not establish lower bills, faster pages, reclaimed historical deployment storage, production verification by this review, or semantic AI-quality improvement.",
+        "Decisions routing and linked resume skills are locally implemented candidates. Historical routing, answer-comparison, targeted repair and deterministic skills checks use different datasets; none establishes the final deployment's quality.",
       ],
     },
     recruiterPrompts: [
@@ -254,6 +276,40 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         ],
       },
       {
+        label: "Decisions evaluation journal",
+        snippets: [
+          decisionsEvaluation.status,
+          ...decisionsEvaluation.stages.map((stage) =>
+            [
+              stage.label,
+              stage.result,
+              stage.method,
+              stage.limit,
+              stage.snapshot,
+            ].join(" "),
+          ),
+          decisionsEvaluation.judgeDisclosure,
+          decisionsEvaluation.methodology,
+        ],
+      },
+      {
+        label: "Historical answer-model bake-off",
+        snippets: [
+          modelBakeoff.date,
+          modelBakeoff.introduction,
+          modelBakeoff.method,
+          ...modelBakeoff.models.map(
+            (row) =>
+              `${row.model}: ${row.trials} trials, deterministic ${row.deterministic}, source-aware judged ${row.judged}, median workflow ${row.medianSeconds} seconds, mean helpfulness ${row.helpfulness}/5.`,
+          ),
+          modelBakeoff.interpretation,
+          modelBakeoff.latencyLimit,
+          modelBakeoff.costLimit,
+          modelBakeoff.auditLimit,
+          modelBakeoff.selection,
+        ],
+      },
+      {
         label: "What this proves",
         snippets: [
           "The system demonstrates AI product judgment where models are useful but constrained.",
@@ -263,7 +319,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Implemented and next",
         snippets: [
-          "Implemented: authenticated API boundaries, public-safe evidence retrieval, a nine-state generation lifecycle, six specialized review perspectives, and structural PDF checks.",
+          "Implemented: authenticated resume-job API boundaries, a nine-state generation lifecycle, six specialized review perspectives, and structural PDF checks. Public-safe career retrieval remains a separate local prototype and is disabled in this candidate pending endpoint review.",
           "Needs implementation or instrumentation: durable job state and queueing, shared evidence identifiers, joined recruiter-funnel measurement, versioned latency and failure metrics, and a hard gate or explicit override for rejected output.",
         ],
       },
@@ -416,6 +472,14 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "The page explicitly says the work mapped recurring AI workflow patterns across pilots to shape reusable platform foundations.",
         type: "outcome",
       },
+      {
+        label: "Qualified prototype-to-production timeline",
+        // Approved provenance: ResumeCustomizer 24133fd, sources/facts-bank.md
+        // and sources/portfolio-sources.md; see docs/decisions-release.md.
+        detail:
+          "Daniel confirmed AI Platform was pitched in February 2025, proofs of concept were built through October 2025, and a production version deployed in February 2026; the timeline does not establish that the final implementation preserved the full original vision.",
+        type: "outcome",
+      },
     ],
     claimBoundaries: {
       directOwnership: [
@@ -430,9 +494,11 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       ],
       implementation: [
         "It supports prototype-building and platform framing, but it does not describe end-to-end production implementation ownership.",
+        "Approved sources confirm a February 2026 production version; this does not establish that the final implementation preserved the full original vision or that Daniel owned end-to-end production engineering.",
       ],
       explicitUnknowns: [
         "The page does not define team size, org structure, production rollout scale, or which reusable pattern shipped most.",
+        "The production timeline does not establish faster or more reliable scaling, quantified platform adoption or performance outcomes, end-to-end production engineering ownership, or preservation of the full original vision.",
       ],
     },
     recruiterPrompts: [
@@ -1022,7 +1088,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Grounded enterprise example",
         detail:
-          "It ties the argument back to leading early ChatGPT rollout work in the contact center, including pre-call preparation and drafting workflows.",
+          "It ties the argument back to helping lead early ChatGPT rollout work in the contact center, including pre-call preparation and drafting workflows.",
         type: "outcome",
       },
       {

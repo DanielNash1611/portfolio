@@ -1,5 +1,7 @@
 import { getPageContextBySlug } from "@/lib/portfolio-guide/context";
 import { INTEREST_TAGS } from "@/lib/portfolio-guide/constants";
+import type { RoutingPlan, SupportingPage } from "./decisions";
+import type { EvidenceSearchResponse } from "./tools/evidence";
 import type {
   CopilotConversationMessage,
   CopilotRequest,
@@ -59,6 +61,8 @@ Rules:
 - Only reference other pages when it adds clarity. Keep the current page dominant and mention at most 2 adjacent pages.
 - Keep the answer concise, grounded, and recruiter-friendly.
 - Prefer 2 to 4 short sentences or 2 to 4 short labeled lines.
+- The four-sentence budget includes attribution, source limitations and resume actions. Use fewer proof points rather than dropping qualifiers.
+- Topic-based cross-project links are thematic comparisons unless an authored bridge establishes a documented relationship; never imply shared implementation or causality from topic similarity.
 - Marketing language is less important than clarity.
 - If helpful, mention why the work matters for the declared role in one short sentence.
 - If the current page is only partially relevant to the declared role, say so plainly.
@@ -81,6 +85,7 @@ Evidence Tool (searchCareerEvidence):
 - If the tool result is a safeFallback indicating the deeper evidence layer could not be reached (timeout, unreachable, or unreadable), answer from the portfolio page and append that safeFallback message verbatim — do not treat it as "no evidence exists."
 - Never dump raw evidence objects into the answer. Synthesize into hiring-manager-readable prose.
 - If evidence is "medium" or "low" answerability, say so clearly — do not overstate the fit.
+- For broader career questions, answer the requested scope directly rather than forcing it into a current-page role-fit template. Retain the relevant claimBoundaries beside each career proof point; measured patent-search results are limited to their measured set and do not establish scientific validation or product-wide quality.
 
 Conversation Tool (searchConversationHistory):
 - Use this only when an older user-authored question or preference is needed to understand the current request.
@@ -141,6 +146,12 @@ export type PortfolioGuidePromptContext = {
     previousAssistantAnswerRule?: string;
   };
   candidateRelatedPages: RelatedPage[];
+  routingContext?: {
+    decisionHints: RoutingPlan;
+    supportingPages: SupportingPage[];
+    careerEvidence?: EvidenceSearchResponse;
+    sourceRule: string;
+  };
   traceability: {
     authoredSectionLabels: string[];
     evidenceHighlightLabels: string[];
@@ -574,7 +585,9 @@ const MAX_ESTIMATED_CONTEXT_TOKENS = 24000;
 function fitPromptContextToBudget(
   input: PortfolioGuidePromptContext,
 ): PortfolioGuidePromptContext {
-  const context = JSON.parse(JSON.stringify(input)) as PortfolioGuidePromptContext;
+  const context = JSON.parse(
+    JSON.stringify(input),
+  ) as PortfolioGuidePromptContext;
   const estimate = () => Math.ceil(JSON.stringify(context).length / 4);
 
   if (estimate() <= MAX_ESTIMATED_CONTEXT_TOKENS) {
@@ -589,8 +602,12 @@ function fitPromptContextToBudget(
         broader: [],
       }
     : undefined;
-  context.siteCatalog.pageDirectory = context.siteCatalog.pageDirectory?.slice(0, 8);
-  context.siteCatalog.featuredProjects = context.siteCatalog.featuredProjects?.slice(0, 6);
+  context.siteCatalog.pageDirectory = context.siteCatalog.pageDirectory?.slice(
+    0,
+    8,
+  );
+  context.siteCatalog.featuredProjects =
+    context.siteCatalog.featuredProjects?.slice(0, 6);
   context.siteMemory.visitedPages = context.siteMemory.visitedPages.slice(-2);
   context.siteMemory.interactionSignals.clickedPrompts =
     context.siteMemory.interactionSignals.clickedPrompts.slice(-3);
@@ -615,14 +632,11 @@ function fitPromptContextToBudget(
 export function buildPortfolioGuideInput(
   request: CopilotRequest,
   relatedPages: RelatedPage[],
+  routingContext?: PortfolioGuidePromptContext["routingContext"],
 ): string {
-  return JSON.stringify(
-    fitPromptContextToBudget(
-      buildPortfolioGuidePromptContext(request, relatedPages),
-    ),
-    null,
-    2,
-  );
+  const context = buildPortfolioGuidePromptContext(request, relatedPages);
+  if (routingContext) context.routingContext = routingContext;
+  return JSON.stringify(fitPromptContextToBudget(context), null, 2);
 }
 
 export function extractResponseText(response: unknown): string {

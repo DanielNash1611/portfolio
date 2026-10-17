@@ -825,7 +825,9 @@ export const productEntries: ProductEntry[] = [
     ],
     buildStory: [
       "The system uses a real personal operating context to demonstrate transferable product decisions: source governance, service boundaries, asynchronous jobs, eval design, privacy, and human accountability.",
-      "Authenticated boundaries, source-audited retrieval, structural checks, and human approval are implemented. Durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate remain explicit next investments.",
+      "Authenticated resume-job boundaries, structural checks, and human approval are implemented. Source-audited career retrieval is a separate local prototype, disabled in this release candidate pending endpoint review. Durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate remain explicit next investments.",
+      "Separated large portfolio recordings from deployment bundles, preserving the original media with checksum verification and adding asset-budget checks. Documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. Daniel directed the AI-assisted implementation. PR #11 and docs/deployment-storage.md document this inventory, excluding server bundles; this content review did not independently rerun the measurement. This file inventory establishes no lower bills, page-speed change, reclaimed historical storage, or semantic AI-quality gain.",
+      "Directed an AI-assisted Decisions API local prototype that routes ambiguous questions before answer generation. Saved comparisons exposed mixed quality results, leading to source-attribution, qualifier and concision fixes. A linked resume skills bank applies the same visible-proof rule. The evaluation journal separates historical experiments, deterministic checks and pending final validation.",
     ],
     visuals: [
       {

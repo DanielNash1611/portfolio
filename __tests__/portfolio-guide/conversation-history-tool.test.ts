@@ -1,21 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type OpenAI from "openai";
-import { getPageContextBySlug, getPortfolioContext } from "@/lib/portfolio-guide/context";
 import {
-  extractAnswerFromRawFallback,
-  generatePortfolioGuideResponse,
-} from "@/lib/portfolio-guide/service";
-
-test("raw model fallback keeps the answer and drops pseudo-JSON helper sections", () => {
-  const answer = extractAnswerFromRawFallback(`**Answer**\n\nGrounded answer.\n\n**Suggested follow-ups**\n\n- Next question?\n\n**Related pages**\n\n- Another page`);
-  assert.equal(answer, "Grounded answer.");
-
-  const inline = extractAnswerFromRawFallback(
-    "**Answer:** Grounded answer. **Suggested follow-ups:** - Next question? **Related pages:** - Another page",
-  );
-  assert.equal(inline, "Grounded answer.");
-});
+  getPageContextBySlug,
+  getPortfolioContext,
+} from "@/lib/portfolio-guide/context";
+import { generatePortfolioGuideResponse } from "@/lib/portfolio-guide/service";
 
 test("conversation history tool returns only callback-provided user messages and is traced", async () => {
   const calls: unknown[] = [];
@@ -32,7 +22,10 @@ test("conversation history tool returns only callback-provided user messages and
                 type: "function_call",
                 call_id: "call_history",
                 name: "searchConversationHistory",
-                arguments: JSON.stringify({ query: "platform role", maxResults: 3 }),
+                arguments: JSON.stringify({
+                  query: "platform role",
+                  maxResults: 3,
+                }),
               },
             ],
           };
@@ -84,6 +77,9 @@ test("conversation history tool returns only callback-provided user messages and
     (event) => event.eventName === "searchConversationHistory",
   );
   assert.ok(toolTrace);
-  assert.match(JSON.stringify(toolTrace.payload), /How does this fit a platform role/);
+  assert.match(
+    JSON.stringify(toolTrace.payload),
+    /How does this fit a platform role/,
+  );
   assert.doesNotMatch(JSON.stringify(toolTrace.payload), /assistant/i);
 });

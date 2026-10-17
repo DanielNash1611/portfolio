@@ -1,4 +1,5 @@
 import MediaFrame from "@/components/site/MediaFrame";
+import DecisionsEvaluation from "./DecisionsEvaluation";
 
 const reviewAgents = [
   {
@@ -198,6 +199,7 @@ export default function EvalEvidence(): React.JSX.Element {
           </article>
         ))}
       </div>
+      <DecisionsEvaluation />
     </section>
   );
 }

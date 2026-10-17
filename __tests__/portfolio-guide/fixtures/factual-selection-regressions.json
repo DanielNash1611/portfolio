@@ -1,0 +1,34 @@
+[
+  {
+    "caseId": "ai-platform-impact",
+    "snapshot": "a611b35c281b3686475f97d3ef5d88dda558fa53",
+    "sourceArtifact": "review-evidence/decisions-release/full-source-alignment-r2-local/ai-platform-impact.json",
+    "slug": "ai-platform-mcp",
+    "question": "Show the impact",
+    "rawText": "**Impact**  \n- The AI platform’s early prototype received a **87 % “would use again”** score in follow‑up UX research, showing strong customer reuse intent (direct evidence from the page).  \n- The project moved from a hackathon‑winning concept to a production‑ready platform in roughly **16 months** (Feb 2025 → Feb 2026), illustrating rapid end‑to‑end delivery (evidence from the page).  \n\n**Suggested follow‑ups**  \n- How did the reusable platform language change decision‑making for leaders?  \n- What specific patterns or connectors were most reused across teams?  \n\n**Related pages**  \n- { \"slug\": \"chatgpt-enterprise\", \"reason\": \"Shows the platform and workflow thinking that later supports broader AI operating‑model work.\" }  \n- { \"slug\": \"oms-chatgpt-app\", \"reason\": \"Both pages illustrate PM‑led AI prototyping; this case is more strategy‑heavy.\" }  \n\n**Inferred interest tags**  \n[\"ai-builder\", \"platform\", \"0-to-1\", \"technical-depth\"]"
+  },
+  {
+    "caseId": "ai-platform-role-relevance",
+    "snapshot": "a611b35c281b3686475f97d3ef5d88dda558fa53",
+    "sourceArtifact": "review-evidence/decisions-release/full-source-alignment-r2-local/ai-platform-role-relevance.json",
+    "slug": "ai-platform-mcp",
+    "question": "For the role I entered, what's most relevant here?",
+    "rawText": "**Answer**  \nThis page shows Daniel leading the design and launch of a reusable AI platform layer (MCP) that turned a hackathon‑winning prototype into a repeatable, governance‑aware workflow system. Concrete evidence:  \n\n* 87 % of users from a follow‑up UX study would use the prototype again, indicating strong adoption intent.  \n* The project mapped recurring AI workflow patterns (retrieve, draft, review, hand‑back) across pilots and built system patterns like agent‑based workflows and structured‑data retrieval, establishing a platform‑level abstraction.\n\nThe work directly supports a **Platform Product Manager** role focused on building scalable, reusable systems with technical depth. It demonstrates ownership of the platform vision, cross‑functional alignment, and delivery of measurable business outcomes.  \n\n**Suggested follow‑ups**  \n1. Which specific platform capabilities would you like to highlight on a resume?  \n2. Are you interested in seeing a resume tailored to a Platform PM role?\n\n**Related pages**  \n- **chatgpt‑enterprise** – showcases the broader AI operating model built on the same platform foundation.  \n- **oms‑chatgpt‑app** – demonstrates applied use of the MCP connectors in a real workflow.\n\n**Inferred interest tags**  \n[\"ai-builder\",\"platform\",\"0-to-1\",\"technical-depth\"]"
+  },
+  {
+    "caseId": "ai-strategy-summary",
+    "snapshot": "a611b35c281b3686475f97d3ef5d88dda558fa53",
+    "sourceArtifact": "review-evidence/decisions-release/full-source-alignment-r2-local/ai-strategy-summary.json",
+    "slug": "ai-strategy",
+    "question": "Summarize this page",
+    "rawText": "**Answer**  \nDaniel argues that enterprise AI succeeds when the workflow, trust, and operating systems around a model are engineered first, rather than the model itself. In a real‑world rollout at a contact‑center, he led pilots that focused on pre‑call preparation and drafting—tasks that made the AI useful, measurable, and safe for agents. He treats champions, training, and governance as core product components, embedding them in the workflow so adoption becomes a repeatable system, not a one‑off demo.  \n\n**Suggested Follow‑Ups**  \n- How did the contact‑center rollout impact agent productivity or cost?  \n- Can you see this workflow‑first approach applied to a new product area?  \n\n**Related Pages**  \n- {\"slug\":\"chatgpt-enterprise\",\"reason\":\"provides concrete pilot data and operating‑model proof behind the workflow‑first argument\"}  \n\n**Inferred Interest Tags**  \n[\"pm-leadership\",\"platform\"]"
+  },
+  {
+    "caseId": "original-paid-ownership-credit",
+    "snapshot": "7371d606250241c365c90a7b65709e9d63bb03ab",
+    "sourceArtifact": "review-evidence/decisions-release/canary-live-terra/release-cross-portfolio-ownership-enabled.json",
+    "slug": "ai-career-operating-system",
+    "question": "Across the portfolio, what did Daniel direct, what was AI-assisted, and what is still a local prototype?",
+    "rawText": "{\"answer\":\"**Directed:** On this page, Daniel defined the product architecture, UX, service boundaries, claim guardrails, evaluation criteria, and the Portfolio–ResumeCustomizer integration; elsewhere in the portfolio, he led ChatGPT Enterprise’s pilot framing, rollout, enablement, and champions model.\\n**AI-assisted:** AI development agents accelerated implementation and iteration, while Daniel retained product direction, acceptance criteria, evals, public-claim accountability, and final human approval; the media-separation work was also directed by Daniel with AI-assisted implementation.\\n**Implemented vs. local prototype:** The authenticated API boundaries, source-audited retrieval, job lifecycle, six advisory reviews, and structural PDF validation are represented as implemented; the Decisions API routing layer is explicitly a locally tested prototype, with final combined-release validation pending. The AI Platform case also supports a functional prototype and reusable-platform framing, but does not claim end-to-end production implementation ownership.\\nI can answer from the portfolio page, but the source-audited ResumeCustomizer evidence layer isn't connected here.\",\"suggestedFollowUps\":[\"What does the local evaluation evidence actually prove?\",\"What did Daniel lead in the ChatGPT Enterprise rollout?\",\"What is implemented versus still planned in this system?\"],\"relatedPages\":[{\"slug\":\"chatgpt-enterprise\",\"reason\":\"Measured organizational adoption, governance, and operating-model proof at a larger scale.\"},{\"slug\":\"ai-platform-mcp\",\"reason\":\"Shows the related progression from an AI prototype to reusable platform principles.\"}],\"inferredInterestTags\":[\"ai-builder\",\"pm-leadership\",\"platform\",\"technical-depth\"]}"
+  }
+]

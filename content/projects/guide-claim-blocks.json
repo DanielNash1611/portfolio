@@ -1,0 +1,185 @@
+[
+  {
+    "id": "ai-platform-mcp:validation",
+    "kind": "evidence",
+    "claims": [
+      "The hackathon-winning prototype was followed by UX research in which 87% of participants said they would use it again."
+    ],
+    "qualifications": [
+      "That is prototype reuse intent, not a quantified platform adoption or performance result."
+    ],
+    "sourceRefs": [
+      "evidenceHighlights.0.detail",
+      "evidenceHighlights.1.detail",
+      "claimBoundaries.explicitUnknowns.1"
+    ],
+    "sourceSha256": "5f4d0b1e23e749b034a0fe171b09aa939d71e8a194e4b84b3481f9ea05cc274c",
+    "boundariesSha256": "734aa9d3b47308928b49e8db1c1462aad36612e8b77a96ad9eefde227a86aa99",
+    "label": "Customer validation"
+  },
+  {
+    "id": "ai-platform-mcp:patterns",
+    "kind": "evidence",
+    "claims": [
+      "Daniel mapped recurring AI workflow patterns and translated prototype learnings into reusable platform foundations."
+    ],
+    "qualifications": [
+      "This supports prototype-building and platform framing, not end-to-end production implementation ownership or quantified scaling outcomes."
+    ],
+    "sourceRefs": [
+      "evidenceHighlights.2.detail",
+      "claimBoundaries.directOwnership.1",
+      "leadershipSignals.0",
+      "claimBoundaries.implementation.0",
+      "claimBoundaries.explicitUnknowns.1"
+    ],
+    "sourceSha256": "8b478199c65359e7a000c82bd8fbabcd2406d92d862651b261c1ab5a373b3a33",
+    "boundariesSha256": "734aa9d3b47308928b49e8db1c1462aad36612e8b77a96ad9eefde227a86aa99",
+    "label": "Reusable platform framing"
+  },
+  {
+    "id": "ai-platform-mcp:timeline",
+    "kind": "status",
+    "claims": [
+      "AI Platform was pitched in February 2025, had proofs of concept through October 2025, and reached a production version in February 2026."
+    ],
+    "qualifications": [
+      "Those dates do not establish preservation of the full original vision, Daniel's end-to-end production engineering ownership, or quantified adoption, performance or scaling gains."
+    ],
+    "sourceRefs": [
+      "evidenceHighlights.3.detail",
+      "claimBoundaries.implementation.1",
+      "claimBoundaries.explicitUnknowns.1"
+    ],
+    "sourceSha256": "40e81d640a174b85ca1eb5a02d31eb323ac3710be6fce3d22761768380dc7e26",
+    "boundariesSha256": "734aa9d3b47308928b49e8db1c1462aad36612e8b77a96ad9eefde227a86aa99"
+  },
+  {
+    "id": "ai-platform-mcp:ownership",
+    "kind": "ownership",
+    "claims": [
+      "Daniel led a team to design and build the original functional AI prototype and mapped recurring workflows into reusable platform principles."
+    ],
+    "qualifications": [
+      "A February 2026 production version is documented, but end-to-end production engineering ownership and preservation of the full original vision are not established."
+    ],
+    "sourceRefs": [
+      "claimBoundaries.directOwnership.0",
+      "claimBoundaries.directOwnership.1",
+      "claimBoundaries.implementation.1"
+    ],
+    "sourceSha256": "e4b7ea73874125660d90eda361b81a4154758f6fd7b94c18a1cb493e4b2ff933",
+    "boundariesSha256": "734aa9d3b47308928b49e8db1c1462aad36612e8b77a96ad9eefde227a86aa99"
+  },
+  {
+    "id": "ai-strategy:rollout",
+    "kind": "evidence",
+    "claims": [
+      "Daniel helped lead early ChatGPT rollout work in the contact center, including pre-call preparation and drafting workflows."
+    ],
+    "qualifications": [
+      "The page does not quantify rollout scale or define exact ownership splits."
+    ],
+    "sourceRefs": [
+      "claimBoundaries.directOwnership.0",
+      "evidenceHighlights.1.detail",
+      "claimBoundaries.explicitUnknowns.0"
+    ],
+    "sourceSha256": "6517663df7ace4ff7030ad16bdad27ab1dd26df83ea36c912f350df847190979",
+    "boundariesSha256": "437f45f83fbcc070386063662b56b75d677cba2518c9f13032b402b95489e2c1"
+  },
+  {
+    "id": "ai-strategy:workflow",
+    "kind": "evidence",
+    "claims": [
+      "The essay presents a workflow-first AI strategy: trust, champions, training, prompting patterns, and feedback loops form the system around the model."
+    ],
+    "qualifications": [
+      "It is a point of view, not documentation of a detailed implementation stack."
+    ],
+    "sourceRefs": [
+      "evidenceHighlights.0.detail",
+      "evidenceHighlights.2.detail",
+      "claimBoundaries.conceptualExploration.0",
+      "claimBoundaries.implementation.0"
+    ],
+    "sourceSha256": "e06e519ec8e5949e0db33de4bfd6ebd0e014eb0ba91997a1680f140777e5bb1e",
+    "boundariesSha256": "437f45f83fbcc070386063662b56b75d677cba2518c9f13032b402b95489e2c1"
+  },
+  {
+    "id": "ai-strategy:ownership",
+    "kind": "ownership",
+    "claims": [
+      "Daniel helped lead early ChatGPT contact-center rollout work and uses that experience to shape workflow-first AI adoption principles."
+    ],
+    "qualifications": [
+      "This essay does not establish exact ownership splits, rollout scale, or a detailed production architecture."
+    ],
+    "sourceRefs": [
+      "claimBoundaries.directOwnership.0",
+      "claimBoundaries.influence.0",
+      "claimBoundaries.implementation.0",
+      "claimBoundaries.explicitUnknowns.0"
+    ],
+    "sourceSha256": "6f54eace7b07a974a13054be2c419b52908b932b975a42477eb8624750f9bbe6",
+    "boundariesSha256": "437f45f83fbcc070386063662b56b75d677cba2518c9f13032b402b95489e2c1"
+  },
+  {
+    "id": "ai-career-operating-system:ownership",
+    "kind": "ownership",
+    "claims": [
+      "Daniel defined AI Career Operating System's product direction, UX, service boundaries, evaluations, and claim guardrails; AI development agents assisted implementation, with Daniel retaining product and quality accountability and no claim of sole hand-coding."
+    ],
+    "qualifications": [
+      "The selected branches support authenticated resume jobs, advisory reviews, and PDF checks; Decisions routing and career retrieval remain local or unshipped candidates, remote retrieval is disabled, and final combined-release validation is pending."
+    ],
+    "sourceRefs": [
+      "claimBoundaries.directOwnership.0",
+      "claimBoundaries.influence.0",
+      "claimBoundaries.implementation.0",
+      "claimBoundaries.implementation.1",
+      "claimBoundaries.explicitUnknowns.3",
+      "claimBoundaries.explicitUnknowns.6",
+      "evidenceHighlights.5.detail"
+    ],
+    "coveredStatuses": ["career-retrieval-unavailable"],
+    "sourceSha256": "0bbea3f6286ee8877c300f8f220af7d4608081fba0cb8db58cf2cbd265ccb9d6",
+    "boundariesSha256": "cae2ae6a4dc60bbe483b19bf411072f1c1893d90d470cca2afd1c9d878836f9c"
+  },
+  {
+    "id": "ai-career-operating-system:retrieval",
+    "kind": "status",
+    "claims": [
+      "The separate Claim-to-Evidence retrieval prototype is public-safe and source-audited, with a safe fallback when evidence is insufficient."
+    ],
+    "qualifications": [
+      "Remote career retrieval is disabled pending endpoint review, and the public integration is not considered launched until both repositories are merged and deployed."
+    ],
+    "sourceRefs": [
+      "evidenceHighlights.1.detail",
+      "claimBoundaries.explicitUnknowns.2",
+      "claimBoundaries.explicitUnknowns.3"
+    ],
+    "coveredStatuses": ["career-retrieval-unavailable"],
+    "sourceSha256": "d93d03cdda5b1f2a2bac9432bd5c3dcc787dd37e8d7f213bdba8d8dba0227b35",
+    "boundariesSha256": "cae2ae6a4dc60bbe483b19bf411072f1c1893d90d470cca2afd1c9d878836f9c"
+  },
+  {
+    "id": "chatgpt-enterprise:ownership",
+    "kind": "ownership",
+    "claims": [
+      "Daniel led pilot framing, rollout, enablement, and the champions model, and defined governance with Legal, Security, Engineering, and Operations."
+    ],
+    "qualifications": [
+      "This supports workflow and rollout ownership, not sole implementation of every workflow or an exact team-by-team ownership split."
+    ],
+    "sourceRefs": [
+      "claimBoundaries.directOwnership.0",
+      "claimBoundaries.directOwnership.1",
+      "claimBoundaries.implementation.0",
+      "claimBoundaries.explicitUnknowns.0"
+    ],
+    "sourceSha256": "e5f55bb30150043fd1e0b1c766599418b6fddb72d9a034eb00460125824b2232",
+    "boundariesSha256": "d01a238222825536a4323f50b6e69c8c6bdad7eec2e2860598a1eb9d63d6b69d"
+  }
+]
