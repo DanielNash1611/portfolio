@@ -1,0 +1,21 @@
+{
+  "provenance": {
+    "snapshot": "e2a72a4908fd97da44223fa5c18f2a847ac46f38",
+    "model": "gpt-oss:20b",
+    "inputs": "Unchanged saved raw outputs, synthetic questions, authored public canonical sources; original evaluation rubric is not modified"
+  },
+  "cases": [
+    {
+      "caseId": "checkout-impact",
+      "question": "What was the impact?",
+      "pageSlug": "checkout-redesign",
+      "rawText": "**Answer**  \nThe checkout redesign delivered a measurable lift of roughly $16 million in annualized revenue, driven by a 30 % faster checkout flow (from 3:00 to 2:03 seconds) and a ~3 % increase in conversion, as reported in the post‑launch A/B test on the page.  \n\n**Suggested Follow‑Ups**  \n- What specific roles did you play in driving that lift?  \n- How did the team balance speed of delivery with risk mitigation?\n\n**Related Pages**  \n- **chatgpt‑enterprise** – another cross‑functional rollout that achieved measurable business impact.  \n- **jira‑product‑discovery** – shows how you improve operating quality through shared decision‑making.\n\n**Inferred Interest Tags**  \n[\"pm‑leadership\"]"
+    },
+    {
+      "caseId": "ai-career-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-career-operating-system",
+      "rawText": "**AI Career Operating System** is a governed AI workflow that turns vetted career evidence into recruiter‑ready artifacts. Daniel defined the product architecture, evidence boundaries, evaluation criteria, and human‑review workflow, and integrated the Portfolio Guide with the ResumeCustomizer via authenticated server‑to‑server APIs. The system includes source‑audited retrieval, bounded claim limits, six advisory reviewers, and structural PDF checks, with a documented reduction in static asset size from 147 MiB to 81 MiB. This work demonstrates a complete, end‑to‑end proof‑engine for AI‑generated career materials, though full production deployment and real‑world adoption are future milestones."
+    }
+  ]
+}

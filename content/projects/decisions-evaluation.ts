@@ -67,7 +67,7 @@ export const decisionsEvaluation = {
     },
     {
       id: "final",
-      label: "Current release validation",
+      label: "Bounded paid validation",
       date: "October 17, 2026 · UTC",
       result: "32/32 routing; 5/6 enabled vs 6/6 disabled",
       method:
@@ -76,6 +76,30 @@ export const decisionsEvaluation = {
         "Routing worked on this small authored set, but enabled answer quality was not a win. A deterministic repair replayed all 12 unchanged raw answers with byte-identical prompts and changed only that ownership answer. The original failed grade is retained; the repair has no new paid quality score. Complete current local validation, service compatibility and deployed configuration remain separate gates.",
       snapshot:
         "Canary snapshot 7371d60; original answers, grades, usage and the separate repair replay are retained locally.",
+    },
+    {
+      id: "complete-local-review",
+      label: "A passing judge still needed review",
+      date: "October 17, 2026 · UTC",
+      result: "41/43 hard checks; 43/43 local judge",
+      method:
+        "A complete original 43-case pass at e2a72a4 used installed gpt-oss:20b answers and the same source-aware qwen2.5:14b judge. Two hard failures were wording or typography mismatches, but manual review still found a lost checkout estimate qualifier and AI Career measurement and release-status limits. Three deterministic probes exposed related output-processing gaps.",
+      limit:
+        "The two hard failures remain in the recorded 41/43 result. Judge passes did not override the manual findings, and the local models did not establish Terra or production quality. This snapshot remains part of the record after repairs.",
+      snapshot:
+        "Frozen e2a72a4 answers, original rubrics, grades and file hashes retained separately from later repairs.",
+    },
+    {
+      id: "source-contract-repairs",
+      label: "Repair the claim boundary, then rerun",
+      date: "October 17, 2026 · UTC",
+      result: "276 deterministic passes",
+      method:
+        "Captured raw answers and supplied canonical evidence drove bounded repairs for estimate qualifiers, unspecified time units, exact static-inventory figures, unlaunched integration scope, empty assistance credit, adjacent media-outcome claims and retrieval typography. Focused tests covered missing evidence, already-qualified answers and unrelated measured runtime facts; four existing tests stayed skipped.",
+      limit:
+        "These are regression checks, not a semantic-quality score. The complete 43-case local answer and same-judge rerun is separate evidence and retains its original rubric. All prior comparisons, including the model bake-off and the paid enabled failure, remain preserved; no additional paid model score or production verification is claimed.",
+      snapshot:
+        "Repair and full-run manifests identify their own code and source snapshots; release remains held for review and owner configuration verification.",
     },
   ],
   judgeDisclosure:

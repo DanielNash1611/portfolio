@@ -20,6 +20,13 @@ function normalizeComparisonLabels(text: string): string {
   return text.replace(/\bvs\.(?=\s)/gi, "versus");
 }
 
+function classificationText(text: string): string {
+  return text
+    .normalize("NFKC")
+    .replace(/[\u2010-\u2015]/g, "-")
+    .replace(/[\u2018\u2019]/g, "'");
+}
+
 /** Keep qualifiers with their proof; do not cut a long answer at an arbitrary character. */
 export function boundGuideAnswer(
   answer: string,
@@ -287,10 +294,12 @@ export function finalizeRoutedAnswer(input: {
     .find((part) => /\bRemote career retrieval is disabled\b/i.test(part));
   const careerRetrievalClaim =
     /\b(?:ResumeCustomizer[^.!?]{0,120}(?:retriev\w*|evidence engine)|source-audited[^.!?]{0,60}(?:retriev\w*|evidence)|career[^.!?]{0,30}retriev\w*|evidence engine)\b/i;
-  const describesCareerRetrieval = careerRetrievalClaim.test(answer);
+  const describesCareerRetrieval = careerRetrievalClaim.test(
+    classificationText(answer),
+  );
   const includesAvailability =
     /\bretriev\w*\b[^.!?]{0,100}\b(?:disabled|not connected|isn't connected|not active)\b|\bdisabled\b[^.!?]{0,100}\bretriev\w*\b/i.test(
-      answer,
+      classificationText(answer),
     );
   if (
     !fallback &&
@@ -300,7 +309,9 @@ export function finalizeRoutedAnswer(input: {
     !includesAvailability
   ) {
     const parts = sentences(answer);
-    const index = parts.findIndex((part) => careerRetrievalClaim.test(part));
+    const index = parts.findIndex((part) =>
+      careerRetrievalClaim.test(classificationText(part)),
+    );
     parts[index] =
       `${parts[index].replace(/[.!?]+$/, "")}; release boundary: ${releaseBoundary}`;
     answer = parts.join(" ");

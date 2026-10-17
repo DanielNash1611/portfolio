@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import type OpenAI from "openai";
 import fixtures from "./fixtures/processing-regressions.json";
+import repairFixtures from "./fixtures/source-contract-repairs.json";
 import {
   getPageContextBySlug,
   getPortfolioContext,
@@ -247,4 +248,165 @@ test("a substantive broader answer survives instead of receiving the refusal fal
     /Directed: On this page Daniel defined product architecture; elsewhere in the portfolio he led a functional prototype/,
   );
   assert.match(answer, /AI-assisted: On this project/);
+});
+
+function processCaptured(
+  caseId: string,
+  rawText?: string,
+  transform?: (input: CopilotRequest) => CopilotRequest,
+) {
+  const fixture = repairFixtures.cases.find((item) => item.caseId === caseId)!;
+  const input = request(fixture.pageSlug, fixture.question);
+  return processPortfolioGuideAnswer({
+    request: transform ? transform(input) : input,
+    rawText: rawText ?? fixture.rawText,
+    relatedPages: [],
+  }).finalized.answer;
+}
+
+test("captured checkout impact retains its estimate and does not invent time units", () => {
+  const answer = processCaptured("checkout-impact");
+  assert.match(answer, /estimated/i);
+  assert.match(answer, /16/);
+  assert.match(answer, /30%/);
+  assert.match(answer, /3:00.*2:03/);
+  assert.doesNotMatch(answer, /2:03\s*(?:seconds|minutes)/i);
+  assert.match(answer, /conversion/i);
+});
+
+test("metric corrections require the supplied estimated metric and unspecified-unit evidence", () => {
+  const raw =
+    "A separate study measured $16 million annualized revenue and a 3:00 to 2:03 seconds comparison.";
+  const answer = processCaptured("checkout-impact", raw, (input) => ({
+    ...input,
+    pageContext: {
+      ...input.pageContext,
+      metrics: [],
+      evidenceHighlights: [],
+      claimBoundaries: {},
+    },
+  }));
+  assert.equal(answer, raw);
+});
+
+test("already-qualified checkout proof remains unchanged", () => {
+  const raw =
+    "The page reports an estimated ~$16M in annualized impact, a 30% faster checkout from 3:00 to 2:03, and ~3% conversion lift.";
+  assert.equal(processCaptured("checkout-impact", raw), raw);
+});
+
+test("captured summary preserves exact inventory values, retrieval status and unlaunched scope", () => {
+  const answer = processCaptured("ai-career-summary");
+  assert.match(answer, /147\.65.*81\.58/);
+  assert.match(answer, /exclude server bundles/);
+  assert.match(answer, /not independently rerun/);
+  assert.match(answer, /Remote career retrieval is disabled/);
+  assert.doesNotMatch(
+    answer,
+    /complete,?\s*end[\u2010-\u2015-]to[\u2010-\u2015-]end\s+proof[\u2010-\u2015-]engine/i,
+  );
+  assert.match(answer, /before.*public integration.*launched/);
+  assert.ok(answer.split(/(?<=[.!?])\s+/).length <= 4);
+});
+
+test("empty assistance headings cannot suppress the captured ownership fallback", () => {
+  for (const credit of [
+    "unknown",
+    "not documented",
+    "undocumented",
+    "not disclosed",
+    "I don't know",
+    "AI development agents are not documented",
+    "",
+  ]) {
+    const answer = broadOwnership(
+      `Directed: unknown. AI-assisted: ${credit}. Local status: unknown. I can't identify roles across the portfolio from this page.`,
+    );
+    assert.match(answer, /AI development agents/);
+    assert.match(answer, /does not claim sole hand-coding/);
+    assert.doesNotMatch(
+      answer,
+      /AI-assisted: (?:unknown|not documented|undocumented)/,
+    );
+  }
+});
+
+test("substantive AI assistance is retained even if another ownership detail is unknown", () => {
+  const raw =
+    "AI-assisted: AI development agents accelerated implementation under human review; exact team size is unknown. I can't identify every role across the portfolio from this page.";
+  assert.match(broadOwnership(raw), /exact team size is unknown/);
+  assert.doesNotMatch(
+    broadOwnership(raw),
+    /From AI experiments to platform foundations/,
+  );
+});
+
+test("standalone inventory-derived speed, cost and semantic conclusions are removed with source limits", () => {
+  const raw =
+    "Repository-documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. This reduction makes pages faster, lowers bills and improves semantic AI answer quality.";
+  const answer = processCaptured("ai-career-summary", raw);
+  assert.match(answer, /147\.65.*81\.58/);
+  assert.doesNotMatch(
+    answer,
+    /makes pages faster|lowers bills|improves semantic AI answer quality/,
+  );
+  assert.match(answer, /does not establish lower bills, faster pages/);
+});
+
+test("inventory guard preserves explicit denials and unrelated measured runtime facts", () => {
+  const raw =
+    "Uncompressed static files decreased from 147.65 MiB to 81.58 MiB. This reduction does not establish faster pages or better semantic quality. A separate evaluation recorded Terra's median workflow latency of 4.82 seconds.";
+  const answer = processCaptured("ai-career-summary", raw);
+  assert.match(answer, /does not establish faster pages/);
+  assert.match(
+    answer,
+    /separate evaluation recorded Terra's median workflow latency of 4\.82 seconds/,
+  );
+});
+
+test("a denied semantic claim cannot shelter an affirmative inventory-derived speed claim", () => {
+  const raw =
+    "Uncompressed static files decreased from 147.65 MiB to 81.58 MiB. This reduction makes pages faster but does not establish semantic quality.";
+  const answer = processCaptured("ai-career-summary", raw);
+  assert.doesNotMatch(answer, /makes pages faster/);
+  assert.match(answer, /does not establish lower bills, faster pages/);
+});
+
+test("a denial scopes across coordinated unsupported outcomes", () => {
+  const raw =
+    "Uncompressed static files decreased from 147.65 MiB to 81.58 MiB. This reduction does not establish faster pages and better semantic quality.";
+  assert.match(
+    processCaptured("ai-career-summary", raw),
+    /does not establish faster pages and better semantic quality/,
+  );
+});
+
+test("equivalent retrieval typography receives the same authored availability qualification", () => {
+  for (const hyphen of ["-", "\u2010", "\u2011", "\u2013"]) {
+    const answer = processCaptured(
+      "ai-career-summary",
+      `The system includes source${hyphen}audited retrieval and structural PDF checks.`,
+    );
+    assert.match(answer, /Remote career retrieval is disabled/);
+  }
+});
+
+test("retrieval and completion corrections do not invent absent source boundaries", () => {
+  const raw =
+    "A complete end-to-end proof-engine uses source‑audited retrieval.";
+  const answer = processCaptured("ai-career-summary", raw, (input) => ({
+    ...input,
+    pageContext: {
+      ...input.pageContext,
+      evidenceHighlights: [],
+      claimBoundaries: {},
+    },
+  }));
+  assert.equal(answer, raw);
+});
+
+test("an explicit denial of completion remains a limit rather than a positive launch claim", () => {
+  const raw =
+    "The page does not establish a complete end-to-end proof-engine or a production-ready workflow.";
+  assert.equal(processCaptured("ai-career-summary", raw), raw);
 });

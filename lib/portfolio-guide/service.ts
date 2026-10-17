@@ -781,22 +781,162 @@ function qualifyStaticInventoryConclusion(
     /media separation does not establish/i.test(text),
   );
   if (!inventoryLimit || !outcomeLimit) return answer;
-  let changed = false;
-  const corrected = answer
+  const parts = answer.split(/(?<=[.!?])\s+/);
+  const inventoryIndex = parts.findIndex(
+    (part) =>
+      /\bMiB\b/i.test(part) &&
+      /\b(?:static|files?|assets?|inventory|media|bundles?)\b/i.test(part),
+  );
+  if (inventoryIndex < 0) return answer;
+  const amounts =
+    /\b\d+(?:\.\d+)?\s*MiB\s*(?:to|→|->)\s*\d+(?:\.\d+)?\s*MiB\b/i;
+  const documentedAmounts = inventoryLimit.match(amounts)?.[0];
+  if (documentedAmounts) {
+    parts[inventoryIndex] = parts[inventoryIndex].replace(
+      amounts,
+      documentedAmounts,
+    );
+  }
+  parts[inventoryIndex] = parts[inventoryIndex].replace(
+    /,\s*(?:illustrating|demonstrating|showing|proving|delivering|yielding|resulting in)\b[^.!?]*(?:quality|performance|speed|savings)[^.!?]*(?=[.!?]|$)/gi,
+    "",
+  );
+  // Only remove conclusions attributed to this inventory, not separate runtime
+  // measurements or explicit denials of the unsupported inference.
+  const derivedConclusion =
+    /\b(?:this|that|the)\s+(?:reduction|decrease|inventory|separation)|\b(?:media separation|smaller (?:static )?bundles)\b/i;
+  const unsupportedOutcome =
+    /\b(?:faster|speed|performance|quality|savings|bills?|reclaim\w*|production verification)\b/i;
+  const deniesOutcome =
+    /\b(?:does not|doesn't|cannot|can't|no evidence|not establish|not prove|not demonstrate)\b/i;
+  const assertsUnsupportedOutcome = (part: string) =>
+    normalizeText(part)
+      .split(/[,;]|\b(?:but|yet)\b/)
+      .some((clause) => {
+        const outcome = clause.search(unsupportedOutcome);
+        const denial = clause.search(deniesOutcome);
+        return outcome >= 0 && (denial < 0 || denial > outcome);
+      });
+  const corrected = parts.filter(
+    (part, index) =>
+      index <= inventoryIndex ||
+      index > inventoryIndex + 2 ||
+      !derivedConclusion.test(normalizeText(part)) ||
+      !assertsUnsupportedOutcome(part),
+  );
+  if (
+    !/exclude server bundles/i.test(answer) ||
+    !/not independently rerun/i.test(answer) ||
+    !/media separation does not establish/i.test(answer)
+  ) {
+    corrected[inventoryIndex] =
+      `${corrected[inventoryIndex].replace(/[.!?]+$/, "")}; measurement boundary: ${joinOwnershipDetails([inventoryLimit, outcomeLimit])}.`;
+  }
+  return corrected.join(" ");
+}
+
+function suppliesSubstantiveAssistanceCredit(answer: string): boolean {
+  const normalized = normalizeText(answer);
+  const clause = normalized
+    .match(/\b(?:ai[- ]assisted\s*:|ai development agents\b)([^.!?]*)/i)?.[1]
+    ?.split(";")[0]
+    .trim();
+  if (!clause) return false;
+  const onlyMissingCredit =
+    /^(?:unknown|undocumented|not (?:documented|specified|established|known|identified|disclosed|clear)|none|n\/a)\b|^(?:i|we) (?:don't|do not|can't|cannot) (?:know|identify|determine)\b/.test(
+      clause,
+    );
+  const missingCredit =
+    /\b(?:unknown|undocumented|not documented|not specified|not identified)\b/.test(
+      clause,
+    );
+  const substantiveAction =
+    /\b(?:accelerated|implemented|built|coded|helped|assisted|generated|reviewed|contributed|supported)\b/.test(
+      clause,
+    );
+  return !onlyMissingCredit && (!missingCredit || substantiveAction);
+}
+
+function preserveQualifiedPageMetrics(
+  answer: string,
+  request: CopilotRequest,
+): string {
+  const metrics = request.pageContext.metrics ?? [];
+  const compact = (text: string) =>
+    normalizeText(text)
+      .replace(/million\b/g, "m")
+      .replace(/[~\s,]/g, "");
+  const mentionsMetric = (part: string, metric: string) => {
+    const value = metric.split(":").slice(1).join(":").split("(")[0];
+    const money = value.match(/\$\d+(?:\.\d+)?\s*(?:million|m)\b/i)?.[0];
+    if (money) return compact(part).includes(compact(money));
+    const percent = value.match(/\d+(?:\.\d+)?\s*%/)?.[0];
+    if (percent) return compact(part).includes(compact(percent));
+    const times = metric.match(/\b\d+:\d{2}\b/g);
+    return Boolean(times?.length && times.every((time) => part.includes(time)));
+  };
+  return answer
     .split(/(?<=[.!?])\s+/)
     .map((part) => {
-      if (!/\bMiB\b/.test(part)) return part;
-      const next = part.replace(
-        /,\s*(?:illustrating|demonstrating|showing|proving|delivering|yielding|resulting in)\b[^.!?]*(?:quality|performance|speed|savings)[^.!?]*(?=[.!?]|$)/gi,
-        "",
-      );
-      changed ||= next !== part;
-      return next;
+      const omittedEstimate =
+        metrics.some(
+          (metric) =>
+            /estimated/i.test(metric) &&
+            /annualized/i.test(metric) &&
+            mentionsMetric(part, metric),
+        ) && !/\bestimat\w*/i.test(part);
+      const inventedTimeUnit = metrics.some((metric) => {
+        const times = metric.match(/\b\d+:\d{2}\b/g);
+        return (
+          times &&
+          times.length > 1 &&
+          times.every((time) => part.includes(time)) &&
+          !/\b(?:seconds?|minutes?|milliseconds?)\b/i.test(metric) &&
+          /\b\d+:\d{2}\s*(?:seconds?|minutes?|milliseconds?)\b/i.test(part)
+        );
+      });
+      if (!omittedEstimate && !inventedTimeUnit) return part;
+      const seen = new Set<string>();
+      const supported = metrics.filter((metric) => {
+        const key = metric.split("(")[0];
+        if (!mentionsMetric(part, metric) || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      return supported.length
+        ? `The page reports ${joinOwnershipDetails(supported)}.`
+        : part;
     })
     .join(" ");
-  return changed
-    ? `${ensureTrailingPeriod(corrected)} Measurement boundary: ${ensureTrailingPeriod(joinDetailsAsOneSentence([inventoryLimit, outcomeLimit]))}`
-    : answer;
+}
+
+function qualifyUnlaunchedSystemClaim(
+  answer: string,
+  request: CopilotRequest,
+): string {
+  const launchBoundary =
+    request.pageContext.claimBoundaries?.explicitUnknowns?.find((fact) =>
+      /before[^.!?]*public integration[^.!?]*launched/i.test(fact),
+    );
+  if (!launchBoundary) return answer;
+  return answer
+    .split(/(?<=[.!?])\s+/)
+    .map((part) => {
+      const normalized = normalizeText(part);
+      const claim =
+        /\b(?:complete,?\s+(?:end-to-end\s+)?proof-engine|(?:fully operational|production-ready|complete)\s+(?:end-to-end\s+)?(?:system|workflow|integration))\b/i.exec(
+          normalized,
+        );
+      if (
+        !claim ||
+        /\b(?:not|isn't|doesn't|does not|no)\b[^.!?;]{0,30}$/.test(
+          normalized.slice(0, claim.index),
+        )
+      )
+        return part;
+      return ensureTrailingPeriod(launchBoundary);
+    })
+    .join(" ");
 }
 
 export function applyPortfolioGuideResponseGuardrails(input: {
@@ -836,10 +976,7 @@ export function applyPortfolioGuideResponseGuardrails(input: {
     /\b(?:can(?:not|'t)|could(?: not|n't))\s+(?:identify|compare|answer|determine|say)\b[^.!?]{0,240}\b(?:across|broader|portfolio)\b|\bonly describes work done on this specific project\b/i.test(
       normalizeText(answer),
     );
-  const suppliesAssistanceCredit =
-    /\bAI[- ]assisted\s*:|\bAI development agents\b/i.test(
-      normalizeText(answer),
-    );
+  const suppliesAssistanceCredit = suppliesSubstantiveAssistanceCredit(answer);
   if (
     preserveRoutedAnswer &&
     falsePageOnlyOwnershipRefusal &&
@@ -986,6 +1123,8 @@ export function applyPortfolioGuideResponseGuardrails(input: {
 
   answer = removeResumeGenerationCompletionClaims(answer);
   answer = removeUnsupportedPortfolioGeneratorSourceClaims(answer);
+  answer = preserveQualifiedPageMetrics(answer, request);
+  answer = qualifyUnlaunchedSystemClaim(answer, request);
   answer = qualifyStaticInventoryConclusion(answer, request);
 
   if (directResumeRequest) {
