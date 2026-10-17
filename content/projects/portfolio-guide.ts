@@ -4,6 +4,7 @@ import type {
   PageContext,
 } from "@/lib/portfolio-guide/types";
 import { creativeGuideMetadata } from "@/content/projects/creative-guide";
+import { decisionsEvaluation } from "@/content/projects/decisions-evaluation";
 
 type GuideOverlay = Partial<
   Pick<
@@ -108,6 +109,12 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "Separated large portfolio recordings from deployment bundles, preserving the original media with checksum verification and adding asset-budget checks. Documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. Evidence: merged PR #11 (https://github.com/DanielNash1611/portfolio/pull/11), docs/deployment-storage.md, and docs/deployment-media.json; the inventory excludes server bundles and was not independently rerun by this content review.",
         type: "metric",
       },
+      {
+        label: "Decisions API local prototype",
+        detail:
+          "A locally tested Decisions API layer routed ambiguous questions before answer generation. Saved evaluations exposed mixed answer-quality results, prompting source-attribution, qualifier and concision fixes. Final combined-release validation remains pending.",
+        type: "workflow",
+      },
     ],
     claimBoundaries: {
       directOwnership: [
@@ -132,6 +139,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "The Claim-to-Evidence changes must be merged and deployed in both repositories before the public integration is considered launched.",
         "The 147.65 MiB to 81.58 MiB figures are repository-documented uncompressed static file inventories, exclude server bundles, and were not independently rerun by this content review.",
         "Media separation does not establish lower bills, faster pages, reclaimed historical deployment storage, production verification by this review, or semantic AI-quality improvement.",
+        "Decisions routing and linked resume skills are locally implemented candidates. Historical routing, answer-comparison, targeted repair and deterministic skills checks use different datasets; none establishes the final deployment's quality.",
       ],
     },
     recruiterPrompts: [
@@ -261,6 +269,23 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "Each reviewer returns structured findings, 1-5 scores, issue severity, source status, and source-backed, needs-source, or reject recommendations.",
           "The review agents are advisory; structural checks can block output, while Daniel retains final approval.",
           "Resume review artifacts expose quality tradeoffs rather than proving universal uplift.",
+        ],
+      },
+      {
+        label: "Decisions evaluation journal",
+        snippets: [
+          decisionsEvaluation.status,
+          ...decisionsEvaluation.stages.map((stage) =>
+            [
+              stage.label,
+              stage.result,
+              stage.method,
+              stage.limit,
+              stage.snapshot,
+            ].join(" "),
+          ),
+          decisionsEvaluation.judgeDisclosure,
+          decisionsEvaluation.methodology,
         ],
       },
       {
