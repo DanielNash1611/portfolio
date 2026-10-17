@@ -13,6 +13,7 @@ const payload = (index = 0, model = "gpt-5.4") =>
   JSON.stringify({
     model,
     store: false,
+    service_tier: "default",
     max_output_tokens: 1200,
     input: `Synthetic public-safe case ${index}`,
   });
@@ -55,11 +56,11 @@ test("guard reserves the complete role maximum and retains nonsecret usage", asy
   await budget.fetch(endpoint, init());
   const result = budget.snapshot();
   assert.equal(result.reservedUsd, 0.3);
-  assert.equal(result.ledger[0].actualNano, 2_500_000);
+  assert.equal(result.ledger[0].usageCostUpperBoundNano, 2_500_000);
   assert.equal(result.ledger[0].status, "complete");
   assert.doesNotMatch(JSON.stringify(result), /Synthetic public-safe/);
 });
-test("full planned call ceilings reserve $7.5888 and reject an extra call", async () => {
+test("full planned call ceilings reserve $7.776 and reject an extra call", async () => {
   const budget = guard({}, async (_input, options) =>
     Response.json({
       model: JSON.parse(options!.body as string).model,
@@ -74,7 +75,7 @@ test("full planned call ceilings reserve $7.5888 and reject an extra call", asyn
       "https://api.openai.com/v1/decisions",
       init(JSON.stringify({ model: "gpt-6-luna", input: String(i) })),
     );
-  assert.equal(budget.snapshot().reservedUsd, 7.5888);
+  assert.equal(budget.snapshot().reservedUsd, 7.776);
   await assert.rejects(budget.fetch(endpoint, init(payload(24))), /call limit/);
 });
 test("budget rejects insufficient allowance, unknown models, excess tokens and external tools before transport", async () => {
@@ -87,12 +88,14 @@ test("budget rejects insufficient allowance, unknown models, excess tokens and e
     JSON.stringify({
       model: "gpt-5.4",
       store: false,
+      service_tier: "default",
       max_output_tokens: 1200,
       input: "x".repeat(24000),
     }),
     JSON.stringify({
       model: "gpt-5.4",
       store: false,
+      service_tier: "default",
       max_output_tokens: 1200,
       tools: [{ type: "web_search" }],
     }),
@@ -141,4 +144,40 @@ test("transport errors and exceeded usage keep the reservation and stop further 
     assert.equal(budget.snapshot().reservedUsd, 0.3);
     await assert.rejects(budget.fetch(endpoint, init(payload(1))), /stopped/);
   }
+});
+
+test("reservation is persisted before transport, and journal failure prevents a request", async () => {
+  const events: string[] = [];
+  const budget = createEvaluationBudgetGuard({
+    approval,
+    scopeSha256,
+    onChange: (state) => {
+      events.push(state.ledger.at(-1)!.status);
+    },
+    fetch: async () => {
+      assert.deepEqual(events, ["reserved"]);
+      events.push("transport");
+      return Response.json({ usage: { input_tokens: 20, output_tokens: 0 } });
+    },
+  });
+  await budget.fetch(endpoint, init());
+  assert.deepEqual(events, ["reserved", "transport", "complete"]);
+  let transported = false;
+  const failedJournal = createEvaluationBudgetGuard({
+    approval,
+    scopeSha256,
+    onChange: () => {
+      throw new Error("journal unavailable");
+    },
+    fetch: async () => {
+      transported = true;
+      return Response.json({});
+    },
+  });
+  await assert.rejects(
+    failedJournal.fetch(endpoint, init()),
+    /journal unavailable/,
+  );
+  assert.equal(transported, false);
+  assert.equal(failedJournal.snapshot().stopped, true);
 });

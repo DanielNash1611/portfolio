@@ -14,15 +14,15 @@ const ROLES = {
     calls: 6,
     input: 24_000,
     output: 1_200,
-    inputNano: 2_000,
-    outputNano: 10_000,
+    inputNano: 3_000,
+    outputNano: 12_000,
   },
   routing: {
     model: "gpt-6-luna",
     calls: 36,
     input: 8_000,
     output: 0,
-    inputNano: 100,
+    inputNano: 200,
     outputNano: 0,
   },
 } as const;
@@ -42,7 +42,14 @@ type LedgerEntry = {
   status: "reserved" | "complete" | "unknown";
   inputTokens?: number;
   outputTokens?: number;
-  actualNano?: number;
+  usageCostUpperBoundNano?: number;
+};
+export type EvaluationBudgetSnapshot = {
+  ceilingUsd: number;
+  reservedUsd: number;
+  stopped: boolean;
+  counts: Record<Role, number>;
+  ledger: LedgerEntry[];
 };
 
 /** Offline until explicitly approved. A conservative admission guard, not a provider billing cap. */
@@ -50,6 +57,7 @@ export function createEvaluationBudgetGuard(options: {
   approval: EvaluationApproval;
   scopeSha256: string;
   fetch: typeof fetch;
+  onChange?: (snapshot: EvaluationBudgetSnapshot) => void;
 }) {
   const { approval } = options;
   const ledger: LedgerEntry[] = [];
@@ -59,6 +67,13 @@ export function createEvaluationBudgetGuard(options: {
   const ceilingNano = Math.floor(approval.ceilingUsd * 1e9);
   const reserved = () =>
     ledger.reduce((sum, item) => sum + item.reservedNano, 0);
+  const snapshot = (): EvaluationBudgetSnapshot => ({
+    ceilingUsd: approval.ceilingUsd,
+    reservedUsd: reserved() / 1e9,
+    stopped,
+    counts: { ...counts },
+    ledger: ledger.map((item) => ({ ...item })),
+  });
   const guardedFetch: typeof fetch = async (input, init) => {
     if (
       !approval.approved ||
@@ -107,12 +122,13 @@ export function createEvaluationBudgetGuard(options: {
     if (
       role !== "routing" &&
       (body.store !== false ||
+        body.service_tier !== "default" ||
         !Number.isInteger(body.max_output_tokens) ||
         body.max_output_tokens <= 0 ||
         body.max_output_tokens > rule.output)
     )
       throw new Error(
-        "Responses require store:false and at most 1200 total output tokens.",
+        "Responses require store:false, default service tier and at most 1200 total output tokens.",
       );
     if (
       (body.tools ?? []).some(
@@ -154,6 +170,7 @@ export function createEvaluationBudgetGuard(options: {
     counts[role]++;
     busy = true;
     try {
+      options.onChange?.(snapshot()); // Persist the full reservation before transport.
       const result = await options.fetch(input, init); // One raw transport attempt; no SDK retries.
       if (!result.ok)
         throw new Error(
@@ -182,13 +199,19 @@ export function createEvaluationBudgetGuard(options: {
         status: "complete",
         inputTokens,
         outputTokens,
-        actualNano:
+        usageCostUpperBoundNano:
           inputTokens * rule.inputNano + outputTokens * rule.outputNano,
       });
+      options.onChange?.(snapshot());
       return result;
     } catch (error) {
       entry.status = "unknown";
       stopped = true;
+      try {
+        options.onChange?.(snapshot());
+      } catch {
+        /* The pre-call reservation remains authoritative. */
+      }
       throw error;
     } finally {
       busy = false;
@@ -196,12 +219,6 @@ export function createEvaluationBudgetGuard(options: {
   };
   return {
     fetch: guardedFetch,
-    snapshot: () => ({
-      ceilingUsd: approval.ceilingUsd,
-      reservedUsd: reserved() / 1e9,
-      stopped,
-      counts: { ...counts },
-      ledger: ledger.map((item) => ({ ...item })),
-    }),
+    snapshot,
   };
 }
