@@ -173,6 +173,18 @@ export const decisionsEvaluation = {
       snapshot:
         "All paid raw answers, source/selection traces, original rubrics, earlier comparisons and the separate model bake-off are retained. New local checks are distinct from live semantic evidence.",
     },
+    {
+      id: "concise-claim-live-check",
+      label: "Verify the narrow fix, retain the tradeoff",
+      date: "October 17, 2026 · UTC",
+      result: "2/2 targeted candidate passes; 1–1 preference",
+      method:
+        "Two new Terra selections used the concise claim catalog for role relevance and cross-portfolio ownership, with one Luna routing call and two Sol paired judgments against preserved baseline answers. Both selections were valid without canonical fallback. Complete qualifications stayed with the rendered proof, including prototype reuse intent, AI-assisted implementation credit, disabled retrieval and production-ownership limits.",
+      limit:
+        "Both baseline answers also passed. The judge preferred the baseline's more explicit role connection and the candidate's attributed cross-portfolio ownership comparison; the candidate was more concise in both cases. This is one observation per question against archived baselines, not a full 43-case Terra result or a universal quality gain. Impact and strategy retain replay-only coverage, and owner Production configuration remains unconfirmed.",
+      snapshot:
+        "Answer runtime 0f1ba7b with reviewed ledger correction be59b62; all five requests completed with known usage and no retries. Original four-question paid grades, source traces, historical stages and the separate model bake-off remain unchanged. The targeted semantic check passes; deployment remains a separate gate.",
+    },
   ],
   judgeDisclosure:
     "Judge results also needed scrutiny. Later checks corrected four unchanged answers' source-aware grades, and a persisted Terra check regraded a malformed judge response against the unchanged answer. These are grading corrections, not newly improved answers; original outcomes remain part of the record.",
