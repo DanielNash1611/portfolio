@@ -472,6 +472,14 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "The page explicitly says the work mapped recurring AI workflow patterns across pilots to shape reusable platform foundations.",
         type: "outcome",
       },
+      {
+        label: "Qualified prototype-to-production timeline",
+        // Approved provenance: ResumeCustomizer 24133fd, sources/facts-bank.md
+        // and sources/portfolio-sources.md; see docs/decisions-release.md.
+        detail:
+          "Daniel confirmed AI Platform was pitched in February 2025, proofs of concept were built through October 2025, and a production version deployed in February 2026; the timeline does not establish that the final implementation preserved the full original vision.",
+        type: "outcome",
+      },
     ],
     claimBoundaries: {
       directOwnership: [
@@ -486,9 +494,11 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       ],
       implementation: [
         "It supports prototype-building and platform framing, but it does not describe end-to-end production implementation ownership.",
+        "Approved sources confirm a February 2026 production version; this does not establish that the final implementation preserved the full original vision or that Daniel owned end-to-end production engineering.",
       ],
       explicitUnknowns: [
         "The page does not define team size, org structure, production rollout scale, or which reusable pattern shipped most.",
+        "The production timeline does not establish faster or more reliable scaling, quantified platform adoption or performance outcomes, end-to-end production engineering ownership, or preservation of the full original vision.",
       ],
     },
     recruiterPrompts: [

@@ -62,3 +62,40 @@ Shortening ranks individual source findings, including qualified survey findings
 A media-inventory sentence cannot conclude broader quality or performance gains from the file-size figures. The case study explicitly separates documented static inventory from runtime, billing, historical-storage and semantic-quality outcomes; the corresponding guard uses those authored measurement boundaries. The same pure postprocessing function serves production and saved-output replay, keeping original prompts, raw outputs, rubrics and grades intact. Local remediation checks do not replace the original paid 5/6 enabled result or establish deployment quality.
 
 Fresh local validation also exposed a future-tense claim that Portfolio pages feed resume generation, a summary omitting the documented disabled-retrieval status, and a false page-only refusal despite captured supporting sources. The source-claim rule now covers that tense without asserting which unstated sources feed the generator. Retrieval descriptions retain the authored release boundary alongside the claim. A responsibility-map refusal can use explicitly attributed ownership, assistance and local-status facts only from the current page and canonical pages actually included in the prompt. It never looks up unseen project facts, invents missing AI credit, or replaces a substantive broader answer with that fallback. Original grades and alias/negation-only hard-check misses remain separately diagnosed.
+
+# Source alignment revision r2 — October 17, 2026
+
+The Guide's AI Platform packet now includes existing approved evidence: the
+platform was pitched in February 2025, proofs of concept were built through
+October 2025, and a production version deployed in February 2026. The timeline
+does not establish that the final implementation preserved the full original
+vision or that Daniel owned end-to-end production engineering. It does not add
+platform adoption, scaling-speed or reliability outcomes.
+
+Provenance is the approved ResumeCustomizer source at commit
+`24133fd012313bbac6c91a188546e69ebccb2352`:
+
+- `sources/facts-bank.md`, AI project evidence, line 123.
+- `sources/portfolio-sources.md`, AI Platform section, lines 111–114.
+
+The conservative agency corrections preserve the current-page sources:
+`ai-strategy.claimBoundaries.directOwnership[0]` says helped lead early ChatGPT
+rollout work; the human-flourishing essay's direct-ownership field says helped
+run surveys and worked on the specified enterprise AI, agentic-workflow and
+productivity-tool activities. This does not downgrade separately approved broader
+enterprise-AI leadership.
+
+The original `3cec994` full result remains 42/43 hard, 43/43 local judge and
+42/43 combined. Its alias failure and recommendation advisory remain recorded;
+recommendation coverage alone is not a factual release blocker. Original raw
+outputs, grades, rubrics, earlier comparisons and bake-off evidence are preserved.
+The source-alignment revision receives one fresh complete original 43-case local
+generation and same-judge run at its own frozen snapshot.
+
+The new review-status revision corrects the old stale nested review note without
+overwriting it: all 43 displayed answers at `3cec994` were reviewed. Conditional
+shipment together after validation was already authorized; duplicate shipment
+approval is not required. Validation and Production configuration/runtime
+verification are the current gates. No publication or deployment proceeds until
+the parent resolves the configuration gate with the owner. The metadata 403 is
+not bypassed and no secret or account setting is changed by this revision.

@@ -113,6 +113,18 @@ export const decisionsEvaluation = {
       snapshot:
         "Frozen bcf571e outputs and grades are retained. The later repair and full-run manifests identify their own snapshot; Production configuration remains unverified after the denied metadata read.",
     },
+    {
+      id: "approved-source-alignment",
+      label: "Align the evidence before strengthening the answer",
+      date: "October 17, 2026 · UTC",
+      result: "42/43 hard checks; 43/43 local judge",
+      method:
+        "The complete 3cec994 run preserved one literal professional-grounding mismatch and one recommendation advisory. Source review found that approved career evidence already confirmed February 2026 platform production, while the Guide packet emphasized prototype framing. A conservative follow-up carried the timeline and original-vision caveat into the packet and retained helped-lead and worked-on agency.",
+      limit:
+        "The recorded combined result remains 42/43. Recommendation coverage alone is not a factual release blocker, and the source cross-check does not establish sole engineering ownership, preservation of the full original vision or stronger performance outcomes. The new snapshot receives its own complete local run; original scores, rubrics and the model bake-off remain unchanged.",
+      snapshot:
+        "Frozen 3cec994 answers and grades remain separate from the source-alignment revision and its later validation; Production configuration is still a separate gate.",
+    },
   ],
   judgeDisclosure:
     "Judge results also needed scrutiny. Later checks corrected four unchanged answers' source-aware grades, and a persisted Terra check regraded a malformed judge response against the unchanged answer. These are grading corrections, not newly improved answers; original outcomes remain part of the record.",

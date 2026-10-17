@@ -486,13 +486,14 @@ test("the rollout essay retains helped-lead agency without changing its supporte
   assert.doesNotMatch(answer, /he led a ChatGPT rollout/);
 });
 
-test("fresh platform summaries and role answers retain prototype/framing scope rather than claiming a delivered platform", () => {
+test("captured platform summaries and role answers retain qualified production and ownership scope", () => {
   for (const id of [
     "bcf-ai-platform-summary",
     "bcf-ai-platform-role-relevance",
   ]) {
     const answer = processCaptured(id);
-    assert.match(answer, /conceptual point of view/);
+    assert.match(answer, /production version.*February 2026/);
+    assert.match(answer, /does not establish.*full original vision/);
     assert.match(
       answer,
       /does not describe end-to-end production implementation ownership/,
@@ -517,4 +518,129 @@ test("platform corrections require source scope and preserve explicit conceptual
     })),
     unsupported,
   );
+});
+
+test("the canonical platform packet includes the approved production timeline and vision caveat", () => {
+  const page = getPageContextBySlug("ai-platform-mcp")!;
+  const timeline = page.evidenceHighlights?.find(
+    (item) => item.label === "Qualified prototype-to-production timeline",
+  )?.detail;
+  assert.ok(timeline);
+  assert.match(timeline, /pitched in February 2025/);
+  assert.match(timeline, /proofs of concept.*October 2025/);
+  assert.match(timeline, /production version.*February 2026/);
+  assert.match(timeline, /does not establish.*full original vision/);
+});
+
+test("the exact middle-layer summary retains qualified production proof without a scaling outcome", () => {
+  const answer = processCaptured("3cec-ai-platform-summary");
+  assert.match(answer, /production version.*February 2026/);
+  assert.match(answer, /does not establish.*full original vision/);
+  assert.match(
+    answer,
+    /does not describe end-to-end production implementation ownership/,
+  );
+  assert.match(answer, /87/);
+  assert.doesNotMatch(answer, /scale AI use cases more quickly and reliably/);
+});
+
+test("the exact experience-leading construction retains collaborative rollout agency", () => {
+  const answer = processCaptured("3cec-ai-strategy-summary");
+  assert.match(answer, /experience helping lead a ChatGPT rollout/);
+  assert.doesNotMatch(answer, /experience leading a ChatGPT rollout/);
+  assert.match(answer, /pre[\u2010-\u2015-]call prep, drafting/);
+});
+
+test("the exact activity-specific work-he-has-led phrase remains worked-on experience", () => {
+  const answer = processCaptured("3cec-human-flourishing-proof-boundaries");
+  assert.match(answer, /surveys he helped run/);
+  assert.match(answer, /work he has worked on/);
+  assert.doesNotMatch(answer, /work he has led/);
+  assert.match(answer, /majority.*reported increased creativity/);
+  assert.match(answer, /exact percentages, sample sizes/);
+});
+
+test("already-qualified production and collaborative agency survive unchanged", () => {
+  const platform =
+    "The AI Platform had a production version deployed in February 2026; the sources do not establish preservation of the full original vision or Daniel's end-to-end production engineering ownership.";
+  assert.equal(processCaptured("3cec-ai-platform-summary", platform), platform);
+  const rollout =
+    "His experience helping lead early ChatGPT rollout work shaped his workflow-first view.";
+  assert.equal(processCaptured("3cec-ai-strategy-summary", rollout), rollout);
+});
+
+test("activity-specific calibration does not downgrade approved broader enterprise-AI leadership", () => {
+  const raw = "Daniel has 2+ years leading enterprise AI initiatives.";
+  assert.equal(
+    processCaptured("3cec-human-flourishing-proof-boundaries", raw),
+    raw,
+  );
+});
+
+test("collaborative calibration preserves an explicit denial of sole rollout leadership", () => {
+  const raw = "The essay does not claim Daniel led the ChatGPT rollout alone.";
+  assert.equal(processCaptured("3cec-ai-strategy-summary", raw), raw);
+});
+
+test("worked-on calibration preserves an explicit limit on the composite leadership claim", () => {
+  const raw =
+    "The page does not establish that the enterprise AI, agentic-workflow, and productivity-tool work he has led is direct ownership evidence.";
+  assert.equal(
+    processCaptured("3cec-human-flourishing-proof-boundaries", raw),
+    raw,
+  );
+});
+
+test("source alignment cannot invent production or weaker agency when source fields are absent", () => {
+  const withoutSource = (input: CopilotRequest) => ({
+    ...input,
+    pageContext: {
+      ...input.pageContext,
+      evidenceHighlights: [],
+      claimBoundaries: {},
+    },
+  });
+  for (const [id, raw] of [
+    [
+      "3cec-ai-platform-summary",
+      "The result is a shared middle-layer platform.",
+    ],
+    [
+      "3cec-ai-strategy-summary",
+      "His experience leading a ChatGPT rollout shaped this view.",
+    ],
+    ["3cec-human-flourishing-proof-boundaries", "This is work he has led."],
+  ]) {
+    assert.equal(processCaptured(id, raw, withoutSource), raw);
+  }
+});
+
+test("a captured legacy packet cannot acquire the newer production fact through a global lookup", () => {
+  const answer = processCaptured(
+    "3cec-ai-platform-summary",
+    "The result was a new platform layer.",
+    (input) => ({
+      ...input,
+      pageContext: {
+        ...input.pageContext,
+        evidenceHighlights: input.pageContext.evidenceHighlights?.filter(
+          (item) => item.label !== "Qualified prototype-to-production timeline",
+        ),
+      },
+    }),
+  );
+  assert.match(answer, /conceptual point of view/);
+  assert.doesNotMatch(answer, /February 2026/);
+});
+
+test("a denied vision claim cannot shelter a positive platform scaling claim", () => {
+  const raw =
+    "The platform does not preserve the full original vision, but the platform enables teams to scale more quickly and reliably.";
+  const answer = processCaptured("3cec-ai-platform-summary", raw);
+  assert.doesNotMatch(
+    answer,
+    /enables teams to scale more quickly and reliably/,
+  );
+  assert.match(answer, /production version.*February 2026/);
+  assert.match(answer, /does not establish faster or more reliable scaling/);
 });

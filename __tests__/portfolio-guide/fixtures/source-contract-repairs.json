@@ -46,6 +46,27 @@
       "question": "Summarize this page",
       "pageSlug": "ai-strategy",
       "rawText": "{\n  \"answer\": \"This essay argues that enterprise AI success depends on workflow fit, trust, and the operating layer around the model rather than model hype. Daniel explains how he led a ChatGPT rollout in a contact center, focusing on concrete jobs like pre‑call preparation and drafting to create measurable, safe pilots. He treats champions, training, and feedback loops as core product features, not after‑the‑fact support, showing how adoption is a product design problem. The page anchors these ideas in real rollout experience and links to the ChatGPT Enterprise case study for concrete rollout metrics.\",\n  \"suggestedFollowUps\": [\n    \"Would you like to see the ChatGPT Enterprise rollout details?\",\n    \"How does this workflow‑first approach align with your team’s AI strategy?\"\n  ],\n  \"relatedPages\": [\n    {\n      \"slug\": \"chatgpt-enterprise\",\n      \"reason\": \"Provides concrete rollout metrics and operating‑model evidence that support the workflow‑first argument.\"\n    },\n    {\n      \"slug\": \"ai-platform-mcp\",\n      \"reason\": \"Shows how the same workflow‑first thinking extended into reusable platform foundations.\"\n    }\n  ],\n  \"inferredInterestTags\": [\n    \"pm-leadership\",\n    \"platform\",\n    \"technical-depth\"\n  ]\n}"
+    },
+    {
+      "caseId": "3cec-ai-platform-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-platform-mcp",
+      "rawText": "**Summary**\n\nDaniel Nash turned a hackathon‑winning AI prototype for Guitar Center into a reusable platform architecture. The prototype was validated in a follow‑up UX study that showed 87 % of participants would use it again. Based on that signal, he mapped recurring AI workflow patterns across pilots, created connector and retrieval patterns, and shipped system‑level patterns (agent‑based workflows, structured‑unstructured retrieval, and governance steps) that now serve as the foundation for future AI agents and enterprise workflows. The result is a shared “middle layer” platform that enables teams to experiment, govern, and scale AI use cases more quickly and reliably.",
+      "capturedAtSnapshot": "3cec9948b8a4040485d9db349d65e009dce4a042"
+    },
+    {
+      "caseId": "3cec-ai-strategy-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-strategy",
+      "rawText": "**Answer**  \nDaniel Nash argues that enterprise AI succeeds when product leaders focus on workflow fit, trust, enablement, and governance rather than on the model itself. He draws this conclusion from his own experience leading a ChatGPT rollout in a contact‑center, where he mapped real agent tasks (pre‑call prep, drafting) and built a champion‑based adoption system as part of the product. The essay highlights that the “middle layer” – prompts, tooling, review paths, and governance embedded in the workflow – is the true product, and that failure often occurs before the model is even chosen.  \n\n**Suggested Follow‑Ups**  \n- How did the ChatGPT rollout impact agent productivity or cost?  \n- What governance or risk controls were built into the workflow?  \n\n**Related Pages**  \n- **chatgpt-enterprise** – provides concrete rollout metrics and operating‑model diagrams.  \n- **ai-platform-mcp** – shows how the same workflow‑first thinking was extended into reusable platform foundations.  \n\n**Inferred Interest Tags**  \n[\"pm-leadership\", \"platform\", \"technical-depth\"]",
+      "capturedAtSnapshot": "3cec9948b8a4040485d9db349d65e009dce4a042"
+    },
+    {
+      "caseId": "3cec-human-flourishing-proof-boundaries",
+      "question": "What's grounded in experience here, and what's personal conviction?",
+      "pageSlug": "the-side-of-ai-i-want-to-be-on",
+      "rawText": "{\"answer\":\"The essay shows Daniel’s professional experience through the Guitar Center AI adoption surveys he helped run and the enterprise AI, agentic‑workflow, and productivity‑tool work he has led (direct‑ownership evidence). It also reports a qualitative outcome: a majority of survey respondents reported increased creativity, a signal that AI can expand human capability (Qualified creativity signal). What the page does not provide are exact percentages, sample sizes, or a full list of metrics, and the personal reflections on faith, scripture study, and life‑sciences exploration are presented as future‑facing aspirations rather than proven outcomes (explicitly stated in claimBoundaries).\",\"suggestedFollowUps\":[\"Would you like to see the ChatGPT Enterprise case study for concrete adoption metrics?\",\"Do you want more detail on the survey methodology?\"],\"relatedPages\":[{\"slug\":\"chatgpt-enterprise\",\"reason\":\"provides measurable rollout and adoption data that underpins the responsible‑adoption viewpoint discussed here.\"}],\"inferredInterestTags\":[\"pm-leadership\",\"ai-builder\"]}",
+      "capturedAtSnapshot": "3cec9948b8a4040485d9db349d65e009dce4a042"
     }
   ]
 }

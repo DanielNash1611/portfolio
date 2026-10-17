@@ -952,24 +952,71 @@ function preserveQualifiedAgency(
   const sharedLead = request.pageContext.claimBoundaries?.directOwnership?.find(
     (fact) => /helped lead[^.!?]*chatgpt rollout/i.test(fact),
   );
-  if ((!agency || !result) && !sharedLead) return answer;
+  const workedOnActivities =
+    request.pageContext.claimBoundaries?.directOwnership?.find((fact) =>
+      /has worked on enterprise AI adoption, agentic workflows, productivity tools/i.test(
+        fact,
+      ),
+    );
+  if ((!agency || !result) && !sharedLead && !workedOnActivities) return answer;
+  const deniedAgency = (prefix: string) =>
+    /\b(?:does not|do not|doesn't|cannot|no evidence|not established)\b/i.test(
+      normalizeText(prefix)
+        .split(/\b(?:but|yet)\b|;/)
+        .at(-1) ?? "",
+    );
   return answer
     .split(/(?<=[.!?])\s+/)
     .map((part) => {
+      const normalizedPart = normalizeText(part);
       const overstatesAgency =
-        /\b(?:daniel|he)\s+(?:(?:explicitly|directly)\s+)*(?:led|owned|ran|conducted)\b[^.!?]{0,100}\b(?:guitar center|ai adoption|surveys?)\b/i.test(
-          normalizeText(part),
+        /\b(?:daniel|he)\s+(?:(?:explicitly|directly)\s+)*(?:led|owned|ran|conducted)\b[^.!?]{0,100}\b(?:guitar center|ai adoption|surveys?)\b/i.exec(
+          normalizedPart,
         );
-      if (agency && result && overstatesAgency) {
+      if (
+        agency &&
+        result &&
+        overstatesAgency &&
+        !deniedAgency(normalizedPart.slice(0, overstatesAgency.index))
+      ) {
         return ensureTrailingPeriod(joinOwnershipDetails([agency, result]));
       }
+      let qualified = part;
       if (sharedLead && /\bchatgpt\s+rollout\b/i.test(normalizeText(part))) {
-        return part.replace(
-          /\b(Daniel|he)(\s+(?:(?:explicitly|directly)\s+)*)led\b/gi,
-          "$1$2helped lead",
+        qualified = qualified
+          .replace(
+            /\b(Daniel|he)(\s+(?:(?:explicitly|directly)\s+)*)led\b/gi,
+            (match, subject, gap, offset, text) =>
+              deniedAgency(text.slice(0, offset))
+                ? match
+                : `${subject}${gap}helped lead`,
+          )
+          .replace(
+            /\bleading(\s+(?:(?:an?|the)\s+)?(?:early\s+)?ChatGPT\s+rollout)\b/gi,
+            (match, activity, offset, text) =>
+              deniedAgency(text.slice(0, offset))
+                ? match
+                : `helping lead${activity}`,
+          );
+      }
+      // The composite activity list has worked-on evidence. This does not
+      // downgrade separately approved broader enterprise-AI leadership.
+      const activityList = normalizeText(part);
+      if (
+        workedOnActivities &&
+        /\benterprise ai\b/.test(activityList) &&
+        /\bagentic/.test(activityList) &&
+        /\bproductivity/.test(activityList)
+      ) {
+        qualified = qualified.replace(
+          /\bwork (he|Daniel) has led\b/gi,
+          (match, subject, offset, text) =>
+            deniedAgency(text.slice(0, offset))
+              ? match
+              : `work ${subject} has worked on`,
         );
       }
-      return part;
+      return qualified;
     })
     .join(" ");
 }
@@ -987,25 +1034,55 @@ function preservePlatformFramingScope(
       /prototype-building and platform framing/i.test(fact),
     );
   if (!conceptual || !implementation) return answer;
+  const productionTimeline = request.pageContext.evidenceHighlights?.find(
+    (item) => item.label === "Qualified prototype-to-production timeline",
+  )?.detail;
+  const outcomeLimit =
+    request.pageContext.claimBoundaries?.explicitUnknowns?.find((fact) =>
+      /production timeline does not establish faster or more reliable scaling/i.test(
+        fact,
+      ),
+    );
   let suppliedBoundary = false;
   return answer
     .split(/(?<=[.!?])\s+/)
     .map((part) => {
       const normalized = normalizeText(part);
       const artifact =
-        /\b(?:ai[- ]?)?platform layer\b|\b(?:connector|retrieval|permissions?)[^.!?]{0,80}\bframework\b/i.test(
+        /\b(?:platform|architecture|middle[- ]layer|framework)\b/i.test(
           normalized,
         );
       const delivery =
-        /\b(?:built|building|implemented|created|delivered|new|provides?|enabl\w*|accelerat\w*)\b/i.test(
+        /\b(?:built|building|implemented|created|delivered|new|provides?|enabl\w*|accelerat\w*|turned|result|shipped|deployed|owned)\b/i.test(
           normalized,
         );
+      const clauses = normalized.split(/[;]|\b(?:but|yet)\b/);
+      const denies =
+        /\b(?:does not|do not|doesn't|not establish|not describe|cannot)\b/;
+      const deniesScope = (pattern: RegExp) =>
+        clauses.some((clause) => {
+          const limit = clause.search(denies);
+          const scope = clause.search(pattern);
+          return limit >= 0 && scope > limit;
+        });
+      const assertsScaling = clauses.some((clause) => {
+        const claim = clause.search(
+          /\bscal\w*\b[^.!?]*(?:more quickly|more reliably|reliably|faster)\b/,
+        );
+        const limit = clause.search(denies);
+        return claim >= 0 && (limit < 0 || limit > claim);
+      });
+      const qualifiedProduction =
+        productionTimeline &&
+        deniesScope(/full original vision/) &&
+        deniesScope(/end-to-end production (?:engineering|implementation)/) &&
+        !assertsScaling;
       if (
         !artifact ||
         !delivery ||
-        /\b(?:conceptual|proposed|framing|not establish|does not|doesn't)\b/i.test(
-          normalized,
-        )
+        qualifiedProduction ||
+        (!assertsScaling &&
+          /\b(?:conceptual|proposed|framing)\b/i.test(normalized))
       )
         return part;
       const proof = (request.pageContext.evidenceHighlights ?? [])
@@ -1018,7 +1095,11 @@ function preservePlatformFramingScope(
         })
         .map((item) => item.detail);
       if (!suppliedBoundary) {
-        proof.push(conceptual, implementation);
+        proof.push(
+          ...(productionTimeline ? [productionTimeline] : [conceptual]),
+          implementation,
+          ...(productionTimeline && outcomeLimit ? [outcomeLimit] : []),
+        );
         suppliedBoundary = true;
       }
       return proof.length
