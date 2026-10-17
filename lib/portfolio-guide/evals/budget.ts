@@ -32,6 +32,13 @@ export type EvaluationApproval = {
   ceilingUsd: number;
   scopeSha256: string;
   pricingVerified: boolean;
+  historyManifestSha256?: string;
+  executionId?: string;
+  executionLimits?: {
+    calls: Record<Role, number>;
+    maximumReservedNano: number;
+    maximumTotalAdmissionNano: number;
+  };
 };
 type LedgerEntry = {
   role: Role;
@@ -54,15 +61,166 @@ export type EvaluationBudgetSnapshot = {
   ledger: LedgerEntry[];
   priorUsageCostUpperBoundUsd?: number;
   totalAdmittedUpperBoundUsd?: number;
+  executionId?: string;
+  scopeSha256?: string;
+  historyManifestSha256?: string;
 };
+
+export type CapturedEvaluationExecution = {
+  runClaimJson: string;
+  approvalJson: string;
+  ledgerJson: string;
+};
+export type ApprovedEvaluationHistory = {
+  approved: boolean;
+  executions: Array<{
+    executionId: string;
+    scopeSha256: string;
+    runClaimSha256: string;
+    approvalSha256: string;
+    ledgerSha256: string;
+  }>;
+  expectedCallCount: number;
+  expectedUsageCostUpperBoundNano: number;
+};
+const sha256 = (text: string) =>
+  createHash("sha256").update(text).digest("hex");
+const isSha256 = (text: unknown): text is string =>
+  typeof text === "string" && /^[a-f0-9]{64}$/.test(text);
+
+/** Legacy execution identity is stable across harmless JSON formatting changes. */
+export function evaluationExecutionIdentity(runClaimJson: string): string {
+  const claim = JSON.parse(runClaimJson);
+  const scope = claim.scopeSha256 ?? claim.scope;
+  if (
+    !isSha256(scope) ||
+    typeof claim.startedAt !== "string" ||
+    !Number.isFinite(Date.parse(claim.startedAt))
+  )
+    throw new Error("Invalid execution claim identity.");
+  if (claim.executionId !== undefined && !isSha256(claim.executionId))
+    throw new Error("Invalid approved execution ID.");
+  return (
+    claim.executionId ??
+    sha256(
+      JSON.stringify({
+        scopeSha256: scope,
+        startedAt: new Date(claim.startedAt).toISOString(),
+      }),
+    )
+  );
+}
+
+export const evaluationHistoryManifestHash = (
+  manifest: ApprovedEvaluationHistory,
+) => sha256(JSON.stringify(manifest));
+
+/** Only a reviewed, hash-bound list of separately approved executions permits
+ * equal historical payloads. Every charge and reservation remains in its ledger. */
+export function reconcileApprovedEvaluationHistory(input: {
+  manifest: ApprovedEvaluationHistory;
+  records: CapturedEvaluationExecution[];
+}) {
+  const { manifest, records } = input;
+  if (
+    manifest.approved !== true ||
+    !records.length ||
+    records.length !== manifest.executions.length ||
+    !Number.isSafeInteger(manifest.expectedCallCount) ||
+    manifest.expectedCallCount <= 0 ||
+    !Number.isSafeInteger(manifest.expectedUsageCostUpperBoundNano) ||
+    manifest.expectedUsageCostUpperBoundNano < 0 ||
+    manifest.expectedUsageCostUpperBoundNano > 10e9
+  )
+    throw new Error(
+      "Reviewed execution history and complete expected totals are required.",
+    );
+  const seenExecutions = new Set<string>();
+  const seenApprovals = new Set<string>();
+  const seenLedgers = new Set<string>();
+  const ledgers = records.map((record, index) => {
+    const expected = manifest.executions[index];
+    const claim = JSON.parse(record.runClaimJson);
+    const approval = JSON.parse(record.approvalJson);
+    const ledger = JSON.parse(record.ledgerJson) as EvaluationBudgetSnapshot;
+    const executionId = evaluationExecutionIdentity(record.runClaimJson);
+    if (
+      expected.executionId !== executionId ||
+      !isSha256(expected.scopeSha256) ||
+      expected.scopeSha256 !== (claim.scopeSha256 ?? claim.scope) ||
+      expected.runClaimSha256 !== sha256(record.runClaimJson) ||
+      expected.approvalSha256 !== sha256(record.approvalJson) ||
+      expected.ledgerSha256 !== sha256(record.ledgerJson) ||
+      approval.approved !== true ||
+      approval.pricingVerified !== true ||
+      approval.scopeSha256 !== expected.scopeSha256 ||
+      !Number.isFinite(approval.ceilingUsd) ||
+      approval.ceilingUsd <= 0 ||
+      approval.ceilingUsd > 10 ||
+      ledger.ceilingUsd > approval.ceilingUsd ||
+      (claim.executionId !== undefined &&
+        approval.executionId !== executionId) ||
+      !(
+        (claim.mode === "live" && claim.dry !== true) ||
+        (claim.dry === false && claim.mode !== "dry-run")
+      ) ||
+      !(
+        claim.resumeOrRetryAllowed === false || claim.retriesAllowed === false
+      ) ||
+      seenExecutions.has(executionId) ||
+      seenApprovals.has(expected.approvalSha256) ||
+      seenLedgers.has(expected.ledgerSha256) ||
+      (ledger.executionId !== undefined &&
+        ledger.executionId !== executionId) ||
+      (ledger.scopeSha256 !== undefined &&
+        ledger.scopeSha256 !== expected.scopeSha256)
+    )
+      throw new Error(
+        "Unapproved, duplicate or mismatched historical execution; stop.",
+      );
+    seenExecutions.add(executionId);
+    seenApprovals.add(expected.approvalSha256);
+    seenLedgers.add(expected.ledgerSha256);
+    return ledger;
+  });
+  const usageCostUpperBoundNano = reconcileLedgerSequence(
+    ledgers,
+    manifest.executions.map((item) => item.executionId),
+  );
+  const callCount = ledgers.reduce(
+    (sum, ledger) => sum + ledger.ledger.length,
+    0,
+  );
+  if (
+    callCount !== manifest.expectedCallCount ||
+    usageCostUpperBoundNano !== manifest.expectedUsageCostUpperBoundNano
+  )
+    throw new Error(
+      "Historical charge totals differ from the reviewed manifest.",
+    );
+  return {
+    usageCostUpperBoundNano,
+    callCount,
+    manifestSha256: evaluationHistoryManifestHash(manifest),
+    executionIds: [...seenExecutions],
+  };
+}
 
 /** Completed runs settle to a conservative usage bound; unknown runs never settle. */
 export function reconcileCompletedEvaluationLedgers(
   prior: EvaluationBudgetSnapshot[],
 ): number {
-  const seen = new Set<string>();
+  return reconcileLedgerSequence(prior);
+}
+
+function reconcileLedgerSequence(
+  prior: EvaluationBudgetSnapshot[],
+  approvedExecutions?: string[],
+): number {
+  const legacySeen = new Set<string>();
   let costNano = 0;
   for (const run of prior) {
+    const seen = approvedExecutions ? new Set<string>() : legacySeen;
     if (
       run.priorUsageCostUpperBoundUsd !== undefined &&
       Math.round(run.priorUsageCostUpperBoundUsd * 1e9) !== costNano
@@ -71,13 +229,19 @@ export function reconcileCompletedEvaluationLedgers(
         "Missing or duplicate prior ledger chain; no further paid calls.",
       );
     if (
-      run.stopped ||
+      run.stopped !== false ||
       !Array.isArray(run.ledger) ||
       !run.ledger.length ||
+      !Number.isFinite(run.ceilingUsd) ||
+      run.ceilingUsd <= 0 ||
+      run.ceilingUsd > 10 ||
       Object.keys(ROLES).some(
         (role) =>
+          !Number.isSafeInteger(run.counts[role as Role]) ||
+          run.counts[role as Role] < 0 ||
+          run.counts[role as Role] > ROLES[role as Role].calls ||
           run.counts[role as Role] !==
-          run.ledger.filter((entry) => entry.role === role).length,
+            run.ledger.filter((entry) => entry.role === role).length,
       )
     )
       throw new Error(
@@ -119,7 +283,14 @@ export function reconcileCompletedEvaluationLedgers(
       costNano += upper;
       reservations += entry.reservedNano;
     }
-    if (Math.round(run.reservedUsd * 1e9) !== reservations)
+    if (
+      Math.round(run.reservedUsd * 1e9) !== reservations ||
+      reservations > Math.round(run.ceilingUsd * 1e9) ||
+      (run.totalAdmittedUpperBoundUsd !== undefined &&
+        Math.round(run.totalAdmittedUpperBoundUsd * 1e9) !==
+          Math.round((run.priorUsageCostUpperBoundUsd ?? 0) * 1e9) +
+            reservations)
+    )
       throw new Error("Prior reservations do not reconcile; stop.");
   }
   return costNano;
@@ -132,16 +303,79 @@ export function createEvaluationBudgetGuard(options: {
   fetch: typeof fetch;
   onChange?: (snapshot: EvaluationBudgetSnapshot) => void;
   priorCompletedLedgers?: EvaluationBudgetSnapshot[];
+  approvedPriorHistory?: {
+    manifest: ApprovedEvaluationHistory;
+    records: CapturedEvaluationExecution[];
+  };
+  executionId?: string;
+  /** Must durably and atomically refuse a reused execution ID before transport. */
+  claimExecution?: (identity: {
+    executionId: string;
+    scopeSha256: string;
+    historyManifestSha256: string;
+  }) => void;
 }) {
-  const { approval } = options;
+  const approval = structuredClone(options.approval);
+  const scopeSha256 = options.scopeSha256;
+  const executionId = options.executionId;
   const ledger: LedgerEntry[] = [];
   let busy = false;
   let stopped = false;
   const counts = { answer: 0, judge: 0, routing: 0 };
   const ceilingNano = Math.floor(approval.ceilingUsd * 1e9);
-  const priorUsageNano = reconcileCompletedEvaluationLedgers(
-    options.priorCompletedLedgers ?? [],
-  );
+  if (options.approvedPriorHistory && options.priorCompletedLedgers)
+    throw new Error("Use one explicit historical accounting contract.");
+  const reviewedHistory = options.approvedPriorHistory
+    ? reconcileApprovedEvaluationHistory(options.approvedPriorHistory)
+    : undefined;
+  const priorUsageNano =
+    reviewedHistory?.usageCostUpperBoundNano ??
+    reconcileCompletedEvaluationLedgers(options.priorCompletedLedgers ?? []);
+  const limits = approval.executionLimits;
+  if (
+    reviewedHistory &&
+    (!isSha256(executionId) ||
+      approval.executionId !== executionId ||
+      approval.historyManifestSha256 !== reviewedHistory.manifestSha256 ||
+      !options.claimExecution ||
+      !limits ||
+      reviewedHistory.executionIds.includes(executionId))
+  )
+    throw new Error(
+      "New execution identity, reviewed history pin, explicit limits and durable claim are required.",
+    );
+  if (limits) {
+    const plannedMaximum = (Object.keys(ROLES) as Role[]).reduce(
+      (sum, role) => {
+        const count = limits.calls[role];
+        if (
+          !Number.isSafeInteger(count) ||
+          count < 0 ||
+          count > ROLES[role].calls
+        )
+          throw new Error("Invalid approved execution call limits.");
+        return (
+          sum +
+          count *
+            (ROLES[role].input * ROLES[role].inputNano +
+              ROLES[role].output * ROLES[role].outputNano)
+        );
+      },
+      0,
+    );
+    if (
+      !Number.isSafeInteger(limits.maximumReservedNano) ||
+      limits.maximumReservedNano !== plannedMaximum ||
+      plannedMaximum <= 0 ||
+      !Number.isSafeInteger(limits.maximumTotalAdmissionNano) ||
+      priorUsageNano + plannedMaximum > limits.maximumTotalAdmissionNano ||
+      limits.maximumTotalAdmissionNano > ceilingNano
+    )
+      throw new Error(
+        "Complete approved execution cannot fit its cumulative reservation bound.",
+      );
+  }
+  let executionClaimed = false;
   const reserved = () =>
     ledger.reduce((sum, item) => sum + item.reservedNano, 0);
   const snapshot = (): EvaluationBudgetSnapshot => ({
@@ -152,13 +386,20 @@ export function createEvaluationBudgetGuard(options: {
     ledger: ledger.map((item) => ({ ...item })),
     priorUsageCostUpperBoundUsd: priorUsageNano / 1e9,
     totalAdmittedUpperBoundUsd: (priorUsageNano + reserved()) / 1e9,
+    ...(executionId
+      ? {
+          executionId,
+          scopeSha256,
+          historyManifestSha256: reviewedHistory?.manifestSha256,
+        }
+      : {}),
   });
   const guardedFetch: typeof fetch = async (input, init) => {
     if (
       approval.approved !== true ||
       approval.pricingVerified !== true ||
-      approval.scopeSha256 !== options.scopeSha256 ||
-      !/^[a-f0-9]{64}$/.test(options.scopeSha256)
+      approval.scopeSha256 !== scopeSha256 ||
+      !/^[a-f0-9]{64}$/.test(scopeSha256)
     )
       throw new Error(
         "Evaluation approval, verified pricing and matching frozen scope are required.",
@@ -228,6 +469,8 @@ export function createEvaluationBudgetGuard(options: {
     const requestSha256 = createHash("sha256").update(init.body).digest("hex");
     if (counts[role] >= rule.calls)
       throw new Error("Approved role-specific call limit exhausted.");
+    if (limits && counts[role] >= limits.calls[role])
+      throw new Error("Approved execution call limit exhausted.");
     if (ledger.some((item) => item.requestSha256 === requestSha256))
       throw new Error("Duplicate request/retry requires separate review.");
     const inputBound = Buffer.byteLength(init.body, "utf8") + 1_024;
@@ -242,6 +485,26 @@ export function createEvaluationBudgetGuard(options: {
       throw new Error(
         "Insufficient approved budget to reserve this complete request.",
       );
+    if (
+      limits &&
+      (reserved() + reservedNano > limits.maximumReservedNano ||
+        priorUsageNano + reserved() + reservedNano >
+          limits.maximumTotalAdmissionNano)
+    )
+      throw new Error("Explicit execution reservation exhausted.");
+    if (reviewedHistory && !executionClaimed) {
+      try {
+        options.claimExecution!({
+          executionId: executionId!,
+          scopeSha256,
+          historyManifestSha256: reviewedHistory.manifestSha256,
+        });
+        executionClaimed = true;
+      } catch (error) {
+        stopped = true;
+        throw error;
+      }
+    }
     const entry: LedgerEntry = {
       role,
       model: rule.model,
