@@ -1,0 +1,118 @@
+[
+  {
+    "id": "c-hallucinations",
+    "query": "Has Daniel reduced hallucinations?"
+  },
+  {
+    "id": "c-oms",
+    "query": "Order lookup and human confirmed cancellation through custom APIs"
+  },
+  {
+    "id": "c-scientists",
+    "query": "How did feedback from scientists shape Daniel's AI evaluations?"
+  },
+  {
+    "id": "c-champions",
+    "query": "Train the trainer partnership with OpenAI GTM"
+  },
+  {
+    "id": "c-checkout",
+    "query": "Conversion lift and annualized checkout revenue impact"
+  },
+  {
+    "id": "c-launchmuse",
+    "query": "Music campaign planning from hours to five minutes"
+  },
+  {
+    "id": "c-cresta",
+    "query": "Cresta coaching rollout to a 250 person contact center"
+  },
+  {
+    "id": "c-fabrication",
+    "query": "Did Daniel stop the assistant inventing patents, and how was that measured?"
+  },
+  {
+    "id": "c-immiatrics",
+    "query": "What trust and evaluation work did he do for Immiatrics?"
+  },
+  {
+    "id": "c-order-agent",
+    "query": "An agent that can find an order and cancel it only after a person approves"
+  },
+  {
+    "id": "c-adoption",
+    "query": "Getting staff to embrace AI through internal ambassadors and training"
+  },
+  {
+    "id": "c-measured-time",
+    "query": "Has he shortened the time artists spend creating a marketing plan?"
+  },
+  {
+    "id": "c-sales-trust",
+    "query": "Putting machine learning lead scores into Salesforce while protecting customer trust"
+  },
+  {
+    "id": "c-platform-milestone",
+    "query": "When did AI Platform move from proofs of concept into production?"
+  },
+  {
+    "id": "c-onboarding-current",
+    "query": "Product manager stakeholder eight week onboarding discovery intake decision forums"
+  },
+  {
+    "id": "p-ownership",
+    "query": "What did Daniel own versus AI assisted implementation across the portfolio?"
+  },
+  {
+    "id": "p-validation",
+    "query": "What prototype validation happened before broader rollout?"
+  },
+  {
+    "id": "p-impact",
+    "query": "Checkout conversion lift annualized revenue impact"
+  },
+  {
+    "id": "p-media",
+    "query": "Separated recordings checksum verified asset budgets static 147.65 MiB 81.58 MiB"
+  },
+  {
+    "id": "p-immunology",
+    "query": "Literature scouting evidence clustering citation product framing"
+  },
+  {
+    "id": "p-oms",
+    "query": "Order lookup cancellation human approval simulated data"
+  },
+  {
+    "id": "p-strategy",
+    "query": "Workflow first shared language rollout"
+  },
+  {
+    "id": "p-evaluation",
+    "query": "Original 5/6 6/6 targeted 2/2 replay evaluation limits"
+  },
+  {
+    "id": "live-patent-measurement",
+    "query": "Has Immunology Scout reduced patent-search hallucinations, and what was measured?"
+  },
+  {
+    "id": "live-ownership",
+    "query": "What did Daniel own versus AI-assisted implementation across the portfolio?"
+  },
+  {
+    "id": "live-onboarding",
+    "query": "What evidence supports Daniel's eight-week onboarding for product managers and stakeholders?"
+  },
+  {
+    "id": "live-oms-context",
+    "query": "For OMS, distinguish the public demo from later production milestones."
+  },
+  {
+    "id": "live-qualification",
+    "query": "Is Daniel HIPAA certified for clinical research?"
+  },
+  {
+    "id": "live-role-fit",
+    "query": "Across the portfolio, what supports my role requirements?\nDeclared role requirements: AI product leader requiring retrieval evaluation and HIPAA qualification"
+  }
+]
