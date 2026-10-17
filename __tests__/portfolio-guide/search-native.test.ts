@@ -1,6 +1,7 @@
-import test from "node:test";
+import test, { type TestContext } from "node:test";
 import assert from "node:assert/strict";
 import {
+  existsSync,
   mkdtempSync,
   readFileSync,
   readdirSync,
@@ -18,6 +19,8 @@ import {
 import { createFileSearchJournal } from "../../lib/portfolio-guide/evals/search-budget-journal";
 import { createSearchFixtureTransport } from "../../lib/portfolio-guide/evals/search-fixture";
 import { nativeQueryCache } from "../../lib/portfolio-guide/evals/search-native";
+import { getPortfolioSearchDocuments } from "../../lib/portfolio-guide/search";
+import { corpusHash } from "../../lib/search/hybrid";
 import {
   validateNativeReview,
   type ReviewPacket,
@@ -26,6 +29,25 @@ import {
 const evidence = resolve(
   "../review-evidence/semantic-search-preparation-20261017",
 );
+// These synthetic tests belong to the immutable October 17 approved corpus.
+// Changed content uses ownership-release-status.test.ts; do not rewrite budget pins.
+const available =
+  [
+    resolve(evidence, "native-final/proposal.json"),
+    resolve(evidence, "paid-test-proposal.json"),
+    resolve(evidence, "paid-test-queries.json"),
+    resolve(evidence, "cache-reconciliation/reused-vectors.json"),
+    resolve("../resumecustomizer-search/lib/evidence/search.ts"),
+    "/Users/danielnash/Code/DanielNash/ResumeCustomizer/evals/search/career-queries.json",
+  ].every((file) => existsSync(file)) &&
+  corpusHash(getPortfolioSearchDocuments()) ===
+    "1b9efb69391740d0b314fd5f3d58984af6bdc4b8bb2ab21456b97b8b96d92e8d";
+const frozenTest = (name: string, fn: (t: TestContext) => void | Promise<void>) =>
+  test(name, {
+    skip: !available
+      ? "Historical frozen-corpus integration: requires original proposal, caches, paired checkout, and pre-correction content; current saved-capture regression runs separately"
+      : false,
+  }, fn);
 const root = mkdtempSync(resolve(tmpdir(), "native-search-tests-"));
 process.on("exit", () => rmSync(root, { recursive: true, force: true }));
 let count = 0;
@@ -77,7 +99,7 @@ function fixture() {
   return { manifest, approval, bundle, attempts, make, output };
 }
 
-test("native adapter makes exactly 2 embeddings, 2 deployed router calls and 6 selections, then freezes an unreviewed Codex packet", async (t) => {
+frozenTest("native adapter makes exactly 2 embeddings, 2 deployed router calls and 6 selections, then freezes an unreviewed Codex packet", async (t) => {
   let escaped = 0;
   t.mock.method(globalThis, "fetch", async () => {
     escaped++;
@@ -174,19 +196,19 @@ test("native adapter makes exactly 2 embeddings, 2 deployed router calls and 6 s
   );
 });
 
-test("native pending approval makes zero transport attempts", () => {
+frozenTest("native pending approval makes zero transport attempts", () => {
   const f = fixture();
   f.approval.approved = false;
   assert.throws(() => f.make(), /explicit_frozen_approval/);
   assert.equal(f.attempts.length, 0);
 });
-test("native mode rejects inherited $2 ceiling instead of transferring old approval", () => {
+frozenTest("native mode rejects inherited $2 ceiling instead of transferring old approval", () => {
   const f = fixture();
   f.approval.incrementalCeilingNano = 2e9;
   assert.throws(() => f.make(), /explicit_frozen_approval/);
   assert.equal(f.attempts.length, 0);
 });
-test("native malformed embedding stops before every later provider call and retains full reservation", async () => {
+frozenTest("native malformed embedding stops before every later provider call and retains full reservation", async () => {
   const f = fixture();
   const g = f.make((request, reply) => {
     if (request.model === "text-embedding-3-small")
@@ -198,7 +220,7 @@ test("native malformed embedding stops before every later provider call and reta
   await assert.rejects(g.execute());
   assert.equal(f.attempts.length, 1);
 });
-test("native cache source hash and exact vector values are bound before transport", () => {
+frozenTest("native cache source hash and exact vector values are bound before transport", () => {
   const f = fixture();
   const cache = JSON.parse(readFileSync(f.manifest.nativeReuse!.path, "utf8"));
   cache.vectors.queries[0].vector[0] += 0.1;
@@ -212,21 +234,21 @@ test("native cache source hash and exact vector values are bound before transpor
   );
   assert.equal(f.attempts.length, 0);
 });
-test("native live source mutation after approval is rejected with no requests", () => {
+frozenTest("native live source mutation after approval is rejected with no requests", () => {
   const f = fixture();
   f.manifest.embeddingInputs["career-index"][0] += " changed";
   f.approval.scopeSha256 = searchManifestHash(f.manifest);
   assert.throws(() => f.make(), /embedding_inputs_changed/);
   assert.equal(f.attempts.length, 0);
 });
-test("native arbitrary model calls and external acceptance gates stay closed", async () => {
+frozenTest("native arbitrary model calls and external acceptance gates stay closed", async () => {
   const f = fixture();
   const g = f.make();
   await assert.rejects(g.call("routing", "ownership", "{}"), /runner_owned/);
   assert.equal(f.attempts.length, 0);
 });
 for (const issue of ["routing", "selection", "usage", "retrieval"] as const)
-  test(`native ${issue} failure closes later calls`, async () => {
+  frozenTest(`native ${issue} failure closes later calls`, async () => {
     const f = fixture();
     const guard = f.make((request, reply) => {
       if (issue === "routing" && request.model === "gpt-6-luna")

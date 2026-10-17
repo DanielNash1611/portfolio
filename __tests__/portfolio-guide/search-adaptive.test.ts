@@ -30,6 +30,8 @@ import {
   type PublicSearchBundle,
 } from "../../lib/portfolio-guide/evals/search-adaptive";
 import { createSearchFixtureTransport } from "../../lib/portfolio-guide/evals/search-fixture";
+import { getPortfolioSearchDocuments } from "../../lib/portfolio-guide/search";
+import { corpusHash } from "../../lib/search/hybrid";
 
 const evidence = resolve(
   "../review-evidence/semantic-search-preparation-20261017",
@@ -37,7 +39,10 @@ const evidence = resolve(
 const careerRoot = resolve("../resumecustomizer-search");
 const available =
   existsSync(resolve(evidence, "paid-test-proposal.json")) &&
-  existsSync(resolve(careerRoot, "lib/evidence/search.ts"));
+  existsSync(resolve(careerRoot, "lib/evidence/search.ts")) &&
+  // This synthetic integration belongs to the immutable, approved October 17 corpus.
+  corpusHash(getPortfolioSearchDocuments()) ===
+    "1b9efb69391740d0b314fd5f3d58984af6bdc4b8bb2ab21456b97b8b96d92e8d";
 const root = mkdtempSync(resolve(tmpdir(), "adaptive-search-tests-"));
 process.on("exit", () => rmSync(root, { recursive: true, force: true }));
 let id = 0;
@@ -76,7 +81,7 @@ function fixture() {
 }
 const options = {
   skip: !available
-    ? "Requires the frozen isolated ResumeCustomizer candidate and original local proposal"
+    ? "Historical frozen-corpus integration: requires original proposal, paired checkout, and pre-correction content; current saved-capture regression runs separately"
     : false,
 };
 

@@ -24,7 +24,9 @@ Role requirements can inform retrieval but never authorize claims.
 BM25 lexical retrieval works without a provider. Semantic retrieval adds cosine
 similarity using a fresh `text-embedding-3-small` index and a query embedding,
 then reciprocal rank fusion. The 63 complete-block texts require a new index;
-old passage vectors are not compatible. No paid index/query calls were made.
+old passage vectors are not compatible. The separately approved October 17
+10-call canary completed; its captures, costs and original grades are preserved
+in the parent workspace's `native-final` evidence folder.
 Embedding failures, absent keys and stale/missing indexes retain lexical results.
 Check `retrievalMode`; HTTP 200 does not establish semantic retrieval.
 
@@ -50,9 +52,29 @@ npm run search:index:require
 ```
 
 These checks do not load env files or call a provider. The semantic requirement
-intentionally fails until a complete index exists. Paid preparation is separately
+currently fails: the ownership release-status correction changed three texts
+(`ai-career-operating-system:evaluation`, `:perspective`, and `:ownership`).
+The preparation cache retains 60 exact-text vectors; the three changed vectors
+were removed. Only one embedding request for those three texts (2,939 UTF-8 bytes)
+remains necessary. The earlier approval is consumed; no refresh ran for this
+correction. Paid preparation is separately
 gated: `npm run search:index:build -- --allow-paid-embeddings --max-requests=1`.
-Do not execute it under the consumed prior five-call approval.
+Do not execute it under either consumed prior approval, including the 10-call canary.
+
+Deployment does not copy indexes from the parent review-evidence folder.
+The complete, current runtime index must be saved and committed at
+`content/search-index/portfolio.json`. The Next.js tracing include adds that
+server file to the Portfolio copilot endpoint; it does not belong under `public`.
+The latest local lexical build passes, but has no runtime portfolio index in its
+endpoint trace. The partial `portfolio-cache.json` is preparation data only.
+
+The corrected status distinguishes bounded Decisions routing/claim selection in
+the deployed PR #12 source from the local career-search candidate. Deployment
+metadata was already verified before this correction; runtime flags and production
+quality were not probed. The saved ownership selection reproduces its original
+answer exactly, then renders only the corrected qualifier with the same IDs.
+The original paid review remains five pass / one uncertain. This deterministic
+repair is separate evidence, not a replacement grade or new model answer.
 
 The small lexical regression set returned 7/8 expected targets. The broad ownership
 case retrieves other relevant ownership blocks ahead of its single labeled AI

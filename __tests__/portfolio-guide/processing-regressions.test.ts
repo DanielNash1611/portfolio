@@ -169,7 +169,11 @@ test("ownership selection cannot omit direction, AI assistance, no sole coding, 
     assert.match(result.response.answer, /support authenticated resume jobs/);
     assert.match(
       result.response.answer,
-      /Decisions routing.*remain local or unshipped/,
+      /bounded Decisions routing.*deployed portfolio source/,
+    );
+    assert.match(
+      result.response.answer,
+      /career retrieval remains a local candidate/,
     );
     assert.match(
       result.response.answer,
@@ -304,7 +308,11 @@ test("the exact three local failures and original paid ownership raw response us
       assert.match(output.response.answer, /no claim of sole hand-coding/);
       assert.match(
         output.response.answer,
-        /Decisions routing.*remain local or unshipped/,
+        /bounded Decisions routing.*deployed portfolio source/,
+      );
+      assert.match(
+        output.response.answer,
+        /career retrieval remains a local candidate/,
       );
     }
   }

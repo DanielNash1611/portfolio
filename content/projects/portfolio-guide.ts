@@ -143,7 +143,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "The isolated release uses canonical portfolio pages with remote career evidence disabled by default: its selected ResumeCustomizer branch supports resume jobs but does not include /api/evidence/search. The preserved local evidence-search implementation is separate, unshipped work.",
         "The 147.65 MiB to 81.58 MiB figures are repository-documented uncompressed static file inventories, exclude server bundles, and were not independently rerun by this content review.",
         "Media separation does not establish lower bills, faster pages, reclaimed historical deployment storage, production verification by this review, or semantic AI-quality improvement.",
-        "Decisions routing and linked resume skills are locally implemented candidates. Historical routing, answer-comparison, targeted repair and deterministic skills checks use different datasets; none establishes the final deployment's quality.",
+        "Bounded Decisions routing and claim selection are included in the deployed portfolio source (PR #12); linked resume skills remain locally implemented candidates. Historical routing, answer-comparison, targeted repair and deterministic skills checks use different datasets; none establishes the final deployment's quality.",
       ],
     },
     recruiterPrompts: [

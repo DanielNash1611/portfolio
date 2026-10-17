@@ -131,7 +131,7 @@
       "Daniel defined AI Career Operating System's product direction, UX, service boundaries, evaluations, and claim guardrails; AI development agents assisted implementation, with Daniel retaining product and quality accountability and no claim of sole hand-coding."
     ],
     "qualifications": [
-      "The selected branches support authenticated resume jobs, advisory reviews, and PDF checks; Decisions routing and career retrieval remain local or unshipped candidates, remote retrieval is disabled, and final combined-release validation is pending."
+      "The selected branches support authenticated resume jobs, advisory reviews, and PDF checks; bounded Decisions routing and claim selection are included in the deployed portfolio source (PR #12), while career retrieval remains a local candidate, remote retrieval is disabled by default, and final combined-release validation is pending."
     ],
     "sourceRefs": [
       "claimBoundaries.directOwnership.0",
@@ -143,8 +143,8 @@
       "evidenceHighlights.5.detail"
     ],
     "coveredStatuses": ["career-retrieval-unavailable"],
-    "sourceSha256": "0bbea3f6286ee8877c300f8f220af7d4608081fba0cb8db58cf2cbd265ccb9d6",
-    "boundariesSha256": "cae2ae6a4dc60bbe483b19bf411072f1c1893d90d470cca2afd1c9d878836f9c"
+    "sourceSha256": "312d7ad211dab3f240556b843218dd5fd46fd4746369d0982fcab59a6fb2a8dd",
+    "boundariesSha256": "ca566402c7d446c05cc487f2902b18f366735fc7db2bddf14b6064054d60e44c"
   },
   {
     "id": "ai-career-operating-system:retrieval",
@@ -162,7 +162,7 @@
     ],
     "coveredStatuses": ["career-retrieval-unavailable"],
     "sourceSha256": "d93d03cdda5b1f2a2bac9432bd5c3dcc787dd37e8d7f213bdba8d8dba0227b35",
-    "boundariesSha256": "cae2ae6a4dc60bbe483b19bf411072f1c1893d90d470cca2afd1c9d878836f9c"
+    "boundariesSha256": "ca566402c7d446c05cc487f2902b18f366735fc7db2bddf14b6064054d60e44c"
   },
   {
     "id": "chatgpt-enterprise:ownership",
