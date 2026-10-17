@@ -279,3 +279,33 @@ test("unknown, missing, inconsistent or duplicated prior usage stops before a ne
     /duplicate/,
   );
 });
+
+test("a cumulative ledger cannot be reused without its settled parent ledger", async () => {
+  const first = guard();
+  await first.fetch(endpoint, init());
+  const second = createEvaluationBudgetGuard({
+    approval,
+    scopeSha256,
+    priorCompletedLedgers: [first.snapshot()],
+    fetch: async () =>
+      Response.json({ usage: { input_tokens: 100, output_tokens: 0 } }),
+  });
+  await second.fetch(endpoint, init(payload(1)));
+  assert.throws(
+    () =>
+      createEvaluationBudgetGuard({
+        approval,
+        scopeSha256,
+        priorCompletedLedgers: [second.snapshot()],
+        fetch: async () => Response.json({}),
+      }),
+    /prior ledger chain/,
+  );
+  const third = createEvaluationBudgetGuard({
+    approval,
+    scopeSha256,
+    priorCompletedLedgers: [first.snapshot(), second.snapshot()],
+    fetch: async () => Response.json({}),
+  });
+  assert.equal(third.snapshot().priorUsageCostUpperBoundUsd, 0.00113);
+});

@@ -64,6 +64,13 @@ export function reconcileCompletedEvaluationLedgers(
   let costNano = 0;
   for (const run of prior) {
     if (
+      run.priorUsageCostUpperBoundUsd !== undefined &&
+      Math.round(run.priorUsageCostUpperBoundUsd * 1e9) !== costNano
+    )
+      throw new Error(
+        "Missing or duplicate prior ledger chain; no further paid calls.",
+      );
+    if (
       run.stopped ||
       !Array.isArray(run.ledger) ||
       !run.ledger.length ||
