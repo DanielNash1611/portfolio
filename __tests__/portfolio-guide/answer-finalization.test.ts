@@ -55,6 +55,31 @@ const evidence: EvidenceSearchResponse = {
   ],
 };
 
+test("sentence bounding keeps the required job-description instruction on a direct resume request", () => {
+  const input = request("Can I generate a resume for my role?");
+  const guarded = applyPortfolioGuideResponseGuardrails({
+    request: input,
+    response: {
+      answer:
+        "The page describes a governed career workflow. It separates evidence and role-specific generation. A historical evaluation used 12 cases. Use the action below: /resume/generate.",
+    },
+    fallbackRelatedPages: [],
+  });
+  assert.match(
+    guarded.answer,
+    /Paste the job description in the generator flow/,
+  );
+  const final = finalizeRoutedAnswer({
+    request: input,
+    answer: guarded.answer,
+    includeCareerEvidence: false,
+    broaderQuestion: false,
+  });
+  assert.match(final.answer, /\/resume\/generate/);
+  assert.match(final.answer, /Paste the job description in the generator flow/);
+  assert.ok(final.answer.split(/(?<=[.!?])\s+/).length <= 4);
+});
+
 test("broad research answers replace unrelated page framing with attributed proof and its scientific limit", () => {
   const result = finalizeRoutedAnswer({
     request: request("Does Daniel have experience with life science research?"),

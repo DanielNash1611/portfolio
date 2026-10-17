@@ -25,6 +25,7 @@ export function boundGuideAnswer(
   const parts = sentences(answer);
   if (parts.length <= maxSentences) return answer.trim();
   const words = new Set(question.toLowerCase().match(/[a-z]{4,}/g) ?? []);
+  const directResumeQuestion = /\b(?:resume|cv)\b/i.test(question);
   const groups: Array<{ parts: string[]; start: number; priority: number }> =
     [];
   parts.forEach((part, index) => {
@@ -51,6 +52,10 @@ export function boundGuideAnswer(
         (limitSignal.test(part) ? 20 : 0) +
         (/\/resume\/generate|couldn't reach|isn't connected/i.test(part)
           ? 30
+          : 0) +
+        (directResumeQuestion &&
+        /\bpaste\b[^.!?]*\bjob description\b|\bgenerator flow\b/i.test(part)
+          ? 50
           : 0) +
         (/\d/.test(part) ? 6 : 0) +
         // Preserve measured proof before generic framing when shortening.
