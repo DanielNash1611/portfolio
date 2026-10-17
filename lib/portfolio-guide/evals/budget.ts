@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 
 const ROLES = {
   answer: {
-    model: "gpt-5.4",
+    model: "gpt-5.6-terra",
     calls: 24,
     input: 24_000,
     output: 1_200,
@@ -39,6 +39,7 @@ type LedgerEntry = {
   requestSha256: string;
   reservedNano: number;
   inputTokenUpperBound: number;
+  inputTokenSource?: "byte-upper-bound" | "verified-counter";
   status: "reserved" | "complete" | "unknown";
   inputTokens?: number;
   outputTokens?: number;
@@ -58,6 +59,15 @@ export function createEvaluationBudgetGuard(options: {
   scopeSha256: string;
   fetch: typeof fetch;
   onChange?: (snapshot: EvaluationBudgetSnapshot) => void;
+  /** Exact provider count for this payload; caller verifies counting pricing first. */
+  countInputTokens?: (
+    body: string,
+    requestSha256: string,
+  ) => Promise<{
+    inputTokens: number;
+    requestSha256: string;
+    model: string;
+  }>;
 }) {
   const { approval } = options;
   const ledger: LedgerEntry[] = [];
@@ -76,15 +86,20 @@ export function createEvaluationBudgetGuard(options: {
   });
   const guardedFetch: typeof fetch = async (input, init) => {
     if (
-      !approval.approved ||
-      !approval.pricingVerified ||
+      approval.approved !== true ||
+      approval.pricingVerified !== true ||
       approval.scopeSha256 !== options.scopeSha256 ||
       !/^[a-f0-9]{64}$/.test(options.scopeSha256)
     )
       throw new Error(
         "Evaluation approval, verified pricing and matching frozen scope are required.",
       );
-    if (!Number.isFinite(ceilingNano) || ceilingNano <= 0 || ceilingNano > 10e9)
+    if (
+      typeof approval.ceilingUsd !== "number" ||
+      !Number.isFinite(ceilingNano) ||
+      ceilingNano <= 0 ||
+      ceilingNano > 10e9
+    )
       throw new Error("Approved evaluation ceiling must be at most $10.");
     if (stopped)
       throw new Error(
@@ -141,16 +156,43 @@ export function createEvaluationBudgetGuard(options: {
       );
     // Byte length deliberately overcounts byte-tokenized input; the additional allowance
     // covers request framing. Oversized context stops the run instead of truncating it.
-    const inputBound = Buffer.byteLength(init.body, "utf8") + 1_024;
+    const requestSha256 = createHash("sha256").update(init.body).digest("hex");
+    if (counts[role] >= rule.calls)
+      throw new Error("Approved role-specific call limit exhausted.");
+    if (ledger.some((item) => item.requestSha256 === requestSha256))
+      throw new Error("Duplicate request/retry requires separate review.");
+    let inputBound = Buffer.byteLength(init.body, "utf8") + 1_024;
+    let inputTokenSource: LedgerEntry["inputTokenSource"] = "byte-upper-bound";
+    if (
+      inputBound > rule.input &&
+      role !== "routing" &&
+      options.countInputTokens
+    ) {
+      busy = true;
+      try {
+        const count = await options.countInputTokens(init.body, requestSha256);
+        if (
+          count.requestSha256 !== requestSha256 ||
+          count.model !== body.model ||
+          !Number.isInteger(count.inputTokens) ||
+          count.inputTokens < 0
+        )
+          throw new Error(
+            "Input token receipt does not match this exact model and payload.",
+          );
+        inputBound = count.inputTokens + 64;
+        inputTokenSource = "verified-counter";
+      } catch (error) {
+        stopped = true;
+        throw error;
+      } finally {
+        busy = false;
+      }
+    }
     if (inputBound > rule.input)
       throw new Error(
         "Conservative input bound exceeds the frozen token limit; revise the packet before calling.",
       );
-    if (counts[role] >= rule.calls)
-      throw new Error("Approved role-specific call limit exhausted.");
-    const requestSha256 = createHash("sha256").update(init.body).digest("hex");
-    if (ledger.some((item) => item.requestSha256 === requestSha256))
-      throw new Error("Duplicate request/retry requires separate review.");
     // Reserve each role's complete maximum, never refund reservations during this run.
     const reservedNano =
       rule.input * rule.inputNano + rule.output * rule.outputNano;
@@ -164,6 +206,7 @@ export function createEvaluationBudgetGuard(options: {
       requestSha256,
       reservedNano,
       inputTokenUpperBound: inputBound,
+      inputTokenSource,
       status: "reserved",
     };
     ledger.push(entry);

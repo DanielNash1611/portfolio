@@ -9,7 +9,7 @@ const approval = {
   scopeSha256,
   pricingVerified: true,
 };
-const payload = (index = 0, model = "gpt-5.4") =>
+const payload = (index = 0, model = "gpt-5.6-terra") =>
   JSON.stringify({
     model,
     store: false,
@@ -32,7 +32,7 @@ function guard(
       (async () => {
         calls++;
         return Response.json({
-          model: "gpt-5.4",
+          model: "gpt-5.6-terra",
           usage: { input_tokens: 100, output_tokens: 30 },
         });
       }),
@@ -83,17 +83,17 @@ test("budget rejects insufficient allowance, unknown models, excess tokens and e
   await assert.rejects(budget.fetch(endpoint, init()), /budget/);
   assert.equal(budget.calls(), 0);
   for (const body of [
-    payload(0, "gpt-5.6-terra"),
-    JSON.stringify({ model: "gpt-5.4", max_output_tokens: 1201 }),
+    payload(0, "unapproved-model"),
+    JSON.stringify({ model: "gpt-5.6-terra", max_output_tokens: 1201 }),
     JSON.stringify({
-      model: "gpt-5.4",
+      model: "gpt-5.6-terra",
       store: false,
       service_tier: "default",
       max_output_tokens: 1200,
       input: "x".repeat(24000),
     }),
     JSON.stringify({
-      model: "gpt-5.4",
+      model: "gpt-5.6-terra",
       store: false,
       service_tier: "default",
       max_output_tokens: 1200,
@@ -180,4 +180,52 @@ test("reservation is persisted before transport, and journal failure prevents a 
   );
   assert.equal(transported, false);
   assert.equal(failedJournal.snapshot().stopped, true);
+});
+
+test("large requests require a matching verified token-count receipt and never lose evidence to fit", async () => {
+  const largeBody = JSON.stringify({
+    model: "gpt-5.6-terra",
+    store: false,
+    service_tier: "default",
+    max_output_tokens: 1200,
+    input: "x".repeat(70000),
+  });
+  let transported = false;
+  const budget = createEvaluationBudgetGuard({
+    approval,
+    scopeSha256,
+    countInputTokens: async (_body, requestSha256) => ({
+      inputTokens: 20000,
+      requestSha256,
+      model: "gpt-5.6-terra",
+    }),
+    fetch: async (_input, options) => {
+      transported = true;
+      assert.equal(options!.body, largeBody);
+      return Response.json({
+        usage: { input_tokens: 20000, output_tokens: 1 },
+      });
+    },
+  });
+  await budget.fetch(endpoint, init(largeBody));
+  assert.equal(transported, true);
+  assert.equal(
+    budget.snapshot().ledger[0].inputTokenSource,
+    "verified-counter",
+  );
+  const mismatch = createEvaluationBudgetGuard({
+    approval,
+    scopeSha256,
+    countInputTokens: async () => ({
+      inputTokens: 1,
+      requestSha256: "wrong",
+      model: "gpt-5.6-terra",
+    }),
+    fetch: async () => {
+      throw new Error("must not reach transport");
+    },
+  });
+  await assert.rejects(mismatch.fetch(endpoint, init(largeBody)), /receipt/);
+  assert.equal(mismatch.snapshot().stopped, true);
+  assert.equal(mismatch.snapshot().reservedUsd, 0);
 });
