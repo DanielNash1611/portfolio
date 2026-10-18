@@ -1,5 +1,10 @@
 # Search evaluation budget guard — local preparation only
 
+Historical planning snapshot: the separately approved 10-call canary and final
+three-text embedding request have completed once. Those approvals are consumed;
+these earlier proposals do not authorize another run. Current index/readiness
+status is in [hybrid search preparation](portfolio-guide-hybrid-search.md).
+
 > **Superseded October 17, 2026.** Daniel changed the evaluation workflow to
 > active-chat Codex review. The 21-call/$2 proposal below was never approved or
 > executed against a live provider. Its commands, prices, fixed corpus sizes and

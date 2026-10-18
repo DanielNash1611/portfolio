@@ -52,21 +52,21 @@ npm run search:index:require
 ```
 
 These checks do not load env files or call a provider. The semantic requirement
-currently fails: the ownership release-status correction changed three texts
-(`ai-career-operating-system:evaluation`, `:perspective`, and `:ownership`).
-The preparation cache retains 60 exact-text vectors; the three changed vectors
-were removed. Only one embedding request for those three texts (2,939 UTF-8 bytes)
-remains necessary. The earlier approval is consumed; no refresh ran for this
-correction. Paid preparation is separately
+now passes for all 63 current blocks. A separately approved final embedding request
+refreshed only `ai-career-operating-system:evaluation`, `:perspective`, and
+`:ownership` after the release-status correction. The other 60 vectors are
+unchanged. That request completed once with 530 input tokens; its receipt and
+once-only journal are preserved in the parent workspace's `single-call-execution`
+evidence folder. Both that approval and the earlier 10-call approval are consumed.
+No further paid call is authorized. Future paid preparation remains separately
 gated: `npm run search:index:build -- --allow-paid-embeddings --max-requests=1`.
-Do not execute it under either consumed prior approval, including the 10-call canary.
 
 Deployment does not copy indexes from the parent review-evidence folder.
-The complete, current runtime index must be saved and committed at
+The complete, current runtime index is saved at
 `content/search-index/portfolio.json`. The Next.js tracing include adds that
 server file to the Portfolio copilot endpoint; it does not belong under `public`.
-The latest local lexical build passes, but has no runtime portfolio index in its
-endpoint trace. The partial `portfolio-cache.json` is preparation data only.
+The 60-record `portfolio-cache.json` remains preparation data only. The current
+index does not enable runtime flags or deploy the feature.
 
 The corrected status distinguishes bounded Decisions routing/claim selection in
 the deployed PR #12 source from the local career-search candidate. Deployment
@@ -75,6 +75,13 @@ quality were not probed. The saved ownership selection reproduces its original
 answer exactly, then renders only the corrected qualifier with the same IDs.
 The original paid review remains five pass / one uncertain. This deterministic
 repair is separate evidence, not a replacement grade or new model answer.
+
+Cached query replay with the completed index preserves the original 15/15 career
+and 7/8 portfolio rankings and labels. Replaying the six original selections and
+two routing replies through the current service passes source/citation checks;
+only the ownership answer's corrected status changes. This makes no fresh
+inference or production-quality claim. Historical controls execute against their
+own immutable public corpus; see [fixture coverage](search-historical-fixtures.md).
 
 The small lexical regression set returned 7/8 expected targets. The broad ownership
 case retrieves other relevant ownership blocks ahead of its single labeled AI
@@ -96,9 +103,9 @@ also injects an invalid media-block selection and requires the canonical rendere
 to recover both mandatory ownership sources. No retrieval algorithm or threshold
 was changed for this review.
 
-Before activation, prepare both complete indexes, compare lexical and semantic
-retrieval on frozen cases, run source-aware relevance/citation checks, verify the
-deployed authenticated backend, and validate Portfolio in preview. Publication,
+Both complete indexes and offline cached retrieval/source/citation checks are
+prepared. Before activation, verify the deployed authenticated backend and its
+index plus resume-job/PDF behavior, and validate Portfolio in preview. Publication,
 production flag changes and deployment remain separately authorized actions.
 
 Local Ollama (`gpt-oss:20b`) completed six lexical-retrieval/ID-selection checks

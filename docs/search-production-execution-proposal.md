@@ -1,5 +1,10 @@
 # Executable native search proposal — October 17, 2026
 
+Historical planning snapshot: the separately approved 10-call canary and final
+three-text embedding request have completed once. Those approvals are consumed;
+these earlier proposals do not authorize another run. Current index/readiness
+status is in [hybrid search preparation](portfolio-guide-hybrid-search.md).
+
 Status: prepared and fake verified; paid execution awaits Daniel's approval.
 This replaces the earlier 16-call/$2 proposal. Its extra six Terra calls came
 from the wrong application baseline.

@@ -1,5 +1,10 @@
 # Revised search validation plan — October 17, 2026
 
+Historical planning snapshot: the separately approved 10-call canary and final
+three-text embedding request have completed once. Those approvals are consumed;
+these earlier proposals do not authorize another run. Current index/readiness
+status is in [hybrid search preparation](portfolio-guide-hybrid-search.md).
+
 The scoped cache reconciliation and native adapter fake verification are complete.
 The final [executable proposal](search-production-execution-proposal.md) follows
 the deployed one-call claim-selection architecture: two embedding requests, two

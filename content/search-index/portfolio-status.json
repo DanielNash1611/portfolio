@@ -2,13 +2,9 @@
   "model": "text-embedding-3-small",
   "corpusHash": "047bdffa439a2d1aa473d080ac950a10bd029acd5bb5a3e7c5f1efd23f4ee77f",
   "documents": 63,
-  "reusable": 60,
-  "pending": [
-    "ai-career-operating-system:evaluation",
-    "ai-career-operating-system:perspective",
-    "ai-career-operating-system:ownership"
-  ],
-  "pendingUtf8Bytes": 2939,
-  "maxEmbeddingRequests": 1,
-  "current": false
+  "reusable": 63,
+  "pending": [],
+  "pendingUtf8Bytes": 0,
+  "maxEmbeddingRequests": 0,
+  "current": true
 }
