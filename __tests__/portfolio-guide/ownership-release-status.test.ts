@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import fixture from "./fixtures/ownership-release-status.json";
 import {
   getPageContextBySlug,
@@ -15,7 +16,12 @@ import {
   getPortfolioSearchCatalog,
   getPortfolioSearchDocuments,
 } from "../../lib/portfolio-guide/search";
-import { hashText } from "../../lib/search/hybrid";
+import {
+  buildIndex,
+  hashText,
+  validIndex,
+  type EmbeddingIndex,
+} from "../../lib/search/hybrid";
 import type { CopilotRequest } from "../../lib/portfolio-guide/types";
 
 const request: CopilotRequest = {
@@ -120,4 +126,76 @@ test("only three qualified portfolio texts invalidate their old embeddings", () 
     "ai-career-operating-system:perspective",
   ]);
   assert.equal(documents.length - changed.length, 60);
+});
+
+test("current corpus needs one synthetic three-text batch and preserves all sixty cached vectors", async (t) => {
+  const docs = getPortfolioSearchDocuments();
+  const previous: EmbeddingIndex = JSON.parse(
+    readFileSync("content/search-index/portfolio-cache.json", "utf8"),
+  );
+  assert.equal(previous.records.length, 60);
+  assert.equal(
+    validIndex(previous, docs),
+    false,
+    "A partial cache cannot be a complete runtime index",
+  );
+  const missing = docs.filter(
+    (d) =>
+      !previous.records.some(
+        (r) => r.id === d.id && r.hash === hashText(d.text),
+      ),
+  );
+  assert.equal(missing.length, 3);
+  assert.equal(
+    missing.reduce((sum, d) => sum + Buffer.byteLength(d.text), 0),
+    2939,
+  );
+  let attempts = 0;
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (url: RequestInfo | URL, init?: RequestInit) => {
+      attempts++;
+      assert.equal(String(url), "https://api.openai.com/v1/embeddings");
+      const body = JSON.parse(String(init?.body));
+      assert.deepEqual(body, {
+        model: "text-embedding-3-small",
+        input: missing.map((d) => d.text),
+      });
+      // Synthetic vectors test assembly/validation only, never semantic quality.
+      return new Response(
+        JSON.stringify({
+          data: missing.map((_, index) => ({
+            index,
+            embedding: Array(1536).fill(index + 1),
+          })),
+        }),
+        { status: 200 },
+      );
+    },
+  );
+  const index = await buildIndex(docs, "SYNTHETIC_ONLY", previous, 1);
+  assert.equal(attempts, 1);
+  assert.equal(validIndex(index, docs), true);
+  for (const record of previous.records)
+    assert.deepEqual(
+      index.records.find((r) => r.id === record.id),
+      record,
+    );
+});
+
+test("current three-text refresh stops after the first synthetic denial without retry", async (t) => {
+  const previous = JSON.parse(
+    readFileSync("content/search-index/portfolio-cache.json", "utf8"),
+  );
+  let attempts = 0;
+  t.mock.method(globalThis, "fetch", async () => {
+    attempts++;
+    return new Response("synthetic denied", { status: 429 });
+  });
+  await assert.rejects(
+    buildIndex(getPortfolioSearchDocuments(), "SYNTHETIC_ONLY", previous, 1),
+    /429/,
+  );
+  assert.equal(attempts, 1);
 });
