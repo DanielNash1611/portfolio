@@ -142,9 +142,11 @@
       "claimBoundaries.explicitUnknowns.6",
       "evidenceHighlights.5.detail"
     ],
-    "coveredStatuses": ["career-retrieval-unavailable"],
+    "coveredStatuses": [
+      "career-retrieval-unavailable"
+    ],
     "sourceSha256": "312d7ad211dab3f240556b843218dd5fd46fd4746369d0982fcab59a6fb2a8dd",
-    "boundariesSha256": "ca566402c7d446c05cc487f2902b18f366735fc7db2bddf14b6064054d60e44c"
+    "boundariesSha256": "8571a8aea1335bd7c95b31be2ad047cc9d3f4563b83b8330458ec0304f418be5"
   },
   {
     "id": "ai-career-operating-system:retrieval",
@@ -160,9 +162,11 @@
       "claimBoundaries.explicitUnknowns.2",
       "claimBoundaries.explicitUnknowns.3"
     ],
-    "coveredStatuses": ["career-retrieval-unavailable"],
+    "coveredStatuses": [
+      "career-retrieval-unavailable"
+    ],
     "sourceSha256": "d93d03cdda5b1f2a2bac9432bd5c3dcc787dd37e8d7f213bdba8d8dba0227b35",
-    "boundariesSha256": "ca566402c7d446c05cc487f2902b18f366735fc7db2bddf14b6064054d60e44c"
+    "boundariesSha256": "8571a8aea1335bd7c95b31be2ad047cc9d3f4563b83b8330458ec0304f418be5"
   },
   {
     "id": "chatgpt-enterprise:ownership",

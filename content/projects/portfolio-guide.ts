@@ -118,12 +118,22 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
           "A locally tested Decisions API layer routed ambiguous questions before answer generation. Saved evaluations exposed mixed answer-quality results, prompting source-attribution, qualifier and concision fixes. Final combined-release validation remains pending.",
         type: "workflow",
       },
+      {
+        // Approved 2026-10-09: Sentinel_702e0ce56d7c8191b47ef2e0af9b2086.
+        // Verified local implementation: child01a11e60-9ce8-7047-9a2a-0b11c3bac016;
+        // ResumeCustomizer docs/application-profile.md, not private profile contents.
+        label: "Private local application profile",
+        detail:
+          "Added a private local application profile with reviewed facts, source references, confirmation dates, and employer-specific answers. Implemented locally in ResumeCustomizer on October 8, 2026; Daniel directed requirements and reviewed facts, with Codex assisting implementation. This remains a private local workflow.",
+        type: "workflow",
+      },
     ],
     claimBoundaries: {
       directOwnership: [
         "Defined the product thesis, user experience, service boundaries, quality criteria, evaluation behavior, and public claim guardrails represented on the page.",
         "Directed the integration of Portfolio recruiter UX with ResumeCustomizer evidence retrieval and role-specific generation.",
         "Directed the portfolio media separation and preservation work; implementation was AI-assisted.",
+        "Directed requirements and reviewed facts for the private local application profile; Codex assisted implementation.",
       ],
       influence: [
         "Used AI development agents to accelerate implementation and iteration while retaining product and quality accountability.",
@@ -135,6 +145,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "The selected branches support authenticated resume-job API boundaries, the job lifecycle, specialized reviews and structural PDF validation; remote career retrieval remains disabled while the separate endpoint awaits review.",
         "The page does not claim sole hand-coding or independent implementation of every component.",
         "Portfolio PR #11 merged on October 15, 2026 at 04:09 UTC (merge 4d33ab9da2a9bece8522a9efee24b3f2b188bfe1). docs/deployment-storage.md and docs/deployment-media.json document media preservation, SHA-256 verification, and static asset-budget checks.",
+        "The application profile was implemented locally in ResumeCustomizer on October 8, 2026. It remains a private local workflow, separate from hosted release status; its private contents are excluded from public portfolio evidence and hosted generation.",
       ],
       explicitUnknowns: [
         "The repositories do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale, or a current full-suite evaluation pass rate.",
@@ -144,6 +155,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "The 147.65 MiB to 81.58 MiB figures are repository-documented uncompressed static file inventories, exclude server bundles, and were not independently rerun by this content review.",
         "Media separation does not establish lower bills, faster pages, reclaimed historical deployment storage, production verification by this review, or semantic AI-quality improvement.",
         "Bounded Decisions routing and claim selection are included in the deployed portfolio source (PR #12); linked resume skills remain locally implemented candidates. Historical routing, answer-comparison, targeted repair and deterministic skills checks use different datasets; none establishes the final deployment's quality.",
+        "The private local application profile has no measured time savings, hiring outcomes, external adoption, application-quality gains, or semantic AI-quality gains.",
       ],
     },
     recruiterPrompts: [

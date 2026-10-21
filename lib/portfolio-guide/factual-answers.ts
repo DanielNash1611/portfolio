@@ -57,6 +57,11 @@ const SPECS: Record<string, BlockSpec[]> = {
   "ai-strategy": [],
   "ai-career-operating-system": [
     {
+      key: "private-local-profile",
+      claims: ["evidenceHighlights.6.detail", bounds("directOwnership.3")],
+      qualifications: [bounds("implementation.3"), bounds("explicitUnknowns.7")],
+    },
+    {
       key: "evaluation",
       claims: ["evidenceHighlights.2.detail"],
       qualifications: [
