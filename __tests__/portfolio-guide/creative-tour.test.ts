@@ -25,10 +25,7 @@ import {
   writeGuideSessionState,
 } from "@/lib/portfolio-guide/session";
 import { inferInterestTagsFromText } from "@/lib/portfolio-guide/infer-tags";
-import {
-  applyPortfolioGuideResponseGuardrails,
-  extractAnswerFromRawFallback,
-} from "@/lib/portfolio-guide/service";
+import { applyPortfolioGuideResponseGuardrails } from "@/lib/portfolio-guide/service";
 import {
   normalizeCopilotResponse,
   PORTFOLIO_GUIDE_SYSTEM_PROMPT,
@@ -41,23 +38,6 @@ import {
 const catalog = getAllCanonicalPageContexts();
 const intent = getQuickSelectIntent("Creative Technology");
 const path = getGuidedRecommendations(catalog, intent);
-
-test("creative model fallback keeps follow-ups and next reads out of the answer", () => {
-  const answer = "Daniel authored the composition. Astra accelerated implementation.";
-  for (const extra of [
-    "**Suggested follow‑ups**\n- What changed after testing?",
-    "**SuggestedFollowUps:**\n- What changed after testing?",
-    "**Suggested next read**\n- Tabletop Symphony.",
-    "**RelatedPages:**\n- Tabletop Symphony.",
-    "**InferredInterestTags**\n- creative-technology",
-  ]) {
-    assert.equal(extractAnswerFromRawFallback(`**Answer**\n${answer}\n\n${extra}`), answer);
-  }
-  assert.equal(
-    extractAnswerFromRawFallback("The suggested next read is Tabletop Symphony."),
-    "The suggested next read is Tabletop Symphony.",
-  );
-});
 
 test("creative preset and freeform interests do not invent a seniority level", () => {
   for (const text of [

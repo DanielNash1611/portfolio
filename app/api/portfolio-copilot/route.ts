@@ -203,6 +203,7 @@ export async function POST(req: NextRequest) {
       },
     };
     const result = await handlePortfolioGuideRequest(internalRequest, {
+      signal: req.signal,
       logger: createPortfolioGuideInteractionLogger(),
       createRequestId: () => begun.requestId,
       generateResponse: (request, config) =>

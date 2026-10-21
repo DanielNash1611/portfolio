@@ -1,0 +1,26 @@
+{
+  "maxStaticBytes": 89128960,
+  "assets": [
+    {
+      "localPath": "videos/gravity/gravity-reach-into-the-music.mp4",
+      "source": "source-assets/videos/gravity/gravity-reach-into-the-music.mp4",
+      "url": "https://km9upglctugamtw6.public.blob.vercel-storage.com/gravity-reach-into-the-music.mp4",
+      "bytes": 38850377,
+      "sha256": "75cc4401faeee293a5361ebb6ce32dbfe2636670f8380a9a2852bb5b9b461422"
+    },
+    {
+      "localPath": "videos/farraginous/home-demo.mp4",
+      "source": "source-assets/videos/farraginous/home-demo.mp4",
+      "url": "https://km9upglctugamtw6.public.blob.vercel-storage.com/home-demo.mp4",
+      "bytes": 18476229,
+      "sha256": "78b10a06caf5741a637fd3356329d001b0045d9540197b546531f3f2db521d1b"
+    },
+    {
+      "localPath": "audio/jumping-on-coals-full-explanation.mp3",
+      "source": "source-assets/audio/jumping-on-coals-full-explanation.mp3",
+      "url": "https://km9upglctugamtw6.public.blob.vercel-storage.com/jumping-on-coals-full-explanation.mp3",
+      "bytes": 11952632,
+      "sha256": "c3324f87cd9863c03b8acf2a3e7086d754be7f52465837f7781f3adf6336adc4"
+    }
+  ]
+}

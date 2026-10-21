@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { generatePortfolioGuideResponse } from "@/lib/portfolio-guide/service";
 import { createOpenAiPortfolioGuideJudge } from "@/lib/portfolio-guide/evals/judge";
+import type { DecisionsConfig } from "../decisions";
 import type {
   PortfolioGuideEvalAssistant,
   PortfolioGuideEvalJudge,
@@ -20,10 +21,14 @@ export type EvalProviderConfig = {
 };
 
 export function createPortfolioGuideAssistant(
-  config: EvalProviderConfig & { systemPrompt?: string },
+  config: EvalProviderConfig & {
+    systemPrompt?: string;
+    decisions?: DecisionsConfig;
+  },
 ): PortfolioGuideEvalAssistant {
   const client = new OpenAI({
     apiKey: config.apiKey,
+    maxRetries: 0,
     ...(config.baseURL ? { baseURL: config.baseURL } : {}),
   });
 
@@ -36,6 +41,7 @@ export function createPortfolioGuideAssistant(
       systemPrompt: config.systemPrompt,
       client,
       signal,
+      decisions: config.decisions,
     });
 }
 
@@ -44,6 +50,7 @@ export function createPortfolioGuideJudge(
 ): PortfolioGuideEvalJudge {
   const client = new OpenAI({
     apiKey: config.apiKey,
+    maxRetries: 0,
     ...(config.baseURL ? { baseURL: config.baseURL } : {}),
   });
 

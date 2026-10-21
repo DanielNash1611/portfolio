@@ -23,7 +23,7 @@ const installationViewImageUrl = "/images/farraginous/installation-view.jpg";
 const exhibitionOverviewImageUrl =
   "/images/farraginous/exhibition-overview.jpg";
 const programCreditImageUrl = "/images/farraginous/program-raw.jpg";
-const homeDemoVideoUrl = "/videos/farraginous/home-demo.mp4";
+const homeDemoVideoUrl = "https://km9upglctugamtw6.public.blob.vercel-storage.com/home-demo.mp4";
 const homeDemoPosterImageUrl = "/images/farraginous/home-demo-poster.png";
 
 const metadataItems = [

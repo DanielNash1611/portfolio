@@ -1,8 +1,15 @@
 import { Check, CircleDashed } from "lucide-react";
+import { productEntries } from "@/content/portfolio";
+
+const deploymentStory = productEntries
+  .find((entry) => entry.slug === "ai-career-operating-system")
+  ?.buildStory?.find((item) =>
+    item.startsWith("Separated large portfolio recordings"),
+  );
 
 const implemented = [
   "Authenticated API boundary",
-  "Claim-to-Evidence retrieval",
+  "Claim-to-Evidence local prototype",
   "Nine-state job lifecycle",
   "Six specialized review perspectives",
   "Structural PDF validation",
@@ -93,23 +100,38 @@ export default function ImplementedNext(): React.JSX.Element {
         </div>
       </div>
 
-      <div className="border-t border-[color:var(--color-slate)]/16 pt-6 text-sm leading-6 text-[color:var(--color-slate)]/70">
-        <h3 className="font-semibold text-[color:var(--color-slate)]">
-          Private local workflow
-        </h3>
-        <p className="mt-2 max-w-3xl">
-          Added a private local application profile with reviewed facts, source
-          references, confirmation dates, and employer-specific answers.
-          Implemented locally in ResumeCustomizer on October 8, 2026; Daniel
-          directed requirements and reviewed facts, with Codex assisting
-          implementation. The profile remains private and local.
-        </p>
-        <p className="mt-2 max-w-3xl">
-          No measured time savings, hiring outcomes, external adoption,
-          application-quality gains, or semantic AI-quality gains are established
-          for this profile.
-        </p>
-      </div>
+      <div className="border-t border-[color:var(--color-slate)]/16 py-8 md:border-t-0 md:pl-10">
+          <Column
+            title="Needs implementation or instrumentation"
+            items={next}
+            complete={false}
+          />
+        </div>
+
+      <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/70">
+        This release candidate uses canonical portfolio pages. Remote career
+        evidence stays disabled until the separate evidence-search endpoint is
+        reviewed and shipped; the selected ResumeCustomizer branch supports the
+        existing resume-job contract. The local retrieval prototype does not
+        establish a launched public integration.
+      </p>
+
+      {deploymentStory ? (
+        <div className="space-y-3 border-t border-[color:var(--color-slate)]/16 pt-8">
+          <h3 className="font-serif text-2xl font-medium tracking-[-0.025em] text-[color:var(--color-slate)]">
+            Deployment media
+          </h3>
+          <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/70">
+            {deploymentStory}
+          </p>
+          <a
+            href="https://github.com/DanielNash1611/portfolio/pull/11"
+            className="inline-block text-sm font-bold text-[color:var(--color-teal)] underline underline-offset-4"
+          >
+            Review the media migration evidence
+          </a>
+        </div>
+      ) : null}
     </section>
   );
 }

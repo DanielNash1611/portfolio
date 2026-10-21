@@ -1,0 +1,72 @@
+{
+  "provenance": {
+    "snapshot": "e2a72a4908fd97da44223fa5c18f2a847ac46f38",
+    "model": "gpt-oss:20b",
+    "inputs": "Unchanged saved raw outputs, synthetic questions, authored public canonical sources; original evaluation rubric is not modified"
+  },
+  "cases": [
+    {
+      "caseId": "checkout-impact",
+      "question": "What was the impact?",
+      "pageSlug": "checkout-redesign",
+      "rawText": "**Answer**  \nThe checkout redesign delivered a measurable lift of roughly $16 million in annualized revenue, driven by a 30 % faster checkout flow (from 3:00 to 2:03 seconds) and a ~3 % increase in conversion, as reported in the post‑launch A/B test on the page.  \n\n**Suggested Follow‑Ups**  \n- What specific roles did you play in driving that lift?  \n- How did the team balance speed of delivery with risk mitigation?\n\n**Related Pages**  \n- **chatgpt‑enterprise** – another cross‑functional rollout that achieved measurable business impact.  \n- **jira‑product‑discovery** – shows how you improve operating quality through shared decision‑making.\n\n**Inferred Interest Tags**  \n[\"pm‑leadership\"]"
+    },
+    {
+      "caseId": "ai-career-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-career-operating-system",
+      "rawText": "**AI Career Operating System** is a governed AI workflow that turns vetted career evidence into recruiter‑ready artifacts. Daniel defined the product architecture, evidence boundaries, evaluation criteria, and human‑review workflow, and integrated the Portfolio Guide with the ResumeCustomizer via authenticated server‑to‑server APIs. The system includes source‑audited retrieval, bounded claim limits, six advisory reviewers, and structural PDF checks, with a documented reduction in static asset size from 147 MiB to 81 MiB. This work demonstrates a complete, end‑to‑end proof‑engine for AI‑generated career materials, though full production deployment and real‑world adoption are future milestones."
+    },
+    {
+      "caseId": "bcf-ai-platform-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-platform-mcp",
+      "rawText": "{\n  \"answer\": \"The page explains how a hackathon‑winning AI prototype for Guitar Center customers was validated through UX research that showed 87% of participants would use it again.  That success led Daniel to map recurring AI workflow patterns—retrieval, drafting, review, hand‑off—to a reusable platform architecture, shifting the focus from one‑off prototypes to repeatable AI systems.  The result was a new platform layer that provides a shared connector, retrieval, permissions, and governance language for teams, enabling faster, more consistent AI adoption across the organization.\",\n  \"suggestedFollowUps\": [\n    \"Would you like to see how this platform architecture was applied in the ChatGPT Enterprise rollout?\",\n    \"Do you want more detail on the metrics or the specific reusable patterns identified?\"\n  ],\n  \"relatedPages\": [\n    {\n      \"slug\": \"chatgpt-enterprise\",\n      \"reason\": \"Shows the same platform and workflow thinking applied to a broader AI operating model.\"\n    },\n    {\n      \"slug\": \"oms-chatgpt-app\",\n      \"reason\": \"Illustrates PM‑led AI prototyping with a more systems‑heavy focus.\"\n    }\n  ],\n  \"inferredInterestTags\": [\n    \"ai-builder\",\n    \"platform\",\n    \"0-to-1\",\n    \"technical-depth\"\n  ]\n}"
+    },
+    {
+      "caseId": "bcf-ai-platform-role-relevance",
+      "question": "For the role I entered, what's most relevant here?",
+      "pageSlug": "ai-platform-mcp",
+      "rawText": "{\n  \"answer\": \"This page shows Daniel’s leadership in building a reusable AI‑platform layer that turns isolated GPT experiments into repeatable, governance‑aware workflows—a core capability for any Platform Product Manager. He led the prototype that proved customer value (87 % reuse intent) and then mapped those patterns into a shared connector, retrieval, and permissions framework that accelerates subsequent AI initiatives. The case also demonstrates his ability to translate complex technical concepts into executive‑grade product language and to align cross‑functional teams around a durable operating model.\\n\\nIf you want a resume tailored to a Platform PM role, use the action below.\",\n  \"suggestedFollowUps\": [\n    \"Would you like to see how this experience maps to a specific job description?\"\n  ],\n  \"relatedPages\": [\n    {\n      \"slug\": \"chatgpt-enterprise\",\n      \"reason\": \"Shows the platform and workflow thinking that later supports broader AI operating‑model work.\"\n    },\n    {\n      \"slug\": \"oms-chatgpt-app\",\n      \"reason\": \"Illustrates how the MCP‑style patterns are applied in a concrete product.\"\n    }\n  ],\n  \"inferredInterestTags\": [\n    \"ai-builder\",\n    \"platform\",\n    \"0-to-1\",\n    \"technical-depth\",\n    \"pm-leadership\"\n  ],\n  \"resumeGeneratorLink\": \"/resume/generate\"\n}"
+    },
+    {
+      "caseId": "bcf-human-flourishing-proof-boundaries",
+      "question": "What's grounded in experience here, and what's personal conviction?",
+      "pageSlug": "the-side-of-ai-i-want-to-be-on",
+      "rawText": "**What’s grounded in experience (on‑page evidence)**  \n- Daniel explicitly led Guitar Center AI adoption surveys, noting that a majority of respondents reported increased creativity (evidence: “Qualified creativity signal”).  \n- He has worked on enterprise‑AI adoption, agentic workflows, productivity tools, and AI experiments (evidence: “Professional grounding”).  \n- He frames trust as a product requirement, listing transparency, role‑change support, review paths, guardrails, and accountability as core design elements (evidence: “Responsible adoption standard”).  \n\n**What’s personal conviction / future‑facing exploration**  \n- The essay articulates a belief that AI should “create real business value while also helping people learn more deeply, create more confidently, access knowledge more easily, and spend more time solving meaningful human problems.” This is framed as a personal aspiration rather than a documented outcome.  \n- He references faith‑based language and personal reflections on dignity and human flourishing, which are stated as personal convictions, not proven product results.\n\n**Summary**  \nThe page documents Daniel’s direct experience with AI adoption and a concrete outcome (creativity signal). His broader vision for AI—measurable impact plus human flourishing—is presented as a personal conviction, supported only by his own reflections, not by measurable data or published outcomes."
+    },
+    {
+      "caseId": "bcf-ai-career-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-career-operating-system",
+      "rawText": "**AI Career Operating System** is a governed AI workflow that turns approved career evidence into recruiter‑ready artifacts. It links DanielNash.co’s portfolio UI with the ResumeCustomizer engine via authenticated server‑to‑server calls, keeping page‑authored content as the primary source. The system implements bounded evidence retrieval, six advisory reviewers, and a human‑approved PDF output, with a documented 12‑case evaluation improvement from 5/12 to 11/12 after grounding changes. Remaining work includes durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate, all noted explicitly on the page.  \n\n**Suggested follow‑ups**  \n- What metrics or outcomes does this system produce for recruiters?  \n- How does the evaluation process compare to other AI product workflows?  \n\n**Related pages**  \n- {slug: \"ai-platform-mcp\", reason: \"Shows similar governance of AI workflow patterns\"}  \n- {slug: \"chatgpt-enterprise\", reason: \"Illustrates large‑scale AI adoption and operational modeling\"}  \n\n**inferredInterestTags**: [\"ai-builder\", \"pm-leadership\", \"platform\", \"technical-depth\"]"
+    },
+    {
+      "caseId": "bcf-ai-strategy-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-strategy",
+      "rawText": "{\n  \"answer\": \"This essay argues that enterprise AI success depends on workflow fit, trust, and the operating layer around the model rather than model hype. Daniel explains how he led a ChatGPT rollout in a contact center, focusing on concrete jobs like pre‑call preparation and drafting to create measurable, safe pilots. He treats champions, training, and feedback loops as core product features, not after‑the‑fact support, showing how adoption is a product design problem. The page anchors these ideas in real rollout experience and links to the ChatGPT Enterprise case study for concrete rollout metrics.\",\n  \"suggestedFollowUps\": [\n    \"Would you like to see the ChatGPT Enterprise rollout details?\",\n    \"How does this workflow‑first approach align with your team’s AI strategy?\"\n  ],\n  \"relatedPages\": [\n    {\n      \"slug\": \"chatgpt-enterprise\",\n      \"reason\": \"Provides concrete rollout metrics and operating‑model evidence that support the workflow‑first argument.\"\n    },\n    {\n      \"slug\": \"ai-platform-mcp\",\n      \"reason\": \"Shows how the same workflow‑first thinking extended into reusable platform foundations.\"\n    }\n  ],\n  \"inferredInterestTags\": [\n    \"pm-leadership\",\n    \"platform\",\n    \"technical-depth\"\n  ]\n}"
+    },
+    {
+      "caseId": "3cec-ai-platform-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-platform-mcp",
+      "rawText": "**Summary**\n\nDaniel Nash turned a hackathon‑winning AI prototype for Guitar Center into a reusable platform architecture. The prototype was validated in a follow‑up UX study that showed 87 % of participants would use it again. Based on that signal, he mapped recurring AI workflow patterns across pilots, created connector and retrieval patterns, and shipped system‑level patterns (agent‑based workflows, structured‑unstructured retrieval, and governance steps) that now serve as the foundation for future AI agents and enterprise workflows. The result is a shared “middle layer” platform that enables teams to experiment, govern, and scale AI use cases more quickly and reliably.",
+      "capturedAtSnapshot": "3cec9948b8a4040485d9db349d65e009dce4a042"
+    },
+    {
+      "caseId": "3cec-ai-strategy-summary",
+      "question": "Summarize this page",
+      "pageSlug": "ai-strategy",
+      "rawText": "**Answer**  \nDaniel Nash argues that enterprise AI succeeds when product leaders focus on workflow fit, trust, enablement, and governance rather than on the model itself. He draws this conclusion from his own experience leading a ChatGPT rollout in a contact‑center, where he mapped real agent tasks (pre‑call prep, drafting) and built a champion‑based adoption system as part of the product. The essay highlights that the “middle layer” – prompts, tooling, review paths, and governance embedded in the workflow – is the true product, and that failure often occurs before the model is even chosen.  \n\n**Suggested Follow‑Ups**  \n- How did the ChatGPT rollout impact agent productivity or cost?  \n- What governance or risk controls were built into the workflow?  \n\n**Related Pages**  \n- **chatgpt-enterprise** – provides concrete rollout metrics and operating‑model diagrams.  \n- **ai-platform-mcp** – shows how the same workflow‑first thinking was extended into reusable platform foundations.  \n\n**Inferred Interest Tags**  \n[\"pm-leadership\", \"platform\", \"technical-depth\"]",
+      "capturedAtSnapshot": "3cec9948b8a4040485d9db349d65e009dce4a042"
+    },
+    {
+      "caseId": "3cec-human-flourishing-proof-boundaries",
+      "question": "What's grounded in experience here, and what's personal conviction?",
+      "pageSlug": "the-side-of-ai-i-want-to-be-on",
+      "rawText": "{\"answer\":\"The essay shows Daniel’s professional experience through the Guitar Center AI adoption surveys he helped run and the enterprise AI, agentic‑workflow, and productivity‑tool work he has led (direct‑ownership evidence). It also reports a qualitative outcome: a majority of survey respondents reported increased creativity, a signal that AI can expand human capability (Qualified creativity signal). What the page does not provide are exact percentages, sample sizes, or a full list of metrics, and the personal reflections on faith, scripture study, and life‑sciences exploration are presented as future‑facing aspirations rather than proven outcomes (explicitly stated in claimBoundaries).\",\"suggestedFollowUps\":[\"Would you like to see the ChatGPT Enterprise case study for concrete adoption metrics?\",\"Do you want more detail on the survey methodology?\"],\"relatedPages\":[{\"slug\":\"chatgpt-enterprise\",\"reason\":\"provides measurable rollout and adoption data that underpins the responsible‑adoption viewpoint discussed here.\"}],\"inferredInterestTags\":[\"pm-leadership\",\"ai-builder\"]}",
+      "capturedAtSnapshot": "3cec9948b8a4040485d9db349d65e009dce4a042"
+    }
+  ]
+}

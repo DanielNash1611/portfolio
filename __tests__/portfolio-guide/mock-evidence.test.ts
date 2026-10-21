@@ -13,10 +13,7 @@ import {
 import { generatePortfolioGuideResponse } from "@/lib/portfolio-guide/service";
 import type { CopilotRequest } from "@/lib/portfolio-guide/types";
 
-function withEnv<T>(
-  vars: Record<string, string | undefined>,
-  fn: () => T,
-): T {
+function withEnv<T>(vars: Record<string, string | undefined>, fn: () => T): T {
   const previous: Record<string, string | undefined> = {};
   for (const [key, value] of Object.entries(vars)) {
     previous[key] = process.env[key];
@@ -43,7 +40,10 @@ function withEnv<T>(
 
 test("mock is disabled by default", () => {
   withEnv(
-    { NODE_ENV: "development", PORTFOLIO_GUIDE_EVIDENCE_ENABLE_MOCK: undefined },
+    {
+      NODE_ENV: "development",
+      PORTFOLIO_GUIDE_EVIDENCE_ENABLE_MOCK: undefined,
+    },
     () => assert.equal(isEvidenceMockEnabled(), false),
   );
 });
@@ -65,7 +65,10 @@ test("mock is force-disabled in production even with the flag set", () => {
 // ── Scenario resolution ───────────────────────────────────────────────────────
 
 test("scenario tokens in the message select a fallback branch", () => {
-  assert.equal(resolveEvidenceMockScenario("tell me X FORCE_EVIDENCE_EMPTY"), "empty");
+  assert.equal(
+    resolveEvidenceMockScenario("tell me X FORCE_EVIDENCE_EMPTY"),
+    "empty",
+  );
   assert.equal(
     resolveEvidenceMockScenario("FORCE_EVIDENCE_TIMEOUT please"),
     "timeout",
@@ -98,11 +101,14 @@ test("each scenario maps to the right fetch result", async () => {
     await runMockEvidence({ query: "q", scenario: "invalid_shape" }),
     { ok: false, reason: "invalid_shape" },
   );
-  assert.deepEqual(await runMockEvidence({ query: "q", scenario: "http_error" }), {
-    ok: false,
-    reason: "http_error",
-    status: 503,
-  });
+  assert.deepEqual(
+    await runMockEvidence({ query: "q", scenario: "http_error" }),
+    {
+      ok: false,
+      reason: "http_error",
+      status: 503,
+    },
+  );
   assert.deepEqual(
     await runMockEvidence({ query: "q", scenario: "network_error" }),
     { ok: false, reason: "network_error" },
@@ -139,7 +145,7 @@ function makeToolCallingClient(): OpenAI {
   let calls = 0;
   return {
     responses: {
-      create: async () => {
+      create: async (params: { input: Array<{ content?: string }> }) => {
         calls += 1;
         if (calls === 1) {
           return {
@@ -155,7 +161,13 @@ function makeToolCallingClient(): OpenAI {
             ],
           };
         }
-        return { output_text: JSON.stringify({ answer: "Synthesized answer." }) };
+        const packet = JSON.parse(params.input.at(-1)!.content!);
+        const block = packet.approvedBlocks.find((item: { id: string }) =>
+          item.id.startsWith("career:"),
+        );
+        return {
+          output_text: JSON.stringify({ blockIds: block ? [block.id] : [] }),
+        };
       },
     },
   } as unknown as OpenAI;
@@ -173,13 +185,21 @@ test("evidenceMock enables the tool without any real ResumeCustomizer config", a
     },
   );
 
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, true);
-  assert.equal(result.response.evidenceUsed?.[0]?.project, "ChatGPT Enterprise pilot");
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    true,
+  );
+  assert.equal(
+    result.response.evidenceUsed?.[0]?.project,
+    "ChatGPT Enterprise pilot",
+  );
 });
 
 test("evidenceMock honors a FORCE_EVIDENCE token for fallback testing", async () => {
   const result = await generatePortfolioGuideResponse(
-    createRequest("what supports the pilot impact claim? FORCE_EVIDENCE_TIMEOUT"),
+    createRequest(
+      "what supports the pilot impact claim? FORCE_EVIDENCE_TIMEOUT",
+    ),
     {
       apiKey: "openai-key",
       model: "gpt-test",
@@ -188,6 +208,12 @@ test("evidenceMock honors a FORCE_EVIDENCE token for fallback testing", async ()
     },
   );
 
-  assert.equal(result.response.evidenceMeta?.resumeCustomizerEvidenceUsed, false);
-  assert.equal(result.response.evidenceMeta?.evidenceUnavailableReason, "timeout");
+  assert.equal(
+    result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
+    false,
+  );
+  assert.equal(
+    result.response.evidenceMeta?.evidenceUnavailableReason,
+    "timeout",
+  );
 });

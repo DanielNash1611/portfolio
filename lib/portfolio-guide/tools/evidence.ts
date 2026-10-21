@@ -32,7 +32,8 @@ export const SEARCH_CAREER_EVIDENCE_TOOL_DEFINITION = {
       },
       visitorIntent: {
         type: "string",
-        description: "Visitor type: hiring_manager, recruiter, or technical_leader",
+        description:
+          "Visitor type: hiring_manager, recruiter, or technical_leader",
       },
       maxResults: {
         type: "number",
@@ -54,7 +55,7 @@ export type EvidenceMetric = {
 export type EvidenceSourceAudit = {
   status: "verified" | "partially-verified" | "unverified";
   sourceType: string;
-  lastReviewedAt: string;
+  lastReviewedAt: string | null;
 };
 
 export type EvidenceItem = {
@@ -68,6 +69,7 @@ export type EvidenceItem = {
   sourceAudit: EvidenceSourceAudit;
   visibility: string;
   recommendedUse: string;
+  claimBoundaries?: string[];
 };
 
 export type EvidenceSearchResponse = {
@@ -217,11 +219,12 @@ function parseEvidenceItem(raw: unknown): EvidenceItem | null {
       lastReviewedAt:
         typeof sourceAuditRaw.lastReviewedAt === "string"
           ? sourceAuditRaw.lastReviewedAt
-          : "",
+          : null,
     },
     visibility: typeof item.visibility === "string" ? item.visibility : "",
     recommendedUse:
       typeof item.recommendedUse === "string" ? item.recommendedUse : "",
+    claimBoundaries: asStringArray(item.claimBoundaries),
   };
 }
 
@@ -337,10 +340,15 @@ export async function callEvidenceTool(
 
   const requestBody = {
     query: input.query,
-    audience: (input.visitorIntent ?? "hiring_manager") as "hiring_manager" | "recruiter" | "technical_leader",
+    audience: (input.visitorIntent ?? "hiring_manager") as
+      | "hiring_manager"
+      | "recruiter"
+      | "technical_leader",
     context: {
       source: "portfolio_chatbot",
-      ...(input.currentPortfolioPage ? { currentPortfolioPage: input.currentPortfolioPage } : {}),
+      ...(input.currentPortfolioPage
+        ? { currentPortfolioPage: input.currentPortfolioPage }
+        : {}),
       ...(input.visitorIntent ? { visitorIntent: input.visitorIntent } : {}),
     },
     filters: {
@@ -350,10 +358,11 @@ export async function callEvidenceTool(
     },
   };
 
-  const { signal: fetchSignal, timeoutSignal, cleanup } = withTimeoutSignal(
-    EVIDENCE_FETCH_TIMEOUT_MS,
-    signal,
-  );
+  const {
+    signal: fetchSignal,
+    timeoutSignal,
+    cleanup,
+  } = withTimeoutSignal(EVIDENCE_FETCH_TIMEOUT_MS, signal);
 
   let response: Response;
   try {
