@@ -36,12 +36,12 @@ Contact messages, resume generation/delivery, and creative-demo controls are not
 
 ## Rollout and verification
 
-See the [native WebMCP and retrieval follow-up](./portfolio-assistant-validation-2026-10-17.md) for current runtime results, and the [original implementation validation record](./portfolio-assistant-validation.md) for earlier checks and screenshots.
+See the [October 21 draft validation and release gates](./portfolio-assistant-release-20261021.md). Earlier local validation records are not included in this extracted branch and do not establish current-head runtime readiness.
 
 - `NEXT_PUBLIC_PORTFOLIO_ASSISTANT_ENABLED=false` restores the original inline guide and homepage role form. The two legacy client components are retained for rollback.
 - `NEXT_PUBLIC_PORTFOLIO_WEBMCP_ENABLED=false` disables native tool registration and form annotations while keeping the human UI.
 - `NEXT_PUBLIC_WEBMCP_ORIGIN_TRIAL_TOKEN` optionally supplies a public origin-trial meta token. Configure it for the actual deployed HTTPS origin; a token is not included in this repository.
-- Ordinary browsers require no flags. For native testing in supporting Chrome, use `chrome://flags/#enable-webmcp-testing` and the Model Context Tool Inspector. Browser agents must visit the site to discover its tools.
+- Human UI works without native WebMCP. Validate native tools in an already-enabled supporting browser or an eligible enrolled test origin. The October 21 preparation scope does not authorize experimental flag changes, origin-trial configuration, new software or new permissions. Browser agents must visit the site to discover its tools.
 
 Run `npm run test:portfolio-guide`, `npm run typecheck`, `npm run lint`, and `npm run build`. Start with the inference-free `eval:portfolio-guide` checks. After meaningful AI behavior changes, generate only affected local cases (smoke for shared changes), reuse cached answers, and review frozen packets in the active Codex chat. Local judges are explicit advisory diagnostics; full suites and live dependencies remain explicit. New cases with IDs beginning `site-` cover homepage discovery, collections, creative status, About, Method, essays, and private-alpha boundaries. The browser journey should also verify annotations and submission behavior, page attribution across navigation, draft preservation, lens clearing, focus restoration, responsive layouts, retry/cancellation, and storage outages.
 
