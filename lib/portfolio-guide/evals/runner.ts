@@ -107,7 +107,7 @@ export function buildRequestForEvalCase(
 function scoreAverage(
   cases: PortfolioGuideEvalCaseResult[],
 ): PortfolioGuideEvalRubricScores | undefined {
-  const judgeResults = cases.map((item) => item.judge).filter(Boolean);
+  const judgeResults = cases.map((item) => item.judge).filter((judge) => judge && judge.verdict !== "uncertain");
   if (judgeResults.length === 0) {
     return undefined;
   }
@@ -180,6 +180,7 @@ export async function runPortfolioGuideEvalSuite(config: {
   providerConfig: EvalResolvedConfig;
   runAssistant: PortfolioGuideEvalAssistant;
   runJudge?: PortfolioGuideEvalJudge;
+  onCaseComplete?: (result: PortfolioGuideEvalCaseResult) => void;
 }): Promise<PortfolioGuideEvalSuiteResult> {
   const results: PortfolioGuideEvalCaseResult[] = [];
 
@@ -248,8 +249,11 @@ export async function runPortfolioGuideEvalSuite(config: {
       }
     }
     const judgePassed =
-      generation != null && judge ? judgePassesThresholds(evalCase, judge) : !config.runJudge;
+      generation != null && judge
+        ? judgePassesThresholds(evalCase, judge)
+        : !config.runJudge;
 
+    const advisoryJudge = config.providerConfig.judge?.label === "local-openai-compatible";
     results.push({
       evalCase,
       request,
@@ -258,21 +262,25 @@ export async function runPortfolioGuideEvalSuite(config: {
       judge,
       providers,
       failures,
-      passed:
-        failures.length === 0 &&
-        deterministicPassed &&
-        judgePassed,
+      qualityStatus: failures.some((failure) => failure.stage === "judge")
+        ? "evaluator-error"
+        : !judge ? "not-reviewed"
+          : judge.verdict === "uncertain" ? "uncertain"
+            : judgePassed ? "advisory-pass" : "advisory-fail",
+      passed: !failures.some((failure) => failure.stage === "assistant") &&
+        deterministicPassed && (advisoryJudge || (failures.length === 0 && judgePassed)),
     });
+    config.onCaseComplete?.(results[results.length - 1]);
   }
 
   return {
     label: config.label,
     cases: results,
-      summary: {
-        total: results.length,
-        passed: results.filter((result) => result.passed).length,
-        failed: results.filter((result) => !result.passed).length,
-        assistantFailures: results.filter((result) =>
+    summary: {
+      total: results.length,
+      passed: results.filter((result) => result.passed).length,
+      failed: results.filter((result) => !result.passed).length,
+      assistantFailures: results.filter((result) =>
         result.failures.some((failure) => failure.stage === "assistant"),
       ).length,
       deterministicFailures: results.filter((result) =>
