@@ -1,3 +1,4 @@
+import { isCacheableGeneration } from "../lib/portfolio-guide/evals/cache";
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -310,11 +311,7 @@ async function main() {
     } catch { /* Unknown model revision disables reuse. */ }
   }
   const cacheEnabled = Boolean(modelIdentity) && !values.live && !values.fresh;
-  const cache = new ArtifactCache<PortfolioGuideGenerationResult>(path.resolve(values["cache-dir"] ?? "artifacts/eval-cache/generations"),
-    (g): g is PortfolioGuideGenerationResult => Boolean(g && typeof g === "object" &&
-      typeof (g as PortfolioGuideGenerationResult).rawText === "string" &&
-      (g as PortfolioGuideGenerationResult).normalizationStatus === "normalized-json" &&
-      typeof (g as PortfolioGuideGenerationResult).response?.answer === "string"));
+  const cache = new ArtifactCache<PortfolioGuideGenerationResult>(path.resolve(values["cache-dir"] ?? "artifacts/eval-cache/generations"), isCacheableGeneration);
   const assistant = createPortfolioGuideAssistant({ ...providerConfig.assistant, systemPrompt,
     retrievalEnabled: values.retrieval ?? false, live: values.live ?? false, liveEvidence: values["live-evidence"] ?? false,
     ...(values.decisions ? { decisions: { enabled: true, apiKey: process.env.OPENAI_API_KEY! } } : {}) });
