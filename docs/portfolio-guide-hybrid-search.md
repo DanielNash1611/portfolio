@@ -1,5 +1,16 @@
 # Portfolio hybrid search preparation
 
+## October 21 review checkpoint — semantic build blocked
+
+Evaluation controls and the existing approved qualification draft have been reconciled. No paid provider request ran. The packaged runtime index is now stale and is retained unchanged so the release check blocks a misleading semantic-ready build. `search:index:prepare` wrote only reusable-vector preparation data and the pending status.
+
+Current corpus: 64 documents; 62 reusable vectors; 2592 pending UTF-8 bytes. Pending IDs: `ai-career-operating-system:private-local-profile`, `ai-career-operating-system:perspective`. Exact remaining work is recorded in [refresh requirements](search-refresh-required-20261021.json). No old paid approval remains available. Semantic validation and the dependent build stop here; lexical/source/auth checks can run independently. Historical reports and captured answers are unchanged and are not a new grade.
+
+The exported integration fixture contains only the current curated public catalog, with no private canonical record or raw application profile. The updated evaluation provider uses that frozen projection through the bounded qualified-block service and makes no separate relevance/prose call. General captured-output review is `eval:portfolio-guide:review`; search-specific review remains `eval:search:review` / the native-search helper.
+
+## Earlier preparation record (historical)
+
+
 Prepared from merged main `ef02e7e819205d606e9a4fbae6c0281aa1396e0b`.
 Production settings and deployments are unchanged.
 

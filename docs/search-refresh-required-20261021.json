@@ -1,0 +1,16 @@
+{
+  "state": "blocked-no-paid-approval",
+  "reason": "Approved qualification changes made the packaged index stale. Existing runtime index is retained so release checks fail closed.",
+  "model": "text-embedding-3-small",
+  "corpusHash": "2ef7c0fa968fd0b94acd380ba905f9c2fbbba590030b99de9243530e44c4ebf8",
+  "documents": 64,
+  "reusableVectors": 62,
+  "pendingIds": [
+    "ai-career-operating-system:private-local-profile",
+    "ai-career-operating-system:perspective"
+  ],
+  "pendingUtf8Bytes": 2592,
+  "maximumIndexRequestsForThisRepository": 1,
+  "queryRefresh": "No query text change is requested. Reuse exact captured query embeddings only.",
+  "requiredNextAction": "Review and approve a fresh bounded embedding manifest. No previous allowance transfers. Then refresh the runtime index, require-semantic, replay cached retrieval, type/unit/build checks and obtain separate production release authorization."
+}
