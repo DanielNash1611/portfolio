@@ -40,7 +40,8 @@ function sanitizeVisitorIntent(input: unknown): VisitorIntent | undefined {
     return undefined;
   }
   const seniority =
-    typeof value.seniority === "string" && VALID_SENIORITY.includes(value.seniority)
+    typeof value.seniority === "string" &&
+    VALID_SENIORITY.includes(value.seniority)
       ? (value.seniority as VisitorIntent["seniority"])
       : undefined;
   return {
@@ -50,7 +51,13 @@ function sanitizeVisitorIntent(input: unknown): VisitorIntent | undefined {
       : {}),
     ...(seniority ? { seniority } : {}),
     ...(Array.isArray(value.roleLenses)
-      ? { roleLenses: strings(value.roleLenses, 3, 80) as VisitorIntent["roleLenses"] }
+      ? {
+          roleLenses: strings(
+            value.roleLenses,
+            3,
+            80,
+          ) as VisitorIntent["roleLenses"],
+        }
       : {}),
     ...(Array.isArray(value.focusAreas)
       ? { focusAreas: strings(value.focusAreas, 12, 120) }
@@ -61,7 +68,9 @@ function sanitizeVisitorIntent(input: unknown): VisitorIntent | undefined {
   };
 }
 
-function sanitizeRecommendations(input: unknown): GuidedRecommendation[] | undefined {
+function sanitizeRecommendations(
+  input: unknown,
+): GuidedRecommendation[] | undefined {
   if (!Array.isArray(input)) {
     return undefined;
   }
@@ -91,16 +100,25 @@ function sanitizeRecommendations(input: unknown): GuidedRecommendation[] | undef
   return values.length ? values : undefined;
 }
 
-export function sanitizeGuideSessionSignals(input: unknown): GuideSessionSignals {
+export function sanitizeGuideSessionSignals(
+  input: unknown,
+): GuideSessionSignals {
   const value =
     input && typeof input === "object" && !Array.isArray(input)
       ? (input as Record<string, unknown>)
       : {};
-  const interestTags = strings(value.inferredInterestTags, MAX_TAG_SIGNALS, 80).filter(
-    (tag): tag is InterestTag => INTEREST_TAGS.includes(tag as InterestTag),
+  const interestTags = strings(
+    value.inferredInterestTags,
+    MAX_TAG_SIGNALS,
+    80,
+  ).filter((tag): tag is InterestTag =>
+    INTEREST_TAGS.includes(tag as InterestTag),
   );
   return {
     visitedPages: strings(value.visitedPages, MAX_VISITED_PAGES, 120),
+    ...(value.visitorIntentCleared === true
+      ? { visitorIntentCleared: true }
+      : {}),
     clickedPrompts: strings(value.clickedPrompts, MAX_TRACKED_PROMPTS, 1000),
     askedQuestions: strings(value.askedQuestions, MAX_TRACKED_QUESTIONS, 1000),
     inferredInterestTags: interestTags,
@@ -125,21 +143,35 @@ export function mergeGuideSessionSignals(
   const mergeUnique = (left: string[], right: string[], limit: number) =>
     [...new Set([...left, ...right])].slice(-limit);
   return sanitizeGuideSessionSignals({
-    visitedPages: mergeUnique(stored.visitedPages, [...incoming.visitedPages, pageSlug], MAX_VISITED_PAGES),
+    visitedPages: mergeUnique(
+      stored.visitedPages,
+      [...incoming.visitedPages, pageSlug],
+      MAX_VISITED_PAGES,
+    ),
     clickedPrompts: [...stored.clickedPrompts, ...incoming.clickedPrompts],
-    askedQuestions: [...stored.askedQuestions, ...incoming.askedQuestions, question],
+    askedQuestions: [
+      ...stored.askedQuestions,
+      ...incoming.askedQuestions,
+      question,
+    ],
     inferredInterestTags: mergeUnique(
       stored.inferredInterestTags,
       incoming.inferredInterestTags,
       MAX_TAG_SIGNALS,
     ),
-    visitorIntent: incoming.visitorIntent ?? stored.visitorIntent,
-    recommendedPath: incoming.recommendedPath ?? stored.recommendedPath,
+    visitorIntent: incoming.visitorIntentCleared
+      ? undefined
+      : (incoming.visitorIntent ?? stored.visitorIntent),
+    recommendedPath: incoming.visitorIntentCleared
+      ? undefined
+      : (incoming.recommendedPath ?? stored.recommendedPath),
     lastVisitedAt: new Date().toISOString(),
   });
 }
 
-function sanitizeFallbackConversation(input: unknown): CopilotConversationMessage[] | undefined {
+function sanitizeFallbackConversation(
+  input: unknown,
+): CopilotConversationMessage[] | undefined {
   if (!Array.isArray(input)) {
     return undefined;
   }
@@ -174,6 +206,12 @@ export function parsePortfolioGuideTurnRequest(
   const value = input as Record<string, unknown>;
   const message = typeof value.message === "string" ? value.message.trim() : "";
   if (
+    (value.scope !== undefined &&
+      value.scope !== "page" &&
+      value.scope !== "portfolio") ||
+    (value.entryPoint !== undefined &&
+      value.entryPoint !== "ui" &&
+      value.entryPoint !== "webmcp") ||
     typeof value.clientTurnId !== "string" ||
     !CLIENT_TURN_ID_PATTERN.test(value.clientTurnId) ||
     typeof value.pageSlug !== "string" ||
@@ -186,11 +224,22 @@ export function parsePortfolioGuideTurnRequest(
     return null;
   }
   return {
+    ...(value.scope
+      ? { scope: value.scope as PortfolioGuideTurnRequest["scope"] }
+      : {}),
+    ...(value.entryPoint
+      ? {
+          entryPoint:
+            value.entryPoint as PortfolioGuideTurnRequest["entryPoint"],
+        }
+      : {}),
     clientTurnId: value.clientTurnId,
     pageSlug: value.pageSlug.trim().slice(0, 120),
     message,
     source: value.source as GuideInteractionSource,
     sessionSignals: sanitizeGuideSessionSignals(value.sessionSignals),
-    fallbackConversation: sanitizeFallbackConversation(value.fallbackConversation),
+    fallbackConversation: sanitizeFallbackConversation(
+      value.fallbackConversation,
+    ),
   };
 }

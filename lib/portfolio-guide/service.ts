@@ -1,3 +1,5 @@
+import { getGuideSurfaceContext, getPublicSurfaceCatalog } from "@/lib/portfolio-agent/catalog";
+import { findRelevantWork } from "@/lib/portfolio-agent/capabilities";
 import OpenAI from "openai";
 import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 import { selectRecommendationsForPage } from "@/lib/portfolio-guide/context";
@@ -266,6 +268,14 @@ export async function generatePortfolioGuideResponse(
   const supportingPages = routing.plan
     ? retrieveSupportingPages(relatedPages, routing.plan)
     : [];
+  if (request.scope === "portfolio") {
+    const query = `${request.message} ${request.sessionContext.visitorIntent?.rawInput ?? ""}`;
+    for (const result of findRelevantWork(getPublicSurfaceCatalog(), query)) {
+      const page = getGuideSurfaceContext(result.slug);
+      if (page && page.slug !== request.pageContext.slug && !supportingPages.some((p) => p.slug === page.slug)) supportingPages.push(page);
+      if (supportingPages.length >= 3) break;
+    }
+  }
   const selectionInput = () =>
     JSON.stringify({
       currentQuestion: request.message,
