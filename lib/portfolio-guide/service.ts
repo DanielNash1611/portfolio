@@ -269,7 +269,8 @@ export async function generatePortfolioGuideResponse(
     ? retrieveSupportingPages(relatedPages, routing.plan)
     : [];
   if (request.scope === "portfolio") {
-    const query = `${request.message} ${request.sessionContext.visitorIntent?.rawInput ?? ""}`;
+    // Ranking accepts 1,000 characters; the submitted question remains intact below.
+    const query = `${request.message} ${request.sessionContext.visitorIntent?.rawInput ?? ""}`.trim().slice(0, 1000);
     for (const result of findRelevantWork(getPublicSurfaceCatalog(), query)) {
       const page = getGuideSurfaceContext(result.slug);
       if (page && page.slug !== request.pageContext.slug && !supportingPages.some((p) => p.slug === page.slug)) supportingPages.push(page);

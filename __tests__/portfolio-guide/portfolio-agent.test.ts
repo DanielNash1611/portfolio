@@ -494,3 +494,18 @@ test("site and method summaries remain authored bounded blocks without semantic 
   assert.ok(result.response.answer.length); assert.equal(result.response.action, undefined);
   assert.match(result.response.answer, /do not establish project outcomes/);
 });
+
+test("whole-portfolio ranking accepts the supported 4000-character question and 1000-character lens", async () => {
+  const message = "Which public evidence supports this role? ".padEnd(4000, "x");
+  const input = { ...request("site-home", "portfolio"), message,
+    sessionContext: { ...empty(), visitorIntent: { rawInput: "Director of Product ".padEnd(1000, "x") } } };
+  let calls = 0;
+  const result = await generatePortfolioGuideResponse(input, { apiKey: "synthetic", client: { responses: { create: async (params: { input: Array<{ content: string }> }) => {
+    calls++;
+    const packet = JSON.parse(params.input[1].content);
+    assert.equal(packet.currentQuestion, message, "Only ranking input may be bounded; preserve the complete submitted question.");
+    return { output_text: JSON.stringify({ blockIds: [packet.approvedBlocks[0].id] }) };
+  } } } as never });
+  assert.equal(calls, 1);
+  assert.ok(result.response.answer);
+});
