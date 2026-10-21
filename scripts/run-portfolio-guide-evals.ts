@@ -1,10 +1,10 @@
 import path from "node:path";
+import { existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
 import { portfolioGuideEvalCases } from "@/lib/portfolio-guide/evals/cases";
-import {
-  resolveEvalRunnerConfig,
-} from "@/lib/portfolio-guide/evals/config";
+import { resolveEvalRunnerConfig } from "@/lib/portfolio-guide/evals/config";
 import { loadPortfolioGuideEvalEnv } from "@/lib/portfolio-guide/evals/env";
 import { verifyOpenAiCompatibleProvider } from "@/lib/portfolio-guide/evals/preflight";
 import {
@@ -16,27 +16,13 @@ import {
   snapshotGeneration,
 } from "@/lib/portfolio-guide/evals/runner";
 import { PORTFOLIO_GUIDE_SYSTEM_PROMPT } from "@/lib/portfolio-guide/prompt";
+import { selectEvalCases, requireExplicitLive } from "@/lib/portfolio-guide/evals/selection";
+import { ArtifactCache, digest, fingerprintFiles } from "./lib/eval-artifacts";
+import type { PortfolioGuideGenerationResult } from "@/lib/portfolio-guide/service";
 import type {
   PortfolioGuideEvalCaseResult,
   PortfolioGuideEvalSuiteResult,
 } from "@/lib/portfolio-guide/evals/types";
-
-const PORTFOLIO_GUIDE_SMOKE_CASE_IDS = new Set([
-  "ai-platform-role-fit-suggests-generator",
-  "ai-platform-direct-resume-request",
-  "checkout-evidence-does-not-overpromote-generator",
-  "checkout-mentions-mcp",
-  "ai-platform-most-reused-patterns",
-  "ai-platform-contaminated-history",
-  "ai-platform-referential-follow-up",
-  "checkout-multiturn-current-page-primary",
-  "ai-platform-seniority",
-  "ai-platform-implied-not-proven",
-  "ai-platform-connections",
-  "checkout-cross-page-dau",
-  "jira-evidence",
-  "jira-next-read",
-]);
 
 function timestampLabel(): string {
   return new Date().toISOString().replace(/[:.]/g, "-");
@@ -44,7 +30,7 @@ function timestampLabel(): string {
 
 function formatScores(result: PortfolioGuideEvalCaseResult): string {
   if (!result.judge) {
-    return "deterministic-only";
+    return "deterministic scoring; model-generated answer";
   }
 
   const {
@@ -76,6 +62,8 @@ function renderCaseTranscript(result: PortfolioGuideEvalCaseResult): string {
 
 - Case ID: \`${result.evalCase.id}\`
 - Status: ${result.passed ? "PASS" : "FAIL"}
+- Execution: ${result.execution?.kind ?? "unknown"}
+- Quality: ${result.qualityStatus ?? "not-reviewed"} (local judge is advisory)
 - Category: \`${result.evalCase.category}\`
 - Page: \`${result.request.pageContext.href}\`
 
@@ -129,16 +117,18 @@ ${JSON.stringify(result.generation?.response ?? null, null, 2)}
 
 ## Deterministic Checks
 
-${result.deterministicChecks.length > 0
-  ? result.deterministicChecks
-      .map(
-        (check) =>
-          `- ${check.passed ? "PASS" : "FAIL"}${check.severity === "advisory" ? " [ADVISORY]" : ""} ${check.label}${
-            check.details ? ` — ${check.details}` : ""
-          }`,
-      )
-      .join("\n")
-  : "- not run"}
+${
+  result.deterministicChecks.length > 0
+    ? result.deterministicChecks
+        .map(
+          (check) =>
+            `- ${check.passed ? "PASS" : "FAIL"}${check.severity === "advisory" ? " [ADVISORY]" : ""} ${check.label}${
+              check.details ? ` — ${check.details}` : ""
+            }`,
+        )
+        .join("\n")
+    : "- not run"
+}
 
 ## Judge
 
@@ -157,14 +147,14 @@ ${
   result.failures.length > 0
     ? failureLines
     : failedChecks.length > 0
-    ? failedChecks.map((check) => `- ${check.label}`).join("\n")
-    : result.judge && !result.judge.passed
-      ? result.judge.issues.map((issue) => `- ${issue}`).join("\n")
-      : advisoryWarnings.length > 0
-        ? advisoryWarnings
-            .map((check) => `- [advisory] ${check.label}`)
-            .join("\n")
-        : "- none"
+      ? failedChecks.map((check) => `- ${check.label}`).join("\n")
+      : result.judge && !result.judge.passed
+        ? result.judge.issues.map((issue) => `- ${issue}`).join("\n")
+        : advisoryWarnings.length > 0
+          ? advisoryWarnings
+              .map((check) => `- [advisory] ${check.label}`)
+              .join("\n")
+          : "- none"
 }
 `;
 }
@@ -182,6 +172,10 @@ function renderMarkdownReport(result: PortfolioGuideEvalSuiteResult): string {
 - Deterministic failures: ${result.summary.deterministicFailures}
 - Advisory warnings: ${result.summary.advisoryWarnings}
 - Judge failures: ${result.summary.judgeFailures}
+- Fresh generations: ${result.cases.filter((c) => c.execution?.kind === "fresh").length}
+- Reused generations: ${result.cases.filter((c) => c.execution?.kind === "cache").length}
+- Model requests this run: ${result.cases.reduce((n, c) => n + (c.execution?.modelCalls ?? 0), 0)}
+- Scope: one run only; cached answers are not fresh sampling. Codex quality review is separate.
 ${averageScores ? `- Average scores: groundedness ${averageScores.groundedness}, uncertainty ${averageScores.uncertaintyHandling}, source separation ${averageScores.sourceSeparation}, helpfulness ${averageScores.helpfulness}, concision ${averageScores.concision}` : ""}
 
 ## Case Summary
@@ -196,7 +190,6 @@ ${result.cases
 }
 
 async function main() {
-  const envLoad = loadPortfolioGuideEvalEnv();
   const { values } = parseArgs({
     args: process.argv.slice(2),
     options: {
@@ -215,9 +208,38 @@ async function main() {
       "output-dir": { type: "string" },
       "no-judge": { type: "boolean" },
       smoke: { type: "boolean" },
+      decisions: { type: "boolean" },
+      retrieval: { type: "boolean" },
+      full: { type: "boolean" },
+      changed: { type: "boolean" },
+      "changed-files": { type: "string" },
+      live: { type: "boolean" },
+      "live-evidence": { type: "boolean" },
+      "max-cases": { type: "string" },
+      fresh: { type: "boolean" },
+      "cache-dir": { type: "string" },
     },
     allowPositionals: false,
   });
+
+  const maxCases = values["max-cases"] === undefined ? undefined : Number(values["max-cases"]);
+  if (maxCases !== undefined && (!Number.isInteger(maxCases) || maxCases < 1)) throw new Error("--max-cases must be a positive integer.");
+  // Do not let credentials or env defaults silently turn a coding loop into a paid run.
+  requireExplicitLive({ live: values.live, decisions: values.decisions, liveEvidence: values["live-evidence"],
+    providerMode: values["provider-mode"] ?? process.env.PORTFOLIO_GUIDE_EVAL_PROVIDER_MODE,
+    assistantBaseUrl: values["assistant-base-url"] ?? process.env.PORTFOLIO_GUIDE_EVAL_ASSISTANT_BASE_URL,
+    judgeBaseUrl: values["judge-base-url"] ?? process.env.PORTFOLIO_GUIDE_EVAL_JUDGE_BASE_URL,
+    maxCases, timeoutMs: Number(values["assistant-timeout-ms"]) });
+  const envLoad = values.live ? loadPortfolioGuideEvalEnv() : { loaded: false, nodeEnv: process.env.NODE_ENV ?? "development" };
+  const changedPaths = values["changed-files"]?.split(",").map((s) => s.trim()).filter(Boolean) ?? [
+    ...execFileSync("git", ["diff", "--name-only", "HEAD"], { encoding: "utf8" }).trim().split("\n"),
+    ...execFileSync("git", ["ls-files", "--others", "--exclude-standard"], { encoding: "utf8" }).trim().split("\n"),
+  ];
+  const selection = selectEvalCases(portfolioGuideEvalCases, { filter: values.filter, smoke: values.smoke,
+    full: values.full, changedPaths });
+  console.log(`Selection: ${selection.reason} (${selection.cases.length} cases)`);
+  if (!selection.cases.length) return;
+  if (maxCases !== undefined && selection.cases.length > maxCases) throw new Error("Selected cases exceed --max-cases; narrow --filter. No requests were started.");
 
   const providerConfig = resolveEvalRunnerConfig({
     providerMode: values["provider-mode"],
@@ -225,16 +247,22 @@ async function main() {
     assistantApiKey: values["assistant-api-key"],
     assistantModel: values["assistant-model"],
     assistantTimeoutMs: values["assistant-timeout-ms"]
-      ? Number.parseInt(values["assistant-timeout-ms"], 10)
+      ? Number(values["assistant-timeout-ms"])
       : undefined,
     judgeBaseUrl: values["judge-base-url"],
     judgeApiKey: values["judge-api-key"],
     judgeModel: values["judge-model"],
     judgeTimeoutMs: values["judge-timeout-ms"]
-      ? Number.parseInt(values["judge-timeout-ms"], 10)
+      ? Number(values["judge-timeout-ms"])
       : undefined,
     noJudge: values["no-judge"] ?? false,
   });
+
+  if (values.decisions && !process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY is required when --decisions is enabled.");
+  }
+
+  if (values.retrieval || values["live-evidence"]) throw new Error("Search eval integration is staged in PR #13; this tooling branch preserves main behavior.");
 
   if (providerConfig.assistant.label === "local-openai-compatible") {
     const assistantPreflight = await verifyOpenAiCompatibleProvider(
@@ -264,43 +292,79 @@ async function main() {
         `${timestampLabel()}-${label}`,
       ),
   );
+  if (existsSync(outputDir)) throw new Error("Eval output already exists. Choose a new output directory; runs are immutable.");
   const promptFile = values["prompt-file"];
   const systemPrompt = promptFile
     ? await readFile(path.resolve(promptFile), "utf8")
     : PORTFOLIO_GUIDE_SYSTEM_PROMPT;
-  const cases = portfolioGuideEvalCases.filter((evalCase) => {
-    if (values.smoke && !PORTFOLIO_GUIDE_SMOKE_CASE_IDS.has(evalCase.id)) {
-      return false;
-    }
-
-    if (!values.filter) {
-      return true;
-    }
-
-    return `${evalCase.id} ${evalCase.title} ${evalCase.summary}`
-      .toLowerCase()
-      .includes(values.filter.toLowerCase());
-  });
-
-  if (cases.length === 0) {
-    throw new Error("No eval cases matched the requested filter.");
+  const cases = selection.cases;
+  const dependencies = fingerprintFiles(process.cwd(), ["lib/portfolio-guide", "content",
+    "lib/portfolio-guide/evals/provider.ts", "package-lock.json"]);
+  let modelIdentity: string | undefined;
+  // Mutable Ollama tags are cacheable only when their weight digest is discoverable.
+  if (providerConfig.assistant.label === "local-openai-compatible") {
+    try {
+      const url = new URL("/api/tags", providerConfig.assistant.baseURL);
+      const tags = await fetch(url, { signal: AbortSignal.timeout(3000) }).then((r) => r.json());
+      modelIdentity = tags.models?.find((m: { name: string; digest: string }) => m.name === providerConfig.assistant.model)?.digest;
+    } catch { /* Unknown model revision disables reuse. */ }
   }
-
-  const suiteResult = await runPortfolioGuideEvalSuite({
+  const cacheEnabled = Boolean(modelIdentity) && !values.live && !values.fresh;
+  const cache = new ArtifactCache<PortfolioGuideGenerationResult>(path.resolve(values["cache-dir"] ?? "artifacts/eval-cache/generations"),
+    (g): g is PortfolioGuideGenerationResult => Boolean(g && typeof g === "object" &&
+      typeof (g as PortfolioGuideGenerationResult).rawText === "string" &&
+      (g as PortfolioGuideGenerationResult).normalizationStatus === "normalized-json" &&
+      typeof (g as PortfolioGuideGenerationResult).response?.answer === "string"));
+  const assistant = createPortfolioGuideAssistant({ ...providerConfig.assistant, systemPrompt,
+    ...(values.decisions ? { decisions: { enabled: true, apiKey: process.env.OPENAI_API_KEY! } } : {}) });
+  let active: { started: number; kind: "fresh" | "cache"; key: string; modelCalls: number } | undefined;
+  const originalFetch = globalThis.fetch;
+  const localOrigins = new Set([providerConfig.assistant.baseURL, providerConfig.judge?.baseURL]
+    .filter((url): url is string => Boolean(url)).map((url) => new URL(url).origin));
+  globalThis.fetch = async (input, init) => {
+    const url = String(input instanceof Request ? input.url : input);
+    if (!values.live && !localOrigins.has(new URL(url).origin)) {
+      throw new Error("Local eval blocked an unexpected network dependency. Use a separately bounded --live run.");
+    }
+    if (active && /\/(?:responses|embeddings|chat\/completions|decisions)(?:\?|$)/.test(url)) active.modelCalls++;
+    return originalFetch(input, init);
+  };
+  const startedAt = new Date().toISOString();
+  let suiteResult: PortfolioGuideEvalSuiteResult;
+  try {
+    suiteResult = await runPortfolioGuideEvalSuite({
     label,
     cases,
     providerConfig,
-    runAssistant: createPortfolioGuideAssistant({
-      ...providerConfig.assistant,
-      systemPrompt,
-    }),
+    runAssistant: async (input) => {
+      const key = digest({ version: 1, request: input.request, systemPrompt, dependencies, modelIdentity,
+        assistant: { label: providerConfig.assistant.label, model: providerConfig.assistant.model, baseURL: providerConfig.assistant.baseURL },
+        retrieval: values.retrieval ?? false, evidence: "frozen-public" });
+      active = { started: Date.now(), kind: "fresh", key, modelCalls: 0 };
+      const previous = cacheEnabled ? await cache.get(key) : undefined;
+      if (previous) { active.kind = "cache"; return previous; }
+      const generation = await assistant(input);
+      if (modelIdentity && !values.live) await cache.put(key, generation);
+      return generation;
+    },
+    onCaseComplete: (result) => {
+      if (active) result.execution = { kind: active.kind, durationMs: Date.now() - active.started,
+        cacheKey: active.key, modelCalls: active.modelCalls, retries: 0,
+        usage: active.kind === "fresh" ? result.generation?.usage ?? null : null };
+    },
     runJudge: providerConfig.judge
       ? createPortfolioGuideJudge(providerConfig.judge)
       : undefined,
-  });
+    });
+  } finally { globalThis.fetch = originalFetch; }
 
   await mkdir(outputDir, { recursive: true });
   await mkdir(path.join(outputDir, "transcripts"), { recursive: true });
+  await writeFile(path.join(outputDir, "run-manifest.json"), JSON.stringify({ schemaVersion: 2, startedAt,
+    selection: { reason: selection.reason, cases: cases.map((c) => c.id) }, dependencies, modelIdentity: modelIdentity ?? null,
+    cacheEnabled, live: values.live ?? false, retrieval: values.retrieval ? (values.live ? "live" : "frozen-public-lexical") : "page-context",
+    cases: suiteResult.cases.map((c) => ({ id: c.evalCase.id, execution: c.execution, qualityStatus: c.qualityStatus })),
+    note: "Single run. Reused answers are not fresh sampling; local judges are advisory; native Codex review is separate." }, null, 2));
 
   await Promise.all(
     suiteResult.cases.map(async (caseResult) => {
@@ -355,6 +419,8 @@ async function main() {
 
   if (suiteResult.summary.failed > 0) {
     process.exitCode = 1;
+  } else if (suiteResult.cases.some((c) => c.qualityStatus === "evaluator-error")) {
+    process.exitCode = 2;
   }
 }
 

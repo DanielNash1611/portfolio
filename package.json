@@ -26,7 +26,10 @@
     "test:product-workspace": "tsx --test __tests__/product-workspace/*.test.ts",
     "eval:product-workspace:live": "tsx scripts/eval-product-workspace.ts",
     "postbuild": "node scripts/report-deploy-assets.mjs",
-    "verify:media": "node scripts/verify-deployment-media.mjs --remote"
+    "verify:media": "node scripts/verify-deployment-media.mjs --remote",
+    "eval:portfolio-guide:generate": "tsx scripts/run-portfolio-guide-evals.ts",
+    "eval:portfolio-guide:review": "tsx scripts/portfolio-guide-artifacts.ts --review",
+    "eval:portfolio-guide:replay": "tsx scripts/portfolio-guide-artifacts.ts --replay"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",
