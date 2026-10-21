@@ -100,13 +100,23 @@ export default function ImplementedNext(): React.JSX.Element {
         </div>
       </div>
 
-      <div className="border-t border-[color:var(--color-slate)]/16 py-8 md:border-t-0 md:pl-10">
-          <Column
-            title="Needs implementation or instrumentation"
-            items={next}
-            complete={false}
-          />
-        </div>
+      <div className="border-t border-[color:var(--color-slate)]/16 pt-6 text-sm leading-6 text-[color:var(--color-slate)]/70">
+        <h3 className="font-semibold text-[color:var(--color-slate)]">
+          Private local workflow
+        </h3>
+        <p className="mt-2 max-w-3xl">
+          Added a private local application profile with reviewed facts, source
+          references, confirmation dates, and employer-specific answers.
+          Implemented locally in ResumeCustomizer on October 8, 2026; Daniel
+          directed requirements and reviewed facts, with Codex assisting
+          implementation. The profile remains private and local.
+        </p>
+        <p className="mt-2 max-w-3xl">
+          No measured time savings, hiring outcomes, external adoption,
+          application-quality gains, or semantic AI-quality gains are established
+          for this profile.
+        </p>
+      </div>
 
       <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/70">
         This release candidate uses canonical portfolio pages. Remote career
