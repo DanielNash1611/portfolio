@@ -1,12 +1,12 @@
 # Portfolio hybrid search preparation
 
-## October 21 review checkpoint — semantic build blocked
+## October 21 review checkpoint — approved index refresh completed
 
-Evaluation controls and the existing approved qualification draft have been reconciled. No paid provider request ran. The packaged runtime index is now stale and is retained unchanged so the release check blocks a misleading semantic-ready build. `search:index:prepare` wrote only reusable-vector preparation data and the pending status.
+The specifically approved cross-repository batch completed once using `text-embedding-3-small`: three exact public texts, 776 input tokens and a total usage-priced cost of $0.00001552 within the $0.00010 cap. No retry, query embedding, answer, routing or judge request was made. The full reservation remains consumed for authorization purposes; no additional request is permitted. See the [refresh receipt](search-refresh-receipt-20261021.json).
 
-Current corpus: 64 documents; 62 reusable vectors; 2592 pending UTF-8 bytes. Pending IDs: `ai-career-operating-system:private-local-profile`, `ai-career-operating-system:perspective`. Exact remaining work is recorded in [refresh requirements](search-refresh-required-20261021.json). No old paid approval remains available. Semantic validation and the dependent build stop here; lexical/source/auth checks can run independently. Historical reports and captured answers are unchanged and are not a new grade.
+This repository now has 64 complete runtime vectors: 62 unchanged vectors were preserved and 2 came from that one shared receipt. Corpus hash and every record hash/dimension are validated. Historical partial cache fixtures and original retrieval labels/grades remain unchanged. Index `require-semantic`, typecheck, 457 deterministic tests and the local production build passed. Hosted checks follow; authenticated deployment behavior and actual runtime flags still require their separate verification. No production activation or shared migration occurred. [Current state and remaining gates](search-refresh-required-20261021.json).
 
-The exported integration fixture contains only the current curated public catalog, with no private canonical record or raw application profile. The updated evaluation provider uses that frozen projection through the bounded qualified-block service and makes no separate relevance/prose call. General captured-output review is `eval:portfolio-guide:review`; search-specific review remains `eval:search:review` / the native-search helper.
+The bounded claim-ID selector and deterministic complete qualifications remain in place. No alternate free-prose architecture or additional relevance call is introduced. Private application profiles and personal records are excluded. A READY preview alone does not clear semantic/backend/runtime acceptance. Cached-query retrieval remains career15/15 and Portfolio7/8; three career ranking orders changed, with no label changes. All six saved-response mechanical source/citation/qualification checks pass. Historical five-pass/one-uncertain model grading is unchanged; no fresh semantic grade is claimed.
 
 ## Earlier preparation record (historical)
 

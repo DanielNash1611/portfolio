@@ -1,13 +1,1 @@
-{
-  "model": "text-embedding-3-small",
-  "corpusHash": "2ef7c0fa968fd0b94acd380ba905f9c2fbbba590030b99de9243530e44c4ebf8",
-  "documents": 64,
-  "reusable": 62,
-  "pending": [
-    "ai-career-operating-system:private-local-profile",
-    "ai-career-operating-system:perspective"
-  ],
-  "pendingUtf8Bytes": 2592,
-  "maxEmbeddingRequests": 1,
-  "current": false
-}
+{"model":"text-embedding-3-small","corpusHash":"2ef7c0fa968fd0b94acd380ba905f9c2fbbba590030b99de9243530e44c4ebf8","documents":64,"reusable":64,"pending":[],"pendingUtf8Bytes":0,"maxEmbeddingRequests":0,"current":true}
