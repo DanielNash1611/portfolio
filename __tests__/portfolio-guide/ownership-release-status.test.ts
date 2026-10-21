@@ -112,9 +112,9 @@ test("release-status source contracts retain both authored blocks after boundary
   );
 });
 
-test("only three qualified portfolio texts invalidate their old embeddings", () => {
+test("historical fixture preserves sixty unchanged texts after approved qualification changes", () => {
   const documents = getPortfolioSearchDocuments();
-  assert.equal(documents.length, 63);
+  assert.equal(documents.length, 64);
   const old = fixture.originalPortfolioDocumentHashes as Record<string, string>;
   const changed = documents
     .filter((d) => old[d.id] !== hashText(d.text))
@@ -124,16 +124,17 @@ test("only three qualified portfolio texts invalidate their old embeddings", () 
     "ai-career-operating-system:evaluation",
     "ai-career-operating-system:ownership",
     "ai-career-operating-system:perspective",
+    "ai-career-operating-system:private-local-profile",
   ]);
   assert.equal(documents.length - changed.length, 60);
 });
 
-test("current corpus needs one synthetic three-text batch and preserves all sixty cached vectors", async (t) => {
+test("current corpus needs one synthetic two-text batch and preserves all sixty-two cached vectors", async (t) => {
   const docs = getPortfolioSearchDocuments();
   const previous: EmbeddingIndex = JSON.parse(
     readFileSync("content/search-index/portfolio-cache.json", "utf8"),
   );
-  assert.equal(previous.records.length, 60);
+  assert.equal(previous.records.length, 62);
   assert.equal(
     validIndex(previous, docs),
     false,
@@ -145,10 +146,10 @@ test("current corpus needs one synthetic three-text batch and preserves all sixt
         (r) => r.id === d.id && r.hash === hashText(d.text),
       ),
   );
-  assert.equal(missing.length, 3);
+  assert.equal(missing.length, 2);
   assert.equal(
     missing.reduce((sum, d) => sum + Buffer.byteLength(d.text), 0),
-    2939,
+    2592,
   );
   let attempts = 0;
   t.mock.method(
@@ -184,7 +185,7 @@ test("current corpus needs one synthetic three-text batch and preserves all sixt
     );
 });
 
-test("current three-text refresh stops after the first synthetic denial without retry", async (t) => {
+test("current two-text refresh stops after the first synthetic denial without retry", async (t) => {
   const previous = JSON.parse(
     readFileSync("content/search-index/portfolio-cache.json", "utf8"),
   );
