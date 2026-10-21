@@ -8,8 +8,10 @@ import { getDatabaseClient } from "../lib/db";
 
 test(
   "isolated owner registration is atomic with ingestion, idempotent and scoped; arbitrary properties stay dropped",
-  { skip: !process.env.ANALYTICS_TEST_HOST },
+  { skip: process.env.ANALYTICS_DISPOSABLE_LOCAL_TEST !== "1" },
   async () => {
+    assert.ok(["127.0.0.1", "localhost", "[::1]"].includes(new URL(process.env.DATABASE_URL!).hostname), "Disposable localhost database required; hosted/shared targets are forbidden.");
+    assert.equal(process.env.ANALYTICS_OWNER_TRAFFIC_ENABLED, "true");
     assert.equal(
       new URL(process.env.DATABASE_URL!).hostname,
       process.env.ANALYTICS_TEST_HOST,

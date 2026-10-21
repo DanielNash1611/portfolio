@@ -1,3 +1,4 @@
+import { ownerEventStatement } from "@/lib/analytics-owner-policy";
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import {
@@ -86,13 +87,8 @@ export async function POST(request: NextRequest) {
     await sql.transaction((tx) =>
       events.map((item) => {
         const event = item!;
-        return tx.query(
+        const statement = ownerEventStatement(
           `
-        WITH owner_registration AS (
-          INSERT INTO analytics_owner_identities (app,app_env,visitor_id)
-          SELECT $4,$5,$7 WHERE $12::boolean
-          ON CONFLICT DO NOTHING
-        )
         INSERT INTO analytics_events (
           id,client_event_id,occurred_at,app,app_env,database_branch_name,
           visitor_id,session_id,event_name,page_path,device_class,properties
@@ -110,9 +106,10 @@ export async function POST(request: NextRequest) {
             event.eventName,
             event.pagePath,
             event.deviceClass,
-            event.isOwner,
           ],
+          event.isOwner,
         );
+        return tx.query(statement.query, statement.params);
       }),
     );
   } catch {

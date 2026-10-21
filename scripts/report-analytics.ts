@@ -1,3 +1,4 @@
+import { ownerExclusionClause, ownerTrafficEnabled } from "@/lib/analytics-owner-policy";
 import { createDatabaseClient, getDatabaseUrl } from "@/lib/db";
 import { loadAppEnv } from "@/scripts/load-app-env";
 
@@ -21,6 +22,8 @@ async function main() {
   }
 
   const days = parseDays();
+  const includeOwner = process.argv.includes("--include-owner");
+  const ownerFilter = ownerExclusionClause(includeOwner);
   const sql = createDatabaseClient(databaseUrl);
   const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
@@ -29,6 +32,7 @@ async function main() {
       SELECT COUNT(DISTINCT visitor_id)::int AS count
       FROM analytics_events
       WHERE app = 'portfolio' AND app_env = 'production' AND occurred_at < now() AND occurred_at >= $1
+      ${ownerFilter}
     `,
     [since.toISOString()],
   )) as CountRow[];
@@ -38,6 +42,7 @@ async function main() {
       SELECT COUNT(DISTINCT session_id)::int AS count
       FROM analytics_events
       WHERE app = 'portfolio' AND app_env = 'production' AND occurred_at < now() AND occurred_at >= $1
+      ${ownerFilter}
     `,
     [since.toISOString()],
   )) as CountRow[];
@@ -54,6 +59,7 @@ async function main() {
         AND event_name = 'page_viewed'
         AND occurred_at >= $1
         AND page_path IS NOT NULL
+      ${ownerFilter}
       GROUP BY page_path
       ORDER BY views DESC, page_path ASC
       LIMIT 20
@@ -69,6 +75,7 @@ async function main() {
         COUNT(DISTINCT visitor_id)::int AS visitors
       FROM analytics_events
       WHERE app = 'portfolio' AND app_env = 'production' AND occurred_at < now() AND occurred_at >= $1
+      ${ownerFilter}
       GROUP BY event_name
       ORDER BY events DESC, event_name ASC
     `,
@@ -85,6 +92,7 @@ async function main() {
         app = 'portfolio' AND app_env = 'production' AND occurred_at < now()
         AND event_name = 'scroll_depth_reached'
         AND occurred_at >= $1
+      ${ownerFilter}
       GROUP BY threshold
       ORDER BY threshold ASC
     `,
@@ -92,6 +100,7 @@ async function main() {
   )) as ScrollRow[];
 
   console.info(`Daniel Analytics · portfolio · last ${days} days`);
+  console.info(`Owner classification: ${ownerTrafficEnabled() ? (includeOwner ? "included" : "excluded") : "disabled; original totals"}`);
   console.info(`Visitors: ${visitorRow?.count ?? 0}`);
   console.info(`Sessions: ${sessionRow?.count ?? 0}`);
 

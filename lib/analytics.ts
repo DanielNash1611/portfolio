@@ -41,7 +41,7 @@ function getVisitorId(): string {
 }
 
 export function initializeAnalyticsOwner() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || process.env.NEXT_PUBLIC_ANALYTICS_OWNER_TRAFFIC_ENABLED !== "true") return;
   let setting;
   try {
     setting = new URL(window.location.href).searchParams.get("analytics_owner");
@@ -144,7 +144,7 @@ export const track = (
     referrerHost: getReferrerHost(),
     deviceClass: getDeviceClass(),
     properties,
-    trafficType: isOwnerTraffic() ? "owner" : "visitor",
+    trafficType: process.env.NEXT_PUBLIC_ANALYTICS_OWNER_TRAFFIC_ENABLED === "true" && isOwnerTraffic() ? "owner" : "visitor",
   };
 
   if (process.env.NODE_ENV !== "production") {
