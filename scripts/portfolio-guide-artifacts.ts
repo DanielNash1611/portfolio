@@ -21,9 +21,11 @@ export function packetCase(record: PortfolioGuideEvalCaseResult): ReviewCase {
   let prompt: Record<string, unknown> = {};
   try { prompt = JSON.parse(generation?.promptInput ?? "{}"); } catch {}
   const canonical = Array.isArray(prompt.canonicalSources) ? prompt.canonicalSources : [];
+  const approvedBlocks = Array.isArray(prompt.approvedBlocks) ? prompt.approvedBlocks : [];
   const sources = [
     // Keep all source containers and attribution boundaries, excluding the answer/history.
     { id: "provided-source-context", text: JSON.stringify(sourceContext, null, 2) },
+    ...approvedBlocks.map((block: { id: string }) => ({ id: block.id, text: JSON.stringify(block, null, 2) })),
     ...canonical.map((source: { id: string; text?: string }) => ({ id: source.id, text: source.text ?? JSON.stringify(source) })),
     ...(context.retrievalContext?.sources ?? []).map((source: { id: string; text: string }) => ({ id: source.id, text: source.text })),
   ];

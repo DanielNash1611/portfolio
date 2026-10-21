@@ -1,3 +1,5 @@
+import { isCacheableGeneration } from "../../lib/portfolio-guide/evals/cache";
+import { packetCase } from "../../scripts/portfolio-guide-artifacts";
 import { runPortfolioGuideEvalSuite } from "../../lib/portfolio-guide/evals/runner";
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -107,3 +109,31 @@ test("local judge disagreement and uncertainty cannot fail a deterministic pass"
 });
 
 
+
+test("bounded selections are cacheable while canonical fallback and empty output are not", async () => {
+  const folder = await mkdtemp(join(tmpdir(), "selected-cache-"));
+  try {
+    const cache = new ArtifactCache(join(folder, "cache"), isCacheableGeneration);
+    const generation = { rawText: '{"blockIds":["approved"]}', response: { answer: "Approved statement with its qualification." }, normalizationStatus: "selected-blocks" };
+    await cache.put("selected", generation as never);
+    assert.deepEqual(await cache.get("selected"), generation);
+    for (const normalizationStatus of ["canonical-fallback", "raw-fallback", "invalid"]) {
+      assert.equal(isCacheableGeneration({ ...generation, normalizationStatus }), false);
+    }
+    assert.equal(isCacheableGeneration({ ...generation, response: { answer: " " } }), false);
+  } finally { await rm(folder, { recursive: true, force: true }); }
+});
+
+test("active review packets retain exact captured block claims, attribution and qualifications", async () => {
+  const evalCase = portfolioGuideEvalCases.find((c) => c.id === "checkout-mentions-mcp")!;
+  const block = { id: "approved", pageSlug: "checkout-redesign", claims: ["Daniel directed the product work."], qualifications: ["Sole engineering implementation is not established."], sourceRefs: ["authored ownership"] };
+  const result = await runPortfolioGuideEvalSuite({ label: "synthetic-packet", cases: [evalCase],
+    providerConfig: resolveEvalRunnerConfig({}, { NODE_ENV: "test" }),
+    runAssistant: async () => ({ promptInput: JSON.stringify({ approvedBlocks: [block] }), rawText: '{"blockIds":["approved"]}', relatedPages: [],
+      response: { answer: "Daniel directed the product work. Sole engineering implementation is not established." },
+      provider: { label: "synthetic", model: "none" }, normalizationStatus: "selected-blocks" }),
+  });
+  const source = packetCase(result.cases[0]).sources.find((item) => item.id === "approved");
+  assert.deepEqual(JSON.parse(source!.text), block);
+  assert.match(source!.text, /Sole engineering implementation is not established/);
+});
