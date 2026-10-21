@@ -29,6 +29,7 @@ export function createPortfolioGuideAssistant(
   const client = new OpenAI({
     apiKey: config.apiKey,
     maxRetries: 0,
+    fetch: (input, init) => globalThis.fetch(input, init),
     ...(config.baseURL ? { baseURL: config.baseURL } : {}),
   });
 
@@ -41,7 +42,7 @@ export function createPortfolioGuideAssistant(
       systemPrompt: config.systemPrompt,
       client,
       signal,
-      decisions: config.decisions,
+      decisions: config.decisions ?? { enabled: false, apiKey: "disabled-not-used" },
     });
 }
 
@@ -51,6 +52,7 @@ export function createPortfolioGuideJudge(
   const client = new OpenAI({
     apiKey: config.apiKey,
     maxRetries: 0,
+    fetch: (input, init) => globalThis.fetch(input, init),
     ...(config.baseURL ? { baseURL: config.baseURL } : {}),
   });
 

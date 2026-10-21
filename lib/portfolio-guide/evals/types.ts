@@ -60,6 +60,7 @@ export type PortfolioGuideDeterministicChecks = {
 };
 
 export type PortfolioGuideEvalCase = {
+  scope?: "page" | "portfolio";
   id: string;
   title: string;
   summary: string;
@@ -87,7 +88,7 @@ export type PortfolioGuideEvalRubricScores = {
 
 export type PortfolioGuideEvalJudgeResult = {
   passed: boolean;
-  verdict: "pass" | "fail";
+  verdict: "pass" | "fail" | "uncertain";
   summary: string;
   scores: PortfolioGuideEvalRubricScores;
   strengths: string[];
@@ -104,6 +105,15 @@ export type PortfolioGuideDeterministicCheckResult = {
 };
 
 export type PortfolioGuideEvalCaseResult = {
+  execution?: {
+    kind: "fresh" | "cache" | "replay";
+    durationMs: number;
+    cacheKey?: string;
+    modelCalls: number;
+    retries: number;
+    usage: unknown;
+  };
+  qualityStatus?: "not-reviewed" | "advisory-pass" | "advisory-fail" | "uncertain" | "evaluator-error";
   evalCase: PortfolioGuideEvalCase;
   request: CopilotRequest;
   generation?: PortfolioGuideGenerationResult;

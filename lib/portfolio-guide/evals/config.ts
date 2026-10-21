@@ -1,4 +1,5 @@
 import type { EvalProviderMode, EvalProviderConfig } from "@/lib/portfolio-guide/evals/provider";
+import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 
 export type EvalCliOptions = {
   providerMode?: string;
@@ -56,8 +57,8 @@ function parseTimeoutValue(
   }
 
   const parsed =
-    typeof value === "number" ? value : Number.parseInt(value, 10);
-  if (!Number.isFinite(parsed) || parsed <= 0) {
+    typeof value === "number" ? value : Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
     throw new Error(`${label} must be a positive integer.`);
   }
 
@@ -80,7 +81,7 @@ export function resolveEvalRunnerConfig(
   const providerModeRaw = getOption(
     cliOptions.providerMode,
     env.PORTFOLIO_GUIDE_EVAL_PROVIDER_MODE,
-    "local-answer-remote-judge",
+    "local-answer-no-judge",
   );
   if (!providerModeRaw || !isProviderMode(providerModeRaw)) {
     throw new Error(
@@ -104,7 +105,7 @@ export function resolveEvalRunnerConfig(
     env.PORTFOLIO_GUIDE_EVAL_ASSISTANT_MODEL,
     localAssistantByDefault
       ? env.OLLAMA_MODEL ?? env.PORTFOLIO_GUIDE_LOCAL_MODEL ?? "gpt-oss"
-      : env.OPENAI_MODEL ?? "gpt-5.4",
+      : getPortfolioGuideModel(env),
   );
 
   const assistant: EvalProviderConfig = {
