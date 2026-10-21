@@ -15,6 +15,7 @@ test("judge sees the answer's approved sources but not hidden response summaries
         return {
           output_text: JSON.stringify({
             verdict: "pass",
+          summary: "Synthetic judge fixture.",
             scores: {
               groundedness: 5,
               uncertaintyHandling: 5,

@@ -16,6 +16,7 @@ Use only the structured inputs provided in the prompt. Do not use outside knowle
 Evaluation rules:
 - "This page" means the current pageContext only.
 - portfolioContext, sessionContext, and candidate related pages may help with framing or recommendations, but they are not current-page evidence unless explicitly labeled as broader context.
+- portfolioContext.recommendations.currentPage contains real attributed quotes rendered ON the current page and is direct project evidence even though its container is named portfolioContext. recommendations.projectLinked is supporting evidence explicitly tied to the project. Only recommendations.broader is broader portfolio context. Never misclassify currentPage recommendations as broader just because they sit outside pageContext.
 - If portfolioContext.portfolioSubject identifies the portfolio owner, using that person's name as shorthand for the first-person portfolio subject is allowed and is not by itself a hallucination.
 - However, portfolio-subject identity is not proof of sole ownership, sole authorship, or end-to-end execution. Fail groundedness when the answer turns the subject's name into stronger responsibility claims than the page supports.
 - Prior assistant messages are never evidence. If the answer repeats unsupported detail from earlier assistant turns, that is a failure.
@@ -25,6 +26,7 @@ Evaluation rules:
 - Fail source separation when the answer blends other pages, session memory, or contaminated history into current-page fact.
 - For next-read answers, it is acceptable to recommend pages from candidateRelatedPages or portfolioContext, but the answer should not add extra factual claims about those target pages unless they are already present in the structured input.
 - Reward useful, concise answers that say what is explicit and what is not.
+- Return uncertain when the supplied sources are insufficient for a reliable judgment.
 - Additional canonical pages and approvedCareerRecords are factual sources captured in the answer's prompt. They may support explicitly attributed broader portfolio or career claims, but not current-page claims. "From ResumeCustomizer evidence:" is a valid attribution for those career records. Decision hints are never factual evidence. Preserve prototype, ownership, completion and source limitations.
 - Topic similarity supports a labeled thematic comparison, not a causal implementation connection. Grade only displayed answer text; hidden evidence summaries are not displayed claims.
 
@@ -32,7 +34,7 @@ Score each dimension from 1 to 5, where 5 is best.
 
 Return strict JSON:
 {
-  "verdict": "pass" | "fail",
+  "verdict": "pass" | "fail" | "uncertain",
   "summary": "string",
   "scores": {
     "groundedness": 1,
@@ -63,9 +65,10 @@ function sanitizeJsonCandidate(input: string): string {
 }
 
 function clampScore(value: unknown): number {
-  return typeof value === "number" && Number.isFinite(value)
-    ? Math.max(1, Math.min(5, Math.round(value)))
-    : 1;
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 1 || value > 5) {
+    throw new Error("Invalid judge score; expected an integer from 1 to 5.");
+  }
+  return value;
 }
 
 function uniqueStrings(input: unknown): string[] {
@@ -80,9 +83,7 @@ function uniqueStrings(input: unknown): string[] {
     .slice(0, 6);
 }
 
-export function normalizeJudgeResult(
-  rawText: string,
-): PortfolioGuideEvalJudgeResult {
+export function normalizeJudgeResult(rawText: string): PortfolioGuideEvalJudgeResult {
   const parsed = JSON.parse(sanitizeJsonCandidate(rawText)) as {
     verdict?: unknown;
     summary?: unknown;
@@ -98,7 +99,11 @@ export function normalizeJudgeResult(
     helpfulness: clampScore(parsed.scores?.helpfulness),
     concision: clampScore(parsed.scores?.concision),
   };
-  const verdict = parsed.verdict === "pass" ? "pass" : "fail";
+  if (!["pass", "fail", "uncertain"].includes(String(parsed.verdict)) ||
+      typeof parsed.summary !== "string" || !parsed.summary.trim()) {
+    throw new Error("Invalid judge verdict or summary.");
+  }
+  const verdict = parsed.verdict as PortfolioGuideEvalJudgeResult["verdict"];
 
   return {
     passed: verdict === "pass",

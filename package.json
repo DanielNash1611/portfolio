@@ -33,8 +33,10 @@
     "search:index:build": "node --import tsx scripts/index-portfolio-search.ts --build",
     "eval:search:lexical": "node --import tsx scripts/eval-search-retrieval.ts",
     "eval:portfolio-guide:generate": "tsx scripts/run-portfolio-guide-evals.ts",
-    "eval:portfolio-guide:review": "node --import tsx scripts/run-search-evaluation.ts --mode review",
-    "eval:portfolio-guide:native-search": "node --import tsx scripts/run-search-evaluation.ts"
+    "eval:portfolio-guide:review": "tsx scripts/portfolio-guide-artifacts.ts --review",
+    "eval:portfolio-guide:native-search": "node --import tsx scripts/run-search-evaluation.ts",
+    "eval:portfolio-guide:replay": "tsx scripts/portfolio-guide-artifacts.ts --replay",
+    "eval:search:review": "node --import tsx scripts/run-search-evaluation.ts --mode review"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",
