@@ -1,5 +1,5 @@
 {
-  "status": "proposal-only-unexecuted",
+  "status": "approved-refresh-completed",
   "provider": "OpenAI",
   "endpoint": "https://api.openai.com/v1/embeddings",
   "model": "text-embedding-3-small",
@@ -43,5 +43,8 @@
   ],
   "manifestSha256": "7871cb278ccfb2501ff068eeb191f3cc95fbfd3f7b846cb76b892f6996067a8b",
   "pricingSource": "https://developers.openai.com/api/docs/models/text-embedding-3-small",
-  "approvalStatus": "New bounded approval required; no request dispatched. Previous October 21 refresh allowance is consumed."
+  "approvalStatus": "Approved and executed once; see docs/search-release-refresh-receipt-20261022.json. No additional paid request is authorized.",
+  "completedReceipt": "docs/search-release-refresh-receipt-20261022.json",
+  "actualInputTokens": 488,
+  "actualUsagePricedCostUsd": "0.00000976"
 }
