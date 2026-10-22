@@ -1,3 +1,4 @@
+import { ownerEventStatement } from "@/lib/analytics-owner-policy";
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import {
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
   ) {
     return NextResponse.json({ ok: false }, { status: 403 });
   }
+  if (request.headers.get("dnt") === "1" || request.headers.get("sec-gpc") === "1") return NextResponse.json({ ok: true, stored: false });
   if (
     Number(request.headers.get("content-length") ?? 0) >
     MAX_ANALYTICS_BODY_BYTES
@@ -67,7 +69,7 @@ export async function POST(request: NextRequest) {
   if (!isDatabaseConfigured("pooled"))
     return NextResponse.json({ ok: true, stored: false });
   try {
-    await getDatabaseClient().query(
+    const statement = ownerEventStatement(
       `
       INSERT INTO analytics_events (
         id, client_event_id, occurred_at, app, app_env, database_branch_name,
@@ -89,7 +91,9 @@ export async function POST(request: NextRequest) {
         payload.deviceClass,
         JSON.stringify(payload.properties),
       ],
+      payload.isOwner,
     );
+    await getDatabaseClient().query(statement.query, statement.params);
   } catch (error) {
     console.error("[analytics:ingest] Database write failed", {
       code: (error as { code?: string })?.code,

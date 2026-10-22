@@ -22,5 +22,3 @@ export async function searchFrozenEvidence(input: EvidenceToolInput): Promise<Ev
   });
   return data ? { ok: true, data } : { ok: false, reason: "invalid_shape" };
 }
-
-

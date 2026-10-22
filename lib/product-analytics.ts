@@ -28,6 +28,7 @@ export function normalizeProductEvent(value: unknown, origin: string | null, col
   // Exact static routes only. Raw identifiers, query strings, referrers and free-form properties are dropped.
   const pagePath = typeof input.pagePath === "string" && (spec.pages as readonly string[]).includes(input.pagePath) ? input.pagePath : null;
   return {
+    isOwner: input.trafficType === "owner",
     app: input.app,
     environment: collectorEnv === "production" ? (input.validation === true ? "validation" : environment) : collectorEnv,
     clientEventId: input.clientEventId, visitorId: input.visitorId, sessionId: input.sessionId,

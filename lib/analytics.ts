@@ -1,4 +1,5 @@
 export type AnalyticsEventProps = Record<string, unknown>;
+import { isOwnerTraffic, setupOwnerTraffic } from "./analytics-owner.js";
 
 const VISITOR_KEY = "daniel_analytics_visitor_id";
 const SESSION_KEY = "daniel_analytics_session_id";
@@ -39,6 +40,26 @@ function getVisitorId(): string {
   return storedId("localStorage", VISITOR_KEY, "visitor");
 }
 
+export function initializeAnalyticsOwner() {
+  if (typeof window === "undefined" || process.env.NEXT_PUBLIC_ANALYTICS_OWNER_TRAFFIC_ENABLED !== "true") return;
+  let setting;
+  try {
+    setting = new URL(window.location.href).searchParams.get("analytics_owner");
+  } catch {
+    return;
+  }
+  if (setting === "0") {
+    try {
+      window.localStorage.removeItem(VISITOR_KEY);
+      window.sessionStorage.removeItem(SESSION_KEY);
+    } catch {
+      /* memory fallback */
+    }
+    fallbackIds.clear();
+  }
+  setupOwnerTraffic();
+}
+
 function getSessionId(): string {
   if (typeof window === "undefined") {
     return "server";
@@ -53,12 +74,14 @@ export function feedbackAnalyticsIdentity(): {
   visitorId: string;
   sessionId: string;
 } | null {
+  initializeAnalyticsOwner();
   if (
     typeof window === "undefined" ||
     navigator.doNotTrack === "1" ||
     (navigator as Navigator & { globalPrivacyControl?: boolean })
       .globalPrivacyControl === true ||
-    process.env.NEXT_PUBLIC_ANALYTICS_DISABLED === "true"
+    process.env.NEXT_PUBLIC_ANALYTICS_DISABLED === "true" ||
+    analyticsDisabled()
   )
     return null;
   return { visitorId: getVisitorId(), sessionId: getSessionId() };
@@ -101,10 +124,13 @@ export const track = (
   eventName: string,
   properties: AnalyticsEventProps = {},
 ): void => {
+  initializeAnalyticsOwner();
   if (
     typeof window === "undefined" ||
     navigator.doNotTrack === "1" ||
-    process.env.NEXT_PUBLIC_ANALYTICS_DISABLED === "true"
+    (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true ||
+    process.env.NEXT_PUBLIC_ANALYTICS_DISABLED === "true" ||
+    analyticsDisabled()
   )
     return;
 
@@ -118,6 +144,7 @@ export const track = (
     referrerHost: getReferrerHost(),
     deviceClass: getDeviceClass(),
     properties,
+    trafficType: process.env.NEXT_PUBLIC_ANALYTICS_OWNER_TRAFFIC_ENABLED === "true" && isOwnerTraffic() ? "owner" : "visitor",
   };
 
   if (process.env.NODE_ENV !== "production") {
@@ -145,3 +172,11 @@ export const track = (
     // Analytics must never break the user experience.
   });
 };
+
+function analyticsDisabled(): boolean {
+  try {
+    return window.localStorage.getItem("daniel-analytics:disabled") === "true";
+  } catch {
+    return false;
+  }
+}
