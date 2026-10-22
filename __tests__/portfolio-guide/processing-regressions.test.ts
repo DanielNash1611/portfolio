@@ -335,3 +335,14 @@ test("private and unaudited career records cannot enter the selector allowlist",
   );
   assert.doesNotMatch(JSON.stringify(blocks), /PRIVATE CLAIM|UNVERIFIED CLAIM/);
 });
+
+
+test("approved private-local profile block keeps direction, implementation and unknown outcomes together", () => {
+  const blocks = pageClaimBlocks(getPageContextBySlug("ai-career-operating-system")!);
+  for (const id of ["ownership", "retrieval", "private-local-profile"]) assert.ok(blocks.some((b) => b.id === `ai-career-operating-system:${id}`));
+  const profile = blocks.find((b) => b.id.endsWith(":private-local-profile"))!;
+  assert.match(profile.claims.join(" "), /Daniel directed requirements/);
+  assert.match(profile.claims.join(" "), /Codex assist/);
+  assert.match(profile.qualifications.join(" "), /separate from hosted release/);
+  assert.match(profile.qualifications.join(" "), /no measured time savings/);
+});

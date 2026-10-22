@@ -10,6 +10,8 @@ export async function verifyOpenAiCompatibleProvider(
 ): Promise<PortfolioGuideEvalProviderPreflight> {
   const client = new OpenAI({
     apiKey: config.apiKey,
+    maxRetries: 0,
+    timeout: 5000,
     ...(config.baseURL ? { baseURL: config.baseURL } : {}),
   });
   const models = await client.models.list();
