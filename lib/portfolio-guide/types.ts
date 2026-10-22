@@ -199,6 +199,8 @@ export type CopilotConversationMessage = {
 };
 
 export type CopilotRequest = {
+  scope?: import("@/lib/portfolio-agent/types").GuideScope;
+  entryPoint?: import("@/lib/portfolio-agent/types").GuideEntryPoint;
   message: string;
   pageContext: PageContext;
   portfolioContext: PortfolioContext;
@@ -210,6 +212,7 @@ export type CopilotRequest = {
 
 /** Lightweight evidence summary for optional UI display. */
 export type EvidenceSummary = {
+  id?: string;
   project: string;
   claim: string;
   capabilityTags: string[];
@@ -227,13 +230,39 @@ export type EvidenceMetadata = {
   pageContextUsed: boolean;
   /** True only when source-audited ResumeCustomizer evidence was woven in. */
   resumeCustomizerEvidenceUsed: boolean;
+  retrievedEvidenceIds?: string[];
+  retrievalMode?: string;
+  relevanceReviewStatus?: string;
+  retrievalDiagnostics?: {
+    scope: string;
+    support: string;
+    candidateSourceIds: string[];
+    selectedSourceIds: string[];
+    missingRequirements: string[];
+    conflicts: string[];
+    durationMs: number;
+    careerMode?: string;
+  };
   /** Why the deeper evidence layer was not used (omitted when it was used). */
   evidenceUnavailableReason?: string;
   /** Non-fatal, server-side degradation notes for observability. */
   warnings?: string[];
 };
 
+export type GuideCitation = {
+  sourceId: string;
+  title: string;
+  kind: "portfolio" | "approved_career";
+  url?: string;
+  claim: string;
+};
+
 export type CopilotResponse = {
+  /** Server-created action; never read from model-written JSON. */
+  action?: import("@/lib/portfolio-agent/types").NavigationAction;
+  sourceClaims?: Array<{ sourceId: string; claim: string }>;
+  citations?: GuideCitation[];
+  usedEvidenceIds?: string[];
   answer: string;
   suggestedFollowUps?: string[];
   relatedPages?: RelatedPage[];
@@ -248,6 +277,8 @@ export type CopilotResponse = {
 };
 
 export type GuideConversationMessage = CopilotConversationMessage & {
+  citations?: GuideCitation[];
+  usedEvidenceIds?: string[];
   id: string;
   createdAt: string;
   turnId?: string;
@@ -266,9 +297,11 @@ export type GuideSessionSignals = Pick<
   | "visitorIntent"
   | "recommendedPath"
   | "lastVisitedAt"
->;
+> & { visitorIntentCleared?: boolean };
 
 export type PortfolioGuideTurnRequest = {
+  scope?: import("@/lib/portfolio-agent/types").GuideScope;
+  entryPoint?: import("@/lib/portfolio-agent/types").GuideEntryPoint;
   clientTurnId: string;
   pageSlug: string;
   message: string;
