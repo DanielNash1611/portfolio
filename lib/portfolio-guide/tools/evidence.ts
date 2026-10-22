@@ -135,7 +135,7 @@ export const EVIDENCE_FALLBACK_MESSAGES: Record<
   string
 > = {
   not_configured:
-    "I can answer from published portfolio sources, but the source-audited ResumeCustomizer evidence layer isn't connected here.",
+    "Daniel's source-checked personal career notes weren't available for this response. This answer uses published portfolio sources.",
   no_evidence_found:
     "I can answer from published portfolio sources, but I don't currently have source-audited ResumeCustomizer evidence for that specific claim.",
   timeout:
