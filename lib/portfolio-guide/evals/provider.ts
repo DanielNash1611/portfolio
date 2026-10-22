@@ -1,3 +1,6 @@
+import { getResumeEngineConfig } from "@/lib/resume-generator/config";
+import { searchFrozenEvidence } from "./frozen-evidence";
+import { retrieveGuideSources } from "../retrieval";
 import OpenAI from "openai";
 import { generatePortfolioGuideResponse } from "@/lib/portfolio-guide/service";
 import { createOpenAiPortfolioGuideJudge } from "@/lib/portfolio-guide/evals/judge";
@@ -23,6 +26,9 @@ export type EvalProviderConfig = {
 export function createPortfolioGuideAssistant(
   config: EvalProviderConfig & {
     systemPrompt?: string;
+    retrievalEnabled?: boolean;
+    live?: boolean;
+    liveEvidence?: boolean;
     decisions?: DecisionsConfig;
   },
 ): PortfolioGuideEvalAssistant {
@@ -43,6 +49,14 @@ export function createPortfolioGuideAssistant(
       client,
       signal,
       decisions: config.decisions ?? { enabled: false, apiKey: "disabled-not-used" },
+      hybridSearch: config.retrievalEnabled ?? false,
+      semanticSearch: config.live === true,
+      ...(config.retrievalEnabled && !config.liveEvidence ? {
+        retrieveSources: (request) => retrieveGuideSources(request, { semantic: false, careerSearch: searchFrozenEvidence }),
+      } : {}),
+      ...(config.liveEvidence && getResumeEngineConfig().configured ? { evidenceConfig: {
+        apiUrl: getResumeEngineConfig().baseUrl!, apiKey: getResumeEngineConfig().token!,
+      }} : {}),
     });
 }
 

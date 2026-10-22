@@ -82,8 +82,8 @@ type SnapshotRow = {
   page_title: string | null;
   suggested_follow_ups: string[] | null;
   related_pages: GuideConversationMessage["relatedPages"] | null;
-  citations?: GuideConversationMessage["citations"];
-  used_evidence_ids?: string[];
+  citations?: GuideConversationMessage["citations"] | null;
+  used_evidence_ids?: string[] | null;
 };
 
 function rows<T>(result: unknown): T[] {

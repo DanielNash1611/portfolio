@@ -1,31 +1,33 @@
-# Owner-traffic release candidate
+# Owner-traffic analytics release
 
-This draft extracts the existing October 14 classification feature onto current main. Owner status is self-declared aggregate metadata, not authentication. Events remain stored; reports can exclude registered identities within the same app/environment/visitor key. No identity is inferred from IP, email, role, cross-app visitor history or a shared session.
+Owner status is explicit, self-declared aggregate classification, scoped by app, environment and stable visitor ID. Events remain stored. Identity is not inferred from IP, email, role, another app or a shared session. Origin/body/property validation and DNT/GPC controls remain in effect; queries, contact text and résumé/profile contents are excluded.
 
-Both `ANALYTICS_OWNER_TRAFFIC_ENABLED` (server) and `NEXT_PUBLIC_ANALYTICS_OWNER_TRAFFIC_ENABLED` (build-time client) default off. When off, ingestion uses the prior INSERT and has no dependency on migration 007. The report retains original totals. After migration and explicit server opt-in, `report:analytics` excludes registered owners; `--include-owner` gives the comparison totals. No report was run against a database during preparation.
+`ANALYTICS_OWNER_TRAFFIC_ENABLED` (server) and `NEXT_PUBLIC_ANALYTICS_OWNER_TRAFFIC_ENABLED` (build-time client) default off. The off path preserves the original event INSERT and report totals without referencing the additive registry. After activation, reports exclude matching registered owners; `--include-owner` returns comparison totals.
 
-## Approval and rollout
+## Verified migration and integration
 
-1. Review this diff, origin/body/property validation, consent and privacy tests.
-2. Test migration 007 and atomic/idempotent ingestion only in a disposable localhost database/proxy with synthetic rows. Hosted/shared hosts are rejected by the opt-in integration test. The required local infrastructure was unavailable on this Mac; no software was installed. PostgreSQL atomicity/idempotency and actual reporting comparisons remain **unexecuted release gates**.
-3. Obtain separate production migration approval, apply additive 007 to the exact approved target, and verify it before separately authorizing flags/redeployment. No production or shared migration is authorized by draft preparation.
-4. Daniel explicitly enrolls each browser using `?analytics_owner=1` after reviewing the preference. The marker is cleaned from the address; the browser may retain a one-year Secure/SameSite=Lax domain cookie and local preference. DNT/GPC/analytics-disabled still prevent event collection. `?analytics_owner=0` clears owner marking and starts a new local visitor identity; it does not delete historical registrations or events.
+On October 22, the dedicated test passed on disposable PostgreSQL 17.10 through the production `@neondatabase/serverless` HTTP client and a loopback adapter backed by the official `pg` client. It applied fixture baseline 004, applied migration 007 twice, and verified real constraint-failure rollback, duplicate ingestion, included/excluded report totals, app/environment scoping, arbitrary-property dropping and DNT. The run created four synthetic events and six synthetic registry entries; the intentionally failed event left no event or owner registration. The owned server was stopped. A prior PostgreSQL 18.4 exploratory run also passed; the PostgreSQL 17 run is the matching-major gate for production 17.11. This tests PostgreSQL SQL and driver/HTTP result behavior, not Neon-hosted network availability, throughput or latency.
 
-Only matching stable visitor IDs can classify earlier events; unrelated browsers/identities cannot be retrospectively inferred. Existing history is never deleted. External product clients must explicitly send owner metadata; this PR does not claim all external apps are enrolled automatically. Queries, contact text, résumé/profile data and arbitrary properties are not added to analytics payloads.
+Fixtures were fetched to a separate temporary workspace, with no application dependency change, system installation, lifecycle-script execution, hosted test resource or new credential. Sources: `@embedded-postgres/darwin-arm64@17.10.0-beta.17` (upstream embedded-postgres/zonky binaries) and official `pg@8.23.1`. Native tarball SHA-256: `41fa2aa47ec3ae7c8692719881c6bdb8376365dd417673b37ffe8281f28f7064`; registry integrity was checked before extraction. Only inspected package-local library symlinks were restored.
 
-Rollback turns both flags off (public flag requires rebuild); prior ingestion/reporting resumes while the additive table remains. A code rollback also leaves the table and event history intact. No paid model service is involved. The database integration remains blocked until safely isolated local infrastructure is available; mock/static tests do not establish that it ran.
+After that disposable test, the exact approved production target was verified through the existing Neon connector: Portfolio project `shiny-wave-60047815`, branch `production` / `br-quiet-cake-anhg9lwc`, database `neondb`. Only the repository's additive migration 007 and its `app_migrations` entry were applied in one transaction, with local lock/statement timeouts. Post-application schema/history checks verified the four expected columns, three CHECK constraints and primary key `(app, app_env, visitor_id)`. Migration SHA-256: `675acb38995e7d33087fed4f1f91d366e2157b97ebbaa30b78fc2ecf154d3d29`. Older unapplied migrations were not run. No production test records, owner enrollment or flag change were made by this migration step.
 
+## Reproduce the disposable test
 
-## October 22 release checkpoint
-
-The end-to-end release is approved, including additive migration 007 after disposable validation. Current main has been reconciled; the remaining hold is infrastructure and verification, not a request for another per-PR production approval. No migration or enrollment has run.
-
-The opt-in integration test now configures an explicit loopback Neon HTTP proxy and applies repository migration 004 as the empty fixture baseline, then migration 007 twice. It exercises real PostgreSQL check-failure rollback, duplicate ingestion, owner exclusion versus included totals, app/environment isolation, property dropping and DNT. It remains **unexecuted** until a disposable PostgreSQL database and compatible HTTP proxy exist locally. Static or mocked tests do not satisfy it. No system software or hosted resource was installed for this checkpoint.
-
-Run only the dedicated integration file in a scrubbed environment, using a disposable database named `owner_traffic_validation_<unique_suffix>`, a loopback `DATABASE_URL`, `ANALYTICS_TEST_HTTP_ENDPOINT=http://127.0.0.1:<proxy_port>/sql`, `ANALYTICS_TEST_HOST` matching the database host, `ANALYTICS_DISPOSABLE_LOCAL_TEST=1`, `ANALYTICS_OWNER_TRAFFIC_ENABLED=true`, `APP_ENV=validation` and `DATABASE_BRANCH_NAME=owner-traffic-validation-20261014`:
+With existing PostgreSQL 17 binaries and the official pg client in a separate fixture directory:
 
 ```sh
-node --import tsx --test __tests__/analytics-owner-integration.test.ts
+node scripts/test-owner-analytics-local.cjs --postgres-bin=/absolute/path/to/bin --pg-module=/absolute/path/to/pg
 ```
 
-Do not supply a production URL or use a shared/hosted substitute. After this gate passes, identify the exact existing production database target and run only `007_analytics_owner_identities.sql` through the migration runner. Verify its additive schema/history entry before enabling the two owner-traffic flags and rebuilding. Enrollment remains each browser owner's explicit opt-in. A production-environment flag write for the assistant was rejected by Vercel with HTTP 403 during this release; owner flag writes have not been attempted and may need the same existing project access resolved.
+The harness installs nothing, loads no application env files, creates a fresh synthetic-only cluster, binds PostgreSQL and HTTP to loopback, restricts child fetches to the fixture endpoint, and uses the real Neon driver and analytics routes. It records a receipt under a new temporary folder and stops its owned database process. No live URL or password is accepted. The HTTP adapter is for this local test only; it is not a production service.
+
+Alternatively, run only `__tests__/analytics-owner-integration.test.ts` against explicitly disposable localhost PostgreSQL and a compatible HTTP proxy with the documented test environment in the harness. Hosted/shared hosts are rejected. Mock or skipped tests do not establish this integration passed.
+
+## Activation, enrollment and rollback
+
+Both owner-traffic flags must be set to exact `true` in Production, and the public flag needs a rebuild. The assistant's Production flag write was rejected with Vercel API HTTP 403; that operation remains stopped. Owner flag writes have not been attempted through an alternate route. Code deployment, flag activation and production behavior must be reported separately.
+
+Each browser owner explicitly chooses `?analytics_owner=1`. The marker is removed from the address; the browser may keep a one-year Secure/SameSite=Lax domain cookie and local preference. DNT/GPC and analytics-disabled preferences still prevent event collection. `?analytics_owner=0` clears owner marking and starts a new local visitor identity; it does not delete historical registrations or events. No real browser is automatically enrolled, and external product clients must send their own explicit owner metadata.
+
+Rollback sets both flags false and rebuilds the public flag. Previous ingestion/reporting resumes while the additive table and event history remain. Code rollback likewise preserves history. No paid model service is involved.

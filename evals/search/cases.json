@@ -1,0 +1,56 @@
+[
+  {
+    "id": "p-ownership",
+    "split": "regression",
+    "query": "What did Daniel own versus AI assisted implementation across the portfolio?",
+    "expectedIds": ["ai-platform-mcp:ownership"]
+  },
+  {
+    "id": "p-validation",
+    "split": "regression",
+    "query": "What prototype validation happened before broader rollout?",
+    "expectedIds": ["ai-platform-mcp:validation"],
+    "projectId": "ai-platform-mcp"
+  },
+  {
+    "id": "p-impact",
+    "split": "regression",
+    "query": "Checkout conversion lift annualized revenue impact",
+    "expectedIds": ["checkout-redesign:evidence-0"],
+    "projectId": "checkout-redesign"
+  },
+  {
+    "id": "p-media",
+    "split": "regression",
+    "query": "Separated recordings checksum verified asset budgets static 147.65 MiB 81.58 MiB",
+    "expectedIds": ["ai-career-operating-system:media"]
+  },
+  {
+    "id": "p-immunology",
+    "split": "regression",
+    "query": "Literature scouting evidence clustering citation product framing",
+    "expectedIds": ["immunology-scout:evidence-0"],
+    "projectId": "immunology-scout"
+  },
+  {
+    "id": "p-oms",
+    "split": "regression",
+    "query": "Order lookup cancellation human approval simulated data",
+    "expectedIds": ["oms-chatgpt-app:evidence-0"],
+    "projectId": "oms-chatgpt-app"
+  },
+  {
+    "id": "p-strategy",
+    "split": "regression",
+    "query": "Workflow first shared language rollout",
+    "expectedIds": ["ai-strategy:workflow"],
+    "projectId": "ai-strategy"
+  },
+  {
+    "id": "p-evaluation",
+    "split": "regression",
+    "query": "Original 5/6 6/6 targeted 2/2 replay evaluation limits",
+    "expectedIds": ["ai-career-operating-system:evaluation"],
+    "projectId": "ai-career-operating-system"
+  }
+]

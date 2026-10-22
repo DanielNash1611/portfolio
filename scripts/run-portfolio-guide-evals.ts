@@ -263,7 +263,7 @@ async function main() {
     throw new Error("OPENAI_API_KEY is required when --decisions is enabled.");
   }
 
-  if (values.retrieval || values["live-evidence"]) throw new Error("Search eval integration is staged in PR #13; this tooling branch preserves main behavior.");
+  if (values["live-evidence"] && !values.retrieval) throw new Error("--live-evidence requires --retrieval.");
 
   if (providerConfig.assistant.label === "local-openai-compatible") {
     const assistantPreflight = await verifyOpenAiCompatibleProvider(
@@ -299,7 +299,7 @@ async function main() {
     ? await readFile(path.resolve(promptFile), "utf8")
     : PORTFOLIO_GUIDE_SYSTEM_PROMPT;
   const cases = selection.cases;
-  const dependencies = fingerprintFiles(process.cwd(), ["lib/portfolio-guide", "content",
+  const dependencies = fingerprintFiles(process.cwd(), ["lib/portfolio-guide", "lib/search", "content", "evals/integration",
     "lib/portfolio-guide/evals/provider.ts", "package-lock.json"]);
   let modelIdentity: string | undefined;
   // Mutable Ollama tags are cacheable only when their weight digest is discoverable.
@@ -313,6 +313,7 @@ async function main() {
   const cacheEnabled = Boolean(modelIdentity) && !values.live && !values.fresh;
   const cache = new ArtifactCache<PortfolioGuideGenerationResult>(path.resolve(values["cache-dir"] ?? "artifacts/eval-cache/generations"), isCacheableGeneration);
   const assistant = createPortfolioGuideAssistant({ ...providerConfig.assistant, systemPrompt,
+    retrievalEnabled: values.retrieval ?? false, live: values.live ?? false, liveEvidence: values["live-evidence"] ?? false,
     ...(values.decisions ? { decisions: { enabled: true, apiKey: process.env.OPENAI_API_KEY! } } : {}) });
   let active: { started: number; kind: "fresh" | "cache"; key: string; modelCalls: number } | undefined;
   const originalFetch = globalThis.fetch;

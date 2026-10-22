@@ -1,0 +1,33 @@
+{
+  "state": "index-refreshed-local-validation-passed-hosted-pending",
+  "reason": "The newly approved single batch completed once. Current runtime index is complete; production activation is not verified or authorized.",
+  "model": "text-embedding-3-small",
+  "corpusHash": "2ef7c0fa968fd0b94acd380ba905f9c2fbbba590030b99de9243530e44c4ebf8",
+  "documents": 64,
+  "reusedUnchangedVectors": 62,
+  "newVectors": 2,
+  "pendingIds": [],
+  "pendingUtf8Bytes": 0,
+  "maximumAdditionalEmbeddingRequests": 0,
+  "manifestSha256": "268187a1b61cdb365785bb67542263e41ed8b67705bef3c788397e8adb4f1c06",
+  "requestSha256": "74af6ef537e6fcfaa93dfdb32ddd531a1ef81ae0eaef90ae60a3066d0566e77f",
+  "sharedBatch": {
+    "httpAttempts": 1,
+    "inputTokens": 776,
+    "usageEstimatedCostUsd": "0.00001552",
+    "approvedCapUsd": "0.00010000",
+    "accounting": "One cross-repository batch; this total must not be counted twice. Unused reservation authorizes no further calls."
+  },
+  "remainingGates": [
+    "Current-head hosted CI/preview verification",
+    "Authenticated deployed backend contract and actual runtime flags",
+    "Separate production release authorization"
+  ],
+  "localVerification": {
+    "requireSemantic": "passed",
+    "typecheck": "passed",
+    "unitTestsPassed": 457,
+    "productionBuild": "passed",
+    "newProviderCallsAfterRefresh": 0
+  }
+}

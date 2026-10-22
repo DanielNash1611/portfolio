@@ -60,6 +60,11 @@ export type EvidenceSourceAudit = {
 
 export type EvidenceItem = {
   id: string;
+  projectId?: string;
+  sources?: Array<{ title: string; kind: string; url?: string }>;
+  claimBoundaries?: string[];
+  sourceRefCount?: number;
+  strength?: string;
   claim: string;
   supportingDetails: string[];
   project: string;
@@ -69,10 +74,17 @@ export type EvidenceItem = {
   sourceAudit: EvidenceSourceAudit;
   visibility: string;
   recommendedUse: string;
-  claimBoundaries?: string[];
 };
 
 export type EvidenceSearchResponse = {
+  contractVersion?: string;
+  retrievalMeta?: {
+    mode: string;
+    corpusSize: number;
+    candidateIds: string[];
+    coverage: number;
+    unsupportedQualification?: string;
+  };
   query: string;
   answerability: "high" | "medium" | "low" | "none";
   confidence: "high" | "medium" | "low";
@@ -87,6 +99,8 @@ export type EvidenceToolInput = {
   currentPortfolioPage?: string;
   visitorIntent?: string;
   maxResults?: number;
+  questionScope?: "page" | "project" | "broad";
+  targetProjectId?: string;
 };
 
 export type EvidenceConfig = {
@@ -121,21 +135,21 @@ export const EVIDENCE_FALLBACK_MESSAGES: Record<
   string
 > = {
   not_configured:
-    "I can answer from the portfolio page, but the source-audited ResumeCustomizer evidence layer isn't connected here.",
+    "I can answer from published portfolio sources, but the source-audited ResumeCustomizer evidence layer isn't connected here.",
   no_evidence_found:
-    "I can answer from the portfolio page, but I don't currently have source-audited ResumeCustomizer evidence for that specific claim.",
+    "I can answer from published portfolio sources, but I don't currently have source-audited ResumeCustomizer evidence for that specific claim.",
   timeout:
-    "I couldn't reach the deeper evidence layer in time, so I'm limiting this answer to the portfolio page content.",
+    "I couldn't reach the deeper evidence layer in time, so I'm limiting this answer to published portfolio sources.",
   network_error:
-    "I couldn't reach the deeper evidence layer, so I'm limiting this answer to the portfolio page content.",
+    "I couldn't reach the deeper evidence layer, so I'm limiting this answer to published portfolio sources.",
   http_error:
-    "I couldn't reach the deeper evidence layer, so I'm limiting this answer to the portfolio page content.",
+    "I couldn't reach the deeper evidence layer, so I'm limiting this answer to published portfolio sources.",
   invalid_json:
-    "The deeper evidence layer returned a response I couldn't read, so I'm limiting this answer to the portfolio page content.",
+    "The deeper evidence layer returned a response I couldn't read, so I'm limiting this answer to published portfolio sources.",
   invalid_shape:
-    "The deeper evidence layer returned a response I couldn't read, so I'm limiting this answer to the portfolio page content.",
+    "The deeper evidence layer returned a response I couldn't read, so I'm limiting this answer to published portfolio sources.",
   evidence_layer_error:
-    "I couldn't reach the deeper evidence layer, so I'm limiting this answer to the portfolio page content.",
+    "I couldn't reach the deeper evidence layer, so I'm limiting this answer to published portfolio sources.",
 };
 
 /** Default timeout for the server-to-server evidence call. */
@@ -165,6 +179,20 @@ function asStringArray(value: unknown): string[] {
   return Array.isArray(value)
     ? value.filter((item): item is string => typeof item === "string")
     : [];
+}
+
+function parseRetrievalMeta(
+  raw: Record<string, unknown>,
+): NonNullable<EvidenceSearchResponse["retrievalMeta"]> {
+  return {
+    mode: typeof raw.mode === "string" ? raw.mode : "unknown",
+    corpusSize: typeof raw.corpusSize === "number" ? raw.corpusSize : 0,
+    candidateIds: asStringArray(raw.candidateIds),
+    coverage: typeof raw.coverage === "number" ? raw.coverage : 0,
+    ...(typeof raw.unsupportedQualification === "string"
+      ? { unsupportedQualification: raw.unsupportedQualification }
+      : {}),
+  };
 }
 
 function parseEvidenceItem(raw: unknown): EvidenceItem | null {
@@ -221,10 +249,38 @@ function parseEvidenceItem(raw: unknown): EvidenceItem | null {
           ? sourceAuditRaw.lastReviewedAt
           : null,
     },
+    ...(typeof item.projectId === "string"
+      ? { projectId: item.projectId }
+      : {}),
+    ...(Array.isArray(item.claimBoundaries)
+      ? { claimBoundaries: asStringArray(item.claimBoundaries) }
+      : {}),
+    ...(typeof item.sourceRefCount === "number"
+      ? { sourceRefCount: item.sourceRefCount }
+      : {}),
+    ...(typeof item.strength === "string" ? { strength: item.strength } : {}),
+    ...(Array.isArray(item.sources)
+      ? {
+          sources: item.sources
+            .filter(
+              (s): s is { title: string; kind: string; url?: string } =>
+                Boolean(s) &&
+                typeof s === "object" &&
+                typeof s.title === "string",
+            )
+            .map((s) => ({
+              title: s.title,
+              kind: s.kind,
+              ...(typeof s.url === "string" &&
+              /^https:\/\/www\.danielnash\.co\//.test(s.url)
+                ? { url: s.url }
+                : {}),
+            })),
+        }
+      : {}),
     visibility: typeof item.visibility === "string" ? item.visibility : "",
     recommendedUse:
       typeof item.recommendedUse === "string" ? item.recommendedUse : "",
-    claimBoundaries: asStringArray(item.claimBoundaries),
   };
 }
 
@@ -242,32 +298,60 @@ export function parseEvidenceSearchResponse(
   }
 
   const payload = raw as Record<string, unknown>;
+  if (
+    payload.contractVersion !== undefined &&
+    payload.contractVersion !== "evidence.v1"
+  )
+    return null;
   if (!Array.isArray(payload.evidence)) {
     return null;
   }
 
   const evidence = payload.evidence
     .map(parseEvidenceItem)
-    .filter((item): item is EvidenceItem => item !== null);
+    .filter(
+      (item): item is EvidenceItem =>
+        item !== null &&
+        item.id.trim().length > 0 &&
+        item.claim.trim().length > 0 &&
+        item.visibility === "public_safe" &&
+        item.sourceAudit.status === "verified",
+    );
 
   const answerability = payload.answerability;
   const confidence = payload.confidence;
 
   return {
+    ...(typeof payload.contractVersion === "string"
+      ? { contractVersion: payload.contractVersion }
+      : {}),
+    ...(payload.retrievalMeta && typeof payload.retrievalMeta === "object"
+      ? {
+          retrievalMeta: parseRetrievalMeta(
+            payload.retrievalMeta as Record<string, unknown>,
+          ),
+        }
+      : {}),
     query: typeof payload.query === "string" ? payload.query : "",
     answerability:
-      answerability === "high" ||
-      answerability === "medium" ||
-      answerability === "low" ||
-      answerability === "none"
-        ? answerability
-        : evidence.length > 0
-          ? "medium"
-          : "none",
+      evidence.length === 0
+        ? "none"
+        : answerability === "high" ||
+            answerability === "medium" ||
+            answerability === "low" ||
+            answerability === "none"
+          ? answerability
+          : evidence.length > 0
+            ? "medium"
+            : "none",
     confidence:
-      confidence === "high" || confidence === "medium" || confidence === "low"
-        ? confidence
-        : "low",
+      evidence.length === 0
+        ? "low"
+        : confidence === "high" ||
+            confidence === "medium" ||
+            confidence === "low"
+          ? confidence
+          : "low",
     evidence,
     ...(Array.isArray(payload.relatedCapabilities)
       ? { relatedCapabilities: asStringArray(payload.relatedCapabilities) }
@@ -346,6 +430,10 @@ export async function callEvidenceTool(
       | "technical_leader",
     context: {
       source: "portfolio_chatbot",
+      ...(input.questionScope ? { questionScope: input.questionScope } : {}),
+      ...(input.targetProjectId
+        ? { targetProjectId: input.targetProjectId }
+        : {}),
       ...(input.currentPortfolioPage
         ? { currentPortfolioPage: input.currentPortfolioPage }
         : {}),

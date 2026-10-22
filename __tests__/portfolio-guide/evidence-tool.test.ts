@@ -12,7 +12,9 @@ import { handlePortfolioGuideRequest } from "@/lib/portfolio-guide/http";
 import type { CopilotRequest } from "@/lib/portfolio-guide/types";
 import type { EvidenceSearchResponse } from "@/lib/portfolio-guide/tools/evidence";
 
-function createRequest(message = "Does Daniel have experience with agentic AI?"): CopilotRequest {
+function createRequest(
+  message = "Does Daniel have experience with agentic AI?",
+): CopilotRequest {
   return {
     message,
     pageContext: {
@@ -43,19 +45,31 @@ const SAMPLE_EVIDENCE_RESPONSE: EvidenceSearchResponse = {
   evidence: [
     {
       id: "ai-product-leadership-prototype-scale",
-      claim: "Daniel has principal pm-level experience at Guitar Center AI product leadership.",
+      claim:
+        "Daniel has principal pm-level experience at Guitar Center AI product leadership.",
       supportingDetails: ["Capabilities: applied ai, agentic ai."],
       project: "Guitar Center AI product leadership",
       capabilityTags: ["applied_ai", "agentic_ai"],
       metricTags: ["AI products"],
-      metrics: [{ label: "177 weekly users", value: "177", context: "Contact Center pilot" }],
-      sourceAudit: { status: "verified", sourceType: "internal_record", lastReviewedAt: "2026-06-11" },
+      metrics: [
+        {
+          label: "177 weekly users",
+          value: "177",
+          context: "Contact Center pilot",
+        },
+      ],
+      sourceAudit: {
+        status: "verified",
+        sourceType: "internal_record",
+        lastReviewedAt: "2026-06-11",
+      },
       visibility: "public_safe",
       recommendedUse: "Use as evidence for applied ai, agentic ai.",
     },
   ],
   relatedCapabilities: ["applied ai", "agentic ai"],
-  suggestedPortfolioAngle: "Emphasize grounded AI execution with concrete proof points.",
+  suggestedPortfolioAngle:
+    "Emphasize grounded AI execution with concrete proof points.",
 };
 
 const EMPTY_EVIDENCE_RESPONSE: EvidenceSearchResponse = {
@@ -63,7 +77,8 @@ const EMPTY_EVIDENCE_RESPONSE: EvidenceSearchResponse = {
   answerability: "none",
   confidence: "low",
   evidence: [],
-  safeFallback: "I do not have enough source-audited public evidence to answer that confidently.",
+  safeFallback:
+    "I do not have enough source-audited public evidence to answer that confidently.",
 };
 
 // ── callEvidenceTool ──────────────────────────────────────────────────────────
@@ -145,7 +160,9 @@ test("callEvidenceTool reports network_error on fetch failure", async () => {
 test("callEvidenceTool reports http_error on non-200 response", async () => {
   const originalFetch = global.fetch;
   global.fetch = async () => {
-    return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+    });
   };
 
   try {
@@ -223,7 +240,7 @@ test("callEvidenceTool returns normalized data on a valid response", async () =>
   }
 });
 
-test("callEvidenceTool defensively normalizes a partial evidence item", async () => {
+test("callEvidenceTool excludes partial items without public and audited status", async () => {
   const originalFetch = global.fetch;
   // 200 with the expected `evidence` array but items missing metrics/tags.
   global.fetch = async () =>
@@ -241,12 +258,8 @@ test("callEvidenceTool defensively normalizes a partial evidence item", async ()
       { apiUrl: "http://localhost:3001", apiKey: "key" },
     );
     assert.equal(result.ok, true);
-    const item = result.ok === true ? result.data.evidence[0] : undefined;
-    // Missing fields are filled with safe defaults so downstream `.length`
-    // reads can never throw.
-    assert.deepEqual(item?.metrics, []);
-    assert.deepEqual(item?.capabilityTags, []);
-    assert.equal(item?.sourceAudit.status, "unverified");
+    assert.equal(result.ok && result.data.evidence.length, 0);
+    assert.equal(result.ok && result.data.answerability, "none");
   } finally {
     global.fetch = originalFetch;
   }
@@ -274,8 +287,16 @@ test("callEvidenceTool applies conservative filters by default", async () => {
   }
 
   const filters = capturedBody.filters as Record<string, unknown>;
-  assert.equal(filters.publicSafeOnly, true, "Should default to publicSafeOnly: true");
-  assert.equal(filters.sourceAuditedOnly, true, "Should default to sourceAuditedOnly: true");
+  assert.equal(
+    filters.publicSafeOnly,
+    true,
+    "Should default to publicSafeOnly: true",
+  );
+  assert.equal(
+    filters.sourceAuditedOnly,
+    true,
+    "Should default to sourceAuditedOnly: true",
+  );
 });
 
 // ── API key never reaches client ──────────────────────────────────────────────
@@ -336,7 +357,10 @@ test("handler degrades gracefully when evidence config is absent", async () => {
   });
 
   assert.equal(result.status, 200);
-  assert.equal((result.body as { answer: string }).answer, "Portfolio content answer");
+  assert.equal(
+    (result.body as { answer: string }).answer,
+    "Portfolio content answer",
+  );
 });
 
 test("handler passes evidence config after opt-in when both vars are set", async () => {
@@ -445,6 +469,12 @@ test("evidenceUsed in generateResponse result is passed through to response body
     answer: string;
     evidenceUsed?: Array<{ project: string }>;
   };
-  assert.ok(Array.isArray(body.evidenceUsed), "evidenceUsed should be in response body");
-  assert.equal(body.evidenceUsed?.[0]?.project, "Guitar Center AI product leadership");
+  assert.ok(
+    Array.isArray(body.evidenceUsed),
+    "evidenceUsed should be in response body",
+  );
+  assert.equal(
+    body.evidenceUsed?.[0]?.project,
+    "Guitar Center AI product leadership",
+  );
 });

@@ -4,6 +4,10 @@ import { fileURLToPath } from "node:url";
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: fileURLToPath(new URL(".", import.meta.url)),
+  outputFileTracingIncludes: {
+    "/api/portfolio-copilot": ["./content/search-index/portfolio.json"],
+    "/api/portfolio-copilot/*": ["./content/search-index/portfolio.json"],
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

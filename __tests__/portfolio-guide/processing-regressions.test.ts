@@ -166,16 +166,20 @@ test("ownership selection cannot omit direction, AI assistance, no sole coding, 
     );
     assert.match(result.response.answer, /AI development agents/);
     assert.match(result.response.answer, /no claim of sole hand-coding/);
-    assert.match(result.response.answer, /support authenticated resume jobs/);
+    assert.match(result.response.answer, /includes authenticated resume jobs/);
     assert.match(
       result.response.answer,
-      /Decisions routing.*remain local or unshipped/,
+      /Deployed source includes.*bounded Decisions routing/,
     );
     assert.match(
       result.response.answer,
-      /final combined-release validation is pending/,
+      /career-evidence backend has a verified synthetic hybrid result/,
     );
-    assert.match(result.response.answer, /remote retrieval is disabled/);
+    assert.match(
+      result.response.answer,
+      /no end-to-end production answer-quality result is established/,
+    );
+    assert.match(result.response.answer, /Portfolio retrieval remains opt-in/);
   }
 });
 
@@ -304,7 +308,11 @@ test("the exact three local failures and original paid ownership raw response us
       assert.match(output.response.answer, /no claim of sole hand-coding/);
       assert.match(
         output.response.answer,
-        /Decisions routing.*remain local or unshipped/,
+        /Deployed source includes.*bounded Decisions routing/,
+      );
+      assert.match(
+        output.response.answer,
+        /career-evidence backend has a verified synthetic hybrid result/,
       );
     }
   }

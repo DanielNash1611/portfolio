@@ -1,0 +1,484 @@
+{
+  "version": 1,
+  "kind": "public-historical-test-fixture-only",
+  "portfolioCorpusHash": "1b9efb69391740d0b314fd5f3d58984af6bdc4b8bb2ab21456b97b8b96d92e8d",
+  "careerCorpusHash": "4adfeda571d38965d06be767a1549c6d7f426e8f5bf17a8e52d1b53ccababa94",
+  "archiveSha256": "90bb16b07db44d210741d9f1b1fd4e5b62d2b5d962bb626ab24467c01dc04c34",
+  "uncompressedSha256": "7c07c64397106a964d6e9f450455ec6316b800f8ba454ae0141913f4b03874fc",
+  "uncompressedBytes": 4573554,
+  "compressedBytes": 951226,
+  "files": [
+    {
+      "path": "career/AGENTS.md",
+      "sha256": "515724935ac625cf2f3e57b212fa530ab878b04abcde04837c756df0f284c50a",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/data/public-career-evidence.json",
+      "sha256": "babb32a632ff8df89e4214decfd40e88aef1ce3bd1a81cfee35273a307dd6a8c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/data/resume-bullet-bank.json",
+      "sha256": "a42724555a1ebdfa4fd0d349dd867ff53e21e313e80bd9f084b11b9899324170",
+      "origin": "Public-only derivation of ResumeCustomizer f19cdbb; only 27 catalog-backed bullet IDs retained",
+      "originalSourceSha256": "c9a4afbb622d6b75235d00105d55e2987ca111d0e31336e123c87b5edf33c265"
+    },
+    {
+      "path": "career/data/search-index/career-cache.json",
+      "sha256": "aa06614a9d946808afd04e85e5c0ba560fb800169418ed58236dfecda6a16426",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/evals/search/cases.json",
+      "sha256": "a18ef90ccac37658b02ff9bd6a34ef7eea43114393eccd20b798bcbdb7ef3639",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/evals/search/held-case-ids.json",
+      "sha256": "be051d6f2158aceb05e748d7d714a3ba59370a982b1a47a275afecad460b2395",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/lib/evidence/catalog.ts",
+      "sha256": "e1720878a7d7c6b6dc0830ae91cfc28eae7b2e388eac038655dc5fabb1ca00ee",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/lib/evidence/config.ts",
+      "sha256": "c4260114c2f5dfd76d63248aa339f399e4cd88e4a6d2590a7fa71bd9afd43a79",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/lib/evidence/search.ts",
+      "sha256": "a0a91bdcaf462ad511a5601c43fc27d6ba8eae8d7eb3eba30865f7c3a8fa7c29",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/lib/evidence/transform.ts",
+      "sha256": "c0243c7b823fa947fb7d29ada905770c15e10f2e5fdfd40cbc1adb638f14a452",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/lib/evidence/types.ts",
+      "sha256": "132985fa7a7d70e68aace656f326b9884a03cd69ac2225214df5c31366a7b522",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/lib/search/hybrid.ts",
+      "sha256": "25c2efa3a6c21041e683792039375acd18779491c75d6f583c23b30c78407cd5",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/lib/search/index-file.ts",
+      "sha256": "665fd20d944df1d67ab0508064ff17364fd1af492681570d79ca4464b267e80c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/package-lock.json",
+      "sha256": "68a5efc3339d461d2bbe8c9ce9c0d23d07cf4f58c843f09c407eef0d8f9cb528",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/package.json",
+      "sha256": "09207480c62da864939e7d47b2c95bb0d4281e252cf31c5f287c64644d0d63e3",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/agent-context.ts",
+      "sha256": "5cc74375b27dbd187d5f49728b86fb49ce68bd19fc16c561e929a953504b67fe",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/agent-review-compare.ts",
+      "sha256": "df3c1caed0953d6cb114c6185c7b0113f5b0ad5cb0674d1c3b5bd0ed659888c5",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/agent-reviews.ts",
+      "sha256": "1f7b6279438153238f0f49f3b806fae34464e383006f30990ab43e4e8601d6b7",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/application-governance.ts",
+      "sha256": "d2be062d69863b9773aeba9d43abe469d7c11d8947b262bbdf5e22787fc9b341",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/ats-providers.ts",
+      "sha256": "6993bc325994d9d59226cc15a883f55928c775df42622533df50c086a1506a80",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/ats-url.ts",
+      "sha256": "ee70f068d2ad2600856fb71c49c400b780b2c8e55d071b16ddda914d52b9699a",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/ats.ts",
+      "sha256": "4d23e6b1211e048ae438ac49dd60a97ee4ca05f932f83c6a8d63e6a9fd8d26bf",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/bridge-analysis.ts",
+      "sha256": "e2fb5101033fcd061d95420aa150379b3bd6d5b428774000d31758d79d8e632d",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/bridge-map.ts",
+      "sha256": "6786e876dc98400ecb40d4422fe85eeefa76559f8c679e38ad1306fb8fcccc73",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/bridge-strategist-safety.ts",
+      "sha256": "5ecae85057f628d6db14f9398cc77fb4871d1d4cec50c1f934fee2300f3921cb",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/bullet-candidates.ts",
+      "sha256": "cd3bac73cd95f728159b99e8fccef5f110207364644b0dcec6ca5e1a95056ed6",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/career-data.ts",
+      "sha256": "fc977b07e8231e6d9a25d0310c50f6a559ebfeb8a9a0bfe295f84532ee2df0c5",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/claim-calibration.ts",
+      "sha256": "c0e564e2e1d1a4692c54815d3990cb2580ecc33beaf583c55415c68a187db903",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/company-research.ts",
+      "sha256": "148494bb58740b90560c59a7af31160d766fff6bb27de145dd2f7bc2143b4add",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/config.ts",
+      "sha256": "77c794e5cdec143f6ead48133dead4fbe6fc32b9b8d6c60a7c569549723c8ed2",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/connections.ts",
+      "sha256": "7ec171e01ecffec2a9fc68cc97e636ce5520d344db0fe9a647d195d97eed4ecd",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/env.ts",
+      "sha256": "f7a4980f297948c8a9e889a91e77d17b95e1abe85aa0500045dcf5e5c835b53e",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/evidence-intake.ts",
+      "sha256": "eb5ff763e2bfc079b0a72984fd57ff4972a118739acbb43e5fb5b61418dba017",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/external-claim-intake.ts",
+      "sha256": "c14b2d6efb1e78f90e896de0a843f37660f743d3c802c41fb54e192e76c6ff58",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/files.ts",
+      "sha256": "daf84be398d40c8d2cb666f2ac83ac94d378a57747fc1a0c3c3747f03969e529",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/final-judge.ts",
+      "sha256": "13f32e06ed6b91ee6ba7fb7588a0ce456e44a3c6256f039069f819062b612f66",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/google-docs-editing.ts",
+      "sha256": "7460a36f256b6d5ad0836d06c774c22fe5bf2aaef482ebe0fa25694afe275c25",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/google-drive.ts",
+      "sha256": "7b7f0ce5978f969ccbb5b2ea8e42efec3a80a3bac7b97351622e8bd4cd183abd",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/headline-strategist.ts",
+      "sha256": "e9ce8d75d60dee575344a41d4a7d37369909752a6764337c029c41a3d7df519c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/job-types.ts",
+      "sha256": "a039f7a96b456b61d4c70c51e991f5b32c0178e6951af7dd0cc6ed9bb3900f1a",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/json-repair.ts",
+      "sha256": "368d96bba7293ec87f01693e371e4979cfab716cfe2b36bfc3baa88668e8f19b",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/keyword-coverage.ts",
+      "sha256": "3682853f15dd3b326a418dcd5f8bcb59acf043701fd714ce4cb0ad611913de67",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/local-model-profiles.ts",
+      "sha256": "6cf1ced63116193de3cae15cb86d7986493a258854244da0bd91fb9d1e6fb8ef",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/long-fetch.ts",
+      "sha256": "dee0f8d57a45e00fb16304851a914aaba172cb6338000d9fbe278ee66619301b",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/outreach-scoring.ts",
+      "sha256": "a6c8be5e1ff1b2e89865c98c3e984c81be6093de82f12624146cdf7464a2d800",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/outreach-strategy.ts",
+      "sha256": "21d55e9f99464af0ab3825863bba2909e83ad9c9396da14d706ee1cfe259ab74",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/outreach-types.ts",
+      "sha256": "2dd14e65777cf3f43a36d7c7e77708a843f0ccdfb19b70792bf95ffd31b43a94",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/portfolio.ts",
+      "sha256": "67fc8ad4d260359fb43ce003f4364900701a435a6ff2184e9f5ca88c5d174789",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/progress.ts",
+      "sha256": "66080391b12218759a4ba535f123c63596b7eba58b7c0b48543d09331cffb027",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/quality-gate.ts",
+      "sha256": "e1092905f21304104ab14bc3fb19064dcffd253c5081e646f8c1b0e6a2ba46bc",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/canonical.ts",
+      "sha256": "d85e085d7d27ba98e2ece191ab3aac6d8fc3dba894ea27b0fcc66b46ba172174",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/load-candidate.ts",
+      "sha256": "30486fd61fc5feef8d5e94ecd6c927e9af9ab34f336ad38e07e5a5171a809c5c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/modules/index.ts",
+      "sha256": "7446b9d4341ab8198b004105aa10517b50026eed3413ad715f8dac1f723b3682",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/normalize.ts",
+      "sha256": "337b1f41b90df8b512e357382843d40ed81f360f3fadf739aa855233870e226c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/page-balance.ts",
+      "sha256": "cf0e487f9cdce3e1be8a066440c1497a2a6cb87da3e4404488949cf2459e294c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/page-fit.ts",
+      "sha256": "88fa843ae7d76f79d761496eb797353b1a514723e566ff3a0df734101b387c81",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/pdf.ts",
+      "sha256": "c57f2e160e57e5ea05db9eab849c73a8151fc506a60af639fcc01872fe905087",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/schema.ts",
+      "sha256": "4fd0af799639e17765c7befaea7eeeebcecf7ed9f4a4aa399f99c359c81ea406",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/section-shape.ts",
+      "sha256": "f59ca9ebb4106266330e86d5f4418b8bcd3dcf0a10e507d47af0bd690ed9eebb",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/styles.ts",
+      "sha256": "3196f70130b8f79c4307a6330da0752390c0aa2f69acaf1c831059caf7ae49b2",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/template.ts",
+      "sha256": "ceba33e5f2fd074622cc4fb22a65835e52297a386751cb1c4f8863c5d907879b",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/resume-renderer/validators.ts",
+      "sha256": "044a758bb17fc15b54aac93e06026c016f9d3874928ee6fe255e986514199bc0",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/review-context.ts",
+      "sha256": "14d48e9bee0701d4adbdce7a9af90cca733bffeea709198ea7369cfdb103d69e",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/review-fallback-policy.ts",
+      "sha256": "dcc3059fa6a39b612a0d9d0c552ce445da32cc517de152456a9358b538be032b",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/review-issue-validator.ts",
+      "sha256": "fb23a3bc810a9a1d39eee2ef315b943babc55323f356d780ff50fd3f9164511b",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/review-loop.ts",
+      "sha256": "27a0a02339793a31709541c8956a934c5f34ca57d1da7ddee1ad1da3c82af378",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/review-scoring.ts",
+      "sha256": "3360cfc868daf577245e885499007afe0d4bcc8e9bb487a379c6acf00f55ba0a",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/role-relevance.ts",
+      "sha256": "004ff22ba83d1951b704bc685059a803731c4bc5bee8d68dfb9fa503e9632c3c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/role-scoring.ts",
+      "sha256": "77731a92eaea469fe8ff0b3d9a4a4d69a0f554f61906cb5bc389798bc3244e85",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/run-versioning.ts",
+      "sha256": "cc88881087a9b759c3e072deacd7f2c03d5d642d0b1716433c06e88618e8c9b9",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/skills-bank.ts",
+      "sha256": "b5bed62c7ae9c0efb83dc3d4856319eb3102925696702e02f6cb508aeb3acd95",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/store.ts",
+      "sha256": "7603134d401dbb15d24b548acbfcd49692c4136d5069dec69af7e1eda4007f87",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/template-baseline.ts",
+      "sha256": "23a0b8051ff36731f877060472298bc6178556d56de9e8311127760035c5855d",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/title-filter.ts",
+      "sha256": "f957ecd4e3efcf88da384a7557eefe3aa7db4c9c90fd9c209fb80f6a2bf7158c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/tracked-companies.ts",
+      "sha256": "0a9f1345106a62cc7b1b7fcea3c228de0a82be65c78640cab8171484802c7a4d",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/tracker-identity.ts",
+      "sha256": "056a4da310e2189faf6a10c00185ded2538232d9b2e7226f77a84e1fed5c70d2",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/triage.ts",
+      "sha256": "7be20df4b8cb91e4d52174d33d41094789ea2af289141736f36a773be7f3ab1a",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/scripts/lib/types.ts",
+      "sha256": "8ce06b1e9ea565fb918291dfca838253ea9ad32bcf5d852a958a29d61a579d47",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/sources/approved-metrics.md",
+      "sha256": "09834d13a2217d613d9d3c2a0ee0d6bcd13eb63f4b799ec0c50b463cf11d6571",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/sources/contact-center-roadmap-progress-end-2024.md",
+      "sha256": "2a3ba8129acd59f192867c12f4ca5d4c4000acd093cc056057298a0be6f26311",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/sources/facts-bank.md",
+      "sha256": "f6ee65a8f0d202ade2fa608b97ed1517bbde4cb26239c5ecc41a1dacff801e56",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/sources/portfolio-sources.md",
+      "sha256": "611e1f193293cfd8672189fb18547142584390761dd498379939ec6955966e96",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/sources/resume-pennymac-fvp-product-manager.md",
+      "sha256": "e7590f7a51dbff838fa7c1800ececf23dd1ba0797a5af509c011649d7cde521c",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/sources/resume-viking-sr-pm.md",
+      "sha256": "7249b179170df758125056fedd0befbce3cdb70c639ba2d12ec100b6ee884fd2",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/sources/user-approved-claims.md",
+      "sha256": "a32c8a88e26e72eb877b29b718edb67cb5d537d7818e0e2bc97d90a4d869dfe6",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "career/tsconfig.json",
+      "sha256": "9e45527a3e3a08bdf21f9fd24bdbcf2d880410ffd8f3d4da1655f7eee14feb8d",
+      "origin": "ResumeCustomizer f19cdbb2c1becdb9690956ed3172cb79ef5cb817"
+    },
+    {
+      "path": "portfolio/content/projects/portfolio-guide.ts",
+      "sha256": "e43b51c0f9ddd92b32244e234ca3f320cf11125577bc80829b1aec694cc4a6db",
+      "origin": "Portfolio e6801e4686ca3229c93273e750c55dc91ad677cd"
+    },
+    {
+      "path": "portfolio/content/projects/guide-claim-blocks.json",
+      "sha256": "ac232e34e20c86ff27dab717c7317cfd9f99c86f85e8ba567c2b8ead5ee0e13a",
+      "origin": "Portfolio e6801e4686ca3229c93273e750c55dc91ad677cd"
+    },
+    {
+      "path": "evidence/paid-test-proposal.json",
+      "sha256": "7bf8e2bfc95fd9e1eeab770c487650c339135a39962521a46481c20e52e1ea5c",
+      "origin": "Saved approved public preparation artifact"
+    },
+    {
+      "path": "evidence/paid-test-queries.json",
+      "sha256": "90dd9aae3586e56ad3a764d976ec0f57d5de6399227216301e98a725881478ce",
+      "origin": "Saved approved public preparation artifact"
+    },
+    {
+      "path": "evidence/native-final/proposal.json",
+      "sha256": "8e738e26a7dfcf20abd376ce6dd17bd062065068ee026a7d542831bd116c9e8c",
+      "origin": "Saved approved public preparation artifact"
+    },
+    {
+      "path": "evidence/cache-reconciliation/reused-vectors.json",
+      "sha256": "5f8b5c7ae367cf9f1fa0dfd6bfe43ecd00c8525ceb84bd76bcdcd21cc38fc703",
+      "origin": "Saved approved public preparation artifact"
+    },
+    {
+      "path": "evidence/original-query-cache.json",
+      "sha256": "79a28e099a46c78d60f47ced74850670f5fd60b78fea392b06d61519aee9b9c6",
+      "origin": "Exact saved query cache origin hash 79a28e099a46c78d60f47ced74850670f5fd60b78fea392b06d61519aee9b9c6"
+    }
+  ],
+  "privateApplicationProfileIncluded": false,
+  "careerCacheRecords": 25,
+  "queries": 29,
+  "purpose": "Run the original synthetic guard/adapter cases against their own immutable corpus using current runner code; not semantic-quality evidence.",
+  "bulletBankRowsRetained": 27,
+  "otherBulletBankRowsIncluded": false
+}

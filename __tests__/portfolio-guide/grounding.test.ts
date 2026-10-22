@@ -138,8 +138,11 @@ test("AI Career Operating System grounding separates implemented evidence from l
   );
   assert.match(
     boundariesText,
-    /must be merged and deployed in both repositories/i,
+    /backend endpoint is deployed; Portfolio career retrieval is opt-in/i,
   );
+  assert.match(boundariesText, /one synthetic query verified hybrid retrieval/i);
+  assert.match(boundariesText, /no end-to-end production answer-quality result/i);
+  assert.doesNotMatch(boundariesText, /does not include \/api\/evidence\/search|separate, unshipped work/i);
 });
 
 test("essay pages are included in the guide catalog with claim-aware authored grounding", () => {

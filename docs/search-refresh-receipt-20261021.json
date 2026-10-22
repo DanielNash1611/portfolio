@@ -1,0 +1,20 @@
+{
+  "manifestSha256": "268187a1b61cdb365785bb67542263e41ed8b67705bef3c788397e8adb4f1c06",
+  "requestSha256": "74af6ef537e6fcfaa93dfdb32ddd531a1ef81ae0eaef90ae60a3066d0566e77f",
+  "completedAt": "2026-10-21T20:42:53.578246+00:00",
+  "provider": "OpenAI",
+  "model": "text-embedding-3-small",
+  "dimensions": 1536,
+  "httpAttempts": 1,
+  "retries": 0,
+  "sharedBatchInputTokens": 776,
+  "sharedBatchUsageEstimatedCostUsd": "0.00001552",
+  "sharedApprovedCapUsd": "0.00010000",
+  "repository": "portfolio",
+  "documents": 64,
+  "newVectors": 2,
+  "reusedUnchangedVectors": 62,
+  "indexSha256": "72b05d001debcda4ba1c3d208358ed12022abc9f144ab578cc7a19d2ca7153b5",
+  "productionActivation": false,
+  "additionalRequestsAuthorized": 0
+}

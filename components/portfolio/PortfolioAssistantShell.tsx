@@ -74,7 +74,7 @@ function Turn({
             <div className="assistant-sources" aria-label="Answer sources">
               <span>Sources</span>
               {citations.map((source) => (
-                <div key={`${source.sourceId}:${source.claim}`}>
+                <div key={`${source.sourceId}:${source.excerpt}`}>
                   {source.url && /^(https:\/\/|\/(?!\/))/.test(source.url) ? (
                     getPortfolioHref(source.url) ? (
                       <Link href={getPortfolioHref(source.url)!}>
