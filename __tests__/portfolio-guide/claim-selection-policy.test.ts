@@ -250,6 +250,12 @@ test("current availability, timeout and unknown notices remain explicit after ba
   });
   assert.match(known.response.answer, /Portfolio retrieval remains opt-in/);
   assert.equal(known.response.answer.includes(unavailable.safeFallback), true);
+  assert.ok(
+    known.response.answer.endsWith(
+      "\n\nDaniel's source-checked personal career notes weren't available for this response. This answer uses published portfolio sources.",
+    ),
+  );
+  assert.doesNotMatch(known.response.answer, /\\(?:n|\r?\n)/);
   const explicitUnavailable = blocks.map((block) => block.id === "ai-career-operating-system:ownership" ? { ...block, qualifications: [...block.qualifications, unavailable.safeFallback], coveredStatuses: ["career-retrieval-unavailable"] } : block);
   const deduplicated = renderClaimSelection({request: req, blocks: explicitUnavailable, rawText: raw, relatedPages: [], careerEvidence: unavailable, evidenceUnavailableReason: "not_configured"});
   assert.equal(deduplicated.response.answer.split(unavailable.safeFallback).length - 1, 1);
