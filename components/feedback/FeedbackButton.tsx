@@ -79,7 +79,7 @@ export default function FeedbackButton() {
         onClick={open}
         aria-haspopup="dialog"
         className="fixed right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-[color:var(--color-teal)] px-4 text-sm font-semibold text-[color:var(--color-cream)] shadow-lg transition hover:bg-[color:var(--color-slate)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--color-orange)]"
-        style={{ bottom: "max(1rem, env(safe-area-inset-bottom))" }}
+        style={{ bottom: process.env.NEXT_PUBLIC_PORTFOLIO_ASSISTANT_ENABLED === "true" ? "max(5rem, calc(env(safe-area-inset-bottom) + 5rem))" : "max(1rem, env(safe-area-inset-bottom))" }}
       >
         <MessageSquare className="h-4 w-4" aria-hidden="true" />
         Feedback

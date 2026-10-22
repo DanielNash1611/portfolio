@@ -1,6 +1,10 @@
+import { getPageContextBySlug, getPortfolioContext } from "@/lib/portfolio-guide/context";
 import { NextRequest, NextResponse } from "next/server";
 import { getClientIp, isAllowedOrigin } from "@/lib/contact";
-import { getPageContextBySlug, getPortfolioContext } from "@/lib/portfolio-guide/context";
+import {
+  getGuideSurfaceContext,
+  getGuidePortfolioContext,
+} from "@/lib/portfolio-agent/catalog";
 import {
   createPortfolioGuideConversationStore,
   GUIDE_CONVERSATION_COOKIE,
@@ -16,6 +20,7 @@ import {
 import { generatePortfolioGuideResponse } from "@/lib/portfolio-guide/service";
 import { handlePortfolioGuideRequest } from "@/lib/portfolio-guide/http";
 import { PORTFOLIO_GUIDE_PROMPT_VERSION } from "@/lib/portfolio-guide/constants";
+import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 import type {
   CopilotRequest,
   GuideConversationMessage,
@@ -24,6 +29,9 @@ import type {
 } from "@/lib/portfolio-guide/types";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
+const assistantEnabled = () => process.env.NEXT_PUBLIC_PORTFOLIO_ASSISTANT_ENABLED === "true";
+const resolvePage = (slug: string) => assistantEnabled() ? getGuideSurfaceContext(slug) : getPageContextBySlug(slug);
 
 function toInternalRequest(input: {
   request: PortfolioGuideTurnRequest;
@@ -32,14 +40,16 @@ function toInternalRequest(input: {
   conversationId?: string;
   turnIndex: number;
 }): CopilotRequest | null {
-  const pageContext = getPageContextBySlug(input.request.pageSlug);
+  const pageContext = resolvePage(input.request.pageSlug);
   if (!pageContext) {
     return null;
   }
   return {
     message: input.request.message,
+    scope: assistantEnabled() ? input.request.scope : undefined,
+    entryPoint: input.request.entryPoint,
     pageContext,
-    portfolioContext: getPortfolioContext(),
+    portfolioContext: assistantEnabled() ? getGuidePortfolioContext() : getPortfolioContext(),
     sessionContext: input.sessionSignals,
     interactionMeta: {
       source: input.request.source,
@@ -53,7 +63,9 @@ function toInternalRequest(input: {
     },
     conversation:
       input.messages.length > 0
-        ? input.messages.slice(-8).map(({ role, content }) => ({ role, content }))
+        ? input.messages
+            .slice(-8)
+            .map(({ role, content }) => ({ role, content }))
         : input.request.fallbackConversation,
   };
 }
@@ -62,6 +74,7 @@ async function runStatelessFallback(
   request: PortfolioGuideTurnRequest,
   reason: string,
   persistenceStatus: "disabled" | "degraded" = "degraded",
+  signal?: AbortSignal,
 ) {
   const sessionSignals = mergeGuideSessionSignals(
     request.sessionSignals,
@@ -74,18 +87,25 @@ async function runStatelessFallback(
     sessionSignals,
     messages: [],
     turnIndex:
-      (request.fallbackConversation?.filter((message) => message.role === "user").length ?? 0) + 1,
+      (request.fallbackConversation?.filter(
+        (message) => message.role === "user",
+      ).length ?? 0) + 1,
   });
   if (!internalRequest) {
-    return NextResponse.json({ error: "Unknown portfolio page." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Unknown portfolio page." },
+      { status: 400 },
+    );
   }
-  const result = await handlePortfolioGuideRequest(internalRequest);
+  const result = await handlePortfolioGuideRequest(internalRequest, { signal });
   return NextResponse.json(
     {
       ...result.body,
       persistenceStatus,
       persistenceWarning:
-        "This answer worked, but the conversation could not be saved. Your current browser keeps a temporary copy.",
+        persistenceStatus === "degraded"
+          ? "This answer worked, but the conversation could not be saved. Your current browser keeps a temporary copy."
+          : undefined,
     },
     { status: result.status },
   );
@@ -114,8 +134,11 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  if (!getPageContextBySlug(publicRequest.pageSlug)) {
-    return NextResponse.json({ error: "Unknown portfolio page." }, { status: 400 });
+  if (!resolvePage(publicRequest.pageSlug)) {
+    return NextResponse.json(
+      { error: "Unknown portfolio page." },
+      { status: 400 },
+    );
   }
 
   if (!isDurablePortfolioGuideEnabled()) {
@@ -123,13 +146,16 @@ export async function POST(req: NextRequest) {
       publicRequest,
       "durable_conversations_disabled",
       "disabled",
+      req.signal,
     );
   }
 
   try {
     const store = createPortfolioGuideConversationStore();
     const existingToken = req.cookies.get(GUIDE_CONVERSATION_COOKIE)?.value;
-    let conversation = existingToken ? await store.resolve(existingToken) : null;
+    let conversation = existingToken
+      ? await store.resolve(existingToken)
+      : null;
     let newToken: string | undefined;
     if (!conversation) {
       const created = await store.create();
@@ -149,10 +175,14 @@ export async function POST(req: NextRequest) {
       sessionSignals,
       messages,
       conversationId: conversation.id,
-      turnIndex: messages.filter((message) => message.role === "user").length + 1,
+      turnIndex:
+        messages.filter((message) => message.role === "user").length + 1,
     });
     if (!internalRequest) {
-      return NextResponse.json({ error: "Unknown portfolio page." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Unknown portfolio page." },
+        { status: 400 },
+      );
     }
 
     const begun = await store.beginTurn({
@@ -160,20 +190,26 @@ export async function POST(req: NextRequest) {
       clientTurnId: publicRequest.clientTurnId,
       ipHash: hashPortfolioGuideIp(getClientIp(req)),
       request: internalRequest,
-      model: process.env.OPENAI_MODEL || "gpt-5.4",
+      model: getPortfolioGuideModel(),
       promptVersion: PORTFOLIO_GUIDE_PROMPT_VERSION,
     });
 
     if (begun.kind === "rate_limited") {
       return NextResponse.json(
         { error: "Too many guide requests. Please try again shortly." },
-        { status: 429, headers: { "Retry-After": String(begun.retryAfterSeconds) } },
+        {
+          status: 429,
+          headers: { "Retry-After": String(begun.retryAfterSeconds) },
+        },
       );
     }
     if (begun.kind === "in_progress") {
       return NextResponse.json(
         { error: "This conversation is already answering a question." },
-        { status: 409, headers: { "Retry-After": String(begun.retryAfterSeconds) } },
+        {
+          status: 409,
+          headers: { "Retry-After": String(begun.retryAfterSeconds) },
+        },
       );
     }
 
@@ -192,7 +228,10 @@ export async function POST(req: NextRequest) {
       return response;
     }
     if (begun.kind !== "started") {
-      return NextResponse.json({ error: "Conversation turn could not start." }, { status: 409 });
+      return NextResponse.json(
+        { error: "Conversation turn could not start." },
+        { status: 409 },
+      );
     }
 
     internalRequest = {
@@ -232,6 +271,8 @@ export async function POST(req: NextRequest) {
     return runStatelessFallback(
       publicRequest,
       error instanceof Error ? error.message : "persistence_unavailable",
+      "degraded",
+      req.signal,
     );
   }
 }
