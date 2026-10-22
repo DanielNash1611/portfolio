@@ -150,6 +150,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  let generationStarted = false;
   try {
     const store = createPortfolioGuideConversationStore();
     const existingToken = req.cookies.get(GUIDE_CONVERSATION_COOKIE)?.value;
@@ -245,12 +246,14 @@ export async function POST(req: NextRequest) {
       signal: req.signal,
       logger: createPortfolioGuideInteractionLogger(),
       createRequestId: () => begun.requestId,
-      generateResponse: (request, config) =>
-        generatePortfolioGuideResponse(request, {
+      generateResponse: (request, config) => {
+        generationStarted = true;
+        return generatePortfolioGuideResponse(request, {
           ...config,
           conversationHistorySearch: (query, maxResults) =>
             store.searchUserMessages(conversation.id, query, maxResults),
-        }),
+        });
+      },
     });
     const response = NextResponse.json(
       {
@@ -268,6 +271,12 @@ export async function POST(req: NextRequest) {
     return response;
   } catch (error) {
     console.warn("Portfolio Guide durable conversation degraded:", error);
+    if (generationStarted) {
+      return NextResponse.json(
+        { error: "The assistant could not complete this response. You can try again.", persistenceStatus: "degraded" },
+        { status: 502 },
+      );
+    }
     return runStatelessFallback(
       publicRequest,
       error instanceof Error ? error.message : "persistence_unavailable",
