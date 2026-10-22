@@ -294,6 +294,16 @@ export function createPortfolioGuideConversationStore(options?: {
       }));
     },
 
+    async updateLens(conversationId: string, visitorIntent: GuideSessionSignals["visitorIntent"], recommendedPath: GuideSessionSignals["recommendedPath"]) {
+      await sql.query(
+        `UPDATE portfolio_guide_conversations
+         SET session_memory = (session_memory - 'visitorIntent' - 'recommendedPath') || $2::jsonb,
+             updated_at = now()
+         WHERE id = $1 AND status = 'active'`,
+        [conversationId, JSON.stringify(visitorIntent ? { visitorIntent, recommendedPath } : {})],
+      );
+    },
+
     async updateMemory(
       conversationId: string,
       memory: GuideSessionSignals,

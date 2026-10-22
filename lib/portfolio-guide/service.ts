@@ -1,6 +1,7 @@
+import { getGuideSurfaceContext, getPublicSurfaceCatalog } from "@/lib/portfolio-agent/catalog";
+import { findRelevantWork } from "@/lib/portfolio-agent/capabilities";
 import OpenAI from "openai";
 import { retrieveGuideSources } from "./retrieval";
-import { getPageContextBySlug } from "./context";
 import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 import { selectRecommendationsForPage } from "@/lib/portfolio-guide/context";
 import { getRelatedPages } from "@/lib/portfolio-guide/related";
@@ -297,10 +298,19 @@ export async function generatePortfolioGuideResponse(
       warnings.push(`evidence_unavailable:${evidenceUnavailableReason}`);
     }
   }
-  const supportingPages =
-    !retrieval && routing.plan
-      ? retrieveSupportingPages(relatedPages, routing.plan)
-      : [];
+  const supportingPages = !retrieval && routing.plan
+    ? retrieveSupportingPages(relatedPages, routing.plan) : [];
+  if (!retrieval && request.scope === "portfolio") {
+    // Ranking accepts 1,000 characters; the submitted question remains intact below.
+    const query = `${request.message} ${request.sessionContext.visitorIntent?.rawInput ?? ""}`.trim().slice(0, 1000);
+
+    for (const result of findRelevantWork(getPublicSurfaceCatalog(), query)) {
+      const page = getGuideSurfaceContext(result.slug);
+      if (page && page.slug !== request.pageContext.slug && !supportingPages.some((p) => p.slug === page.slug)) supportingPages.push(page);
+      if (supportingPages.length >= 3) break;
+    }
+  }
+
   const selectionInput = () =>
     JSON.stringify({
       currentQuestion: request.message,
@@ -791,7 +801,7 @@ export async function generatePortfolioGuideResponse(
             ? prefetchedEvidence?.evidence
                 .find((e) => `career:${e.id}` === block.id)
                 ?.sources?.find((source) => source.url)?.url
-            : getPageContextBySlug(block.pageSlug)?.href,
+            : getGuideSurfaceContext(block.pageSlug)?.href,
         }))
     : undefined;
   const finalCopilotResponse: CopilotResponse = {

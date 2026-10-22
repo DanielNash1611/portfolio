@@ -93,6 +93,12 @@ export function pageClaimBlocks(page: SourcePage): ClaimBlock[] {
       qualifications: [bounds("implementation"), bounds("explicitUnknowns")],
     }));
   const all: BlockSpec[] = [...specs];
+  if (/^site-/.test(page.slug)) {
+    for (const [i, section] of (page.authoredSections ?? []).entries()) {
+      for (const [j] of section.snippets.entries()) all.push({ key: `section-${i}-${j}`,
+        claims: [`authoredSections.${i}.snippets.${j}`], qualifications: [bounds("implementation"), bounds("explicitUnknowns")] });
+    }
+  }
   if (!all.some((spec) => spec.kind === "ownership"))
     all.push({
       key: "ownership",
@@ -301,7 +307,13 @@ export function claimSelectionPolicy(
     /\bacross\b[^?!.]{0,40}\bportfolio\b|\b(?:compare|other projects?|elsewhere)\b/i.test(
       request.message,
     );
-  if (ownershipQuestion(request.message)) {
+  if (request.scope === "portfolio" && !(ownershipQuestion(request.message) && across && own)) {
+    blocks = inventory.filter((block) => ownershipQuestion(request.message) ? block.kind === "ownership" : block.kind !== "recommendation");
+    const seen = new Set<string>();
+    fallbackIds = blocks.filter((block) => { if (seen.has(block.pageSlug)) return false; seen.add(block.pageSlug); return true; }).slice(0, 2).map((b) => b.id);
+    purpose = "whole-portfolio-evidence";
+    maxItems = 2;
+  } else if (ownershipQuestion(request.message)) {
     const others = inventory.filter(
       (block) => block.pageSlug !== slug && block.kind === "ownership",
     );
@@ -316,7 +328,6 @@ export function claimSelectionPolicy(
     minItems = fallbackIds.length;
     maxItems = Math.max(1, minItems);
   } else if (
-    request.scope !== "portfolio" &&
     slug === "ai-platform-mcp" &&
     /\btimeline\b|\bwhen\b[^?]*(?:pitch|deploy|production)/i.test(
       request.message,
@@ -328,7 +339,6 @@ export function claimSelectionPolicy(
     minItems = blocks.length;
     maxItems = 1;
   } else if (
-    request.scope !== "portfolio" &&
     slug === "ai-platform-mcp" &&
     !/\b(?:across|elsewhere|other projects?|compare)\b/i.test(
       request.message,
@@ -365,7 +375,7 @@ export function claimSelectionPolicy(
     fallbackIds,
     requiresSupportingPage,
     missingSupportingPage,
-    maxSentences: purpose === "page-evidence" ? undefined : 4,
+    maxSentences: ["page-evidence", "whole-portfolio-evidence"].includes(purpose) ? undefined : 4,
   };
 }
 
@@ -428,8 +438,7 @@ export function renderClaimSelection(input: {
   const policy = claimSelectionPolicy(request, input.blocks);
   const blocks = policy.blocks;
   const byId = new Map(blocks.map((block) => [block.id, block]));
-  const broader =
-    request.scope === "portfolio" ||
+  const broader = request.scope === "portfolio" ||
     /\b(?:across|elsewhere|other project|other work|portfolio|career|experience|background|compare)\b/i.test(
       request.message,
     );

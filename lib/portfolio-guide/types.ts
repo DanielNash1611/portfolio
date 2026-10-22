@@ -199,7 +199,8 @@ export type CopilotConversationMessage = {
 };
 
 export type CopilotRequest = {
-  scope?: "page" | "portfolio";
+  scope?: import("@/lib/portfolio-agent/types").GuideScope;
+  entryPoint?: import("@/lib/portfolio-agent/types").GuideEntryPoint;
   message: string;
   pageContext: PageContext;
   portfolioContext: PortfolioContext;
@@ -247,6 +248,8 @@ export type EvidenceMetadata = {
 };
 
 export type CopilotResponse = {
+  /** Server-created navigation action, never model-written. */
+  action?: import("@/lib/portfolio-agent/types").NavigationAction;
   citations?: GuideCitation[];
   usedEvidenceIds?: string[];
   answer: string;
@@ -283,9 +286,11 @@ export type GuideSessionSignals = Pick<
   | "visitorIntent"
   | "recommendedPath"
   | "lastVisitedAt"
->;
+> & { visitorIntentCleared?: boolean };
 
 export type PortfolioGuideTurnRequest = {
+  scope?: import("@/lib/portfolio-agent/types").GuideScope;
+  entryPoint?: import("@/lib/portfolio-agent/types").GuideEntryPoint;
   clientTurnId: string;
   pageSlug: string;
   message: string;

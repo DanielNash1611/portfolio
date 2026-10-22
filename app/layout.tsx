@@ -7,6 +7,9 @@ import SiteFooter from "@/components/site/SiteFooter";
 import SiteHeader from "@/components/site/SiteHeader";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import FeedbackButton from "@/components/feedback/FeedbackButton";
+import PortfolioAssistantProvider from "@/components/portfolio/PortfolioAssistantProvider";
+import PortfolioAssistantShell from "@/components/portfolio/PortfolioAssistantShell";
+import { getPublicSurfaceCatalog } from "@/lib/portfolio-agent/catalog";
 
 const sans = Manrope({
   subsets: ["latin"],
@@ -74,13 +77,34 @@ export default function RootLayout({
 }): React.JSX.Element {
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
+      {process.env.NEXT_PUBLIC_WEBMCP_ORIGIN_TRIAL_TOKEN ? (
+        <head>
+          <meta
+            httpEquiv="origin-trial"
+            content={process.env.NEXT_PUBLIC_WEBMCP_ORIGIN_TRIAL_TOKEN}
+          />
+        </head>
+      ) : null}
       <body>
         <AnalyticsProvider />
         <SEOReviews />
-        <SiteHeader />
-        <MainContainer>{children}</MainContainer>
-        <SiteFooter />
-        <FeedbackButton />
+        <PortfolioAssistantProvider
+          catalog={getPublicSurfaceCatalog()}
+          enabled={
+            process.env.NEXT_PUBLIC_PORTFOLIO_ASSISTANT_ENABLED === "true"
+          }
+          webmcpEnabled={
+            process.env.NEXT_PUBLIC_PORTFOLIO_WEBMCP_ENABLED === "true"
+          }
+        >
+          <div id="portfolio-site-content">
+            <SiteHeader />
+            <MainContainer>{children}</MainContainer>
+            <SiteFooter />
+            <FeedbackButton />
+          </div>
+          <PortfolioAssistantShell />
+        </PortfolioAssistantProvider>
       </body>
     </html>
   );

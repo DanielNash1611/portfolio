@@ -22,6 +22,7 @@ const MainContainer = ({ children }: MainContainerProps): React.JSX.Element => {
       const currentHeader = document.querySelector<HTMLElement>(HEADER_SELECTOR);
       if (currentHeader) {
         setHeaderHeight(currentHeader.getBoundingClientRect().height);
+        document.documentElement.style.setProperty("--portfolio-header-height", `${currentHeader.getBoundingClientRect().height}px`);
       }
     };
 

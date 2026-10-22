@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { getNavigationResponse } from "@/lib/portfolio-agent/navigation";
 import { buildPortfolioGuidePromptContext } from "@/lib/portfolio-guide/prompt";
 import {
   createPortfolioGuideInteractionLogger,
@@ -11,12 +12,12 @@ import type {
   GuideInteractionSource,
 } from "@/lib/portfolio-guide/types";
 import { GUIDE_UNAVAILABLE_MESSAGE } from "@/lib/portfolio-guide/constants";
+import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 // The Claim-to-Evidence tool reuses the existing ResumeCustomizer connection
 // (RESUME_CUSTOMIZER_API_BASE_URL + RESUME_CUSTOMIZER_API_TOKEN) — the same
 // server-to-server boundary the resume generator already uses. No separate key.
 import { getResumeEngineConfig } from "@/lib/resume-generator/config";
 import { isEvidenceMockEnabled } from "@/lib/portfolio-guide/tools/mockEvidence";
-import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 import { isRemoteCareerEvidenceEnabled } from "@/lib/portfolio-guide/evidence-config";
 
 type PortfolioGuideSuccessBody =
@@ -288,7 +289,8 @@ export async function handlePortfolioGuideRequest(
     dependencies.logWarning,
   );
 
-  if (!apiKey) {
+  const navigation = payload.scope ? getNavigationResponse(payload) : null;
+  if (!apiKey && !navigation) {
     await safeFinishLog(
       dependencies.logger,
       {
@@ -312,6 +314,27 @@ export async function handlePortfolioGuideRequest(
   const startedAt = dependencies.now();
 
   try {
+    dependencies.signal?.throwIfAborted();
+    if (navigation) {
+      await safeFinishLog(
+        dependencies.logger,
+        {
+          requestId,
+          model: "canonical-navigation",
+          status: "answered",
+          answer: navigation.answer,
+          answerLength: navigation.answer.length,
+          responsePayload: navigation,
+          promptSnapshot: {
+            pageTitle: payload.pageContext.title,
+            entryPoint: payload.entryPoint ?? "ui",
+            scope: payload.scope ?? "page",
+          },
+        },
+        dependencies.logWarning,
+      );
+      return { status: 200, body: navigation };
+    }
     const evidenceApiUrl = dependencies.getEvidenceApiUrl?.();
     const evidenceApiKey = dependencies.getEvidenceApiKey?.();
     const evidenceConfig =
@@ -321,7 +344,7 @@ export async function handlePortfolioGuideRequest(
     const evidenceMock = dependencies.getEvidenceMockEnabled?.() ?? false;
 
     const generation = await dependencies.generateResponse(payload, {
-      apiKey,
+      apiKey: apiKey!,
       model,
       signal: dependencies.signal,
       evidenceConfig,
@@ -329,9 +352,10 @@ export async function handlePortfolioGuideRequest(
       hybridSearch: dependencies.getHybridSearchEnabled?.() ?? false,
       decisions: {
         enabled: dependencies.getDecisionsEnabled?.() ?? false,
-        apiKey,
+        apiKey: apiKey!,
       },
     });
+    dependencies.signal?.throwIfAborted();
     const promptContext = payload.debug
       ? dependencies.buildPromptContext(payload, generation.relatedPages)
       : null;
@@ -347,6 +371,8 @@ export async function handlePortfolioGuideRequest(
         answerLength: generation.response.answer.trim().length,
         answer: generation.response.answer.trim(),
         promptSnapshot: {
+          ...(payload.entryPoint ? { entryPoint: payload.entryPoint } : {}),
+          ...(payload.scope ? { scope: payload.scope } : {}),
           pageTitle: payload.pageContext.title,
           context: JSON.parse(generation.promptInput) as Record<
             string,
@@ -376,6 +402,7 @@ export async function handlePortfolioGuideRequest(
     };
   } catch (error) {
     const elapsedMs = dependencies.now() - startedAt;
+    const cancelled = dependencies.signal?.aborted === true;
 
     await safeFinishLog(
       dependencies.logger,
@@ -384,11 +411,17 @@ export async function handlePortfolioGuideRequest(
         model,
         status: "errored",
         latencyMs: elapsedMs,
-        errorCode: normalizeErrorCode(error),
+        errorCode: cancelled ? "request_cancelled" : normalizeErrorCode(error),
       },
       dependencies.logWarning,
     );
 
+    if (cancelled) {
+      return {
+        status: 499,
+        body: { error: "Request cancelled.", code: "request_cancelled" },
+      };
+    }
     dependencies.logError("Portfolio Guide route failed:", error);
     return {
       status: 500,
