@@ -96,6 +96,7 @@ type FakeBehavior = {
   /** When true, the second (synthesis) call rejects, exercising recovery. */
   secondCallThrows?: boolean;
   answerText?: string;
+  onCall?: () => void;
 };
 
 /** Minimal stand-in for the OpenAI Responses client used by the service. */
@@ -105,6 +106,7 @@ function makeFakeClient(behavior: FakeBehavior): OpenAI {
     responses: {
       create: async (params: { input: Array<{ content?: string }> }) => {
         calls += 1;
+        behavior.onCall?.();
         if (calls === 1) {
           return behavior.firstCallsTool
             ? {
@@ -317,6 +319,7 @@ test("unexpected response shape (the original crash) returns a safe answer", asy
 });
 
 test("synthesis call failure recovers with a page-context answer", async () => {
+  let modelCalls = 0;
   const result = await withFetch(
     async () => jsonResponse(SAMPLE_EVIDENCE),
     () =>
@@ -326,12 +329,15 @@ test("synthesis call failure recovers with a page-context answer", async () => {
         client: makeFakeClient({
           firstCallsTool: true,
           secondCallThrows: true,
+          onCall: () => modelCalls++,
         }),
         evidenceConfig: EVIDENCE_CONFIG,
       }),
   );
 
   assert.equal(result.response.answer.length > 0, true);
+  assert.equal(modelCalls, 2, "Recovery must not make a third paid model call");
+  assert.ok(result.traceEvents?.some((event) => event.eventName === "deterministic_page_context_fallback"));
   assert.equal(
     result.response.evidenceMeta?.resumeCustomizerEvidenceUsed,
     false,

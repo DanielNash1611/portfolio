@@ -435,7 +435,7 @@ export async function generatePortfolioGuideResponse(
     try {
       const response = await client.responses.create(
         params,
-        signal ? { signal } : undefined,
+        { maxRetries: 0, ...(signal ? { signal } : {}) },
       );
       const diagnostics = getResponseDiagnostics(response);
       if (diagnostics.id) {
@@ -673,9 +673,8 @@ export async function generatePortfolioGuideResponse(
         max_output_tokens: 600,
       });
     } catch (error) {
-      // The evidence augmentation or the synthesis call failed. Recover with
-      // a single page-context-only completion so the visitor still gets a
-      // useful, grounded answer rather than a server error.
+      signal?.throwIfAborted();
+      // Recover from supplied claim blocks without another paid completion.
       console.warn(
         "[portfolio-guide] evidence augmentation failed; falling back to page context",
         error,
@@ -689,12 +688,12 @@ export async function generatePortfolioGuideResponse(
       evidenceUnavailableReason = "evidence_layer_error";
       warnings.push("evidence_layer_error");
 
-      finalResponse = await runModelCall("page_context_fallback", {
-        model,
-        reasoning: { effort: reasoningEffort },
-        input: baseInput,
-        ...providerStorageParams,
+      addTrace({
+        eventType: "guardrail",
+        eventName: "deterministic_page_context_fallback",
+        payload: { reason: "evidence_layer_error" },
       });
+      finalResponse = { output_text: JSON.stringify({ blockIds: [] }) };
     }
   }
   // toolCalls.length === 0: the model answered from page context without
