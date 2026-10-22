@@ -1,0 +1,1495 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "ai-product-leadership-prototype-scale",
+      "claim": "Guided applied AI prototypes toward enterprise adoption across contact center, product, and merchandising teams, including ChatGPT rollout and agent workflows.",
+      "supportingDetails": [],
+      "project": "Guitar Center AI product leadership and portfolio prototypes",
+      "capabilityTags": [
+        "applied_ai",
+        "prototype_to_scale",
+        "custom_gpts",
+        "agentic_ai",
+        "enterprise_systems",
+        "cross_functional_leadership"
+      ],
+      "metricTags": [
+        "AI products",
+        "ChatGPT Enterprise",
+        "contact center",
+        "product teams",
+        "merchandising"
+      ],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 3,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, prototype-to-scale execution, custom GPT development. Strength: strong.",
+      "projectId": "chatgpt-enterprise",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Guitar Center AI product leadership and portfolio prototypes",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/chatgpt-enterprise"
+        }
+      ]
+    },
+    {
+      "id": "contact-center-ai-pilot-impact",
+      "claim": "Directed a contact-center ChatGPT pilot whose adoption evidence informed expansion: 90% training completion, 177 weekly users across 289 users, and 30,780 messages over three weeks.",
+      "supportingDetails": [
+        "The adoption window comprises 30,780 messages over three weeks, with 177 weekly users among 289 contact-center users.",
+        "A separate six-month pilot compared agents with a matched control group and supports an estimated $2.7M annualized impact; control-group improvements matter when interpreting individual metrics."
+      ],
+      "project": "Contact Center ChatGPT pilot",
+      "capabilityTags": [
+        "applied_ai",
+        "contact_center",
+        "custom_gpts",
+        "workflow_transformation",
+        "measurable_impact",
+        "cross_functional_leadership",
+        "adoption",
+        "ai_platform"
+      ],
+      "metricTags": [
+        "contact center",
+        "enterprise AI",
+        "customer operations"
+      ],
+      "metrics": [
+        {
+          "label": "training completion",
+          "value": "90%",
+          "context": "Contact Center ChatGPT pilot"
+        },
+        {
+          "label": "weekly users",
+          "value": "177",
+          "context": "Contact Center ChatGPT pilot"
+        },
+        {
+          "label": "Contact Center users",
+          "value": "289",
+          "context": "Contact Center ChatGPT pilot"
+        },
+        {
+          "label": "messages in 3 weeks",
+          "value": "30,780",
+          "context": "Contact Center ChatGPT pilot"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 4,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, contact center operations, custom GPT development. Strength: very strong.",
+      "projectId": "chatgpt-enterprise",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Contact Center ChatGPT pilot",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/chatgpt-enterprise"
+        }
+      ]
+    },
+    {
+      "id": "chatgpt-champions-train-trainer",
+      "claim": "Worked with OpenAI GTM partners to establish a ChatGPT Champions network and develop a train-the-trainer approach to adoption.",
+      "supportingDetails": [
+        "The Champions network and train-the-trainer approach helped embed enablement alongside the enterprise rollout, in partnership with OpenAI GTM."
+      ],
+      "project": "OpenAI GTM partnership and ChatGPT Champions",
+      "capabilityTags": [
+        "applied_ai",
+        "leadership_without_authority",
+        "cross_functional_leadership",
+        "business_transformation"
+      ],
+      "metricTags": [
+        "enterprise AI",
+        "cross-functional enablement",
+        "OpenAI GTM partnership"
+      ],
+      "metrics": [
+        {
+          "label": "members",
+          "value": "40+",
+          "context": "OpenAI GTM partnership and ChatGPT Champions"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, leadership without authority, cross-functional leadership. Strength: strong.",
+      "projectId": "chatgpt-enterprise",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "OpenAI GTM partnership and ChatGPT Champions",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/chatgpt-enterprise"
+        }
+      ]
+    },
+    {
+      "id": "checkout-redesign-conversion-impact",
+      "claim": "Led checkout delivery over 12 weeks, with approximately 3% conversion lift, an estimated $16M annualized revenue impact, and a 30% faster checkout flow.",
+      "supportingDetails": [
+        "Post-launch A/B testing supports approximately 3% conversion lift and the $16M annualized estimate.",
+        "Follow-up usability work measured full checkout time moving from 3:00 to 2:03; this is separate from the 12-week delivery timeline.",
+        "QA planning reduced roughly 400 billion theoretical combinations to 20-30 high-risk scenarios."
+      ],
+      "project": "Checkout redesign",
+      "capabilityTags": [
+        "ecommerce",
+        "checkout_redesign",
+        "conversion_lift",
+        "experimentation",
+        "customer_experience",
+        "measurable_impact"
+      ],
+      "metricTags": [
+        "ecommerce",
+        "checkout",
+        "growth"
+      ],
+      "metrics": [
+        {
+          "label": "12-week redesign",
+          "value": "12-week redesign",
+          "context": "Checkout redesign"
+        },
+        {
+          "label": "about 30% faster checkout",
+          "value": "about 30% faster checkout",
+          "context": "Checkout redesign"
+        },
+        {
+          "label": "conversion lift",
+          "value": "3%",
+          "context": "Checkout redesign"
+        },
+        {
+          "label": "annualized revenue impact",
+          "value": "$16M",
+          "context": "Checkout redesign"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 3,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ecommerce, checkout redesign, conversion lift. Strength: very strong.",
+      "projectId": "checkout-redesign",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Checkout redesign",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/checkout-redesign"
+        }
+      ]
+    },
+    {
+      "id": "checkout-redesign-ux-uxr-partnership",
+      "claim": "Collaborated with UX and user research on checkout experimentation and customer experience; the redesign supported roughly 3% conversion lift and $16M estimated annualized impact.",
+      "supportingDetails": [
+        "The approved record credits collaboration with UX and UXR; the usability and business measurements retain their separate contexts."
+      ],
+      "project": "Checkout redesign UX/UXR partnership",
+      "capabilityTags": [
+        "ecommerce",
+        "checkout_redesign",
+        "conversion_lift",
+        "experimentation",
+        "customer_experience",
+        "cross_functional_leadership",
+        "measurable_impact"
+      ],
+      "metricTags": [
+        "ecommerce",
+        "checkout",
+        "UX research",
+        "growth"
+      ],
+      "metrics": [
+        {
+          "label": "12-week redesign",
+          "value": "12-week redesign",
+          "context": "Checkout redesign UX/UXR partnership"
+        },
+        {
+          "label": "conversion lift",
+          "value": "3%",
+          "context": "Checkout redesign UX/UXR partnership"
+        },
+        {
+          "label": "annualized revenue impact",
+          "value": "$16M",
+          "context": "Checkout redesign UX/UXR partnership"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 4,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ecommerce, checkout redesign, conversion lift. Strength: very strong.",
+      "projectId": "checkout-redesign",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Checkout redesign UX/UXR partnership",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/checkout-redesign"
+        }
+      ]
+    },
+    {
+      "id": "chatgpt-enterprise-platform-adoption",
+      "claim": "Expanded ChatGPT Enterprise to approximately 1,000 licensed and 800 active users using training, Champions, governance, and reusable rollout practices.",
+      "supportingDetails": [
+        "Licenses and active usage are separate measures: approximately 1,000 licensed users and around 800 active users."
+      ],
+      "project": "ChatGPT Enterprise platform adoption",
+      "capabilityTags": [
+        "applied_ai",
+        "ai_platform",
+        "business_transformation",
+        "leadership_without_authority",
+        "cross_functional_leadership",
+        "measurable_impact",
+        "adoption"
+      ],
+      "metricTags": [
+        "ChatGPT Enterprise",
+        "enterprise AI adoption",
+        "AI platform governance",
+        "OpenAI GTM partnership"
+      ],
+      "metrics": [
+        {
+          "label": "about 1,000 licensed users",
+          "value": "about 1,000 licensed users",
+          "context": "ChatGPT Enterprise platform adoption"
+        },
+        {
+          "label": "around 800 active users",
+          "value": "around 800 active users",
+          "context": "ChatGPT Enterprise platform adoption"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 3,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, AI platform, business transformation. Strength: very strong.",
+      "projectId": "chatgpt-enterprise",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "ChatGPT Enterprise platform adoption",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/chatgpt-enterprise"
+        }
+      ]
+    },
+    {
+      "id": "product-operating-model-institutionalized",
+      "claim": "At Guitar Center, Daniel defined product practices across intake, discovery, prioritization, and decision forums, and built an eight-week onboarding program for product managers and stakeholder groups.",
+      "supportingDetails": [
+        "The work was at Guitar Center. Eight weeks describes the onboarding program duration."
+      ],
+      "project": "Guitar Center product operating model",
+      "capabilityTags": [
+        "product_operating_model",
+        "product_strategy",
+        "prioritization_frameworks",
+        "intake_prioritization",
+        "business_transformation",
+        "portfolio_strategy",
+        "executive_alignment"
+      ],
+      "metricTags": [
+        "product operating model",
+        "intake",
+        "discovery",
+        "prioritization",
+        "decision forums",
+        "product manager onboarding",
+        "stakeholder enablement"
+      ],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "user_approved",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for product operating model, product strategy, prioritization frameworks. Strength: very strong.",
+      "projectId": "jira-product-discovery",
+      "claimBoundaries": [
+        "No adoption, completion, or business-impact outcome is established."
+      ],
+      "sources": [
+        {
+          "title": "Digital product operating model",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/case-studies/jira-product-discovery"
+        }
+      ]
+    },
+    {
+      "id": "launchmuse-agentic-marketing-campaign-platform",
+      "claim": "Developed an OpenAI API campaign-planning product for artists, orchestrating multiple steps into a structured music marketing campaign.",
+      "supportingDetails": [],
+      "project": "LaunchMuse founder and product builder",
+      "capabilityTags": [
+        "applied_ai",
+        "agentic_ai",
+        "agentic_orchestration",
+        "zero_to_one",
+        "prototype_to_scale",
+        "technical_fluency",
+        "workflow_transformation"
+      ],
+      "metricTags": [
+        "LaunchMuse",
+        "AI marketing campaigns",
+        "agentic workflows",
+        "multi-step outputs",
+        "creator tools",
+        "OpenAI APIs"
+      ],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, agentic AI, agentic orchestration. Strength: strong.",
+      "projectId": "launchmuse",
+      "claimBoundaries": [
+        "Planning time is a workflow result; no adoption, revenue, or retention metric is established."
+      ],
+      "sources": [
+        {
+          "title": "LaunchMuse founder and product builder",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/products/launchmuse"
+        }
+      ]
+    },
+    {
+      "id": "oms-api-platform-ai-tooling",
+      "claim": "Helped shape custom order-management APIs and their OpenAI integration for agent tools supporting service, fulfillment, and order workflows.",
+      "supportingDetails": [
+        "Agent tools integrate OpenAI APIs directly with custom OMS APIs; the supported workflow includes order lookup and cancellation."
+      ],
+      "project": "Custom OMS APIs for AI and internal tooling",
+      "capabilityTags": [
+        "enterprise_systems",
+        "oms",
+        "ai_platform",
+        "technical_fluency",
+        "workflow_transformation",
+        "applied_ai"
+      ],
+      "metricTags": [
+        "OMS",
+        "platform APIs",
+        "OpenAI APIs",
+        "custom OMS APIs",
+        "AI tooling",
+        "fulfillment systems"
+      ],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 3,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for enterprise system design, oms, AI platform. Strength: strong.",
+      "projectId": "oms-chatgpt-app",
+      "claimBoundaries": [
+        "The public demo uses simulated data; later production work is a separate milestone.",
+        "No production adoption or business-impact metrics are established."
+      ],
+      "sources": [
+        {
+          "title": "Custom OMS APIs for AI and internal tooling",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/products/oms-chatgpt-app"
+        }
+      ]
+    },
+    {
+      "id": "builder-pm-ai-prototypes",
+      "claim": "Created AI prototypes across music marketing, scientific research, education, and portfolio discovery, using OpenAI APIs, local document reading, retrieval, MCP patterns, and evaluation.",
+      "supportingDetails": [],
+      "project": "Portfolio AI prototypes",
+      "capabilityTags": [
+        "zero_to_one",
+        "prototype_to_scale",
+        "applied_ai",
+        "evals",
+        "mcp",
+        "chatgpt_apps",
+        "retrieval",
+        "technical_fluency"
+      ],
+      "metricTags": [
+        "AI products",
+        "research tools",
+        "creator tools",
+        "education workflows",
+        "Gemma 4 local-model document reading",
+        "OpenAI APIs",
+        "portfolio AI assistant"
+      ],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 4,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for zero to one, prototype-to-scale execution, applied AI. Strength: strong.",
+      "projectId": "cross-project",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Portfolio AI prototypes",
+          "kind": "approved_career"
+        }
+      ]
+    },
+    {
+      "id": "immunology-scout-research-assistant",
+      "claim": "Developed a research assistant for immunology literature and patent discovery, combining OpenAI APIs with retrieval, evaluation, and human source review.",
+      "supportingDetails": [
+        "The scientific workflow focuses on immunology papers and patents, with traceable retrieved sources and human approval before follow-up context use."
+      ],
+      "project": "Immunology Scout",
+      "capabilityTags": [
+        "ai_for_science",
+        "research_tools",
+        "science_research",
+        "retrieval",
+        "human_in_the_loop",
+        "evals",
+        "evidence_grounded_synthesis",
+        "technical_fluency"
+      ],
+      "metricTags": [
+        "immunology",
+        "scientific research",
+        "patent discovery",
+        "AI research tools",
+        "OpenAI APIs"
+      ],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ai for science, research tools, science research. Strength: very strong.",
+      "projectId": "immunology-scout",
+      "claimBoundaries": [
+        "The 100% to 0% result concerns patent-search hallucinations in the measured set, not every possible hallucination.",
+        "No product-wide adoption, revenue, or scientific validation is established."
+      ],
+      "sources": [
+        {
+          "title": "Immunology Scout",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/products/immunology-scout"
+        }
+      ]
+    },
+    {
+      "id": "portfolio-ai-assistant-openai-api-grounding",
+      "claim": "Created the OpenAI-connected Portfolio Guide to help hiring teams explore case studies and approved career evidence through grounded questions.",
+      "supportingDetails": [],
+      "project": "Portfolio site AI assistant",
+      "capabilityTags": [
+        "applied_ai",
+        "retrieval",
+        "evidence_grounded_synthesis",
+        "evals",
+        "technical_fluency",
+        "ai_platform"
+      ],
+      "metricTags": [
+        "portfolio AI assistant",
+        "OpenAI APIs",
+        "grounded assistant",
+        "recruiter experience"
+      ],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, retrieval, evidence grounded synthesis. Strength: strong.",
+      "projectId": "ai-career-operating-system",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Portfolio site AI assistant",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/products/ai-career-operating-system"
+        }
+      ]
+    },
+    {
+      "id": "oms-chatgpt-app-prototype-production-pilot",
+      "claim": "Moved an order-management ChatGPT application from prototype through production connection and small-group testing to production. Agentic order lookup and cancellation use custom OMS APIs, PII-safe validation, and deliberate human confirmation.",
+      "supportingDetails": [
+        "Approved milestones distinguish the April 2025 Canvas prototype, December 2025 coded prototype, March 2026 production connection, and April 2026 small-group production testing. Later approved notes confirm production.",
+        "The public portfolio demonstration uses simulated data and remains separate from these later operational milestones.",
+        "In prototype time studies, reduced customer-order lookup from about a minute to a few seconds."
+      ],
+      "project": "OMS ChatGPT App",
+      "capabilityTags": [
+        "applied_ai",
+        "zero_to_one",
+        "prototype_to_scale",
+        "agentic_ai",
+        "responsible_ai",
+        "human_in_the_loop",
+        "technical_fluency",
+        "oms",
+        "ai_platform"
+      ],
+      "metricTags": [
+        "OMS",
+        "ChatGPT App",
+        "OpenAI APIs",
+        "custom OMS APIs",
+        "enterprise AI workflows"
+      ],
+      "metrics": [
+        {
+          "label": "Canvas prototype",
+          "value": "Canvas prototype",
+          "context": "OMS ChatGPT App"
+        },
+        {
+          "label": "production connection",
+          "value": "production connection",
+          "context": "OMS ChatGPT App"
+        },
+        {
+          "label": "small-group production testing",
+          "value": "small-group production testing",
+          "context": "OMS ChatGPT App"
+        },
+        {
+          "label": "production status",
+          "value": "production status",
+          "context": "OMS ChatGPT App"
+        },
+        {
+          "label": "Prototype time studies: customer-order lookup from about a minute to a few seconds",
+          "value": "Prototype time studies: customer-order lookup from about a minute to a few seconds",
+          "context": "OMS ChatGPT App"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 3,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, zero to one, prototype-to-scale execution. Strength: very strong.",
+      "projectId": "oms-chatgpt-app",
+      "claimBoundaries": [
+        "The public demo uses simulated data; later production work is a separate milestone.",
+        "No production adoption or business-impact metrics are established.",
+        "The approximate prototype lookup timing does not establish production performance, adoption or business impact; exact seconds, sample size and percentage reduction remain unknown."
+      ],
+      "sources": [
+        {
+          "title": "OMS ChatGPT App",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/products/oms-chatgpt-app"
+        }
+      ]
+    },
+    {
+      "id": "agentic-ai-quality-retrieval-tool-use-skill-cluster",
+      "claim": "Applied retrieval grounding, MCP-style tools, agent loops, evaluation, hallucination checks, and human review across AI products. Patent-search quality evidence belongs specifically to Immunology Scout.",
+      "supportingDetails": [],
+      "project": "Cross-project AI product quality and tool-use patterns",
+      "capabilityTags": [
+        "applied_ai",
+        "agentic_ai",
+        "agentic_orchestration",
+        "mcp",
+        "retrieval",
+        "evals",
+        "human_in_the_loop",
+        "source_grounded_ai",
+        "technical_fluency"
+      ],
+      "metricTags": [
+        "MCP-style tools",
+        "RAG / retrieval grounding",
+        "hallucination evaluation",
+        "human-in-the-loop review",
+        "source-grounded AI"
+      ],
+      "metrics": [
+        {
+          "label": "patent hallucinations reduced from 100% to 0%",
+          "value": "patent hallucinations reduced from 100% to 0%",
+          "context": "Cross-project AI product quality and tool-use patterns"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 4,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, agentic AI, agentic orchestration. Strength: strong.",
+      "projectId": "cross-project",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Cross-project AI product quality and tool-use patterns",
+          "kind": "approved_career"
+        }
+      ]
+    },
+    {
+      "id": "zero-to-one-ai-products-across-domains",
+      "claim": "Built early AI products across enterprise operations, scientific research, education, music marketing, and portfolio discovery, with production deployments supported for selected products.",
+      "supportingDetails": [],
+      "project": "Portfolio of 0-to-1 AI products",
+      "capabilityTags": [
+        "zero_to_one",
+        "prototype_to_scale",
+        "applied_ai",
+        "agentic_ai",
+        "ai_platform",
+        "technical_fluency",
+        "ambiguity"
+      ],
+      "metricTags": [
+        "enterprise operations",
+        "scientific research",
+        "education",
+        "music marketing",
+        "OpenAI APIs",
+        "portfolio AI assistant"
+      ],
+      "metrics": [
+        {
+          "label": "multiple 0-to-1 AI products",
+          "value": "multiple 0-to-1 AI products",
+          "context": "Portfolio of 0-to-1 AI products"
+        },
+        {
+          "label": "production deployments for selected products",
+          "value": "production deployments for selected products",
+          "context": "Portfolio of 0-to-1 AI products"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 6,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for zero to one, prototype-to-scale execution, applied AI. Strength: very strong.",
+      "projectId": "cross-project",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Portfolio of 0-to-1 AI products",
+          "kind": "approved_career"
+        }
+      ]
+    },
+    {
+      "id": "immunology-scout-prototype-production",
+      "claim": "Led product and technical strategy for an immunology research assistant. Scientist feedback informed evaluations and retrieval grounding that reduced patent-search hallucinations from 100% to 0% in the measured set.",
+      "supportingDetails": [
+        "Scientist responses gathered through a Google Form informed evaluation cases and agentic coding loops.",
+        "Prototype and production at Immiatrics were confirmed in February 2026. The 100% to 0% patent-search result describes the measured evaluation, without proving clinical validation or adoption."
+      ],
+      "project": "Immunology Scout",
+      "capabilityTags": [
+        "ai_for_science",
+        "research_tools",
+        "science_research",
+        "retrieval",
+        "human_in_the_loop",
+        "evals",
+        "mcp",
+        "evidence_grounded_synthesis",
+        "technical_fluency",
+        "zero_to_one"
+      ],
+      "metricTags": [
+        "Immiatrics",
+        "immunology research",
+        "papers and patents",
+        "OpenAI APIs"
+      ],
+      "metrics": [
+        {
+          "label": "prototype to production in February 2026",
+          "value": "prototype to production in February 2026",
+          "context": "Immunology Scout"
+        },
+        {
+          "label": "patent hallucinations reduced from 100% to 0%",
+          "value": "patent hallucinations reduced from 100% to 0%",
+          "context": "Immunology Scout"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 3,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ai for science, research tools, science research. Strength: very strong.",
+      "projectId": "immunology-scout",
+      "claimBoundaries": [
+        "The 100% to 0% result concerns patent-search hallucinations in the measured set, not every possible hallucination.",
+        "No product-wide adoption, revenue, or scientific validation is established."
+      ],
+      "sources": [
+        {
+          "title": "Immunology Scout",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/products/immunology-scout"
+        }
+      ]
+    },
+    {
+      "id": "immunology-scout-hitl-grounding-workflow",
+      "claim": "Turned expert research needs into requirements for retrieval, trust, evaluation, source validation, and human approval of scientific evidence.",
+      "supportingDetails": [
+        "Retrieved documents can be approved as context for follow-up questions. Experiment-building workflows are planned, so that downstream capability is not established as production behavior."
+      ],
+      "project": "Immunology Scout",
+      "capabilityTags": [
+        "ai_for_science",
+        "research_tools",
+        "science_research",
+        "retrieval",
+        "human_in_the_loop",
+        "evidence_grounded_synthesis",
+        "agentic_ai",
+        "technical_fluency",
+        "zero_to_one"
+      ],
+      "metricTags": [
+        "Immiatrics",
+        "immunology research",
+        "retrieval grounding",
+        "experiment-building workflows"
+      ],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ai for science, research tools, science research. Strength: very strong.",
+      "projectId": "immunology-scout",
+      "claimBoundaries": [
+        "The 100% to 0% result concerns patent-search hallucinations in the measured set, not every possible hallucination.",
+        "No product-wide adoption, revenue, or scientific validation is established."
+      ],
+      "sources": [
+        {
+          "title": "Immunology Scout",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/products/immunology-scout"
+        }
+      ]
+    },
+    {
+      "id": "launchmuse-mvp-campaign-planning",
+      "claim": "Took a music campaign-planning product from independent prototype to its October 2025 MVP launch, reducing planning from hours to approximately five minutes for structured six-week campaigns.",
+      "supportingDetails": [
+        "The October 2025 MVP launch follows earlier independent prototyping and a simpler demo. Campaign-planning time moved from hours to roughly five minutes; subscription revenue, retention, and adoption remain unestablished."
+      ],
+      "project": "LaunchMuse",
+      "capabilityTags": [
+        "zero_to_one",
+        "prototype_to_scale",
+        "applied_ai",
+        "agentic_ai",
+        "customer_experience",
+        "technical_fluency",
+        "product_strategy"
+      ],
+      "metricTags": [
+        "LaunchMuse",
+        "music marketing",
+        "creator tools",
+        "OpenAI APIs"
+      ],
+      "metrics": [
+        {
+          "label": "hours to roughly 5 minutes",
+          "value": "hours to roughly 5 minutes",
+          "context": "LaunchMuse"
+        },
+        {
+          "label": "MVP launched October 2025",
+          "value": "MVP launched October 2025",
+          "context": "LaunchMuse"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for zero to one, prototype-to-scale execution, applied AI. Strength: strong.",
+      "projectId": "launchmuse",
+      "claimBoundaries": [
+        "Planning time is a workflow result; no adoption, revenue, or retention metric is established."
+      ],
+      "sources": [
+        {
+          "title": "LaunchMuse",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/products/launchmuse"
+        }
+      ]
+    },
+    {
+      "id": "rig-advisor-hackathon-production-concept",
+      "claim": "Contributed to a winning AI hackathon concept that later informed a customer-facing production experience announced publicly by the CEO.",
+      "supportingDetails": [],
+      "project": "Rig Advisor / ChatGPT Hackathon",
+      "capabilityTags": [
+        "applied_ai",
+        "zero_to_one",
+        "prototype_to_scale",
+        "custom_gpts",
+        "customer_experience",
+        "measurable_impact"
+      ],
+      "metricTags": [
+        "Rig Advisor",
+        "customer-facing AI",
+        "hackathon"
+      ],
+      "metrics": [
+        {
+          "label": "hackathon-winning concept",
+          "value": "hackathon-winning concept",
+          "context": "Rig Advisor / ChatGPT Hackathon"
+        },
+        {
+          "label": "production customer-facing experience",
+          "value": "production customer-facing experience",
+          "context": "Rig Advisor / ChatGPT Hackathon"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for applied AI, zero to one, prototype-to-scale execution. Strength: strong.",
+      "projectId": "ai-platform-mcp",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Rig Advisor / ChatGPT Hackathon",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/ai-platform-mcp"
+        }
+      ]
+    },
+    {
+      "id": "ai-platform-prototype-production-strategy",
+      "claim": "Proposed the AI Platform direction in February 2025, developed proofs of concept through October 2025, and helped the capability reach production in February 2026.",
+      "supportingDetails": [
+        "The approved milestone sequence spans the February 2025 proposal, proofs of concept through October 2025, and production in February 2026. It describes Daniel’s contribution to a shared capability, not sole engineering ownership."
+      ],
+      "project": "AI Platform strategy and prototype-to-production path",
+      "capabilityTags": [
+        "ai_platform",
+        "applied_ai",
+        "prototype_to_scale",
+        "product_strategy",
+        "responsible_ai",
+        "ai_governance",
+        "executive_alignment",
+        "technical_fluency"
+      ],
+      "metricTags": [
+        "AI Platform",
+        "enterprise AI",
+        "governance"
+      ],
+      "metrics": [
+        {
+          "label": "pitched February 2025",
+          "value": "pitched February 2025",
+          "context": "AI Platform strategy and prototype-to-production path"
+        },
+        {
+          "label": "POCs through October 2025",
+          "value": "POCs through October 2025",
+          "context": "AI Platform strategy and prototype-to-production path"
+        },
+        {
+          "label": "production version February 2026",
+          "value": "production version February 2026",
+          "context": "AI Platform strategy and prototype-to-production path"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for AI platform, applied AI, prototype-to-scale execution. Strength: strong.",
+      "projectId": "ai-platform-mcp",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "AI Platform strategy and prototype-to-production path",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/ai-platform-mcp"
+        }
+      ]
+    },
+    {
+      "id": "ecommerce-consumer-experience-scale",
+      "claim": "Delivered customer-facing ecommerce changes across homepage, product detail and listing pages, cart, and checkout; checkout provides the clearest measured outcome.",
+      "supportingDetails": [],
+      "project": "Guitar Center ecommerce experience",
+      "capabilityTags": [
+        "ecommerce",
+        "customer_experience",
+        "mobile_customer_experience",
+        "conversion_lift",
+        "experimentation",
+        "product_strategy"
+      ],
+      "metricTags": [
+        "ecommerce",
+        "homepage",
+        "PDP",
+        "PLP",
+        "cart",
+        "checkout"
+      ],
+      "metrics": [
+        {
+          "label": "homepage through checkout scope",
+          "value": "homepage through checkout scope",
+          "context": "Guitar Center ecommerce experience"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 3,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ecommerce, customer experience, mobile customer experience. Strength: strong.",
+      "projectId": "checkout-redesign",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Guitar Center ecommerce experience",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/checkout-redesign"
+        }
+      ]
+    },
+    {
+      "id": "checkout-conversion-impact-half-time",
+      "claim": "Approved resume shorthand associates checkout with 3% conversion lift and an estimated $16M annualized impact. Timing wording differs across sources and must retain its original measurement context.",
+      "supportingDetails": [
+        "Approved resume shorthand says checkout time was cut in half; the more precise public measurement is roughly 30%, from 3:00 to 2:03. Prefer the precise measurement when comparing outcomes."
+      ],
+      "project": "Checkout redesign",
+      "capabilityTags": [
+        "ecommerce",
+        "checkout_redesign",
+        "conversion_lift",
+        "experimentation",
+        "customer_experience",
+        "measurable_impact",
+        "mobile_customer_experience"
+      ],
+      "metricTags": [
+        "checkout",
+        "ecommerce",
+        "conversion optimization"
+      ],
+      "metrics": [
+        {
+          "label": "conversion lift",
+          "value": "3%",
+          "context": "Checkout redesign"
+        },
+        {
+          "label": "annualized revenue impact",
+          "value": "$16M",
+          "context": "Checkout redesign"
+        },
+        {
+          "label": "checkout time reduced by half",
+          "value": "checkout time reduced by half",
+          "context": "Checkout redesign"
+        }
+      ],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "portfolio_source",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 2,
+      "strength": "very_strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ecommerce, checkout redesign, conversion lift. Strength: very strong.",
+      "projectId": "checkout-redesign",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Checkout redesign",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/checkout-redesign"
+        }
+      ]
+    },
+    {
+      "id": "operationalized-an-ml-driven-sales-scoring",
+      "claim": "Brought an ML sales-scoring workflow into Salesforce agent use, balancing lead prioritization with transparency, trust, and long-term customer relationships.",
+      "supportingDetails": [],
+      "project": "Guitar Center — Senior Product Manager - Contact Center & Order Management Systems",
+      "capabilityTags": [
+        "retrieval",
+        "adoption",
+        "automation"
+      ],
+      "metricTags": [],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "user_approved",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 1,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for retrieval, enterprise adoption, automation. Strength: strong.",
+      "projectId": "contact-center",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Guitar Center — Senior Product Manager - Contact Center & Order Management Systems",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/chatgpt-enterprise"
+        }
+      ]
+    },
+    {
+      "id": "aligned-contact-center-prioritization-with-the",
+      "claim": "Helped adapt an email-team RFM customer score built from custom ML models into contact-center agent workflows.",
+      "supportingDetails": [],
+      "project": "Guitar Center — Senior Product Manager — Contact Center & Order Management Systems",
+      "capabilityTags": [
+        "contact_center"
+      ],
+      "metricTags": [],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "user_approved",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 1,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for contact center operations. Strength: strong.",
+      "projectId": "contact-center",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Guitar Center — Senior Product Manager — Contact Center & Order Management Systems",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/chatgpt-enterprise"
+        }
+      ]
+    },
+    {
+      "id": "created-the-ecommerce-testing-and-personalization",
+      "claim": "Established a testing and personalization center of excellence after implementing Monetate, supporting A/B testing and personalized page experiences.",
+      "supportingDetails": [],
+      "project": "Guitar Center — Product Manager — eCommerce Journeys",
+      "capabilityTags": [
+        "ecommerce",
+        "adoption"
+      ],
+      "metricTags": [],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "user_approved",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 1,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ecommerce, enterprise adoption. Strength: strong.",
+      "projectId": "ecommerce",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Guitar Center — Product Manager — eCommerce Journeys",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/checkout-redesign"
+        }
+      ]
+    },
+    {
+      "id": "optimized-recommendation-engine-experiences-across-the",
+      "claim": "Partnered with the ecommerce data lead to improve recommendation experiences across the customer journey.",
+      "supportingDetails": [],
+      "project": "Guitar Center — Product Manager — eCommerce Journeys",
+      "capabilityTags": [
+        "ecommerce",
+        "customer_data"
+      ],
+      "metricTags": [],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "user_approved",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 1,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for ecommerce, customer data. Strength: strong.",
+      "projectId": "ecommerce",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Guitar Center — Product Manager — eCommerce Journeys",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/checkout-redesign"
+        }
+      ]
+    },
+    {
+      "id": "rolled-out-cresta-ai-coaching-across",
+      "claim": "Introduced Cresta coaching to a 250-person contact center over two months, combining executive alignment, agent onboarding, manager workflows, and feedback-driven iteration.",
+      "supportingDetails": [],
+      "project": "Guitar Center — Senior Product Manager — Contact Center & Order Management Systems",
+      "capabilityTags": [
+        "executive_alignment",
+        "contact_center"
+      ],
+      "metricTags": [],
+      "metrics": [],
+      "sourceAudit": {
+        "status": "verified",
+        "sourceType": "user_approved",
+        "lastReviewedAt": null
+      },
+      "sourceRefCount": 1,
+      "strength": "strong",
+      "visibility": "public_safe",
+      "recommendedUse": "Use as evidence for executive alignment, contact center operations. Strength: strong.",
+      "projectId": "contact-center",
+      "claimBoundaries": [
+        "This record does not establish sole implementation ownership, team size, or additional business impact."
+      ],
+      "sources": [
+        {
+          "title": "Guitar Center — Senior Product Manager — Contact Center & Order Management Systems",
+          "kind": "approved_career",
+          "url": "https://www.danielnash.co/work/chatgpt-enterprise"
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "ai-product-leadership-prototype-scale",
+      "projectId": "chatgpt-enterprise",
+      "text": "Guitar Center AI product leadership and portfolio prototypes\nGuided applied AI prototypes toward enterprise adoption across contact center, product, and merchandising teams, including ChatGPT rollout and agent workflows.\napplied_ai\nprototype_to_scale\ncustom_gpts\nagentic_ai\nenterprise_systems\ncross_functional_leadership\nAI products\nChatGPT Enterprise\ncontact center\nproduct teams\nmerchandising\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "2355cf0c8e1e5cfdf2731a406ad604d56d586656c724fbb0832f548eeaca682e"
+    },
+    {
+      "id": "contact-center-ai-pilot-impact",
+      "projectId": "chatgpt-enterprise",
+      "text": "Contact Center ChatGPT pilot\nDirected a contact-center ChatGPT pilot whose adoption evidence informed expansion: 90% training completion, 177 weekly users across 289 users, and 30,780 messages over three weeks.\nThe adoption window comprises 30,780 messages over three weeks, with 177 weekly users among 289 contact-center users.\nA separate six-month pilot compared agents with a matched control group and supports an estimated $2.7M annualized impact; control-group improvements matter when interpreting individual metrics.\napplied_ai\ncontact_center\ncustom_gpts\nworkflow_transformation\nmeasurable_impact\ncross_functional_leadership\nadoption\nai_platform\ncontact center\nenterprise AI\ncustomer operations\n90% training completion Contact Center ChatGPT pilot\n177 weekly users Contact Center ChatGPT pilot\n289 Contact Center users Contact Center ChatGPT pilot\n30,780 messages in 3 weeks Contact Center ChatGPT pilot\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "9baa8af95d079bd02bb30de745c0b39a18d502fa040b9b4d1a4d397683501348"
+    },
+    {
+      "id": "chatgpt-champions-train-trainer",
+      "projectId": "chatgpt-enterprise",
+      "text": "OpenAI GTM partnership and ChatGPT Champions\nWorked with OpenAI GTM partners to establish a ChatGPT Champions network and develop a train-the-trainer approach to adoption.\nThe Champions network and train-the-trainer approach helped embed enablement alongside the enterprise rollout, in partnership with OpenAI GTM.\napplied_ai\nleadership_without_authority\ncross_functional_leadership\nbusiness_transformation\nenterprise AI\ncross-functional enablement\nOpenAI GTM partnership\n40+ members OpenAI GTM partnership and ChatGPT Champions\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "ef8403b5fe6a21d59943123bc41ef314a02a09c7b8cf0f454371944daeda7617"
+    },
+    {
+      "id": "checkout-redesign-conversion-impact",
+      "projectId": "checkout-redesign",
+      "text": "Checkout redesign\nLed checkout delivery over 12 weeks, with approximately 3% conversion lift, an estimated $16M annualized revenue impact, and a 30% faster checkout flow.\nPost-launch A/B testing supports approximately 3% conversion lift and the $16M annualized estimate.\nFollow-up usability work measured full checkout time moving from 3:00 to 2:03; this is separate from the 12-week delivery timeline.\nQA planning reduced roughly 400 billion theoretical combinations to 20-30 high-risk scenarios.\necommerce\ncheckout_redesign\nconversion_lift\nexperimentation\ncustomer_experience\nmeasurable_impact\necommerce\ncheckout\ngrowth\n12-week redesign 12-week redesign Checkout redesign\nabout 30% faster checkout about 30% faster checkout Checkout redesign\n3% conversion lift Checkout redesign\n$16M annualized revenue impact Checkout redesign\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "57f0dc7c825486c87b2f811333e766b95545c623b21904a482c9a7f50b1d43a4"
+    },
+    {
+      "id": "checkout-redesign-ux-uxr-partnership",
+      "projectId": "checkout-redesign",
+      "text": "Checkout redesign UX/UXR partnership\nCollaborated with UX and user research on checkout experimentation and customer experience; the redesign supported roughly 3% conversion lift and $16M estimated annualized impact.\nThe approved record credits collaboration with UX and UXR; the usability and business measurements retain their separate contexts.\necommerce\ncheckout_redesign\nconversion_lift\nexperimentation\ncustomer_experience\ncross_functional_leadership\nmeasurable_impact\necommerce\ncheckout\nUX research\ngrowth\n12-week redesign 12-week redesign Checkout redesign UX/UXR partnership\n3% conversion lift Checkout redesign UX/UXR partnership\n$16M annualized revenue impact Checkout redesign UX/UXR partnership\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "473616fb2026e33c159c983bad23ec466a739fffe1558cb5273547f5f04f803c"
+    },
+    {
+      "id": "chatgpt-enterprise-platform-adoption",
+      "projectId": "chatgpt-enterprise",
+      "text": "ChatGPT Enterprise platform adoption\nExpanded ChatGPT Enterprise to approximately 1,000 licensed and 800 active users using training, Champions, governance, and reusable rollout practices.\nLicenses and active usage are separate measures: approximately 1,000 licensed users and around 800 active users.\napplied_ai\nai_platform\nbusiness_transformation\nleadership_without_authority\ncross_functional_leadership\nmeasurable_impact\nadoption\nChatGPT Enterprise\nenterprise AI adoption\nAI platform governance\nOpenAI GTM partnership\nabout 1,000 licensed users about 1,000 licensed users ChatGPT Enterprise platform adoption\naround 800 active users around 800 active users ChatGPT Enterprise platform adoption\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "80e345d4dcd2467828bfd8dc9fc0f2bfbf0a66324b2d43454529010078e84802"
+    },
+    {
+      "id": "product-operating-model-institutionalized",
+      "projectId": "jira-product-discovery",
+      "text": "Guitar Center product operating model\nAt Guitar Center, Daniel defined product practices across intake, discovery, prioritization, and decision forums, and built an eight-week onboarding program for product managers and stakeholder groups.\nThe work was at Guitar Center. Eight weeks describes the onboarding program duration.\nproduct_operating_model\nproduct_strategy\nprioritization_frameworks\nintake_prioritization\nbusiness_transformation\nportfolio_strategy\nexecutive_alignment\nproduct operating model\nintake\ndiscovery\nprioritization\ndecision forums\nproduct manager onboarding\nstakeholder enablement\nNo adoption, completion, or business-impact outcome is established.",
+      "revision": "8d90d96dc1776269b9c6d86dd76a218f8874ebe5ecc697ad3d14eab1fa99d7f9"
+    },
+    {
+      "id": "launchmuse-agentic-marketing-campaign-platform",
+      "projectId": "launchmuse",
+      "text": "LaunchMuse founder and product builder\nDeveloped an OpenAI API campaign-planning product for artists, orchestrating multiple steps into a structured music marketing campaign.\napplied_ai\nagentic_ai\nagentic_orchestration\nzero_to_one\nprototype_to_scale\ntechnical_fluency\nworkflow_transformation\nLaunchMuse\nAI marketing campaigns\nagentic workflows\nmulti-step outputs\ncreator tools\nOpenAI APIs\nPlanning time is a workflow result; no adoption, revenue, or retention metric is established.",
+      "revision": "bf90ae0349975a3f808782a0734dc5c502ae657532990cb2017f62286981801e"
+    },
+    {
+      "id": "oms-api-platform-ai-tooling",
+      "projectId": "oms-chatgpt-app",
+      "text": "Custom OMS APIs for AI and internal tooling\nHelped shape custom order-management APIs and their OpenAI integration for agent tools supporting service, fulfillment, and order workflows.\nAgent tools integrate OpenAI APIs directly with custom OMS APIs; the supported workflow includes order lookup and cancellation.\nenterprise_systems\noms\nai_platform\ntechnical_fluency\nworkflow_transformation\napplied_ai\nOMS\nplatform APIs\nOpenAI APIs\ncustom OMS APIs\nAI tooling\nfulfillment systems\nThe public demo uses simulated data; later production work is a separate milestone.\nNo production adoption or business-impact metrics are established.",
+      "revision": "e8e0769453253d10cd7ac3ed5be47d2987b7302346198c4dee25e851cf51474d"
+    },
+    {
+      "id": "builder-pm-ai-prototypes",
+      "projectId": "cross-project",
+      "text": "Portfolio AI prototypes\nCreated AI prototypes across music marketing, scientific research, education, and portfolio discovery, using OpenAI APIs, local document reading, retrieval, MCP patterns, and evaluation.\nzero_to_one\nprototype_to_scale\napplied_ai\nevals\nmcp\nchatgpt_apps\nretrieval\ntechnical_fluency\nAI products\nresearch tools\ncreator tools\neducation workflows\nGemma 4 local-model document reading\nOpenAI APIs\nportfolio AI assistant\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "cd642403aebb1018e7a7cf80b870c3f9b9631a8cf66be2d11e9a91a86b86d5f1"
+    },
+    {
+      "id": "immunology-scout-research-assistant",
+      "projectId": "immunology-scout",
+      "text": "Immunology Scout\nDeveloped a research assistant for immunology literature and patent discovery, combining OpenAI APIs with retrieval, evaluation, and human source review.\nThe scientific workflow focuses on immunology papers and patents, with traceable retrieved sources and human approval before follow-up context use.\nai_for_science\nresearch_tools\nscience_research\nretrieval\nhuman_in_the_loop\nevals\nevidence_grounded_synthesis\ntechnical_fluency\nimmunology\nscientific research\npatent discovery\nAI research tools\nOpenAI APIs\nThe 100% to 0% result concerns patent-search hallucinations in the measured set, not every possible hallucination.\nNo product-wide adoption, revenue, or scientific validation is established.",
+      "revision": "67aa016e0513ce57dbec0b7e7cabbf072ab195c17eaba9ba1e66bb4986f3f209"
+    },
+    {
+      "id": "portfolio-ai-assistant-openai-api-grounding",
+      "projectId": "ai-career-operating-system",
+      "text": "Portfolio site AI assistant\nCreated the OpenAI-connected Portfolio Guide to help hiring teams explore case studies and approved career evidence through grounded questions.\napplied_ai\nretrieval\nevidence_grounded_synthesis\nevals\ntechnical_fluency\nai_platform\nportfolio AI assistant\nOpenAI APIs\ngrounded assistant\nrecruiter experience\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "2c1b1d34d7bebf4d09c419006d4f1e5e1e4836e49e837a659466263b115723cf"
+    },
+    {
+      "id": "oms-chatgpt-app-prototype-production-pilot",
+      "projectId": "oms-chatgpt-app",
+      "text": "OMS ChatGPT App\nMoved an order-management ChatGPT application from prototype through production connection and small-group testing to production. Agentic order lookup and cancellation use custom OMS APIs, PII-safe validation, and deliberate human confirmation.\nApproved milestones distinguish the April 2025 Canvas prototype, December 2025 coded prototype, March 2026 production connection, and April 2026 small-group production testing. Later approved notes confirm production.\nThe public portfolio demonstration uses simulated data and remains separate from these later operational milestones.\nIn prototype time studies, reduced customer-order lookup from about a minute to a few seconds.\napplied_ai\nzero_to_one\nprototype_to_scale\nagentic_ai\nresponsible_ai\nhuman_in_the_loop\ntechnical_fluency\noms\nai_platform\nOMS\nChatGPT App\nOpenAI APIs\ncustom OMS APIs\nenterprise AI workflows\nCanvas prototype Canvas prototype OMS ChatGPT App\nproduction connection production connection OMS ChatGPT App\nsmall-group production testing small-group production testing OMS ChatGPT App\nproduction status production status OMS ChatGPT App\nPrototype time studies: customer-order lookup from about a minute to a few seconds Prototype time studies: customer-order lookup from about a minute to a few seconds OMS ChatGPT App\nThe public demo uses simulated data; later production work is a separate milestone.\nNo production adoption or business-impact metrics are established.\nThe approximate prototype lookup timing does not establish production performance, adoption or business impact; exact seconds, sample size and percentage reduction remain unknown.",
+      "revision": "a089dd9501c8d4e517fa3c55b062812396e21e9551ea25ef07a054eefd5d15fa"
+    },
+    {
+      "id": "agentic-ai-quality-retrieval-tool-use-skill-cluster",
+      "projectId": "cross-project",
+      "text": "Cross-project AI product quality and tool-use patterns\nApplied retrieval grounding, MCP-style tools, agent loops, evaluation, hallucination checks, and human review across AI products. Patent-search quality evidence belongs specifically to Immunology Scout.\napplied_ai\nagentic_ai\nagentic_orchestration\nmcp\nretrieval\nevals\nhuman_in_the_loop\nsource_grounded_ai\ntechnical_fluency\nMCP-style tools\nRAG / retrieval grounding\nhallucination evaluation\nhuman-in-the-loop review\nsource-grounded AI\npatent hallucinations reduced from 100% to 0% patent hallucinations reduced from 100% to 0% Cross-project AI product quality and tool-use patterns\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "effd0a9582938e9447a765a10f6a407f5f9bd7054850f0804418b8fe4c216b7f"
+    },
+    {
+      "id": "zero-to-one-ai-products-across-domains",
+      "projectId": "cross-project",
+      "text": "Portfolio of 0-to-1 AI products\nBuilt early AI products across enterprise operations, scientific research, education, music marketing, and portfolio discovery, with production deployments supported for selected products.\nzero_to_one\nprototype_to_scale\napplied_ai\nagentic_ai\nai_platform\ntechnical_fluency\nambiguity\nenterprise operations\nscientific research\neducation\nmusic marketing\nOpenAI APIs\nportfolio AI assistant\nmultiple 0-to-1 AI products multiple 0-to-1 AI products Portfolio of 0-to-1 AI products\nproduction deployments for selected products production deployments for selected products Portfolio of 0-to-1 AI products\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "6cc9f4bd864d8722082e69085ba93943319328d050d7dd59eafbf6810ca0f8b9"
+    },
+    {
+      "id": "immunology-scout-prototype-production",
+      "projectId": "immunology-scout",
+      "text": "Immunology Scout\nLed product and technical strategy for an immunology research assistant. Scientist feedback informed evaluations and retrieval grounding that reduced patent-search hallucinations from 100% to 0% in the measured set.\nScientist responses gathered through a Google Form informed evaluation cases and agentic coding loops.\nPrototype and production at Immiatrics were confirmed in February 2026. The 100% to 0% patent-search result describes the measured evaluation, without proving clinical validation or adoption.\nai_for_science\nresearch_tools\nscience_research\nretrieval\nhuman_in_the_loop\nevals\nmcp\nevidence_grounded_synthesis\ntechnical_fluency\nzero_to_one\nImmiatrics\nimmunology research\npapers and patents\nOpenAI APIs\nprototype to production in February 2026 prototype to production in February 2026 Immunology Scout\npatent hallucinations reduced from 100% to 0% patent hallucinations reduced from 100% to 0% Immunology Scout\nThe 100% to 0% result concerns patent-search hallucinations in the measured set, not every possible hallucination.\nNo product-wide adoption, revenue, or scientific validation is established.",
+      "revision": "d1bd4ba8ec8be1d54b7a1916e76caecb95d52854fb81af430a08c672d2daabb2"
+    },
+    {
+      "id": "immunology-scout-hitl-grounding-workflow",
+      "projectId": "immunology-scout",
+      "text": "Immunology Scout\nTurned expert research needs into requirements for retrieval, trust, evaluation, source validation, and human approval of scientific evidence.\nRetrieved documents can be approved as context for follow-up questions. Experiment-building workflows are planned, so that downstream capability is not established as production behavior.\nai_for_science\nresearch_tools\nscience_research\nretrieval\nhuman_in_the_loop\nevidence_grounded_synthesis\nagentic_ai\ntechnical_fluency\nzero_to_one\nImmiatrics\nimmunology research\nretrieval grounding\nexperiment-building workflows\nThe 100% to 0% result concerns patent-search hallucinations in the measured set, not every possible hallucination.\nNo product-wide adoption, revenue, or scientific validation is established.",
+      "revision": "21dd71832289b58eef43a99765bc485a0a93366102c23f400f0490f213cf950b"
+    },
+    {
+      "id": "launchmuse-mvp-campaign-planning",
+      "projectId": "launchmuse",
+      "text": "LaunchMuse\nTook a music campaign-planning product from independent prototype to its October 2025 MVP launch, reducing planning from hours to approximately five minutes for structured six-week campaigns.\nThe October 2025 MVP launch follows earlier independent prototyping and a simpler demo. Campaign-planning time moved from hours to roughly five minutes; subscription revenue, retention, and adoption remain unestablished.\nzero_to_one\nprototype_to_scale\napplied_ai\nagentic_ai\ncustomer_experience\ntechnical_fluency\nproduct_strategy\nLaunchMuse\nmusic marketing\ncreator tools\nOpenAI APIs\nhours to roughly 5 minutes hours to roughly 5 minutes LaunchMuse\nMVP launched October 2025 MVP launched October 2025 LaunchMuse\nPlanning time is a workflow result; no adoption, revenue, or retention metric is established.",
+      "revision": "7d392356455670ecbf844b795d6bc0a224c650f0e3ccef65ff4013c83c4bbbe5"
+    },
+    {
+      "id": "rig-advisor-hackathon-production-concept",
+      "projectId": "ai-platform-mcp",
+      "text": "Rig Advisor / ChatGPT Hackathon\nContributed to a winning AI hackathon concept that later informed a customer-facing production experience announced publicly by the CEO.\napplied_ai\nzero_to_one\nprototype_to_scale\ncustom_gpts\ncustomer_experience\nmeasurable_impact\nRig Advisor\ncustomer-facing AI\nhackathon\nhackathon-winning concept hackathon-winning concept Rig Advisor / ChatGPT Hackathon\nproduction customer-facing experience production customer-facing experience Rig Advisor / ChatGPT Hackathon\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "4766e73669789a3b48cdeb017eecaeea80957eb6dea05950d05d445577cc4ff3"
+    },
+    {
+      "id": "ai-platform-prototype-production-strategy",
+      "projectId": "ai-platform-mcp",
+      "text": "AI Platform strategy and prototype-to-production path\nProposed the AI Platform direction in February 2025, developed proofs of concept through October 2025, and helped the capability reach production in February 2026.\nThe approved milestone sequence spans the February 2025 proposal, proofs of concept through October 2025, and production in February 2026. It describes Daniel’s contribution to a shared capability, not sole engineering ownership.\nai_platform\napplied_ai\nprototype_to_scale\nproduct_strategy\nresponsible_ai\nai_governance\nexecutive_alignment\ntechnical_fluency\nAI Platform\nenterprise AI\ngovernance\npitched February 2025 pitched February 2025 AI Platform strategy and prototype-to-production path\nPOCs through October 2025 POCs through October 2025 AI Platform strategy and prototype-to-production path\nproduction version February 2026 production version February 2026 AI Platform strategy and prototype-to-production path\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "62e38d85d815782cd9efe029ae533f4acf554eb07f6a115535fcd61ab85c144a"
+    },
+    {
+      "id": "ecommerce-consumer-experience-scale",
+      "projectId": "checkout-redesign",
+      "text": "Guitar Center ecommerce experience\nDelivered customer-facing ecommerce changes across homepage, product detail and listing pages, cart, and checkout; checkout provides the clearest measured outcome.\necommerce\ncustomer_experience\nmobile_customer_experience\nconversion_lift\nexperimentation\nproduct_strategy\necommerce\nhomepage\nPDP\nPLP\ncart\ncheckout\nhomepage through checkout scope homepage through checkout scope Guitar Center ecommerce experience\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "1f32b08328398b763fe4b42088e16529aedc1691e1a676a17e00279b1ec0aff4"
+    },
+    {
+      "id": "checkout-conversion-impact-half-time",
+      "projectId": "checkout-redesign",
+      "text": "Checkout redesign\nApproved resume shorthand associates checkout with 3% conversion lift and an estimated $16M annualized impact. Timing wording differs across sources and must retain its original measurement context.\nApproved resume shorthand says checkout time was cut in half; the more precise public measurement is roughly 30%, from 3:00 to 2:03. Prefer the precise measurement when comparing outcomes.\necommerce\ncheckout_redesign\nconversion_lift\nexperimentation\ncustomer_experience\nmeasurable_impact\nmobile_customer_experience\ncheckout\necommerce\nconversion optimization\n3% conversion lift Checkout redesign\n$16M annualized revenue impact Checkout redesign\ncheckout time reduced by half checkout time reduced by half Checkout redesign\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "59ba42b123e3711b204b650d06948069bc0648939520509cef311937f469cac0"
+    },
+    {
+      "id": "operationalized-an-ml-driven-sales-scoring",
+      "projectId": "contact-center",
+      "text": "Guitar Center — Senior Product Manager - Contact Center & Order Management Systems\nBrought an ML sales-scoring workflow into Salesforce agent use, balancing lead prioritization with transparency, trust, and long-term customer relationships.\nretrieval\nadoption\nautomation\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "d1d6c8234a2624e28be39ae551a612a39b953ff0f4acc52b1be7d55a973553e8"
+    },
+    {
+      "id": "aligned-contact-center-prioritization-with-the",
+      "projectId": "contact-center",
+      "text": "Guitar Center — Senior Product Manager — Contact Center & Order Management Systems\nHelped adapt an email-team RFM customer score built from custom ML models into contact-center agent workflows.\ncontact_center\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "60ccb75f31706c587a3625964f0c56e7d6b6a01ed5e6e15dce36caa4de83cdf1"
+    },
+    {
+      "id": "created-the-ecommerce-testing-and-personalization",
+      "projectId": "ecommerce",
+      "text": "Guitar Center — Product Manager — eCommerce Journeys\nEstablished a testing and personalization center of excellence after implementing Monetate, supporting A/B testing and personalized page experiences.\necommerce\nadoption\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "b38561abcf94308baad536c094394cd148f2bfc2740d8cb8e2d0a4efdb27968e"
+    },
+    {
+      "id": "optimized-recommendation-engine-experiences-across-the",
+      "projectId": "ecommerce",
+      "text": "Guitar Center — Product Manager — eCommerce Journeys\nPartnered with the ecommerce data lead to improve recommendation experiences across the customer journey.\necommerce\ncustomer_data\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "cc6e39490751762a6ebd51561e4acd4caee34dbfd617ce5106f65a0470cc625e"
+    },
+    {
+      "id": "rolled-out-cresta-ai-coaching-across",
+      "projectId": "contact-center",
+      "text": "Guitar Center — Senior Product Manager — Contact Center & Order Management Systems\nIntroduced Cresta coaching to a 250-person contact center over two months, combining executive alignment, agent onboarding, manager workflows, and feedback-driven iteration.\nexecutive_alignment\ncontact_center\nThis record does not establish sole implementation ownership, team size, or additional business impact.",
+      "revision": "eb9e44c2b9b6db0517b64a5ef11da7c2b1a3b8c8695025c7a4702577847a3a49"
+    }
+  ]
+}

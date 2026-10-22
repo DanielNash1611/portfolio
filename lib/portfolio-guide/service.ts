@@ -1,6 +1,7 @@
 import { getGuideSurfaceContext, getPublicSurfaceCatalog } from "@/lib/portfolio-agent/catalog";
 import { findRelevantWork } from "@/lib/portfolio-agent/capabilities";
 import OpenAI from "openai";
+import { retrieveGuideSources } from "./retrieval";
 import { getPortfolioGuideModel } from "@/lib/portfolio-guide/model";
 import { selectRecommendationsForPage } from "@/lib/portfolio-guide/context";
 import { getRelatedPages } from "@/lib/portfolio-guide/related";
@@ -34,6 +35,8 @@ import {
   claimSelectionFormat,
   claimSelectionConstraints,
   renderClaimSelection,
+  blockExcerpt,
+  type ClaimBlock,
 } from "./factual-answers";
 import {
   routePortfolioQuestion,
@@ -57,6 +60,12 @@ export type PortfolioGuideServiceConfig = {
   decisions?: DecisionsConfig;
   /** When provided, enables the searchCareerEvidence tool (server-side call to ResumeCustomizer). */
   evidenceConfig?: EvidenceConfig;
+  hybridSearch?: boolean;
+  semanticSearch?: boolean;
+  /** In-process deterministic replay; never exposed as an HTTP request option. */
+  retrieveSources?: (
+    request: CopilotRequest,
+  ) => ReturnType<typeof retrieveGuideSources>;
   /**
    * When true, the evidence tool is served by the in-process local mock instead
    * of a real ResumeCustomizer call. Non-production only; lets the whole
@@ -164,6 +173,7 @@ export function processPortfolioGuideAnswer(input: {
   routingEnabled?: boolean;
   supportingPages?: SupportingPage[];
   evidenceUnavailableReason?: EvidenceUnavailableReason;
+  retrievedBlocks?: ClaimBlock[];
 }) {
   const result = renderClaimSelection({
     ...input,
@@ -171,6 +181,7 @@ export function processPortfolioGuideAnswer(input: {
       input.request,
       input.supportingPages,
       input.careerEvidence,
+      input.retrievedBlocks,
     ),
   });
   return {
@@ -226,7 +237,7 @@ export async function generatePortfolioGuideResponse(
   const recommendations =
     request.portfolioContext.recommendations ??
     selectRecommendationsForPage(request.pageContext);
-  const enrichedRequest: CopilotRequest = {
+  let enrichedRequest: CopilotRequest = {
     ...request,
     portfolioContext: {
       ...request.portfolioContext,
@@ -239,7 +250,29 @@ export async function generatePortfolioGuideResponse(
     evidenceEnabled ? undefined : "not_configured";
   const warnings: string[] = [];
   let prefetchedEvidence: EvidenceSearchResponse | undefined;
-  if (routing.plan?.searchCareerEvidence) {
+  let retrieval: Awaited<ReturnType<typeof retrieveGuideSources>> | undefined;
+  if (config.hybridSearch) {
+    retrieval = config.retrieveSources
+      ? await config.retrieveSources(enrichedRequest)
+      : await retrieveGuideSources(enrichedRequest, {
+          apiKey,
+          signal,
+          semantic: config.semanticSearch !== false,
+          evidenceConfig,
+        });
+    enrichedRequest = {
+      ...retrieval.request,
+      portfolioContext: {
+        ...retrieval.request.portfolioContext,
+        recommendations: selectRecommendationsForPage(
+          retrieval.request.pageContext,
+        ),
+      },
+    };
+    prefetchedEvidence = retrieval.careerEvidence;
+    evidenceUnavailableReason = retrieval.evidenceUnavailableReason;
+  }
+  if (!retrieval && routing.plan?.searchCareerEvidence) {
     const payload = {
       query: request.message,
       currentPortfolioPage: request.pageContext.slug,
@@ -265,25 +298,26 @@ export async function generatePortfolioGuideResponse(
       warnings.push(`evidence_unavailable:${evidenceUnavailableReason}`);
     }
   }
-  const supportingPages = routing.plan
-    ? retrieveSupportingPages(relatedPages, routing.plan)
-    : [];
-  if (request.scope === "portfolio") {
+  const supportingPages = !retrieval && routing.plan
+    ? retrieveSupportingPages(relatedPages, routing.plan) : [];
+  if (!retrieval && request.scope === "portfolio") {
     // Ranking accepts 1,000 characters; the submitted question remains intact below.
     const query = `${request.message} ${request.sessionContext.visitorIntent?.rawInput ?? ""}`.trim().slice(0, 1000);
+
     for (const result of findRelevantWork(getPublicSurfaceCatalog(), query)) {
       const page = getGuideSurfaceContext(result.slug);
       if (page && page.slug !== request.pageContext.slug && !supportingPages.some((p) => p.slug === page.slug)) supportingPages.push(page);
       if (supportingPages.length >= 3) break;
     }
   }
+
   const selectionInput = () =>
     JSON.stringify({
       currentQuestion: request.message,
       currentPage: {
         identity: {
-          slug: request.pageContext.slug,
-          title: request.pageContext.title,
+          slug: enrichedRequest.pageContext.slug,
+          title: enrichedRequest.pageContext.title,
         },
       },
       visitorRole: request.sessionContext.visitorIntent?.normalizedTitle,
@@ -291,6 +325,7 @@ export async function generatePortfolioGuideResponse(
         enrichedRequest,
         supportingPages,
         prefetchedEvidence,
+        retrieval?.blocks,
       ),
       selectionConstraints: claimSelectionConstraints(
         enrichedRequest,
@@ -298,9 +333,16 @@ export async function generatePortfolioGuideResponse(
           enrichedRequest,
           supportingPages,
           prefetchedEvidence,
+          retrieval?.blocks,
         ),
       ),
       candidateRelatedPages: relatedPages,
+      ...(retrieval
+        ? {
+            retrievalScope: retrieval.scope,
+            retrievedIds: retrieval.candidateIds,
+          }
+        : {}),
       ...(routing.plan
         ? {
             routingContext: {
@@ -352,7 +394,7 @@ export async function generatePortfolioGuideResponse(
   // First call: include only the allowlisted tools available for this request.
   type ResponsesCreateParams = Parameters<typeof client.responses.create>[0];
   const availableTools: NonNullable<ResponsesCreateParams["tools"]> = [];
-  if (evidenceEnabled && !prefetchedEvidence) {
+  if (!retrieval && evidenceEnabled && !prefetchedEvidence) {
     availableTools.push(SEARCH_CAREER_EVIDENCE_TOOL_DEFINITION);
   }
   if (conversationHistorySearch) {
@@ -441,6 +483,7 @@ export async function generatePortfolioGuideResponse(
           enrichedRequest,
           supportingPages,
           prefetchedEvidence,
+          retrieval?.blocks,
         ),
         enrichedRequest,
       ),
@@ -622,6 +665,7 @@ export async function generatePortfolioGuideResponse(
               enrichedRequest,
               supportingPages,
               prefetchedEvidence,
+              retrieval?.blocks,
             ),
             enrichedRequest,
           ),
@@ -675,6 +719,7 @@ export async function generatePortfolioGuideResponse(
     routingEnabled: Boolean(routing.plan),
     supportingPages,
     evidenceUnavailableReason,
+    retrievedBlocks: retrieval?.blocks,
   });
   addTrace({
     eventType: "guardrail",
@@ -717,17 +762,60 @@ export async function generatePortfolioGuideResponse(
   }
 
   const evidenceMeta: EvidenceMetadata = {
-    pageContextUsed: true,
+    pageContextUsed: retrieval
+      ? selectionDiagnostics.selectedIds.some((id) => !id.startsWith("career:"))
+      : true,
+    ...(retrieval
+      ? {
+          retrievedEvidenceIds: retrieval.candidateIds,
+          retrievalMode: retrieval.mode,
+          careerRetrievalMode: retrieval.careerMode,
+          scope: retrieval.scope.kind,
+        }
+      : {}),
     resumeCustomizerEvidenceUsed,
     ...(evidenceUnavailableReason ? { evidenceUnavailableReason } : {}),
     ...(warnings.length > 0 ? { warnings } : {}),
   };
 
+  const citations = retrieval
+    ? buildClaimInventory(
+        enrichedRequest,
+        supportingPages,
+        prefetchedEvidence,
+        retrieval.blocks,
+      )
+        .filter(
+          (block) =>
+            selectionDiagnostics.selectedIds.includes(block.id) &&
+            finalized.answer.includes(blockExcerpt(block)),
+        )
+        .map((block) => ({
+          sourceId: block.id,
+          title: block.pageTitle,
+          excerpt: blockExcerpt(block),
+          kind: block.id.startsWith("career:")
+            ? ("approved_career" as const)
+            : ("portfolio" as const),
+          url: block.id.startsWith("career:")
+            ? prefetchedEvidence?.evidence
+                .find((e) => `career:${e.id}` === block.id)
+                ?.sources?.find((source) => source.url)?.url
+            : getGuideSurfaceContext(block.pageSlug)?.href,
+        }))
+    : undefined;
   const finalCopilotResponse: CopilotResponse = {
     ...guardedResponse,
-    answer: finalized.answer,
+    answer:
+      finalized.answer +
+      (retrieval?.qualificationGap
+        ? `\n\nThe retrieved public evidence does not establish the requested ${retrieval.qualificationGap} qualification.`
+        : ""),
     ...(evidenceUsed ? { evidenceUsed } : {}),
     evidenceMeta,
+    ...(citations
+      ? { citations, usedEvidenceIds: citations.map((c) => c.sourceId) }
+      : {}),
   };
 
   return {

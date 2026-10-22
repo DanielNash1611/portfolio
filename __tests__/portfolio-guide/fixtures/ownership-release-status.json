@@ -1,0 +1,133 @@
+{
+  "provenance": {
+    "executionId": "66ba254f7e5dce931fbc8b1c097709fc654cb5581c899b20c1da2161b68e13ac",
+    "originalCaptureSha256": "23414ab07f46de7efdd9d01bcf83bdf6f691f2c932d8ee6878b34dc5b91959d3",
+    "originalReviewVerdict": "uncertain",
+    "note": "Public saved capture; original grade and immutable journal remain unchanged."
+  },
+  "question": "What did Daniel own versus AI-assisted implementation across the portfolio?",
+  "pageSlug": "ai-platform-mcp",
+  "scope": "portfolio",
+  "rawText": "{\"blockIds\":[\"ai-platform-mcp:ownership\",\"ai-career-operating-system:ownership\"]}",
+  "relatedPages": [
+    {
+      "slug": "ai-career-operating-system",
+      "title": "AI Career Operating System",
+      "href": "/products/ai-career-operating-system",
+      "reason": "Thematic comparison, elsewhere in the portfolio — AI Career Operating System: Designed a governed AI workflow that turns approved career evidence into recruiter-ready artifacts through bounded retrieval, configured advisory reviewers, and human approval."
+    },
+    {
+      "slug": "chatgpt-enterprise",
+      "title": "ChatGPT Enterprise from pilot to operating model",
+      "href": "/work/chatgpt-enterprise",
+      "reason": "This case pairs with ChatGPT Enterprise because it shows the platform and workflow thinking that later supports broader AI operating-model work."
+    }
+  ],
+  "originalBlocks": [
+    {
+      "id": "ai-platform-mcp:ownership",
+      "pageSlug": "ai-platform-mcp",
+      "pageTitle": "From AI experiments to platform foundations",
+      "kind": "ownership",
+      "claims": [
+        "Daniel led a team to design and build the original functional AI prototype and mapped recurring workflows into reusable platform principles."
+      ],
+      "qualifications": [
+        "A February 2026 production version is documented, but end-to-end production engineering ownership and preservation of the full original vision are not established."
+      ],
+      "sourceRefs": [
+        "ai-platform-mcp.claimBoundaries.directOwnership.0",
+        "ai-platform-mcp.claimBoundaries.directOwnership.1",
+        "ai-platform-mcp.claimBoundaries.implementation.1"
+      ]
+    },
+    {
+      "id": "ai-career-operating-system:ownership",
+      "pageSlug": "ai-career-operating-system",
+      "pageTitle": "AI Career Operating System",
+      "kind": "ownership",
+      "claims": [
+        "Daniel defined AI Career Operating System's product direction, UX, service boundaries, evaluations, and claim guardrails; AI development agents assisted implementation, with Daniel retaining product and quality accountability and no claim of sole hand-coding."
+      ],
+      "qualifications": [
+        "The selected branches support authenticated resume jobs, advisory reviews, and PDF checks; Decisions routing and career retrieval remain local or unshipped candidates, remote retrieval is disabled, and final combined-release validation is pending."
+      ],
+      "sourceRefs": [
+        "ai-career-operating-system.claimBoundaries.directOwnership.0",
+        "ai-career-operating-system.claimBoundaries.influence.0",
+        "ai-career-operating-system.claimBoundaries.implementation.0",
+        "ai-career-operating-system.claimBoundaries.implementation.1",
+        "ai-career-operating-system.claimBoundaries.explicitUnknowns.3",
+        "ai-career-operating-system.claimBoundaries.explicitUnknowns.6",
+        "ai-career-operating-system.evidenceHighlights.5.detail"
+      ],
+      "coveredStatuses": ["career-retrieval-unavailable"]
+    }
+  ],
+  "originalAnswer": "On this page — From AI experiments to platform foundations: Daniel led a team to design and build the original functional AI prototype and mapped recurring workflows into reusable platform principles. A February 2026 production version is documented, but end-to-end production engineering ownership and preservation of the full original vision are not established.\n\nElsewhere in the portfolio — AI Career Operating System: Daniel defined AI Career Operating System's product direction, UX, service boundaries, evaluations, and claim guardrails; AI development agents assisted implementation, with Daniel retaining product and quality accountability and no claim of sole hand-coding. The selected branches support authenticated resume jobs, advisory reviews, and PDF checks; Decisions routing and career retrieval remain local or unshipped candidates, remote retrieval is disabled, and final combined-release validation is pending.",
+  "originalPortfolioDocumentHashes": {
+    "gravity-astra:evidence-0": "0c07526e894fc37d19d6f21e6bd5d031e4e1308ee8ab4a0a9157a671c8d61c72",
+    "gravity-astra:evidence-1": "1e9fb1cc649f56f07749da25b30e2f74e5310ac95ee79c4bf18f8223ee777333",
+    "gravity-astra:evidence-2": "809c8435c84942e433a50e4d22363cdc2663593048047b832b3cfee09a6428de",
+    "gravity-astra:ownership": "cc286a083fd0c3dbb74bb93dc5299eaa2fecf4196a9906993b8184f4736d2b85",
+    "gravity-astra:perspective": "55a36309aa51083bb695ad53258d309b4a4433f831590099b8ea6dcea2412cdd",
+    "tabletop-symphony:evidence-0": "1a5d3906baeba7ce5dfb07f09ca0006d08d3751f37e899dcf3f7c20576db80e2",
+    "tabletop-symphony:evidence-1": "06ba7ef15e32499af178d3b7c1b902d8115af475c7cc674ce2e3719b6caff026",
+    "tabletop-symphony:evidence-2": "c599ba688c48d76467024df4ba7757466fa2f4dac6ab87ffdb6ae6143e8d75e0",
+    "tabletop-symphony:ownership": "c5ca53363449d282f111da54347f5e3f4211d5a89dfdde1f943bdcac0e649185",
+    "tabletop-symphony:perspective": "92d3e955ee91e812775b88b64b55e344a32a14bbcbeecf3a49fb0f8952fe7769",
+    "chatgpt-enterprise:evidence-0": "f64663108ff4beef8c9baf841e27facd33a5c2bfe329dfc8afcb99a2876f026b",
+    "chatgpt-enterprise:evidence-1": "4afe2dd92174598ad57bc7fadcc2152070696fff518c342a7fcbbfc7cb150cd1",
+    "chatgpt-enterprise:evidence-2": "a59aa2523fcee4453aac6afbb7ece8f9128c08f3fd540f63a7c1ba4e1a4833dd",
+    "chatgpt-enterprise:perspective": "136f7dc392a008ff2e647f3cb43f0ef49d37d34cc6c2ad04d9cafe759c9de70a",
+    "chatgpt-enterprise:ownership": "0f641b535a2ab1de18b6de4bfc86800e058bb773e1e5da2e4ad6e9df3b738e16",
+    "ai-platform-mcp:perspective": "5f9c277c761ccbdd6b2c0be41398f99a7381928a3ad7c9451975a09504c0e13c",
+    "ai-platform-mcp:validation": "cf400afbdc3a52ad58feb2374a0267c96bb3bdb4230da11363b1567c49bf9a54",
+    "ai-platform-mcp:patterns": "d70a1c4a1a66eedd19ab5f87557e82e8b010953fb689dc8ba442d48348828217",
+    "ai-platform-mcp:timeline": "e1f693bfc880cb3861754df365e2943a8eda513348dd3a6417b92357326411a0",
+    "ai-platform-mcp:ownership": "7befba11d8735a0db14a7ae098352488f9aacc8228a60d7f9a90a8f8384fdb44",
+    "checkout-redesign:evidence-0": "524ed1ccce99fd23358cee028d08e0df318b1d88f0ba3c89b8c6b3270d6cd7e5",
+    "checkout-redesign:evidence-1": "03edf13c4a9a1831d8d8ff45086171689c75c0c03e989d1b6aa7213d05eefc26",
+    "checkout-redesign:evidence-2": "c045819e90ed361a5fc92c17ae381199aa6ed2c4f2fab0f78c82fdc6ff341565",
+    "checkout-redesign:ownership": "0cb2044c6a945263036f1f8464d342c27049e0044aa7a43920d3e353ce9eb2fc",
+    "checkout-redesign:perspective": "b15210e6760c4d651426a9e63fc32ba35bc88e876f563e8c45df1a133eed5b7b",
+    "launchmuse:evidence-0": "4f450cb1c31aed949e838ffc72e62a0f0fbf7dc0feaad042a894783a7a2583e8",
+    "launchmuse:evidence-1": "59193bc947f93b90ae7b0a2f4db4107fa8863f5706b6087a67bd8360640510ed",
+    "launchmuse:ownership": "cc7a6a62254fec291ebc00b9d453b48fce6f3264301e5ccdfa4c4dc71b4db79f",
+    "launchmuse:perspective": "6b75cf2595e119e95e0803518450b58912f67de3b63b2727e8cc47726a492a8c",
+    "ai-career-operating-system:evaluation": "f9b1f3971c9a0f7e772d7654fc3165d11be628d9de679a7c6c42e4f14dfd3ccf",
+    "ai-career-operating-system:media": "3e7574dca14bbd48ad52223123e929fe1771026d4776987707e6a680794947a4",
+    "ai-career-operating-system:next": "528572fe3d0b6f8a29ab3f92268802334454359c69149ae9a13d42be826d7c6b",
+    "ai-career-operating-system:perspective": "fa57debb6c818d6a7d60b30bbf695ea657c758dd4c43c5451caf5ad62e1a351a",
+    "ai-career-operating-system:ownership": "c00224cb66539761a678cf8e7ba582738c32720d2f9001a49440e137832ffc32",
+    "ai-career-operating-system:retrieval": "5966dca81f8ddc4c537834703d3e068813e272f0d0a490a383e83f902e222155",
+    "immunology-scout:evidence-0": "ea1ce4bc52c916542d08a1a3b43c9780256964673b5724c97a1f7737b7853e24",
+    "immunology-scout:evidence-1": "fc01099ef0fce3e4ffeab1b4fec7f5b184355fbc8ab9b6e93f6e80c125aff228",
+    "immunology-scout:ownership": "3c6862f8603666373c4cb7b22bbc42ab73a9b0675350f50ec49110aac9064e1b",
+    "immunology-scout:perspective": "82c5143407e4920af39a88487a22fc8252583163957f3da65955346ee711825b",
+    "oms-chatgpt-app:evidence-0": "d1c258b8ee696f3b5a2a0982d195f654ce1514e38cce1635585d5a0cbc67d3be",
+    "oms-chatgpt-app:evidence-1": "2c32cc7757ba929e770e5aad2f2b5f81f448d25e5e306d712fefd9faeafd8817",
+    "oms-chatgpt-app:evidence-2": "ceb48e64b5d4a71f33ace66318ef6fedd66250055b89e0610238709be735271c",
+    "oms-chatgpt-app:ownership": "c44e6188c0853a27dfd514f6041c59e5cb762ec3e952e003162cd17870e81346",
+    "oms-chatgpt-app:perspective": "c060904e9a9ecd1ad0b0a6b5042372be1baa67e241dd5f0f09459048c2cd175f",
+    "jira-product-discovery:evidence-0": "0c7c06c1a50ecb48bc959ac8955118e28e35893b22ddae33717ba432e6cf0856",
+    "jira-product-discovery:evidence-1": "5dd2b12da91fc7632f02994d97fae5aebbdca3dd2195ea8ded0145029e6c9fc3",
+    "jira-product-discovery:evidence-2": "d7a5ffd29465932ad4bbafa3e076911d3103a53ef9c3930d636d95bb230490a3",
+    "jira-product-discovery:ownership": "ca05a2f38487349b84ad4183a30def8a5cb8f59fb0b5fcbbb49558d29570e82b",
+    "jira-product-discovery:perspective": "d21c2c7ab4ca8596b138d471741cc1d2e8c9f45b04cfe13a347f2659ec1096ca",
+    "ai-strategy:perspective": "79ba982900f7c0e28073a03c14c86e535cd22e499fb766ff3890481eadd60e14",
+    "ai-strategy:rollout": "6fa9b556c68033ebf8125682863e2d58161c68786a3a819d2df8db14fd081ea8",
+    "ai-strategy:workflow": "7afb0caacc8a3d28d0dc1cada6f013650acdc642c6e2401728b740cef055a6ca",
+    "ai-strategy:ownership": "1196cadd4a31670633c9215aa9437de86b7d9e4e7012928cbc11d8276c01694e",
+    "the-side-of-ai-i-want-to-be-on:evidence-0": "e57d67ab7a9a0e66085abf6f01545a1f9d6e77e46d79c334241e641a1fd3f7ff",
+    "the-side-of-ai-i-want-to-be-on:evidence-1": "2288f838a29dda62a2e78f1f61e973446b92cbe3107fc1e816fe854473d428b7",
+    "the-side-of-ai-i-want-to-be-on:evidence-2": "c945eb3d64af70d612f93fdec2ea7d042adf495527df15020311b6349ccc43dd",
+    "the-side-of-ai-i-want-to-be-on:ownership": "4dc70a6406c77b69fcfaabc801137b1fffdfd6a85b087fe2439887396849ba54",
+    "the-side-of-ai-i-want-to-be-on:perspective": "c0021702306f9680bf8f0726aa0eae006783a0a0e6fafd0a98da136462b046bf",
+    "product-philosophy:evidence-0": "e3c9081ffa31d1b0ec30c87b52d18fceca863f8c63c79a86cd8835d1de11bd1c",
+    "product-philosophy:evidence-1": "64a205db73aba1c9264a8cda42ade4e92049fa5cf45fbfd7d7b41ebe16127606",
+    "product-philosophy:evidence-2": "1941a9db2cdfb6b1214bfc174122a639335ef1326f0b7ba21d734dbbe0a93207",
+    "product-philosophy:ownership": "be9527b20a005a1934fcc593ffc1a4b005d69ed2bbc84f0a401dff60f402f901",
+    "product-philosophy:perspective": "d9265598d60e6c0997c3d7addf7f5b1f8ff78bc0d2dc12bde25210d3f2c80fdd"
+  }
+}

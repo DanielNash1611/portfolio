@@ -1,0 +1,27 @@
+{
+  "status": "success",
+  "completedAt": "2026-10-22T03:33:32.075800+00:00",
+  "manifestSha256": "7871cb278ccfb2501ff068eeb191f3cc95fbfd3f7b846cb76b892f6996067a8b",
+  "requestSha256": "a36835c673f06ef4c71d18db1e52e7c25ae47835d6b94827b39d6e8ef91974d4",
+  "provider": "OpenAI",
+  "model": "text-embedding-3-small",
+  "dimensions": 1536,
+  "httpStatus": 200,
+  "requestId": "req_e908233c7d0f4432a7953426c021dfbc",
+  "httpAttempts": 1,
+  "automaticRetries": 0,
+  "usage": {
+    "prompt_tokens": 488,
+    "total_tokens": 488
+  },
+  "usagePricedCostUsd": "0.00000976",
+  "capUsd": "0.00010",
+  "additionalPaidRequestsAuthorized": 0,
+  "refreshedIds": [
+    "ai-career-operating-system:perspective",
+    "ai-career-operating-system:ownership",
+    "ai-career-operating-system:retrieval"
+  ],
+  "preservedVectors": 61,
+  "totalVectors": 64
+}

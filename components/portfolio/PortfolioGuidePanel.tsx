@@ -192,32 +192,33 @@ export default function PortfolioGuidePanel({
                   {message.pageTitle}
                 </p>
               ) : null}
-              <p className="whitespace-pre-line">{message.content}</p>
+              <p className="whitespace-pre-line [overflow-wrap:anywhere]">
+                {message.content}
+              </p>
 
               {message.role === "assistant" && message.citations?.length ? (
-                <div
-                  className="mt-3 space-y-1 text-xs opacity-80"
-                  aria-label="Answer sources"
-                >
-                  <p className="font-semibold">Sources</p>
+                <div className="mt-4 space-y-2 text-xs">
+                  <p className="font-semibold">Evidence used</p>
                   {message.citations.map((citation) => (
-                    <p key={citation.sourceId}>
-                      {citation.url ? (
-                        <a
-                          href={citation.url}
-                          className="underline underline-offset-2"
-                        >
-                          {citation.title}
-                        </a>
-                      ) : (
-                        <span>{citation.title}</span>
-                      )}
-                      {citation.kind === "approved_career"
-                        ? citation.url
-                          ? " · Approved career evidence · Portfolio context link"
-                          : " · Approved career evidence"
-                        : " · Portfolio"}
-                    </p>
+                    <details key={citation.sourceId}>
+                      <summary className="cursor-pointer">
+                        {citation.title}
+                      </summary>
+                      <p className="mt-2 whitespace-pre-line [overflow-wrap:anywhere]">
+                        {citation.excerpt}
+                      </p>
+                      {citation.url &&
+                      (/^\/(?![\/\\])/.test(citation.url) ||
+                        /^https:\/\/www\.danielnash\.co\//.test(
+                          citation.url,
+                        )) ? (
+                        <Link className="underline" href={citation.url}>
+                          {citation.kind === "approved_career"
+                            ? "Related project context"
+                            : "View source page"}
+                        </Link>
+                      ) : null}
+                    </details>
                   ))}
                 </div>
               ) : null}
@@ -285,8 +286,9 @@ export default function PortfolioGuidePanel({
       ) : (
         <div className={emptyStateClassName}>
           <p className="text-sm leading-6">
-            Ask about this page or Daniel’s broader experience. Answers cite
-            published portfolio content and approved career evidence.
+            Ask a specific question about this page. Answers stay grounded in
+            page evidence and can point to one useful adjacent page when that
+            adds clarity.
           </p>
         </div>
       )}

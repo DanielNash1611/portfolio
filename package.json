@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run images:meta && next build --webpack",
+    "build": "npm run search:index:check && npm run images:meta && next build --webpack",
     "start": "next start",
     "lint": "eslint app components lib data content",
     "typecheck": "tsc --noEmit",
@@ -27,9 +27,16 @@
     "eval:product-workspace:live": "tsx scripts/eval-product-workspace.ts",
     "postbuild": "node scripts/report-deploy-assets.mjs",
     "verify:media": "node scripts/verify-deployment-media.mjs --remote",
+    "search:index:check": "node --import tsx scripts/index-portfolio-search.ts --check",
+    "search:index:prepare": "node --import tsx scripts/index-portfolio-search.ts --prepare",
+    "search:index:require": "node --import tsx scripts/index-portfolio-search.ts --require-semantic",
+    "search:index:build": "node --import tsx scripts/index-portfolio-search.ts --build",
+    "eval:search:lexical": "node --import tsx scripts/eval-search-retrieval.ts",
     "eval:portfolio-guide:generate": "tsx scripts/run-portfolio-guide-evals.ts",
     "eval:portfolio-guide:review": "tsx scripts/portfolio-guide-artifacts.ts --review",
-    "eval:portfolio-guide:replay": "tsx scripts/portfolio-guide-artifacts.ts --replay"
+    "eval:portfolio-guide:native-search": "node --import tsx scripts/run-search-evaluation.ts",
+    "eval:portfolio-guide:replay": "tsx scripts/portfolio-guide-artifacts.ts --replay",
+    "eval:search:review": "node --import tsx scripts/run-search-evaluation.ts --mode review"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.28",

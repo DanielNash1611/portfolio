@@ -51,6 +51,7 @@ test("page-only guide never calls optional evidence search while resume jobs ret
       getEvidenceMockEnabled: () => false,
       generateResponse: async (request, config) => {
         assert.equal(config.evidenceConfig, undefined);
+        assert.equal(config.hybridSearch, false);
         return generatePortfolioGuideResponse(request, {
           ...config,
           client: {

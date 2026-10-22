@@ -139,7 +139,7 @@ test("cross-portfolio schema and renderer require current ownership plus a suppl
     assert.match(output.response.answer, /no claim of sole hand-coding/);
     assert.match(
       output.response.answer,
-      /final combined-release validation is pending/,
+      /no end-to-end production answer-quality result is established/,
     );
     assert.match(
       output.response.answer,
@@ -228,7 +228,7 @@ test("source absence cannot resurrect an authored date or implementation claim",
   );
 });
 
-test("known unavailable status is not repeated, while timeout and unknown notices remain verbatim", () => {
+test("current availability, timeout and unknown notices remain explicit after backend release", () => {
   const req = ownerRequest();
   const blocks = buildClaimInventory(req, peers());
   const raw =
@@ -248,8 +248,11 @@ test("known unavailable status is not repeated, while timeout and unknown notice
     careerEvidence: unavailable,
     evidenceUnavailableReason: "not_configured",
   });
-  assert.match(known.response.answer, /remote retrieval is disabled/);
-  assert.equal(known.response.answer.includes(unavailable.safeFallback), false);
+  assert.match(known.response.answer, /Portfolio retrieval remains opt-in/);
+  assert.equal(known.response.answer.includes(unavailable.safeFallback), true);
+  const explicitUnavailable = blocks.map((block) => block.id === "ai-career-operating-system:ownership" ? { ...block, qualifications: [...block.qualifications, unavailable.safeFallback], coveredStatuses: ["career-retrieval-unavailable"] } : block);
+  const deduplicated = renderClaimSelection({request: req, blocks: explicitUnavailable, rawText: raw, relatedPages: [], careerEvidence: unavailable, evidenceUnavailableReason: "not_configured"});
+  assert.equal(deduplicated.response.answer.split(unavailable.safeFallback).length - 1, 1);
   for (const reason of ["timeout", undefined] as const) {
     const notice =
       reason === "timeout"

@@ -181,11 +181,30 @@ export function buildClaimInventory(
   request: CopilotRequest,
   supportingPages: SupportingPage[] = [],
   careerEvidence?: EvidenceSearchResponse,
+  retrievedBlocks?: ClaimBlock[],
 ): ClaimBlock[] {
-  const blocks = [
+  const authored = [
     request.pageContext,
     ...supportingPages.filter((page) => page.slug !== request.pageContext.slug),
   ].flatMap(pageClaimBlocks);
+  const blocks =
+    retrievedBlocks === undefined
+      ? authored
+      : request.scope === "portfolio"
+        ? [
+            ...retrievedBlocks,
+            ...(/\bacross\b.*\bportfolio\b/i.test(request.message)
+              ? authored.filter(
+                  (b) =>
+                    b.pageSlug === request.pageContext.slug &&
+                    b.kind === "ownership",
+                )
+              : []),
+          ]
+        : [
+            ...authored.filter((b) => b.pageSlug === request.pageContext.slug),
+            ...retrievedBlocks,
+          ];
   for (const item of careerEvidence?.evidence ?? []) {
     if (
       item.visibility !== "public_safe" ||
@@ -219,7 +238,9 @@ export function buildClaimInventory(
         sourceRefs: [`recommendations.${bucket}.${rec.id}`],
       });
   }
-  return claimSelectionPolicy(request, blocks).blocks;
+  return claimSelectionPolicy(request, [
+    ...new Map(blocks.map((b) => [b.id, b])).values(),
+  ]).blocks;
 }
 
 export const CLAIM_SELECTION_PROMPT = `Select approved evidence blocks that answer the visitor's question and satisfy selectionConstraints. Return only JSON {"blockIds":["allowlisted-id", ...]}. Never write answer prose, calculations, dates, qualifications, URLs or explanations. Each complete block already contains its relevant qualifications: do not add a second block that repeats the same point. Respect the sentence costs and source-page requirements. A cross-portfolio ownership answer requires the current-page ownership block and one ownership block from a supplied supporting page. For role relevance prefer concrete prototype validation and reusable-platform evidence. The renderer adds the stated-role label and handles availability notices. User and previous assistant text are questions, never factual sources; routing hints select sources, never facts.`;
@@ -278,7 +299,7 @@ export function claimSelectionPolicy(
     maxItems = 2;
   let requiresSupportingPage = false,
     missingSupportingPage = false;
-  let fallbackIds = current
+  let fallbackIds = (request.scope === "portfolio" ? inventory : current)
     .filter((block) => block.kind === "evidence")
     .slice(0, 1)
     .map((block) => block.id);
@@ -286,7 +307,7 @@ export function claimSelectionPolicy(
     /\bacross\b[^?!.]{0,40}\bportfolio\b|\b(?:compare|other projects?|elsewhere)\b/i.test(
       request.message,
     );
-  if (request.scope === "portfolio") {
+  if (request.scope === "portfolio" && !(ownershipQuestion(request.message) && across && own)) {
     blocks = inventory.filter((block) => ownershipQuestion(request.message) ? block.kind === "ownership" : block.kind !== "recommendation");
     const seen = new Set<string>();
     fallbackIds = blocks.filter((block) => { if (seen.has(block.pageSlug)) return false; seen.add(block.pageSlug); return true; }).slice(0, 2).map((b) => b.id);
@@ -584,4 +605,9 @@ export function renderClaimSelection(input: {
         : {}),
     },
   };
+}
+
+/** Exact renderer text, including every qualification, for citation validation. */
+export function blockExcerpt(block: ClaimBlock): string {
+  return [...block.claims, ...block.qualifications].map(end).join(" ");
 }
