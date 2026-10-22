@@ -139,7 +139,7 @@ export const EVIDENCE_FALLBACK_MESSAGES: Record<
   no_evidence_found:
     "I can answer from published portfolio sources, but I don't currently have source-audited ResumeCustomizer evidence for that specific claim.",
   timeout:
-    "I couldn't reach the deeper evidence layer in time, so I'm limiting this answer to published portfolio sources.",
+    "I couldn't retrieve Daniel's source-checked personal career notes in time. This answer uses published portfolio sources.",
   network_error:
     "I couldn't reach the deeper evidence layer, so I'm limiting this answer to published portfolio sources.",
   http_error:
@@ -152,8 +152,8 @@ export const EVIDENCE_FALLBACK_MESSAGES: Record<
     "I couldn't reach the deeper evidence layer, so I'm limiting this answer to published portfolio sources.",
 };
 
-/** Default timeout for the server-to-server evidence call. */
-export const EVIDENCE_FETCH_TIMEOUT_MS = 8000;
+/** One cold-start-tolerant attempt, including body parsing, within the route's 60s limit. */
+export const EVIDENCE_FETCH_TIMEOUT_MS = 40000;
 
 /**
  * Build a safe, well-formed EvidenceSearchResponse for the LLM's tool-result
@@ -452,9 +452,9 @@ export async function callEvidenceTool(
     cleanup,
   } = withTimeoutSignal(EVIDENCE_FETCH_TIMEOUT_MS, signal);
 
-  let response: Response;
+  let readingBody = false;
   try {
-    response = await fetch(url, {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -465,40 +465,37 @@ export async function callEvidenceTool(
       signal: fetchSignal,
       cache: "no-store",
     });
+    fetchSignal.throwIfAborted();
+    if (!response.ok) {
+      console.warn(
+        "[portfolio-guide:evidence] non-ok response",
+        response.status,
+      );
+      return { ok: false, reason: "http_error", status: response.status };
+    }
+    readingBody = true;
+    const json: unknown = await response.json();
+    fetchSignal.throwIfAborted();
+    readingBody = false;
+    const parsed = parseEvidenceSearchResponse(json);
+    if (!parsed) {
+      console.warn(
+        "[portfolio-guide:evidence] unexpected response shape (no evidence array)",
+      );
+      return { ok: false, reason: "invalid_shape" };
+    }
+    return { ok: true, data: parsed };
   } catch (error) {
-    // Network error or timeout — degrade gracefully; the chatbot answers from
-    // portfolio context only. Logged for observability, matching
-    // lib/resume-generator/engineClient.ts.
     const reason: EvidenceUnavailableReason = timeoutSignal.aborted
       ? "timeout"
-      : "network_error";
+      : fetchSignal.aborted
+        ? "network_error"
+        : readingBody
+          ? "invalid_json"
+          : "network_error";
     console.warn(`[portfolio-guide:evidence] fetch failed (${reason})`, error);
     return { ok: false, reason };
   } finally {
     cleanup();
   }
-
-  if (!response.ok) {
-    // Auth or server error — degrade gracefully.
-    console.warn("[portfolio-guide:evidence] non-ok response", response.status);
-    return { ok: false, reason: "http_error", status: response.status };
-  }
-
-  let json: unknown;
-  try {
-    json = await response.json();
-  } catch (error) {
-    console.warn("[portfolio-guide:evidence] invalid JSON response", error);
-    return { ok: false, reason: "invalid_json" };
-  }
-
-  const parsed = parseEvidenceSearchResponse(json);
-  if (!parsed) {
-    console.warn(
-      "[portfolio-guide:evidence] unexpected response shape (no evidence array)",
-    );
-    return { ok: false, reason: "invalid_shape" };
-  }
-
-  return { ok: true, data: parsed };
 }
