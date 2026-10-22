@@ -80,18 +80,18 @@ test("saved ownership selection repairs only the dated release qualifier, preser
     /AI development agents assisted implementation/,
   );
   assert.match(revised.response.answer, /no claim of sole hand-coding/);
-  assert.match(revised.response.answer, /deployed portfolio source \(PR #12\)/);
+  assert.match(revised.response.answer, /Deployed source includes authenticated resume jobs/);
   assert.match(
     revised.response.answer,
-    /career retrieval remains a local candidate/,
+    /career-evidence backend has a verified synthetic hybrid result/,
   );
   assert.match(
     revised.response.answer,
-    /remote retrieval is disabled by default/,
+    /Portfolio retrieval remains opt-in/,
   );
   assert.match(
     revised.response.answer,
-    /final combined-release validation is pending/,
+    /no end-to-end production answer-quality result is established/,
   );
   assert.doesNotMatch(
     revised.response.answer,
@@ -112,7 +112,7 @@ test("release-status source contracts retain both authored blocks after boundary
   );
 });
 
-test("historical fixture preserves sixty unchanged texts after approved qualification changes", () => {
+test("historical fixture preserves fifty-nine unchanged texts after qualifications and backend release status", () => {
   const documents = getPortfolioSearchDocuments();
   assert.equal(documents.length, 64);
   const old = fixture.originalPortfolioDocumentHashes as Record<string, string>;
@@ -125,16 +125,17 @@ test("historical fixture preserves sixty unchanged texts after approved qualific
     "ai-career-operating-system:ownership",
     "ai-career-operating-system:perspective",
     "ai-career-operating-system:private-local-profile",
+    "ai-career-operating-system:retrieval",
   ]);
-  assert.equal(documents.length - changed.length, 60);
+  assert.equal(documents.length - changed.length, 59);
 });
 
-test("current corpus needs one synthetic two-text batch and preserves all sixty-two cached vectors", async (t) => {
+test("current corpus needs one synthetic three-text batch and preserves all sixty-one cached vectors", async (t) => {
   const docs = getPortfolioSearchDocuments();
   const previous: EmbeddingIndex = JSON.parse(
     readFileSync("content/search-index/portfolio-cache.json", "utf8"),
   );
-  assert.equal(previous.records.length, 62);
+  assert.equal(previous.records.length, 61);
   assert.equal(
     validIndex(previous, docs),
     false,
@@ -146,10 +147,10 @@ test("current corpus needs one synthetic two-text batch and preserves all sixty-
         (r) => r.id === d.id && r.hash === hashText(d.text),
       ),
   );
-  assert.equal(missing.length, 2);
+  assert.equal(missing.length, 3);
   assert.equal(
     missing.reduce((sum, d) => sum + Buffer.byteLength(d.text), 0),
-    2592,
+    2698,
   );
   let attempts = 0;
   t.mock.method(
@@ -185,7 +186,7 @@ test("current corpus needs one synthetic two-text batch and preserves all sixty-
     );
 });
 
-test("current two-text refresh stops after the first synthetic denial without retry", async (t) => {
+test("current three-text refresh stops after the first synthetic denial without retry", async (t) => {
   const previous = JSON.parse(
     readFileSync("content/search-index/portfolio-cache.json", "utf8"),
   );

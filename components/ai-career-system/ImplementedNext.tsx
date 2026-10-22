@@ -9,7 +9,7 @@ const deploymentStory = productEntries
 
 const implemented = [
   "Authenticated API boundary",
-  "Claim-to-Evidence local prototype",
+  "Authenticated career-evidence search backend",
   "Nine-state job lifecycle",
   "Six specialized review perspectives",
   "Structural PDF validation",
@@ -119,11 +119,11 @@ export default function ImplementedNext(): React.JSX.Element {
       </div>
 
       <p className="max-w-3xl text-sm leading-6 text-[color:var(--color-slate)]/70">
-        This release candidate uses canonical portfolio pages. Remote career
-        evidence stays disabled until the separate evidence-search endpoint is
-        reviewed and shipped; the selected ResumeCustomizer branch supports the
-        existing resume-job contract. The local retrieval prototype does not
-        establish a launched public integration.
+        The authenticated ResumeCustomizer career-evidence endpoint is deployed;
+        one synthetic query verified hybrid retrieval on October 22, 2026.
+        Portfolio career retrieval is opt-in and keeps a safe fallback when
+        evidence is unavailable. This check establishes no real-user adoption
+        or end-to-end Portfolio answer-quality result.
       </p>
 
       {deploymentStory ? (

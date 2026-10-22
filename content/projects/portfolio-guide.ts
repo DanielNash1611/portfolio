@@ -91,7 +91,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Source-audited retrieval",
         detail:
-          "The separate local Claim-to-Evidence prototype defaults to public-safe, source-audited results and returns a safe fallback when evidence is insufficient. Remote career retrieval is disabled in this isolated release pending a separately reviewed endpoint; canonical page grounding and resume jobs remain supported.",
+          "Claim-to-Evidence retrieval uses public-safe, source-audited records and returns a safe fallback when evidence is insufficient. The authenticated ResumeCustomizer endpoint is deployed; Portfolio career retrieval is opt-in, and canonical page grounding and resume jobs remain supported.",
         type: "workflow",
       },
       {
@@ -113,9 +113,9 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         type: "metric",
       },
       {
-        label: "Decisions API local prototype",
+        label: "Bounded Decisions routing",
         detail:
-          "A locally tested Decisions API layer routed ambiguous questions before answer generation. Saved evaluations exposed mixed answer-quality results, prompting source-attribution, qualifier and concision fixes. Final combined-release validation remains pending.",
+          "Bounded Decisions routing and claim selection are included in the deployed portfolio source (PR #12). Saved evaluations exposed mixed answer-quality results, prompting source-attribution, qualifier and concision fixes; these historical results do not establish current production answer quality.",
         type: "workflow",
       },
       {
@@ -142,7 +142,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "Durable queueing, joined recruiter-funnel analytics, shared page-to-evidence identifiers, and a hard reject gate are documented next investments.",
       ],
       implementation: [
-        "The selected branches support authenticated resume-job API boundaries, the job lifecycle, specialized reviews and structural PDF validation; remote career retrieval remains disabled while the separate endpoint awaits review.",
+        "Deployed source includes authenticated resume-job API boundaries, the job lifecycle, specialized reviews and structural PDF validation; the deployed career-evidence backend returned hybrid results in one authenticated synthetic check, while Portfolio retrieval remains opt-in.",
         "The page does not claim sole hand-coding or independent implementation of every component.",
         "Portfolio PR #11 merged on October 15, 2026 at 04:09 UTC (merge 4d33ab9da2a9bece8522a9efee24b3f2b188bfe1). docs/deployment-storage.md and docs/deployment-media.json document media preservation, SHA-256 verification, and static asset-budget checks.",
         "The application profile was implemented locally in ResumeCustomizer on October 8, 2026. It remains a private local workflow, separate from hosted release status; its private contents are excluded from public portfolio evidence and hosted generation.",
@@ -150,8 +150,8 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       explicitUnknowns: [
         "The repositories do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale, or a current full-suite evaluation pass rate.",
         "The 5/12 to 11/12 comparison is a historical, comparable 12-case OpenAI result rather than a current universal quality score.",
-        "The Claim-to-Evidence changes must be merged and deployed in both repositories before the public integration is considered launched.",
-        "The isolated release uses canonical portfolio pages with remote career evidence disabled by default: its selected ResumeCustomizer branch supports resume jobs but does not include /api/evidence/search. The preserved local evidence-search implementation is separate, unshipped work.",
+        "The backend endpoint is deployed; Portfolio career retrieval is opt-in, with a safe fallback when evidence is unavailable, and this release has no end-to-end production answer-quality result.",
+        "ResumeCustomizer PR #13 deployed the authenticated /api/evidence/search endpoint; one synthetic query verified hybrid retrieval on October 22, 2026, without establishing real-user adoption, end-to-end Portfolio answer quality or a general reliability score.",
         "The 147.65 MiB to 81.58 MiB figures are repository-documented uncompressed static file inventories, exclude server bundles, and were not independently rerun by this content review.",
         "Media separation does not establish lower bills, faster pages, reclaimed historical deployment storage, production verification by this review, or semantic AI-quality improvement.",
         "Bounded Decisions routing and claim selection are included in the deployed portfolio source (PR #12); linked resume skills remain locally implemented candidates. Historical routing, answer-comparison, targeted repair and deterministic skills checks use different datasets; none establishes the final deployment's quality.",
