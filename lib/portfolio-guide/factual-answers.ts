@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
 import authoredBlocks from "@/content/projects/guide-claim-blocks.json";
+import { getPageContextBySlug } from "./context";
+import { getNamedProjectIds } from "./project-references";
 import type {
   CopilotRequest,
   CopilotResponse,
@@ -187,6 +189,7 @@ export function buildClaimInventory(
     request.pageContext,
     ...supportingPages.filter((page) => page.slug !== request.pageContext.slug),
   ].flatMap(pageClaimBlocks);
+  const focusedPage = focusedOwnershipPage(request);
   const blocks =
     retrievedBlocks === undefined
       ? authored
@@ -205,6 +208,9 @@ export function buildClaimInventory(
             ...authored.filter((b) => b.pageSlug === request.pageContext.slug),
             ...retrievedBlocks,
           ];
+  if (focusedPage) {
+    blocks.push(...pageClaimBlocks(focusedPage).filter((b) => b.kind === "ownership"));
+  }
   for (const item of careerEvidence?.evidence ?? []) {
     if (
       item.visibility !== "public_safe" ||
@@ -286,6 +292,34 @@ function roleQuestion(question: string) {
   return /\b(?:role|relevan\w*|fit|job description|director)\b/i.test(question);
 }
 
+function ownershipComparison(question: string) {
+  return /\bacross\b[^?!.]{0,40}\bportfolio\b|\b(?:compare|other projects?|elsewhere)\b/i.test(
+    question,
+  );
+}
+
+/** A named ownership question must keep its authored proof even when broad ranking omits it. */
+function focusedOwnershipPage(
+  request: CopilotRequest,
+): PageContext | undefined {
+  if (
+    request.scope !== "portfolio" ||
+    !ownershipQuestion(request.message) ||
+    ownershipComparison(request.message)
+  )
+    return;
+  const named = getNamedProjectIds(request.message);
+  if (named.length === 1)
+    return named[0] === request.pageContext.slug
+      ? request.pageContext
+      : (getPageContextBySlug(named[0]) ?? undefined);
+  if (
+    named.length === 0 &&
+    /\b(?:this page|this work|on the page|here)\b/i.test(request.message)
+  )
+    return request.pageContext;
+}
+
 export function claimSelectionPolicy(
   request: CopilotRequest,
   inventory: ClaimBlock[],
@@ -293,6 +327,7 @@ export function claimSelectionPolicy(
   const slug = request.pageContext.slug;
   const current = inventory.filter((block) => block.pageSlug === slug);
   const own = current.find((block) => block.kind === "ownership");
+  const focused = focusedOwnershipPage(request);
   let blocks = inventory,
     purpose = "page-evidence",
     minItems = 0,
@@ -303,11 +338,19 @@ export function claimSelectionPolicy(
     .filter((block) => block.kind === "evidence")
     .slice(0, 1)
     .map((block) => block.id);
-  const across =
-    /\bacross\b[^?!.]{0,40}\bportfolio\b|\b(?:compare|other projects?|elsewhere)\b/i.test(
-      request.message,
+  const across = ownershipComparison(request.message);
+  if (focused) {
+    blocks = inventory.filter(
+      (block) => block.pageSlug === focused.slug && block.kind === "ownership",
     );
-  if (request.scope === "portfolio" && !(ownershipQuestion(request.message) && across && own)) {
+    fallbackIds = blocks.map((block) => block.id);
+    purpose = "focused-project-ownership";
+    minItems = blocks.length;
+    maxItems = Math.max(1, blocks.length);
+  } else if (
+    request.scope === "portfolio" &&
+    !(ownershipQuestion(request.message) && across && own)
+  ) {
     blocks = inventory.filter((block) => ownershipQuestion(request.message) ? block.kind === "ownership" : block.kind !== "recommendation");
     const seen = new Set<string>();
     fallbackIds = blocks.filter((block) => { if (seen.has(block.pageSlug)) return false; seen.add(block.pageSlug); return true; }).slice(0, 2).map((b) => b.id);
@@ -369,6 +412,7 @@ export function claimSelectionPolicy(
   }
   return {
     blocks,
+    primaryPageSlug: focused?.slug ?? slug,
     purpose,
     minItems,
     maxItems,
@@ -388,7 +432,7 @@ export function claimSelectionConstraints(
     purpose: policy.purpose,
     minBlocks: policy.minItems,
     maxBlocks: policy.maxItems,
-    primaryPageSlug: request.pageContext.slug,
+    primaryPageSlug: policy.primaryPageSlug,
     requiresSupportingPage: policy.requiresSupportingPage,
     maxSentences: policy.maxSentences,
     costs: policy.blocks.map((block) => ({
@@ -473,7 +517,7 @@ export function renderClaimSelection(input: {
       throw new Error("Current-page scope required");
     if (
       policy.purpose.includes("ownership") &&
-      !ids.some((id) => byId.get(id)!.pageSlug === request.pageContext.slug)
+      !ids.some((id) => byId.get(id)!.pageSlug === policy.primaryPageSlug)
     )
       throw new Error("Current-page ownership required");
     if (

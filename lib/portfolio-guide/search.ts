@@ -10,6 +10,7 @@ import {
   validIndex,
 } from "../search/hybrid";
 import type { CopilotRequest } from "./types";
+import { getNamedProjectIds } from "./project-references";
 export type QuestionScope = {
   kind: "page" | "project" | "broad";
   projectId?: string;
@@ -84,40 +85,9 @@ export function resolveQuestionScope(request: CopilotRequest): QuestionScope {
     return { kind: "broad", query };
   if (/\b(?:this page|this work|on the page|here)\b/i.test(query))
     return { kind: "page", projectId: request.pageContext.slug, query };
-  const aliases: Record<string, string[]> = {
-    "oms-chatgpt-app": ["OMS", "order management"],
-    "immunology-scout": ["Immunology Scout", "Immiatrics"],
-    "chatgpt-enterprise": [
-      "ChatGPT Enterprise",
-      "Champions",
-      "chatgpt-contact-center",
-    ],
-    "ai-platform-mcp": [
-      "AI Platform",
-      "Sound Seeker",
-      "Sound Synthesist",
-      "sound-seeker",
-      "sound-synthesist",
-      "chatgpt-org-scale",
-    ],
-    "ai-career-operating-system": ["Career OS"],
-    "checkout-redesign": ["checkout"],
-    "zimmer-biomet": ["Zimmer", "Biomet"],
-    launchmuse: ["LaunchMuse"],
-    "eeg-music": ["EEG"],
-  };
-  const namedProjects = new Set<string>();
-  for (const [projectId, names] of Object.entries(aliases))
-    if (names.some((name) => new RegExp(`\\b${name}\\b`, "i").test(query)))
-      namedProjects.add(projectId);
-  for (const page of getAllCanonicalPageContexts())
-    if (
-      query.toLowerCase().includes(page.title.toLowerCase()) ||
-      query.toLowerCase().includes(page.slug)
-    )
-      namedProjects.add(page.slug);
-  if (namedProjects.size > 1) return { kind: "broad", query };
-  const projectId = [...namedProjects][0];
+  const namedProjects = getNamedProjectIds(query);
+  if (namedProjects.length > 1) return { kind: "broad", query };
+  const projectId = namedProjects[0];
   if (projectId)
     return {
       kind: "project",

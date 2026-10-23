@@ -1,0 +1,23 @@
+{
+  "provenance": {
+    "kind": "captured-production-synthetic-query",
+    "capturedAt": "2026-10-22T06:03:05.575Z",
+    "sourceSha": "a62c8cbf43249f974f98bae11e843a56f3d50cae",
+    "note": "Public query, candidate IDs and empty selection only. No profile data, secret, prompt packet or fresh inference."
+  },
+  "question": "What did Daniel own in the Jira Product Discovery rollout, and what is not established?",
+  "pageSlug": "jira-product-discovery",
+  "scope": "portfolio",
+  "retrievedPortfolioIds": [
+    "jira-product-discovery:perspective",
+    "jira-product-discovery:evidence-1",
+    "ai-career-operating-system:ownership",
+    "ai-platform-mcp:ownership",
+    "immunology-scout:ownership",
+    "the-side-of-ai-i-want-to-be-on:perspective",
+    "checkout-redesign:evidence-2",
+    "chatgpt-enterprise:ownership"
+  ],
+  "rawSelection": "{\"blockIds\":[]}",
+  "expectedOwnershipId": "jira-product-discovery:ownership"
+}
