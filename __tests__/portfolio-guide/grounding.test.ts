@@ -120,7 +120,7 @@ test("AI Career Operating System grounding separates implemented evidence from l
   assert.match(authoredText, /action surface, not evidence of role fit/i);
   assert.match(authoredText, /publicSafeOnly and sourceAuditedOnly/i);
   assert.match(authoredText, /5\/12 to 11\/12/i);
-  assert.match(authoredText, /historical and scoped/i);
+  assert.match(authoredText, /historical, model-judged and scoped to 12 authored cases/i);
   assert.match(authoredText, /final-judge rejection is currently advisory/i);
   assert.match(
     authoredText,
@@ -138,10 +138,11 @@ test("AI Career Operating System grounding separates implemented evidence from l
   );
   assert.match(
     boundariesText,
-    /backend endpoint is deployed; Portfolio career retrieval is opt-in/i,
+    /site-wide assistant and authenticated public-safe hybrid retrieval are released/i,
   );
-  assert.match(boundariesText, /one synthetic query verified hybrid retrieval/i);
-  assert.match(boundariesText, /no end-to-end production answer-quality result/i);
+  assert.match(boundariesText, /one warm synthetic Portfolio question verified career hybrid retrieval/i);
+  assert.match(boundariesText, /without a new generated-answer or hosted cold-start check/i);
+  assert.match(boundariesText, /successful live Decisions API use remains unverified/i);
   assert.doesNotMatch(boundariesText, /does not include \/api\/evidence\/search|separate, unshipped work/i);
 });
 
