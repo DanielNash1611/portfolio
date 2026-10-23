@@ -54,19 +54,19 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       "Hiring teams need fast access to credible proof, while AI-generated application materials introduce risks around unsupported claims, generic output, and unclear ownership.",
     actions: [
       "Separated recruiter-facing UX from the long-running resume engine through authenticated server-to-server APIs.",
-      "Kept authored page content primary while developing a separate public-safe, source-audited career-retrieval prototype; remote retrieval is disabled in this release candidate pending endpoint review.",
-      "Defined role-aware generation, six configured advisory review agents, structural PDF checks, and explicit human accountability.",
+      "Released a site-wide portfolio assistant connected to public-safe career evidence through authenticated hybrid retrieval. Decisions routing handles eligible broader questions; direct questions can bypass it. Daniel directed the AI-assisted implementation while retaining source and ownership boundaries.",
+      "Defined role-aware generation, six configured advisory review agents, structural PDF checks, and explicit human accountability. Directed AI-assisted evaluation tooling that reuses recorded outputs and prepares source-cited Codex review packets, keeping deterministic regression checks separate from semantic answer review.",
     ],
     outcomes: [
       "Created an inspectable workflow spanning portfolio discovery, evidence retrieval, resume generation, evaluation, and PDF delivery.",
-      "Stored a comparable Portfolio Guide evaluation improvement from 5/12 to 11/12 after grounding and source-separation changes.",
+      "Stored historical acceptable-response counts of 5/12 and 11/12 on the same 12 authored cases after grounding and source-separation changes, with gpt-5 answers and gpt-5-mini judging.",
       "Made current limits visible, including process-local queueing, incomplete funnel instrumentation, and advisory final-judge rejection.",
     ],
     metrics: [
       "Portfolio Guide evaluation inventory: 43 authored cases.",
       "Resume review system: 6 configured advisory agents.",
       "Role positioning model: 3 template lanes.",
-      "Historical Portfolio Guide comparison: 5/12 to 11/12 on comparable stored 12-case OpenAI runs.",
+      "Historical Portfolio Guide comparison: 5/12 to 11/12 recorded acceptable responses, same 12 authored questions, model-judged March 30–31, 2026; not a current production score.",
     ],
     tools: [
       "Next.js and TypeScript",
@@ -91,13 +91,13 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Source-audited retrieval",
         detail:
-          "Claim-to-Evidence retrieval uses public-safe, source-audited records and returns a safe fallback when evidence is insufficient. The authenticated ResumeCustomizer endpoint is deployed; Portfolio career retrieval is opt-in, and canonical page grounding and resume jobs remain supported.",
+          "Released a site-wide portfolio assistant connected to public-safe career evidence through authenticated hybrid retrieval. Decisions routing handles eligible broader questions; direct questions can bypass it. The warm October 22 synthetic query verified authenticated career and Portfolio hybrid retrieval. Retrieval candidates are distinct from actually selected/cited evidence; canonical page grounding and safe fallback remain supported.",
         type: "workflow",
       },
       {
         label: "Qualified eval improvement",
         detail:
-          "Comparable stored 12-case OpenAI Guide runs improved from 5/12 to 11/12 after grounding and source-separation changes.",
+          "Historical March 30–31, 2026 stored runs recorded acceptable responses increasing from 5/12 to 11/12 on the same 12 authored cases, with gpt-5 answers and gpt-5-mini judging, after grounding and source-separation changes.",
         type: "metric",
       },
       {
@@ -115,7 +115,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Bounded Decisions routing",
         detail:
-          "Bounded Decisions routing and claim selection are included in the deployed portfolio source (PR #12). Saved evaluations exposed mixed answer-quality results, prompting source-attribution, qualifier and concision fixes; these historical results do not establish current production answer quality.",
+          "Directed AI-assisted integration of Decisions API routing and bounded claim selection into the deployed site-wide assistant while preserving source attribution and ownership qualifications. Decisions handles eligible broader questions; the two October 22 live questions bypassed it. Portfolio PRs #13/#15/#18/#19 establish the released source, not a successful live Decisions call or universal answer/citation quality.",
         type: "workflow",
       },
       {
@@ -142,19 +142,19 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         "Durable queueing, joined recruiter-funnel analytics, shared page-to-evidence identifiers, and a hard reject gate are documented next investments.",
       ],
       implementation: [
-        "Deployed source includes authenticated resume-job API boundaries, the job lifecycle, specialized reviews and structural PDF validation; the deployed career-evidence backend returned hybrid results in one authenticated synthetic check, while Portfolio retrieval remains opt-in.",
+        "Deployed source includes the site-wide assistant, authenticated public-safe career hybrid retrieval, conditional Decisions routing, bounded claim selection, resume-job boundaries, advisory reviews and PDF checks. The warm October 22 synthetic query verified career and Portfolio hybrid retrieval; both checked questions bypassed Decisions routing.",
         "The page does not claim sole hand-coding or independent implementation of every component.",
         "Portfolio PR #11 merged on October 15, 2026 at 04:09 UTC (merge 4d33ab9da2a9bece8522a9efee24b3f2b188bfe1). docs/deployment-storage.md and docs/deployment-media.json document media preservation, SHA-256 verification, and static asset-budget checks.",
         "The application profile was implemented locally in ResumeCustomizer on October 8, 2026. It remains a private local workflow, separate from hosted release status; its private contents are excluded from public portfolio evidence and hosted generation.",
       ],
       explicitUnknowns: [
         "The repositories do not establish external customer adoption, recruiter conversion, hiring outcomes, enterprise scale, or a current full-suite evaluation pass rate.",
-        "The 5/12 to 11/12 comparison is a historical, comparable 12-case OpenAI result rather than a current universal quality score.",
-        "The backend endpoint is deployed; Portfolio career retrieval is opt-in, with a safe fallback when evidence is unavailable, and this release has no end-to-end production answer-quality result.",
-        "ResumeCustomizer PR #13 deployed the authenticated /api/evidence/search endpoint; one synthetic query verified hybrid retrieval on October 22, 2026, without establishing real-user adoption, end-to-end Portfolio answer quality or a general reliability score.",
+        "The 5/12 to 11/12 result is historical recorded acceptance in the same 12 authored cases, with model judging; deterministic-only replay is 11/12 to 12/12. It is not raw judge-label counting, a current production/universal score, or an improvement caused by Decisions release or Codex review tooling.",
+        "The site-wide assistant and authenticated public-safe hybrid retrieval are released. Source availability and selected/cited evidence remain distinct; neither the two live questions nor PR #19 establishes universal answer quality, citation success or measured cost savings.",
+        "ResumeCustomizer PR #13 deployed the authenticated /api/evidence/search endpoint. One warm synthetic Portfolio question verified career hybrid retrieval on October 22, 2026, while the earlier question timed out; PR #19 repaired ownership selection and extended the single evidence attempt to 40 seconds without a new generated-answer or hosted cold-start check.",
         "The 147.65 MiB to 81.58 MiB figures are repository-documented uncompressed static file inventories, exclude server bundles, and were not independently rerun by this content review.",
         "Media separation does not establish lower bills, faster pages, reclaimed historical deployment storage, production verification by this review, or semantic AI-quality improvement.",
-        "Bounded Decisions routing and claim selection are included in the deployed portfolio source (PR #12); linked resume skills remain locally implemented candidates. Historical routing, answer-comparison, targeted repair and deterministic skills checks use different datasets; none establishes the final deployment's quality.",
+        "Decisions routing is implemented in deployed source and was enabled for the two checked direct questions, which bypassed it; successful live Decisions API use remains unverified. Linked resume skills require exact visible proof. Source-cited Codex review is author-assisted, with packet checks for structure/traceability rather than independent calibration or semantic entailment; no measured cost reduction follows.",
         "The private local application profile has no measured time savings, hiring outcomes, external adoption, application-quality gains, or semantic AI-quality gains.",
       ],
     },
@@ -278,8 +278,8 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         label: "Evaluation evidence",
         snippets: [
           "The Portfolio Guide has 43 authored evaluation cases.",
-          "Comparable stored 12-case OpenAI Guide runs improved from 5/12 to 11/12 after grounding and source-separation changes.",
-          "The 5/12 to 11/12 result is historical and scoped; it is not a current full-suite pass claim.",
+          "Historical March 30–31, 2026 stored runs recorded acceptable responses increasing from 5/12 to 11/12 on the same 12 authored cases, with gpt-5 answers and gpt-5-mini judging, after grounding and source-separation changes.",
+          "The 5/12 to 11/12 result is historical, model-judged and scoped to 12 authored cases; it is not a current full-suite pass claim. Recorded acceptance differs from raw judge-label counts and deterministic-only replay. Directed AI-assisted evaluation tooling that reuses recorded outputs and prepares source-cited Codex review packets, keeping deterministic regression checks separate from semantic answer review. The tooling is not the cause of that older metric, and it establishes no measured savings.",
           "The six configured reviewers are Recruiter Screen, Hiring Manager, Career Coach, Source Auditor, ATS Readability, and Positioning & Bridge Strategist.",
           "The baseline-template pass uses Recruiter Screen, Hiring Manager, Career Coach, and Positioning & Bridge Strategist; the final-resume pass runs all six.",
           "Each reviewer returns structured findings, 1-5 scores, issue severity, source status, and source-backed, needs-source, or reject recommendations.",
@@ -331,7 +331,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Implemented and next",
         snippets: [
-          "Implemented: authenticated resume-job API boundaries, a nine-state generation lifecycle, six specialized review perspectives, and structural PDF checks. Public-safe career retrieval remains a separate local prototype and is disabled in this candidate pending endpoint review.",
+          "Implemented: a released site-wide assistant connected to public-safe career evidence through authenticated hybrid retrieval; conditional Decisions routing and bounded qualified answers; recorded-output replay and source-cited Codex review packets; authenticated resume-job boundaries, a nine-state lifecycle, six advisory review perspectives and structural PDF checks.",
           "Needs implementation or instrumentation: durable job state and queueing, shared evidence identifiers, joined recruiter-funnel measurement, versioned latency and failure metrics, and a hard gate or explicit override for rejected output.",
         ],
       },
