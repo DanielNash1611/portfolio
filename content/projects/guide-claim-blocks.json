@@ -131,7 +131,7 @@
       "Daniel defined AI Career Operating System's product direction, UX, service boundaries, evaluations, and claim guardrails; AI development agents assisted implementation, with Daniel retaining product and quality accountability and no claim of sole hand-coding."
     ],
     "qualifications": [
-      "Deployed source includes authenticated resume jobs, advisory reviews, PDF checks, and bounded Decisions routing and claim selection; the career-evidence backend has a verified synthetic hybrid result, while Portfolio retrieval remains opt-in and no end-to-end production answer-quality result is established."
+      "Deployed source includes authenticated resume jobs, advisory reviews, PDF checks, site-wide hybrid retrieval and bounded Decisions routing for eligible broader questions; the career-evidence backend has a verified synthetic hybrid result, while Portfolio retrieval remains opt-in, direct questions can bypass Decisions, and no end-to-end production answer-quality result is established."
     ],
     "sourceRefs": [
       "claimBoundaries.directOwnership.0",
@@ -142,25 +142,25 @@
       "claimBoundaries.explicitUnknowns.6",
       "evidenceHighlights.5.detail"
     ],
-    "sourceSha256": "04bde39bdb06727404f0e2b996614fada93e22824dd7659bb045fc26e995e91c",
-    "boundariesSha256": "fb1e8d5ca0353dc057b56fe814c898756b847ad35400481d566287f2c65132e6"
+    "sourceSha256": "a92c2980953a9ed8925d8fbb9a376096605568b450514ccec4d959c2a36f55e2",
+    "boundariesSha256": "62869ebf922b81b7ef755ec0d21f0b832817631ce1e000ce3737c0f95b79cd79"
   },
   {
     "id": "ai-career-operating-system:retrieval",
     "kind": "status",
     "claims": [
-      "Claim-to-Evidence retrieval uses public-safe, source-audited records and returns a safe fallback when evidence is insufficient."
+      "Released a site-wide portfolio assistant connected to public-safe career evidence through authenticated hybrid retrieval."
     ],
     "qualifications": [
-      "The backend endpoint is deployed; Portfolio career retrieval is opt-in, with a safe fallback when evidence is unavailable, and this release has no end-to-end production answer-quality result."
+      "The warm October 22 synthetic question verified career and Portfolio hybrid retrieval, while the earlier question timed out. Retrieved candidates and actually selected/cited proof remain distinct; PR #19 had no new generated-answer or hosted cold-start validation, and no universal answer quality or measured cost saving is established."
     ],
     "sourceRefs": [
       "evidenceHighlights.1.detail",
       "claimBoundaries.explicitUnknowns.2",
       "claimBoundaries.explicitUnknowns.3"
     ],
-    "sourceSha256": "4cdc83a6a7b73d1860a8d6b9271add79ceb2a2803ab7a3556d20f1fa08085ed5",
-    "boundariesSha256": "fb1e8d5ca0353dc057b56fe814c898756b847ad35400481d566287f2c65132e6"
+    "sourceSha256": "92826baa13db5ee17d9588c84e471773d61aea5b85e5f50f5e30c40b20dcc19a",
+    "boundariesSha256": "62869ebf922b81b7ef755ec0d21f0b832817631ce1e000ce3737c0f95b79cd79"
   },
   {
     "id": "chatgpt-enterprise:ownership",

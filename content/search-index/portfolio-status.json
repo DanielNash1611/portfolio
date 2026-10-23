@@ -1,6 +1,6 @@
 {
   "model": "text-embedding-3-small",
-  "corpusHash": "314d0e4abb0ac16be4004a1c5fc8ca7913104cd164c55d907a697fe71d2675e0",
+  "corpusHash": "971e2412ec7a34ed9aba900fc36f5c7ba30c9348aac4d15e3bf408e588813e89",
   "documents": 64,
   "reusable": 64,
   "pending": [],

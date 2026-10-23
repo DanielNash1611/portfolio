@@ -1,0 +1,54 @@
+{
+  "status": "success",
+  "completedAt": "2026-10-23T21:21:21.797094+00:00",
+  "manifestSha256": "78b262bd2b69f82f7b16f547dbbe721d5efdeeed2edacb881a706078e6a98be7",
+  "requestSha256": "c81d96aa194cdeaa0882aeba23ff3a1d6a76c77f974a85f5546afb1bba0004a1",
+  "provider": "OpenAI",
+  "model": "text-embedding-3-small",
+  "dimensions": 1536,
+  "httpStatus": 200,
+  "requestId": "req_2daf68d212094a1e84d59a32f9f733e5",
+  "httpAttempts": 1,
+  "automaticRetries": 0,
+  "usage": {
+    "prompt_tokens": 843,
+    "total_tokens": 843
+  },
+  "usagePricedCostUsd": "0.00001686",
+  "capUsd": "0.00010",
+  "additionalPaidRequestsAuthorized": 0,
+  "records": [
+    {
+      "id": "ai-career-operating-system:evaluation",
+      "hash": "a81b785c7d7a60c8da66ba4ef01f4a0ce167e500f80e5cf31bf9c67f819bd747",
+      "utf8Bytes": 1132
+    },
+    {
+      "id": "ai-career-operating-system:perspective",
+      "hash": "38a93a4d84f57d4713c1e8ff509aaabfc4e519266504a3e4e539e49a56f45719",
+      "utf8Bytes": 2211
+    },
+    {
+      "id": "ai-career-operating-system:ownership",
+      "hash": "b6c466dd79a6257500bbb157dea6502ab6abc72b9d25117cdee29b95f0ecfa0f",
+      "utf8Bytes": 673
+    },
+    {
+      "id": "ai-career-operating-system:retrieval",
+      "hash": "f9719024097fc6ad803cabb939e6d568280ad6fd6050c6f1fe2bc9d240432403",
+      "utf8Bytes": 485
+    }
+  ],
+  "corpusHash": "971e2412ec7a34ed9aba900fc36f5c7ba30c9348aac4d15e3bf408e588813e89",
+  "indexRecords": 64,
+  "reusedVectorRecords": 60,
+  "refreshedVectorRecords": 4,
+  "completeIndexValidated": true,
+  "inputTokenUpperBound": 4565,
+  "priceUsdPerMillionInputTokens": 0.02,
+  "pricingSource": "https://developers.openai.com/api/docs/models/text-embedding-3-small",
+  "dataClassification": "Approved public portfolio content in the draft reconciliation; no private profile values or personal records",
+  "previousIndexSha256": "db7cae78cc7a272302b129d5c41fa4ef871d4e8d39f846ee0ea7c4171038133c",
+  "indexSha256": "84edf6ccadaa72d3416fa8f2821e6daa723975fa160aa99306f425ea8ec281b8",
+  "generatedAnswerValidation": false
+}

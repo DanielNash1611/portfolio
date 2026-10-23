@@ -814,7 +814,7 @@ export const productEntries: ProductEntry[] = [
       },
     ],
     evaluationAndTrust: [
-      "Portfolio Guide evals test grounding, ownership boundaries, source separation, and recruiter-facing answer quality.",
+      "Directed AI-assisted evaluation tooling that reuses recorded outputs and prepares source-cited Codex review packets, keeping deterministic regression checks separate from semantic answer review. Portfolio PR #14 and ResumeCustomizer PR #15 document the controls. This workflow does not establish measured cost savings or a new quality gain.",
       "ResumeCustomizer separates supported evidence, safe positioning bridges, and true gaps before rendering.",
       "Structural PDF validation is enforced; final-judge rejection remains advisory until a hard gate or explicit override is implemented.",
     ],
@@ -829,9 +829,9 @@ export const productEntries: ProductEntry[] = [
       // Local implementation verified in child01a11e60-9ce8-7047-9a2a-0b11c3bac016;
       // ResumeCustomizer docs/application-profile.md describes the capability, without private values.
       "Added a private local application profile with reviewed facts, source references, confirmation dates, and employer-specific answers. Implemented locally in ResumeCustomizer on October 8, 2026; Daniel directed requirements and reviewed facts, with Codex assisting implementation. This remains a private local workflow.",
-      "Authenticated resume-job boundaries, structural checks, and human approval are implemented. Source-audited career retrieval is a separate local prototype, disabled in this release candidate pending endpoint review. Durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate remain explicit next investments.",
+      "Released a site-wide portfolio assistant connected to public-safe career evidence through authenticated hybrid retrieval. Decisions routing handles eligible broader questions; direct questions can bypass it. Authenticated resume-job boundaries, structural checks, and human approval remain implemented. Durable queueing, joined funnel analytics, shared evidence identifiers, and a hard reject gate remain explicit next investments.",
       "Separated large portfolio recordings from deployment bundles, preserving the original media with checksum verification and adding asset-budget checks. Documented uncompressed static files decreased from 147.65 MiB to 81.58 MiB. Daniel directed the AI-assisted implementation. PR #11 and docs/deployment-storage.md document this inventory, excluding server bundles; this content review did not independently rerun the measurement. This file inventory establishes no lower bills, page-speed change, reclaimed historical storage, or semantic AI-quality gain.",
-      "Directed an AI-assisted Decisions API local prototype that routes ambiguous questions before answer generation. Saved comparisons exposed mixed quality results, leading to source-attribution, qualifier and concision fixes. A linked resume skills bank applies the same visible-proof rule. The evaluation journal separates historical experiments, deterministic checks and pending final validation.",
+      "Directed the AI-assisted integration of Decisions routing and bounded claim selection into the deployed assistant while preserving source attribution and ownership qualifications. Both October 22 live questions bypassed routing; authenticated career and Portfolio hybrid retrieval was verified on the warm query. The ownership repair shipped in PR #19 without a new generated-answer check. A linked resume skills bank applies the same visible-proof rule; historical experiments, deterministic checks and pending semantic validation stay separate.",
     ],
     visuals: [
       {

@@ -130,7 +130,7 @@ test("historical fixture preserves fifty-nine unchanged texts after qualificatio
   assert.equal(documents.length - changed.length, 59);
 });
 
-test("current corpus needs one synthetic three-text batch and preserves all sixty-one cached vectors", async (t) => {
+test("reconciled corpus replaces every stale text and preserves every compatible cached vector", async (t) => {
   const docs = getPortfolioSearchDocuments();
   const previous: EmbeddingIndex = JSON.parse(
     readFileSync("content/search-index/portfolio-cache.json", "utf8"),
@@ -147,11 +147,22 @@ test("current corpus needs one synthetic three-text batch and preserves all sixt
         (r) => r.id === d.id && r.hash === hashText(d.text),
       ),
   );
-  assert.equal(missing.length, 3);
+  assert.deepEqual(missing.map((d) => d.id).sort(), [
+    "ai-career-operating-system:evaluation",
+    "ai-career-operating-system:ownership",
+    "ai-career-operating-system:perspective",
+    "ai-career-operating-system:retrieval",
+  ]);
   assert.equal(
     missing.reduce((sum, d) => sum + Buffer.byteLength(d.text), 0),
-    2698,
+    4501,
   );
+  const reusable = previous.records.filter((record) =>
+    docs.some((doc) => doc.id === record.id && record.hash === hashText(doc.text)),
+  );
+  const stale = previous.records.filter((record) => !reusable.includes(record));
+  assert.equal(reusable.length, 60);
+  assert.deepEqual(stale.map((record) => record.id), ["ai-career-operating-system:evaluation"]);
   let attempts = 0;
   t.mock.method(
     globalThis,
@@ -179,14 +190,20 @@ test("current corpus needs one synthetic three-text batch and preserves all sixt
   const index = await buildIndex(docs, "SYNTHETIC_ONLY", previous, 1);
   assert.equal(attempts, 1);
   assert.equal(validIndex(index, docs), true);
-  for (const record of previous.records)
+  for (const record of reusable)
     assert.deepEqual(
       index.records.find((r) => r.id === record.id),
       record,
     );
+  for (const record of stale) {
+    const replacement = index.records.find((r) => r.id === record.id)!;
+    assert.equal(replacement.hash, hashText(docs.find((doc) => doc.id === record.id)!.text));
+    assert.notEqual(replacement.hash, record.hash);
+    assert.notDeepEqual(replacement.vector, record.vector);
+  }
 });
 
-test("current three-text refresh stops after the first synthetic denial without retry", async (t) => {
+test("current refresh stops after the first synthetic denial without retry", async (t) => {
   const previous = JSON.parse(
     readFileSync("content/search-index/portfolio-cache.json", "utf8"),
   );
