@@ -209,11 +209,15 @@ export const PRODUCTS = {
       "creature_summoned"
     ],
     "actions": [
+      "camera_start_clicked",
+      "camera_creature_summoned",
+      "button_creature_summoned",
       "duel_started",
       "duel_completed",
       "operator_demo_summoned"
     ],
     "origins": [
+      "https://shadowcast.shadowcasterseries.com",
       "https://shadow-casters.vercel.app",
       "https://shadow-casters-danash1611-3756s-projects.vercel.app",
       "https://shadow-casters-git-main-danash1611-3756s-projects.vercel.app"

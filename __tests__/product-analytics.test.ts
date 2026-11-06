@@ -10,6 +10,19 @@ const payload = {
 };
 const now=Date.parse(payload.occurredAt);
 describe("shared product collector",()=>{
+  it("accepts Shadow Casters camera and summon events only on its registered origins",()=>{
+    const origin="https://shadowcast.shadowcasterseries.com";
+    assert.equal(resolveProductOrigin("shadow-casters",origin),"production");
+    assert.equal(resolveProductOrigin("shadow-casters","https://shadow-casters-abc-danash1611-3756s-projects.vercel.app"),"preview");
+    for(const eventName of ["camera_start_clicked","creature_summoned","camera_creature_summoned","button_creature_summoned","operator_demo_summoned"]){
+      const event={...payload,app:"shadow-casters",eventName,properties:{landmarks:[1],message:"private"}};
+      assert.deepEqual(normalizeProductEvent(event,origin,"production",now)?.properties,{});
+      assert.equal(normalizeProductEvent({...event,validation:true},origin,"production",now)?.environment,"validation");
+      assert.equal(normalizeProductEvent(event,origin+".evil.example","production",now),null);
+      assert.equal(normalizeProductEvent(event,"https://shadow-casters-abc-other-projects.vercel.app","production",now),null);
+    }
+    assert.equal(normalizeProductEvent({...payload,app:"shadow-casters",eventName:"camera_frame"},origin,"production",now),null);
+  });
   it("registers Just Because without accepting private authoring routes or preview production traffic",()=>{
     const origin="https://justbecause.danielnash.co";
     const event={...payload,app:"just-because",eventName:"piece_completed"};
