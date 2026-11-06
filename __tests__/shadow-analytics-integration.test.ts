@@ -32,6 +32,6 @@ test("isolated Shadow collector persists newsletter camera/summon events once an
     count(DISTINCT session_id)::int AS sessions
     FROM analytics_events WHERE app='shadow-casters' AND app_env='validation'
       AND occurred_at >= $1::timestamptz AND occurred_at < $2::timestamptz
-      AND client_event_id=ANY($3::uuid[])`,[start,end,[...events.map(e=>e.clientEventId),ignored.clientEventId]]);
+      AND client_event_id=ANY($3::uuid[])`,[start,end,[...events.map(e=>e.clientEventId),ignored.clientEventId]]) as Array<{events:number;content:number;sessions:number}>;
   assert.deepEqual(result[0],{events:6,content:0,sessions:1});
 });
