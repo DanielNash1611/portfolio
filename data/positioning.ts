@@ -180,7 +180,7 @@ export const APPROVED_METRICS: ApprovedMetric[] = [
   {
     id: "chatgpt-rollout",
     label: "Enterprise ChatGPT rollout",
-    value: "~1,000 licensed users / ~800 DAU",
+    value: "~1,000 licensed users / ~800 active users",
     detail:
       "Scaled adoption with enablement, governance, and repeatable rollout patterns across the organization.",
     narrativeIds: ["senior-product-manager", "product-leader"],

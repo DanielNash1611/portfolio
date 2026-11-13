@@ -87,12 +87,12 @@ export const cases: Case[] = [
     cardType: "Case Study",
     kpis: [
       { label: "Licensed Users", value: "~1,000" },
-      { label: "Daily Active Users", value: "~800" },
+      { label: "Active Users", value: "~800" },
       { label: "Program", value: "Champions + AI COE" },
     ],
     chips: [
       "~1,000 licensed users",
-      "~800 daily active users",
+      "~800 active users",
       "AI COE groundwork",
     ],
     href: "/products/chatgpt-org-scale",

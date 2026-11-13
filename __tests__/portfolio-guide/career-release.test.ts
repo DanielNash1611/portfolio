@@ -20,8 +20,8 @@ test('Zimmer public evidence retains single-task, development and shared-ownersh
 });
 
 test('current public adoption copy never assigns a daily timeframe to 800 or 40 active users',()=>{
- const source=readFileSync('content/portfolio.ts','utf8');
- assert.doesNotMatch(source,/(?:40|800)[^\n]{0,30}\bDAU\b|800 daily active users|label: "Daily active users"/i);
+ const source=['content/portfolio.ts','lib/portfolio-guide/recommendations.ts','app/products/chatgpt-org-scale/page.tsx','data/caseStudies.ts','data/cases.ts','data/positioning.ts','data/featuredWork.ts','data/impact.ts','lib/portfolio-guide/tools/mockEvidence.ts'].map(path=>readFileSync(path,'utf8')).join('\n');
+ assert.doesNotMatch(source,/\bdaily active users\b|\bDAU\b/i);
  const page=getPageContextBySlug('chatgpt-enterprise');assert.ok(page);
  assert.match(JSON.stringify(page),/1,000 licensed users and 800 active users/);
  assert.match(JSON.stringify(page),/measurement period is unspecified/);

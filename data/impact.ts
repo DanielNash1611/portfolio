@@ -56,7 +56,7 @@ export const UNIFIED_IMPACT_METRICS: UnifiedImpactMetric[] = [
   {
     id: chatgptRollout?.id ?? "chatgpt-rollout",
     category: "AI adoption",
-    value: chatgptRollout?.value ?? "~1,000 licensed users / ~800 DAU",
+    value: chatgptRollout?.value ?? "~1,000 licensed users / ~800 active users",
     support:
       chatgptRollout?.detail ??
       "Scaled adoption with enablement, governance, and repeatable rollout patterns across the organization.",
