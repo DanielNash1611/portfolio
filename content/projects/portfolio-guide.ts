@@ -1,3 +1,4 @@
+import { zimmerGuide } from "@/content/projects/zimmer-ai-prototypes";
 import type {
   InterestTag,
   PageArtifact,
@@ -43,6 +44,7 @@ type GuideOverlay = Partial<
 
 export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
   ...creativeGuideMetadata,
+  "zimmer-ai-prototypes": zimmerGuide,
   "ai-career-operating-system": {
     category: "AI product systems",
     oneLiner:
@@ -355,7 +357,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Measured adoption",
         detail:
-          "~1,000 users with ~800 daily active users after scaling beyond the initial pilot.",
+          "About 1,000 licensed users and 800 active users after scaling beyond the initial pilot; the activity measurement period is unspecified.",
         type: "metric",
       },
       {

@@ -54,6 +54,12 @@ type CanonicalProject = {
 
 const CANONICAL_PROJECTS: CanonicalProject[] = [
   {
+    slug: "zimmer-ai-prototypes",
+    href: "/work/zimmer-ai-prototypes",
+    title: "From discovery to credible AI prototypes",
+    source: "work",
+  },
+  {
     slug: "gravity-astra",
     href: "/creative/gravity/astra",
     title: "Gravity × Astra",

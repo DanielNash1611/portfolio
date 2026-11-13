@@ -1,3 +1,5 @@
+import { zimmerAiPrototypes } from "@/content/projects/zimmer-ai-prototypes";
+
 export type NavItem = {
   href: string;
   label: string;
@@ -62,6 +64,8 @@ export type WorkEntry = {
   execution: Array<string | ExecutionStep>;
   impact: Metric[];
   results?: string[];
+  resultsDescription?: string;
+  reflectionDescription?: string;
   scaledBeyondPilot?: string[];
   reflection: string[];
   artifactSectionTitle?: string;
@@ -241,8 +245,8 @@ export const homeContent = {
   metrics: [
     {
       label: "ChatGPT Enterprise scale",
-      value: "~1,000 users",
-      detail: "~800 daily active users",
+      value: "~1,000 licensed users",
+      detail: "~800 active users",
     },
     {
       label: "Commerce impact",
@@ -313,13 +317,14 @@ export const homeContent = {
 };
 
 export const workEntries: WorkEntry[] = [
+  zimmerAiPrototypes,
   {
     slug: "chatgpt-enterprise",
     href: "/work/chatgpt-enterprise",
     title: "ChatGPT Enterprise from pilot to operating model",
     eyebrow: "Senior Product Manager, AI Platform Strategy",
     summary:
-      "I led ChatGPT Enterprise from a controlled pilot to scaled operating model at Guitar Center, proving measurable value in the contact center, then expanding adoption from roughly ~150 licensed users / ~40 DAU to ~1,000 users / ~800 DAU through workflow design, governance, enablement, and cross-functional trust.",
+      "I led ChatGPT Enterprise from a controlled pilot to scaled operating model at Guitar Center, proving measurable value in the contact center, then expanding adoption from roughly ~150 licensed users / ~40 active users to ~1,000 licensed users / ~800 active users through workflow design, governance, enablement, and cross-functional trust.",
     description:
       "A recruiter-friendly story about taking AI from early promise into real production environments with measurable impact.",
     role: "Senior Product Manager, Contact Center & AI Strategy",
@@ -358,10 +363,10 @@ export const workEntries: WorkEntry[] = [
           "Expanded ChatGPT Enterprise from an early pilot footprint into broad company adoption.",
       },
       {
-        label: "Daily active users",
+        label: "Active users",
         value: "~40 -> ~800",
         detail:
-          "Daily usage grew because the rollout emphasized reusable workflows, training, and governance.",
+          "Active usage grew alongside reusable workflows, training, and governance; no daily measurement period is claimed.",
       },
     ],
     overview: [
@@ -438,15 +443,15 @@ export const workEntries: WorkEntry[] = [
       },
       {
         label: "Operating model",
-        value: "~40 -> ~800 DAU",
+        value: "~40 -> ~800 active users",
         detail:
-          "Daily usage grew because rollout emphasized reusable workflows, training, governance, and trust.",
+          "Active usage grew alongside reusable workflows, training, governance, and trust; no daily measurement period is claimed.",
       },
     ],
     results: [
       "The pilot proved two things at once.",
       "First, AI could create measurable value in a frontline workflow. Second, adoption would scale when enablement and guardrails were designed as part of the product rather than added later.",
-      "The initial six-month pilot produced an annualized impact estimate of ~$2.7M, with pilot agents outperforming a matched control group across revenue and efficiency indicators. That proof point became the basis for expanding ChatGPT Enterprise from roughly ~150 licensed users / ~40 DAU to ~1,000 users / ~800 DAU across the company.",
+      "The initial six-month pilot produced an annualized impact estimate of ~$2.7M, with pilot agents outperforming a matched control group across revenue and efficiency indicators. That proof point became the basis for expanding ChatGPT Enterprise from roughly ~150 licensed users / ~40 active users to ~1,000 licensed users / ~800 active users across the company.",
     ],
     scaledBeyondPilot: [
       "The most important outcome was not just the pilot result. It was the operating model that came out of it.",
@@ -1650,7 +1655,7 @@ export const aboutContent = {
     "I turn emerging AI capability into products, workflows, and adoption strategies that create measurable business outcomes while advancing trust, creativity, and more meaningful human work.",
   paragraphs: [
     "My work usually starts the same way: find the leverage point in a system, then turn emerging capability into something operationally useful.",
-    "That has taken me across ecommerce, contact center, workflow modernization, and enterprise AI. At Guitar Center, I helped scale ChatGPT Enterprise from roughly ~150 licensed users / ~40 DAU to ~1,000 users / ~800 DAU by pairing reusable workflows with governance, enablement, and close partnership across Legal, Security, Engineering, and Operations.",
+    "That has taken me across ecommerce, contact center, workflow modernization, and enterprise AI. At Guitar Center, I helped scale ChatGPT Enterprise from roughly ~150 licensed users / ~40 active users to ~1,000 licensed users / ~800 active users by pairing reusable workflows with governance, enablement, and close partnership across Legal, Security, Engineering, and Operations.",
     "I stay close to the build because better AI product decisions come from understanding the system, not just the roadmap. My work has included agent-based workflows, retrieval across structured and unstructured data, and eval-driven iteration to improve quality, trust, and reliability over time.",
     "I also keep a hands-on builder practice through AI-native product and research experiments, including multi-agent research workflows in immunology. Music remains part of the story because it sharpens narrative sense, systems awareness, and craft. It supports the product work rather than competing with it.",
   ],

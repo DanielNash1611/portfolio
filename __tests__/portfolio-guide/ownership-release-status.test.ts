@@ -112,9 +112,9 @@ test("release-status source contracts retain both authored blocks after boundary
   );
 });
 
-test("historical fixture preserves fifty-nine unchanged texts after qualifications and backend release status", () => {
+test("historical fixture preserves fifty-eight unchanged texts after approved career additions and adoption correction", () => {
   const documents = getPortfolioSearchDocuments();
-  assert.equal(documents.length, 64);
+  assert.equal(documents.length, 69);
   const old = fixture.originalPortfolioDocumentHashes as Record<string, string>;
   const changed = documents
     .filter((d) => old[d.id] !== hashText(d.text))
@@ -126,8 +126,14 @@ test("historical fixture preserves fifty-nine unchanged texts after qualificatio
     "ai-career-operating-system:perspective",
     "ai-career-operating-system:private-local-profile",
     "ai-career-operating-system:retrieval",
+    "chatgpt-enterprise:evidence-0",
+    "zimmer-ai-prototypes:evidence-0",
+    "zimmer-ai-prototypes:evidence-1",
+    "zimmer-ai-prototypes:evidence-2",
+    "zimmer-ai-prototypes:evidence-3",
+    "zimmer-ai-prototypes:ownership",
   ]);
-  assert.equal(documents.length - changed.length, 59);
+  assert.equal(documents.length - changed.length, 58);
 });
 
 test("reconciled corpus replaces every stale text and preserves every compatible cached vector", async (t) => {
@@ -152,17 +158,23 @@ test("reconciled corpus replaces every stale text and preserves every compatible
     "ai-career-operating-system:ownership",
     "ai-career-operating-system:perspective",
     "ai-career-operating-system:retrieval",
+    "chatgpt-enterprise:evidence-0",
+    "zimmer-ai-prototypes:evidence-0",
+    "zimmer-ai-prototypes:evidence-1",
+    "zimmer-ai-prototypes:evidence-2",
+    "zimmer-ai-prototypes:evidence-3",
+    "zimmer-ai-prototypes:ownership",
   ]);
   assert.equal(
     missing.reduce((sum, d) => sum + Buffer.byteLength(d.text), 0),
-    4501,
+    9784,
   );
   const reusable = previous.records.filter((record) =>
     docs.some((doc) => doc.id === record.id && record.hash === hashText(doc.text)),
   );
   const stale = previous.records.filter((record) => !reusable.includes(record));
-  assert.equal(reusable.length, 60);
-  assert.deepEqual(stale.map((record) => record.id), ["ai-career-operating-system:evaluation"]);
+  assert.equal(reusable.length, 59);
+  assert.deepEqual(stale.map((record) => record.id), ["chatgpt-enterprise:evidence-0", "ai-career-operating-system:evaluation"]);
   let attempts = 0;
   t.mock.method(
     globalThis,
