@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import StudioCollectionPage from "@/components/site/StudioCollectionPage";
+import ProductScreenshotCredit from "@/components/site/ProductScreenshotCredit";
 import { productEntries } from "@/content/portfolio";
 
 export const metadata: Metadata = {
@@ -30,6 +31,7 @@ export default function ProductsPage(): React.JSX.Element {
         description: entry.description,
         image: entry.heroImage,
         imageAlt: entry.heroImageAlt,
+        imageAttribution: <ProductScreenshotCredit slug={entry.slug} />,
         imageClassName:
           entry.heroImageClassName ??
           (entry.slug === "ai-career-operating-system"

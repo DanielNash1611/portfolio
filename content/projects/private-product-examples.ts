@@ -1,5 +1,28 @@
 import type { ProductEntry } from "@/content/portfolio";
 
+export const privateProductScreenshotCredits: Record<
+  string,
+  {
+    title: string;
+    creator: string;
+    sourceUrl: string;
+    license: string;
+    licenseUrl: string;
+    changes: string;
+  }
+> = {
+  "temple-stories": {
+    title: "Salt Lake Temple, Utah - Sept 2004.jpg",
+    creator: "DAVID ILIFF (Diliff)",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Salt_Lake_Temple,_Utah_-_Sept_2004.jpg",
+    license: "CC BY 2.5",
+    licenseUrl: "https://creativecommons.org/licenses/by/2.5/",
+    changes:
+      "Photo cropped and resized within the interface. Screenshot scaled for this page.",
+  },
+};
+
 export const privateProductExamples: ProductEntry[] = [
   {
     slug: "original-reader",
@@ -11,8 +34,10 @@ export const privateProductExamples: ProductEntry[] = [
       "A mobile-first historical text reader shaped around keeping your place and choosing which textual changes deserve attention.",
     description:
       "Privately deployed reading experience with passage-preserving navigation, touch interactions, and selective annotations.",
-    heroImage: "",
-    heroImageAlt: "",
+    heroImage: "/images/products/original-reader/filters.jpg",
+    heroImageAlt:
+      "Original Reader's footnote category dialog with word changes and major punctuation selected.",
+    heroImageClassName: "!object-contain bg-white",
     tags: ["Interaction design", "AI-assisted building", "Reading experience"],
     featuredMetrics: [],
     problem: [
@@ -39,7 +64,24 @@ export const privateProductExamples: ProductEntry[] = [
     evaluationAndTrust: [
       "Privately deployed. This is an AI-assisted product and experience example, not a public launch or a claim of measured adoption.",
     ],
-    visuals: [],
+    visuals: [
+      {
+        title: "Historical reading view",
+        description:
+          "A capture of the private historical-text build showing the 1830 chapter opening and reading layout.",
+        image: "/images/products/original-reader/reading.jpg",
+        alt: "Original Reader displaying the 1830 First Book of Nephi chapter opening in its reading layout.",
+        imageFit: "contain",
+      },
+      {
+        title: "Selective footnote filters",
+        description:
+          "The category dialog lets readers include substantive word changes and major punctuation while leaving minor edits out of the reading focus.",
+        image: "/images/products/original-reader/filters.jpg",
+        alt: "Choose your footnotes dialog with word changes and major punctuation selected, while spelling and minor punctuation are unselected.",
+        imageFit: "contain",
+      },
+    ],
   },
   {
     slug: "temple-stories",
@@ -51,8 +93,10 @@ export const privateProductExamples: ProductEntry[] = [
       "A swipe-led browsing experience for exploring temples through educational visual stories.",
     description:
       "Privately deployed experience using horizontal swipes to switch temples and vertical swipes to explore their stories.",
-    heroImage: "",
-    heroImageAlt: "",
+    heroImage: "/images/products/temple-stories/salt-lake-overview.jpg",
+    heroImageAlt:
+      "Temple Stories showing the Salt Lake Temple overview with horizontal temple navigation and vertical story navigation.",
+    heroImageClassName: "!object-contain bg-white",
     tags: [
       "Interaction design",
       "AI-assisted building",
@@ -78,7 +122,16 @@ export const privateProductExamples: ProductEntry[] = [
     evaluationAndTrust: [
       "Privately deployed. This example demonstrates an interaction concept, not a public launch, measured adoption, or equal depth of content across temple profiles.",
     ],
-    visuals: [],
+    visuals: [
+      {
+        title: "Salt Lake browsing overview",
+        description:
+          "A capture from a local recording build showing the Salt Lake overview, horizontal temple navigation, and vertical story progression. This selected screen uses an openly licensed photograph.",
+        image: "/images/products/temple-stories/salt-lake-overview.jpg",
+        alt: "Temple Stories Salt Lake Temple overview, showing its title, broad exterior photo, story progress, temple-switching controls, and visible photo credit.",
+        imageFit: "contain",
+      },
+    ],
   },
 ];
 

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Container from "@/components/site/Container";
+import MediaFrame from "@/components/site/MediaFrame";
 import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import type { ProductEntry } from "@/content/portfolio";
+import ProductScreenshotCredit from "@/components/site/ProductScreenshotCredit";
 import {
   getPageContextByPath,
   getPortfolioContext,
@@ -40,6 +42,40 @@ export default function PrivateProductExample({
         </h1>
         <p className="mt-6 text-lg leading-8">{entry.summary}</p>
       </header>
+      {entry.visuals.length > 0 ? (
+        <section
+          className="my-10 max-w-5xl space-y-8"
+          aria-label="Product screenshots"
+        >
+          {entry.visuals.map((visual, index) => (
+            <figure key={visual.title} className="space-y-3">
+              <MediaFrame
+                src={visual.image}
+                alt={visual.alt ?? visual.title}
+                sizes="(min-width: 1024px) 1024px, 100vw"
+                className="aspect-[1512/682] border border-[color:var(--color-slate)]/12 bg-white"
+                imageClassName="!object-contain"
+                priority={index === 0}
+              />
+              <figcaption className="text-sm leading-6 text-[color:var(--color-slate)]/70">
+                <span className="font-semibold">{visual.title}.</span>{" "}
+                {visual.description}
+                {visual.image ? (
+                  <a
+                    href={visual.image}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="ml-1 underline"
+                  >
+                    Open full-size screenshot
+                  </a>
+                ) : null}
+                <ProductScreenshotCredit slug={entry.slug} />
+              </figcaption>
+            </figure>
+          ))}
+        </section>
+      ) : null}
       <div className="max-w-3xl">
         {sections.map((section) => (
           <section
