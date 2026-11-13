@@ -158,23 +158,31 @@ export default function StudioCollectionPage({
                   {String(index + 1).padStart(2, "0")}
                 </p>
 
-                <Link
-                  href={entry.href}
-                  tabIndex={-1}
-                  aria-hidden="true"
-                  className="relative block self-start overflow-hidden bg-white"
-                >
-                  <MediaFrame
-                    src={entry.image}
-                    alt=""
-                    fallbackTitle={entry.title}
-                    sizes="(min-width: 1024px) 34vw, 100vw"
-                    className="aspect-[16/10] border border-[color:var(--color-slate)]/12"
-                    imageClassName={`transition-transform duration-700 group-hover:scale-[1.025] ${
-                      entry.imageClassName ?? ""
-                    }`}
-                  />
-                </Link>
+                {entry.image ? (
+                  <Link
+                    href={entry.href}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    className="relative block self-start overflow-hidden bg-white"
+                  >
+                    <MediaFrame
+                      src={entry.image}
+                      alt=""
+                      fallbackTitle={entry.title}
+                      sizes="(min-width: 1024px) 34vw, 100vw"
+                      className="aspect-[16/10] border border-[color:var(--color-slate)]/12"
+                      imageClassName={`transition-transform duration-700 group-hover:scale-[1.025] ${
+                        entry.imageClassName ?? ""
+                      }`}
+                    />
+                  </Link>
+                ) : (
+                  <div className="self-start border-l-2 border-[color:var(--color-orange)] py-4 pl-5 text-sm leading-7 text-[color:var(--color-slate)]/60">
+                    {entry.eyebrow}
+                    <br />
+                    {entry.meta}
+                  </div>
+                )}
 
                 <div className="flex h-full flex-col">
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-2">

@@ -48,7 +48,10 @@ test("non-referential questions exclude assistant turns from dialogue context", 
     "What did Daniel own?",
   ]);
   assert.equal(promptContext.conversationContext.excludedAssistantMessages, 1);
-  assert.equal(promptContext.conversationContext.previousAssistantAnswer, undefined);
+  assert.equal(
+    promptContext.conversationContext.previousAssistantAnswer,
+    undefined,
+  );
 });
 
 test("referential follow-ups retain only the latest assistant answer as untrusted context", () => {
@@ -66,7 +69,10 @@ test("referential follow-ups retain only the latest assistant answer as untruste
         inferredInterestTags: ["platform"],
       },
       conversation: [
-        { role: "assistant", content: "The page shows a reusable-systems signal." },
+        {
+          role: "assistant",
+          content: "The page shows a reusable-systems signal.",
+        },
       ],
     },
     fallbackRelatedPages,
@@ -120,7 +126,10 @@ test("AI Career Operating System grounding separates implemented evidence from l
   assert.match(authoredText, /action surface, not evidence of role fit/i);
   assert.match(authoredText, /publicSafeOnly and sourceAuditedOnly/i);
   assert.match(authoredText, /5\/12 to 11\/12/i);
-  assert.match(authoredText, /historical, model-judged and scoped to 12 authored cases/i);
+  assert.match(
+    authoredText,
+    /historical, model-judged and scoped to 12 authored cases/i,
+  );
   assert.match(authoredText, /final-judge rejection is currently advisory/i);
   assert.match(
     authoredText,
@@ -140,10 +149,22 @@ test("AI Career Operating System grounding separates implemented evidence from l
     boundariesText,
     /site-wide assistant and authenticated public-safe hybrid retrieval are released/i,
   );
-  assert.match(boundariesText, /one warm synthetic Portfolio question verified career hybrid retrieval/i);
-  assert.match(boundariesText, /without a new generated-answer or hosted cold-start check/i);
-  assert.match(boundariesText, /successful live Decisions API use remains unverified/i);
-  assert.doesNotMatch(boundariesText, /does not include \/api\/evidence\/search|separate, unshipped work/i);
+  assert.match(
+    boundariesText,
+    /one warm synthetic Portfolio question verified career hybrid retrieval/i,
+  );
+  assert.match(
+    boundariesText,
+    /without a new generated-answer or hosted cold-start check/i,
+  );
+  assert.match(
+    boundariesText,
+    /successful live Decisions API use remains unverified/i,
+  );
+  assert.doesNotMatch(
+    boundariesText,
+    /does not include \/api\/evidence\/search|separate, unshipped work/i,
+  );
 });
 
 test("essay pages are included in the guide catalog with claim-aware authored grounding", () => {
@@ -281,5 +302,5 @@ test("prompt context keeps current page facts separate from broader site memory"
     "currentPage.claimBoundaries",
     "currentPage.structuredMetadata",
   ]);
-  assert.equal(promptContext.siteCatalog.pageDirectory?.length, 14);
+  assert.equal(promptContext.siteCatalog.pageDirectory?.length, 16);
 });

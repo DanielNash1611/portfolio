@@ -80,15 +80,15 @@ test("saved ownership selection repairs only the dated release qualifier, preser
     /AI development agents assisted implementation/,
   );
   assert.match(revised.response.answer, /no claim of sole hand-coding/);
-  assert.match(revised.response.answer, /Deployed source includes authenticated resume jobs/);
+  assert.match(
+    revised.response.answer,
+    /Deployed source includes authenticated resume jobs/,
+  );
   assert.match(
     revised.response.answer,
     /career-evidence backend has a verified synthetic hybrid result/,
   );
-  assert.match(
-    revised.response.answer,
-    /Portfolio retrieval remains opt-in/,
-  );
+  assert.match(revised.response.answer, /Portfolio retrieval remains opt-in/);
   assert.match(
     revised.response.answer,
     /no end-to-end production answer-quality result is established/,
@@ -114,7 +114,7 @@ test("release-status source contracts retain both authored blocks after boundary
 
 test("historical fixture preserves fifty-eight unchanged texts after approved career additions and adoption correction", () => {
   const documents = getPortfolioSearchDocuments();
-  assert.equal(documents.length, 69);
+  assert.equal(documents.length, 74);
   const old = fixture.originalPortfolioDocumentHashes as Record<string, string>;
   const changed = documents
     .filter((d) => old[d.id] !== hashText(d.text))
@@ -127,6 +127,11 @@ test("historical fixture preserves fifty-eight unchanged texts after approved ca
     "ai-career-operating-system:private-local-profile",
     "ai-career-operating-system:retrieval",
     "chatgpt-enterprise:evidence-0",
+    "original-reader:evidence-0",
+    "original-reader:evidence-1",
+    "original-reader:ownership",
+    "temple-stories:evidence-0",
+    "temple-stories:ownership",
     "zimmer-ai-prototypes:evidence-0",
     "zimmer-ai-prototypes:evidence-1",
     "zimmer-ai-prototypes:evidence-2",
@@ -159,6 +164,11 @@ test("reconciled corpus replaces every stale text and preserves every compatible
     "ai-career-operating-system:perspective",
     "ai-career-operating-system:retrieval",
     "chatgpt-enterprise:evidence-0",
+    "original-reader:evidence-0",
+    "original-reader:evidence-1",
+    "original-reader:ownership",
+    "temple-stories:evidence-0",
+    "temple-stories:ownership",
     "zimmer-ai-prototypes:evidence-0",
     "zimmer-ai-prototypes:evidence-1",
     "zimmer-ai-prototypes:evidence-2",
@@ -167,14 +177,19 @@ test("reconciled corpus replaces every stale text and preserves every compatible
   ]);
   assert.equal(
     missing.reduce((sum, d) => sum + Buffer.byteLength(d.text), 0),
-    9784,
+    11490,
   );
   const reusable = previous.records.filter((record) =>
-    docs.some((doc) => doc.id === record.id && record.hash === hashText(doc.text)),
+    docs.some(
+      (doc) => doc.id === record.id && record.hash === hashText(doc.text),
+    ),
   );
   const stale = previous.records.filter((record) => !reusable.includes(record));
   assert.equal(reusable.length, 59);
-  assert.deepEqual(stale.map((record) => record.id), ["chatgpt-enterprise:evidence-0", "ai-career-operating-system:evaluation"]);
+  assert.deepEqual(
+    stale.map((record) => record.id),
+    ["chatgpt-enterprise:evidence-0", "ai-career-operating-system:evaluation"],
+  );
   let attempts = 0;
   t.mock.method(
     globalThis,
@@ -209,7 +224,10 @@ test("reconciled corpus replaces every stale text and preserves every compatible
     );
   for (const record of stale) {
     const replacement = index.records.find((r) => r.id === record.id)!;
-    assert.equal(replacement.hash, hashText(docs.find((doc) => doc.id === record.id)!.text));
+    assert.equal(
+      replacement.hash,
+      hashText(docs.find((doc) => doc.id === record.id)!.text),
+    );
     assert.notEqual(replacement.hash, record.hash);
     assert.notDeepEqual(replacement.vector, record.vector);
   }

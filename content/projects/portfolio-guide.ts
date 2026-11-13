@@ -1,3 +1,4 @@
+import { privateProductGuide } from "@/content/projects/private-product-examples";
 import { zimmerGuide } from "@/content/projects/zimmer-ai-prototypes";
 import type {
   InterestTag,
@@ -44,6 +45,7 @@ type GuideOverlay = Partial<
 
 export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
   ...creativeGuideMetadata,
+  ...privateProductGuide,
   "zimmer-ai-prototypes": zimmerGuide,
   "ai-career-operating-system": {
     category: "AI product systems",

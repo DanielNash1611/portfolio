@@ -54,6 +54,18 @@ type CanonicalProject = {
 
 const CANONICAL_PROJECTS: CanonicalProject[] = [
   {
+    slug: "original-reader",
+    href: "/products/original-reader",
+    title: "Original Reader",
+    source: "product",
+  },
+  {
+    slug: "temple-stories",
+    href: "/products/temple-stories",
+    title: "Temple Stories",
+    source: "product",
+  },
+  {
     slug: "zimmer-ai-prototypes",
     href: "/work/zimmer-ai-prototypes",
     title: "From discovery to credible AI prototypes",
