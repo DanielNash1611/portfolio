@@ -1,3 +1,4 @@
+import { privateProductExamples } from "@/content/projects/private-product-examples";
 import { zimmerAiPrototypes } from "@/content/projects/zimmer-ai-prototypes";
 
 export type NavItem = {
@@ -1171,6 +1172,7 @@ export const productEntries: ProductEntry[] = [
     ],
     featured: true,
   },
+  ...privateProductExamples,
 ];
 
 export const thinkingEntries: ThinkingEntry[] = [

@@ -31,5 +31,5 @@ test('current public adoption copy never assigns a daily timeframe to 800 or 40 
 test('released index covers all current claims without stale embeddings',()=>{
  const index=JSON.parse(readFileSync('content/search-index/portfolio.json','utf8'));
  assert.equal(validIndex(index,getPortfolioSearchDocuments()),true);
- assert.equal(index.records.length,69);
+ assert.equal(index.records.length,74);
 });
