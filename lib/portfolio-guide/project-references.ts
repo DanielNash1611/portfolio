@@ -19,7 +19,7 @@ const PROJECT_ALIASES: Record<string, string[]> = {
   "ai-career-operating-system": ["Career OS"],
   "jira-product-discovery": ["Jira Product Discovery", "JPD"],
   "checkout-redesign": ["checkout"],
-  "zimmer-biomet": ["Zimmer", "Biomet"],
+  "zimmer-ai-prototypes": ["Zimmer", "Biomet"],
   launchmuse: ["LaunchMuse"],
   "eeg-music": ["EEG"],
 };

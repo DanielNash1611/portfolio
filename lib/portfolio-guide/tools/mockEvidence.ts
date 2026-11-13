@@ -119,9 +119,9 @@ const CHATGPT_ENTERPRISE_EVIDENCE: EvidenceItem[] = [
   {
     id: "mock-chatgpt-enterprise-adoption-scale",
     claim:
-      "Daniel scaled ChatGPT Enterprise adoption roughly 7x in licensed users and 20x in daily active users.",
+      "Daniel scaled ChatGPT Enterprise adoption roughly 7x in licensed users and 20x in active users.",
     supportingDetails: [
-      "Expanded from ~150 licensed users / ~40 DAU to ~1,000 users / ~800 DAU.",
+      "Expanded from ~150 licensed users / ~40 active users to ~1,000 users / ~800 active users.",
       "Drove adoption through governance, enablement, a champions network, and a repeatable operating model.",
     ],
     project: "ChatGPT Enterprise expansion",
@@ -134,7 +134,7 @@ const CHATGPT_ENTERPRISE_EVIDENCE: EvidenceItem[] = [
         context: "Pilot to expansion",
       },
       {
-        label: "Daily active users",
+        label: "Active users",
         value: "~40 → ~800",
         context: "Pilot to expansion",
       },

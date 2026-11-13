@@ -77,7 +77,7 @@ export const featuredWork: FeaturedWorkItem[] = [
     },
     chips: [
       "~1,000 licensed users",
-      "~800 daily active users",
+      "~800 active users",
       "AI COE groundwork",
     ],
     bestFor: "Senior Product Manager and Product Leader",

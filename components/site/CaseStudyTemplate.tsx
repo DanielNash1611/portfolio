@@ -343,7 +343,7 @@ export default function CaseStudyTemplate({
               <ContentSection
                 eyebrow="07 · Proof"
                 title="Results"
-                description="What the pilot proved and what that unlocked."
+                description={entry.resultsDescription ?? "What the pilot proved and what that unlocked."}
                 tone="plain"
               >
                 <div className="grid gap-6 md:grid-cols-2">
@@ -413,7 +413,7 @@ export default function CaseStudyTemplate({
             <ContentSection
               eyebrow="09 · Reflection"
               title="What this work reinforced"
-              description="The product leadership lessons that remained after the rollout."
+              description={entry.reflectionDescription ?? "The product leadership lessons that remained after the rollout."}
               tone="plain"
             >
               <div className="grid gap-6 md:grid-cols-2">

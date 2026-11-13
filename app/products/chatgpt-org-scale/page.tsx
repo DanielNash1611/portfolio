@@ -15,7 +15,7 @@ const heroTags = [
 
 const heroKpis = [
   { label: "Licensed Users", value: "~1,000" },
-  { label: "Daily Active Users", value: "~800" },
+  { label: "Active Users", value: "~800" },
   { label: "Program", value: "ChatGPT Champions" },
 ];
 
@@ -41,7 +41,7 @@ const snapshotItems = [
   {
     label: "Scope",
     value:
-      "Scaled to roughly 1,000 licensed users with about 800 daily active users, plus full contact center rollout (~350 agents).",
+      "Scaled to roughly 1,000 licensed users with about 800 active users, plus full contact center rollout (~350 agents).",
   },
   {
     label: "Focus",
@@ -89,7 +89,7 @@ const outcomes = [
   {
     heading: "Scaled ChatGPT access across HQ",
     detail:
-      "Moved from a focused pilot to roughly 1,000 licensed users and about 800 daily active users, plus full deployment to the contact center (~350 agents).",
+      "Moved from a focused pilot to roughly 1,000 licensed users and about 800 active users, plus full deployment to the contact center (~350 agents).",
   },
   {
     heading: "ChatGPT Champions community",

@@ -85,7 +85,7 @@ Measured outcomes demonstrate the upside of expanding generative AI assistance i
       "Expanded ChatGPT Enterprise access, launched ChatGPT Champions, and established AI COE guardrails.",
     headlineMetrics: [
       { label: "licensed users", value: "~1,000" },
-      { label: "daily active users", value: "~800" },
+      { label: "active users", value: "~800" },
     ],
     href: "/products/chatgpt-org-scale",
   },

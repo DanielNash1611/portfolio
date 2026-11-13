@@ -281,5 +281,5 @@ test("prompt context keeps current page facts separate from broader site memory"
     "currentPage.claimBoundaries",
     "currentPage.structuredMetadata",
   ]);
-  assert.equal(promptContext.siteCatalog.pageDirectory?.length, 13);
+  assert.equal(promptContext.siteCatalog.pageDirectory?.length, 14);
 });

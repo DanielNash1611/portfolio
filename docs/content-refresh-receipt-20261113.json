@@ -1,0 +1,52 @@
+{
+  "completedAt": "2026-11-13T19:27:40.185Z",
+  "provider": "OpenAI",
+  "model": "text-embedding-3-small",
+  "dimensions": 1536,
+  "httpAttempts": 1,
+  "automaticRetries": 0,
+  "usage": {
+    "prompt_tokens": 918,
+    "total_tokens": 918
+  },
+  "usagePricedCostUsd": 0.00001836,
+  "capUsd": 0.0002,
+  "manifestSha256": "ce5c8ed0a0bee9e7ad80c2bae353d7885a1f1723ea2851e792117b715d7e6e54",
+  "requestId": "req_503145bdb0774bebab765b05832072bf",
+  "records": [
+    {
+      "id": "zimmer-ai-prototypes:evidence-0",
+      "hash": "2cc5e7a153efa1f9fe535ac12ce7d0ecedb035a99ae34ce203d11e0c1f7e5cf2"
+    },
+    {
+      "id": "zimmer-ai-prototypes:evidence-1",
+      "hash": "41a1f467eea05011cd3660c1d9fa375c551b64185493584350ac6ecca67a1b24"
+    },
+    {
+      "id": "zimmer-ai-prototypes:evidence-2",
+      "hash": "6e190039977c4fa5cb0a6185d0d9c6194e53b587ccd99cdd8db5d026b9feae99"
+    },
+    {
+      "id": "zimmer-ai-prototypes:evidence-3",
+      "hash": "85dbb71caddfdcb8fc7c6700edf6ab57846f601a33e80dce8dad4d7a1decfeb6"
+    },
+    {
+      "id": "zimmer-ai-prototypes:ownership",
+      "hash": "bc12340c9c424659db1503c266fe04229b23b82521cf362db3c6b850a163dc0e"
+    },
+    {
+      "id": "chatgpt-enterprise:evidence-0",
+      "hash": "cb8e35b11a1369189ce2651eedce2d4036aad3a2979cea993ba445e7b484101b"
+    }
+  ],
+  "indexRecords": 69,
+  "reusedVectorRecords": 63,
+  "refreshedVectorRecords": 6,
+  "completeIndexValidated": true,
+  "additionalPaidRequestsAuthorized": 0,
+  "dataClassification": "Approved public portfolio content only",
+  "previousIndexSha256": "84edf6ccadaa72d3416fa8f2821e6daa723975fa160aa99306f425ea8ec281b8",
+  "indexSha256": "de58731512cfe02cf00ca7d7bcb59e855edde0a618d0f040e2907f17733050d1",
+  "pricingSource": "https://developers.openai.com/api/docs/models/text-embedding-3-small",
+  "generatedAnswerValidation": false
+}

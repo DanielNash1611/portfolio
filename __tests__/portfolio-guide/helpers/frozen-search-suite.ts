@@ -114,6 +114,14 @@ export function runFrozenSearchSuite(suite: "adaptive" | "native") {
       mkdirSync(dirname(destination), { recursive: true });
       writeFileSync(destination, text);
     }
+    // Freeze the historical work-entry corpus as well as its metadata. New
+    // public pages must not silently enter the October 17 historical replay.
+    // Exact bytes from Portfolio e6801e4686ca3229c93273e750c55dc91ad677cd.
+    const historicalPortfolioSource = readFileSync(
+      resolve(fixtureRoot, "frozen-search-20261017-portfolio-source.ts.txt"),
+    );
+    assert.equal(digest(historicalPortfolioSource), "0b92b7d463f491226693af3183ef82b00ae282336fa39b270939f8c746cdc99d");
+    writeFileSync(resolve(portfolio, "content/portfolio.ts"), historicalPortfolioSource);
     const modules = realpathSync(resolve(repo, "node_modules"));
     for (const checkout of [portfolio, career]) {
       symlinkSync(modules, resolve(checkout, "node_modules"), "dir");

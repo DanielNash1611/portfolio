@@ -37,7 +37,7 @@ export const CREATIVE_TECHNOLOGY_TOUR = [
   {
     slug: "chatgpt-enterprise",
     reason:
-      "Finish with enterprise delivery evidence: ChatGPT adoption grew from a controlled pilot to roughly 1,000 licensed users and 800 daily active users.",
+      "Finish with enterprise delivery evidence: ChatGPT adoption grew from a controlled pilot to roughly 1,000 licensed users and 800 active users.",
   },
 ] as const;
 
