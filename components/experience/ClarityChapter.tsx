@@ -13,6 +13,11 @@ import { ArrowDown, ArrowUpRight, RotateCcw, Sun } from "lucide-react";
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import MethodBuildPreview from "./MethodBuildPreview";
 import ClarityPrinciples from "./ClarityPrinciples";
+import {
+  LIGHT_JOURNEY_APPROACH,
+  lightJourneyFrame,
+  lightJourneyGeometry,
+} from "@/lib/experience/light-journey";
 import type { ExperienceHomeContent } from "@/content/experience-home";
 import {
   loopSteps,
@@ -42,7 +47,7 @@ const journeyPath = [
   [55, 48],
   [50, 49],
 ];
-const approachLead = 0.32;
+const approachLead = LIGHT_JOURNEY_APPROACH;
 const flightStops = [-0.5, -0.4, -0.24, 0.24, 0.36, 0.5, 0.8];
 const compactPath = [
   [49, 50],
@@ -127,7 +132,7 @@ function MethodJourney({ paused }: { paused: boolean }) {
   });
   const current = stage.index;
   const readable = !stage.reward && (paused || stage.readable);
-  const [viewport, setViewport] = useState({ compact: false, fits: true });
+  const [viewport, setViewport] = useState({ compact: true, fits: true });
   const path = viewport.compact ? compactPath : journeyPath;
   const lightX = useTransform(
     progress,
@@ -190,9 +195,10 @@ function MethodJourney({ paused }: { paused: boolean }) {
   const scaleX = useTransform(progress, [0, 4], [0, 1]);
 
   useEffect(() => {
+    const coarse = matchMedia("(pointer: coarse)");
     const assess = () => {
       const next = {
-        compact: innerWidth < 900,
+        compact: innerWidth < 900 || coarse.matches,
         fits: innerHeight >= 600,
       };
       setViewport((previous) =>
@@ -203,7 +209,11 @@ function MethodJourney({ paused }: { paused: boolean }) {
     };
     assess();
     window.addEventListener("resize", assess);
-    return () => window.removeEventListener("resize", assess);
+    coarse.addEventListener("change", assess);
+    return () => {
+      window.removeEventListener("resize", assess);
+      coarse.removeEventListener("change", assess);
+    };
   }, []);
 
   useEffect(() => {
@@ -211,18 +221,17 @@ function MethodJourney({ paused }: { paused: boolean }) {
     const canvas = scene.current;
     if (!viewport.fits || !element || !canvas) return;
     let frame = 0;
-    let interval = 620;
+    let geometry = lightJourneyGeometry(0, 600, 0);
+    let measuredStep = 0;
+    let nearby = true;
     let previous = -1;
     let previousReadable = false;
     let previousReward = false;
     let disposed = false;
     const update = () => {
       frame = 0;
-      const top = parseFloat(getComputedStyle(canvas).top) || 0;
-      const bounds = element.getBoundingClientRect();
-      const immersive =
-        bounds.top <= top + 0.5 &&
-        bounds.bottom >= canvas.getBoundingClientRect().height - 0.5;
+      const state = lightJourneyFrame(scrollY, geometry);
+      const { immersive } = state;
       if (immersive) {
         if (
           document.documentElement.dataset.clarityImmersive !== immersiveOwner
@@ -233,14 +242,8 @@ function MethodJourney({ paused }: { paused: boolean }) {
       ) {
         delete document.documentElement.dataset.clarityImmersive;
       }
-      const position = Math.max(
-        -approachLead,
-        Math.min(5.9, (top - bounds.top) / interval - approachLead),
-      );
-      travel.set(position);
-      const active = Math.max(0, Math.min(4, Math.round(position)));
-      const inLight = Math.abs(position - active) <= 0.24;
-      const reward = position >= 4.95;
+      if (travel.get() !== state.position) travel.set(state.position);
+      const { index: active, readable: inLight, reward } = state;
       if (
         !inLight &&
         document.activeElement?.closest(".clarity-scene-method")
@@ -259,16 +262,42 @@ function MethodJourney({ paused }: { paused: boolean }) {
       }
     };
     const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (nearby && !document.hidden && !frame)
+        frame = requestAnimationFrame(update);
     };
     const measure = () => {
-      interval = Math.max(500, canvas.getBoundingClientRect().height * 1.05);
-      element.style.setProperty("--journey-step", `${interval}px`);
-      element.style.setProperty("--journey-travel", `${interval * 6.05}px`);
+      // All geometry reads precede writes; scrolling samples only scrollY.
+      geometry = lightJourneyGeometry(
+        element.getBoundingClientRect().top + scrollY,
+        canvas.getBoundingClientRect().height,
+        parseFloat(getComputedStyle(canvas).top) || 0,
+      );
+      if (measuredStep !== geometry.step) {
+        measuredStep = geometry.step;
+        element.style.setProperty("--journey-step", `${geometry.step}px`);
+        element.style.setProperty("--journey-travel", `${geometry.distance}px`);
+      }
       schedule();
     };
     const observer = new ResizeObserver(measure);
     observer.observe(canvas);
+    // Earlier disclosures, fonts and images can move the journey without
+    // resizing its sticky scene. Invalidate the cached document position too.
+    const page = element.closest(".experience");
+    if (page) observer.observe(page);
+    const visibility = new IntersectionObserver(
+      ([entry]) => {
+        nearby = entry.isIntersecting;
+        if (!nearby) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        }
+        // Reconcile both edges once, including releasing immersive chrome.
+        update();
+      },
+      { rootMargin: "200px 0px" },
+    );
+    visibility.observe(element);
     measure();
     const hash = location.hash;
     const arrival = /^#clarity-method-(journey|[0-4])$/.test(hash)
@@ -289,6 +318,7 @@ function MethodJourney({ paused }: { paused: boolean }) {
     }
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", measure);
+    document.addEventListener("visibilitychange", schedule);
     return () => {
       disposed = true;
       if (document.documentElement.dataset.clarityImmersive === immersiveOwner)
@@ -296,8 +326,10 @@ function MethodJourney({ paused }: { paused: boolean }) {
       cancelAnimationFrame(frame);
       cancelAnimationFrame(arrivalFrame);
       observer.disconnect();
+      visibility.disconnect();
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", measure);
+      document.removeEventListener("visibilitychange", schedule);
     };
   }, [travel, viewport.fits, immersiveOwner]);
 
@@ -361,6 +393,7 @@ function MethodJourney({ paused }: { paused: boolean }) {
         className="clarity-journey"
         id="clarity-method-journey"
         data-current={current}
+        data-rendering={viewport.compact ? "compact" : "full"}
       >
         <div className="clarity-journey-stops" aria-hidden="true">
           <span
@@ -395,7 +428,7 @@ function MethodJourney({ paused }: { paused: boolean }) {
             style={{
               x: paused ? 0 : landscapeDrift,
               y: paused ? 0 : landscapeY,
-              scale: paused ? 1 : landscapeScale,
+              scale: paused ? 1 : viewport.compact ? 1.06 : landscapeScale,
             }}
           >
             <Image
@@ -428,8 +461,8 @@ function MethodJourney({ paused }: { paused: boolean }) {
             className="clarity-journey-fog"
             aria-hidden="true"
             style={{
-              maskImage: aperture,
-              WebkitMaskImage: aperture,
+              maskImage: viewport.compact ? undefined : aperture,
+              WebkitMaskImage: viewport.compact ? undefined : aperture,
               opacity: paused ? 0 : fogOpacity,
             }}
           >
@@ -446,38 +479,44 @@ function MethodJourney({ paused }: { paused: boolean }) {
             aria-hidden="true"
             style={{ opacity: sceneInk }}
           />
-          <div className="clarity-forest-space" aria-hidden="true">
-            <ForestPlane
-              travel={travel}
-              offset={0.1}
-              source={environment.near}
-              paused={paused}
-            />
-            <ForestPlane
-              travel={travel}
-              offset={1.2}
-              source={environment.middle}
-              flipped
-              paused={paused}
-            />
-            <ForestPlane
-              travel={travel}
-              offset={2.3}
-              source={environment.near}
-              flipped
-              paused={paused}
-            />
-            <ForestPlane
-              travel={travel}
-              offset={3.4}
-              source={environment.middle}
-              paused={paused}
-            />
-          </div>
+          {!viewport.compact && (
+            <div className="clarity-forest-space" aria-hidden="true">
+              <ForestPlane
+                travel={travel}
+                offset={0.1}
+                source={environment.near}
+                paused={paused}
+              />
+              <ForestPlane
+                travel={travel}
+                offset={1.2}
+                source={environment.middle}
+                flipped
+                paused={paused}
+              />
+              <ForestPlane
+                travel={travel}
+                offset={2.3}
+                source={environment.near}
+                flipped
+                paused={paused}
+              />
+              <ForestPlane
+                travel={travel}
+                offset={3.4}
+                source={environment.middle}
+                paused={paused}
+              />
+            </div>
+          )}
           <motion.span
             className="clarity-scene-glow"
             aria-hidden="true"
-            style={{ left: lightX, top: lightY, opacity: sceneInk }}
+            style={{
+              left: viewport.compact ? "50%" : lightX,
+              top: viewport.compact ? "49%" : lightY,
+              opacity: sceneInk,
+            }}
           />
           <motion.div
             className="clarity-scene-heading"
@@ -489,7 +528,11 @@ function MethodJourney({ paused }: { paused: boolean }) {
           </motion.div>
           <motion.div
             className="clarity-scene-focus"
-            style={{ left: lightX, top: lightY, opacity: sceneInk }}
+            style={{
+              left: viewport.compact ? "50%" : lightX,
+              top: viewport.compact ? "49%" : lightY,
+              opacity: sceneInk,
+            }}
           >
             <span className="clarity-scene-lens" aria-hidden="true">
               <Sun size={24} strokeWidth={1.1} />
@@ -498,11 +541,11 @@ function MethodJourney({ paused }: { paused: boolean }) {
               key={current}
               className="clarity-scene-method"
               style={{
-                z: paused ? 0 : planeDepth,
+                z: paused || viewport.compact ? 0 : planeDepth,
                 y: paused ? 0 : planeY,
-                rotateX: paused ? 0 : planeTilt,
+                rotateX: paused || viewport.compact ? 0 : planeTilt,
                 opacity: paused ? 1 : planeOpacity,
-                filter: paused ? "blur(0px)" : planeFilter,
+                filter: paused || viewport.compact ? "none" : planeFilter,
               }}
               data-readable={readable}
               aria-hidden={!readable}
@@ -768,6 +811,25 @@ export default function ClarityChapter({
   const focusOnOpen = useRef(false);
   const focusOnReturn = useRef(false);
   const open = reading || phase === "open";
+
+  useEffect(() => {
+    if (phase === "closed" || !focusOnOpen.current) return;
+    // A tap starts the reveal, but a later swipe/key/wheel owns navigation.
+    // Do not pull a visitor back when the delayed opening animation finishes.
+    const interrupted = () => {
+      focusOnOpen.current = false;
+    };
+    window.addEventListener("touchstart", interrupted, { passive: true });
+    window.addEventListener("pointerdown", interrupted, { passive: true });
+    window.addEventListener("wheel", interrupted, { passive: true });
+    window.addEventListener("keydown", interrupted);
+    return () => {
+      window.removeEventListener("touchstart", interrupted);
+      window.removeEventListener("pointerdown", interrupted);
+      window.removeEventListener("wheel", interrupted);
+      window.removeEventListener("keydown", interrupted);
+    };
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "lighting") return;

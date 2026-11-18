@@ -33,8 +33,13 @@ export function useContinuity(
         }
         anchors.sort((a, b) => a.y - b.y);
       };
+      let chapter = "";
       const update = () => {
-        element.setAttribute("data-chapter", sampleContinuity(anchors, scrollY).section);
+        const next = sampleContinuity(anchors, scrollY).section;
+        if (next !== chapter) {
+          chapter = next;
+          element.setAttribute("data-chapter", next);
+        }
       };
       measure();
       update();

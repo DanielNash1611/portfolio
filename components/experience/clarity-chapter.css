@@ -1484,6 +1484,61 @@ html[data-clarity-immersive] .experience-control-bar button:focus-visible {
   filter: brightness(0.48) saturate(0.55);
 }
 
+/* Keep the forest/light/sunrise story on touch devices, with composited
+   opacity and transforms instead of viewport-sized animated raster effects. */
+.clarity-journey[data-rendering="compact"] .clarity-journey-fog {
+  mask-image: radial-gradient(
+    ellipse 90% 62% at 50% 49%,
+    transparent 18%,
+    #000 88%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 62% at 50% 49%,
+    transparent 18%,
+    #000 88%
+  );
+}
+.clarity-journey[data-rendering="compact"] .clarity-fog,
+.clarity-journey[data-rendering="compact"] .clarity-near-fog {
+  filter: none;
+  animation: none;
+}
+.clarity-journey[data-rendering="compact"] .clarity-fog-b,
+.clarity-journey[data-rendering="compact"] .clarity-fog-c {
+  display: none;
+}
+.clarity-journey[data-rendering="compact"] .clarity-journey-mist {
+  backdrop-filter: none;
+}
+.clarity-journey[data-rendering="compact"] .clarity-scene-focus {
+  perspective: none;
+  transform-style: flat;
+}
+.clarity-journey[data-rendering="compact"] .clarity-scene-method {
+  will-change: transform, opacity;
+}
+@media (max-width: 899px), (pointer: coarse) {
+  .clarity-gate-art,
+  .clarity-chapter[data-phase="lighting"] .clarity-gate-art {
+    filter: brightness(0.65) saturate(0.7);
+    transition: transform 1s;
+  }
+  .clarity-fog,
+  .clarity-chapter[data-phase="lighting"] .clarity-fog {
+    filter: none;
+    animation: none;
+    transition:
+      transform 1.1s,
+      opacity 1s;
+  }
+  .experience .clarity-intro h2 {
+    transition: none;
+  }
+  .clarity-forest-space {
+    display: none;
+  }
+}
+
 /* The cinematic chapter arrives before its supporting field guide. */
 .clarity-chapter[data-reading="false"] .clarity-guide {
   padding-top: 0;

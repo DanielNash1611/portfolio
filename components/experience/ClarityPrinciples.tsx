@@ -90,14 +90,12 @@ export default function ClarityPrinciples({
     );
     if (!animated || !element || !stage) return;
     let frame = 0;
+    let start = 0;
+    let distance = 1;
+    let nearby = true;
     const update = () => {
       frame = 0;
-      const top = parseFloat(getComputedStyle(stage).top) || 113;
-      const travel = Math.max(1, element.offsetHeight - stage.offsetHeight);
-      const value = Math.max(
-        0,
-        Math.min(1, (top - element.getBoundingClientRect().top) / travel),
-      );
+      const value = Math.max(0, Math.min(1, (scrollY - start) / distance));
       progress.set(value);
       setIndex((previous) => {
         const next = sequenceIndex(value, values.length);
@@ -105,19 +103,44 @@ export default function ClarityPrinciples({
       });
     };
     const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (nearby && !document.hidden && !frame)
+        frame = requestAnimationFrame(update);
     };
-    const observer = new ResizeObserver(schedule);
+    const measure = () => {
+      const top = parseFloat(getComputedStyle(stage).top) || 113;
+      start = element.getBoundingClientRect().top + scrollY - top;
+      distance = Math.max(1, element.offsetHeight - stage.offsetHeight);
+      schedule();
+    };
+    const observer = new ResizeObserver(measure);
     observer.observe(element);
     observer.observe(stage);
+    const page = element.closest(".experience");
+    if (page) observer.observe(page);
+    const visibility = new IntersectionObserver(
+      ([entry]) => {
+        nearby = entry.isIntersecting;
+        if (!nearby) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        }
+        update();
+      },
+      { rootMargin: "200px 0px" },
+    );
+    visibility.observe(element);
+    measure();
     update();
     window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
+    window.addEventListener("resize", measure);
+    document.addEventListener("visibilitychange", schedule);
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      visibility.disconnect();
       window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
+      window.removeEventListener("resize", measure);
+      document.removeEventListener("visibilitychange", schedule);
     };
   }, [animated, progress, values.length]);
   function select(next: number) {
