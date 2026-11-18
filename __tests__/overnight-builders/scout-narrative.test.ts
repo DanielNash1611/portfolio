@@ -5,7 +5,7 @@ import { scoutScenes } from "../../components/overnight-builders/scout-narrative
 
 test("the artifact sequence uses only documented app captures and carries fictional-data boundaries", async () => {
   const provenance = await readFile(
-    "public/images/experience/scout/README.md",
+    "source-assets/experience-provenance/images/experience/scout/README.md",
     "utf8",
   );
   assert.equal(new Set(scoutScenes.map((scene) => scene.image)).size, 3);
