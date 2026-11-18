@@ -33,7 +33,6 @@ import ConductorCue from "./ConductorCue";
 import { useIntroLayoutFits, useIntroProgress } from "./useIntroProgress";
 import { portraitPhases } from "@/lib/experience/portrait-scroll";
 import { revealExperienceTarget } from "@/lib/experience/reveal-target";
-import { useHomepageTouchStops } from "./useHomepageTouchStops";
 import "./experience.css";
 import "./personality-portrait.css";
 import "./opening-outcomes.css";
@@ -67,8 +66,7 @@ export default function ExperiencePreview({
   useInitialChapterAnchor(root, mounted);
   const quiet = Boolean(reduced) || reading;
   const stopMotion = paused || quiet || fullGravity;
-  const touchStops = presentation === "home" && mounted && !stopMotion;
-  const moveReadingStop = useHomepageTouchStops(root, touchStops);
+  const homeLandings = presentation === "home" && mounted && !stopMotion;
   useEffect(() => {
     const element = root.current;
     if (!element) return;
@@ -154,31 +152,12 @@ export default function ExperiencePreview({
       className="experience experience-narrative"
       data-paused={stopMotion}
       data-motion={mounted && !quiet}
-      data-touch-stops={touchStops}
+      data-home-landings={homeLandings}
       data-personal-video={personalVideo}
       data-testid="experience-preview"
     >
       <div className="experience-control-bar">
         <div>
-          {touchStops && (
-            <nav
-              className="experience-touch-navigation"
-              aria-label="Reading stops"
-            >
-              <button
-                onClick={() => moveReadingStop(-1)}
-                aria-label="Previous reading stop"
-              >
-                ↑ <span>Previous</span>
-              </button>
-              <button
-                onClick={() => moveReadingStop(1)}
-                aria-label="Next reading stop"
-              >
-                <span>Next</span> ↓
-              </button>
-            </nav>
-          )}
           <PortfolioAssistantTrigger
             className="experience-toolbar-assistant"
             aria-label="Open portfolio assistant"
