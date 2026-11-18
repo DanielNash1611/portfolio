@@ -271,6 +271,7 @@ function MethodJourney({ paused }: { paused: boolean }) {
         element.getBoundingClientRect().top + scrollY,
         canvas.getBoundingClientRect().height,
         parseFloat(getComputedStyle(canvas).top) || 0,
+        viewport.compact,
       );
       if (measuredStep !== geometry.step) {
         measuredStep = geometry.step;
@@ -331,7 +332,7 @@ function MethodJourney({ paused }: { paused: boolean }) {
       window.removeEventListener("resize", measure);
       document.removeEventListener("visibilitychange", schedule);
     };
-  }, [travel, viewport.fits, immersiveOwner]);
+  }, [travel, viewport.fits, viewport.compact, immersiveOwner]);
 
   function pageThroughMethods(event: KeyboardEvent<HTMLDivElement>) {
     if (
