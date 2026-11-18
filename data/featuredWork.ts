@@ -75,11 +75,7 @@ export const featuredWork: FeaturedWorkItem[] = [
       height: 675,
       alt: "AI rollout illustration with enablement, governance, and adoption callouts.",
     },
-    chips: [
-      "~1,000 licensed users",
-      "~800 active users",
-      "AI COE groundwork",
-    ],
+    chips: ["~1,000 licensed users", "~800 active users", "AI COE groundwork"],
     bestFor: "Senior Product Manager and Product Leader",
   },
   {

@@ -1,0 +1,262 @@
+/* Main hiring path: evidence first, optional depth at the point of interest. */
+.experience-home
+  :is(
+    .experience-products,
+    .experience-work,
+    .experience-contact,
+    .experience-creative
+  )
+  > h2,
+.experience-home .experience-contact h2 {
+  font-size: clamp(42px, 5.2vw, 74px);
+  max-width: 900px;
+}
+.experience-home-section:is(
+  .experience-products,
+  .experience-work,
+  .experience-contact
+) {
+  padding-block: clamp(52px, 5vw, 76px);
+}
+.experience-products .experience-story-list {
+  margin-top: 32px;
+}
+.experience-products .experience-project-story {
+  padding-block: 36px;
+}
+.experience-disclosure {
+  margin: 0;
+  padding-inline: clamp(24px, 5vw, 80px);
+  color: #173f3d;
+  background: #f3eee4;
+}
+.experience-disclosure > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 74px;
+  padding-block: 20px;
+  border-top: 1px solid #173f3d35;
+  cursor: pointer;
+}
+.experience-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.experience-disclosure > summary strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+.experience-disclosure > summary > span > span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 4px;
+  opacity: 0.78;
+}
+.experience-disclosure > summary > svg {
+  flex: 0 0 auto;
+  transition: transform 0.2s;
+}
+.experience-disclosure[open] > summary > svg {
+  transform: rotate(180deg);
+}
+.experience-disclosure > summary:hover strong {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.experience-disclosure > summary:focus-visible {
+  outline: 2px solid #a14835;
+  outline-offset: 5px;
+}
+.experience-disclosure-body {
+  margin-inline: calc(-1 * clamp(24px, 5vw, 80px));
+}
+.experience-depth-green {
+  background: #173f3d;
+  color: #f3eee4;
+}
+.experience-depth-green > summary {
+  border-color: #f3eee43b;
+}
+.experience-work-summaries {
+  margin-top: 32px;
+}
+.experience-work-summary {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(30px, 6vw, 90px);
+  padding-block: 30px;
+  border-top: 1px solid #173f3d35;
+}
+.experience-work-summary > div {
+  min-width: 0;
+}
+.experience-work-summary h3 {
+  font:
+    400 clamp(27px, 3vw, 38px) / 1.08 var(--font-serif),
+    Georgia,
+    serif;
+}
+.experience-work-summary .experience-home-eyebrow {
+  font-size: 9px;
+  margin-bottom: 14px;
+}
+.experience-work-summary > div > p:not(.experience-home-eyebrow) {
+  max-width: 64ch;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.experience-work-summary > div > .experience-home-link {
+  margin-top: 10px;
+}
+.experience-work-summary .experience-story-metrics {
+  margin-top: 16px;
+  grid-template-columns: 1fr;
+}
+.experience-work-summary .experience-story-metrics dd {
+  font-size: 27px;
+}
+.experience-work-reveal {
+  padding: 0;
+  margin-top: 8px;
+}
+.experience-work-reveal > summary {
+  min-height: 50px;
+  padding-block: 12px;
+}
+.experience-work-reveal > summary strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.experience-work-reveal .experience-disclosure-body {
+  margin: 0;
+}
+.experience-work-reveal .experience-project-story {
+  display: block;
+  padding-block: 18px 0;
+  border: 0;
+}
+.experience-work-reveal .experience-story-copy > .experience-home-link {
+  margin-top: 12px;
+}
+.experience-work-reveal .experience-story-visual {
+  width: 100%;
+  max-width: 100%;
+  transform: none !important;
+  clip-path: none !important;
+}
+.experience-supporting-work {
+  padding: 0;
+  margin-top: 12px;
+}
+.experience-supporting-work > .experience-disclosure-body {
+  margin: 0;
+}
+.experience-work-reveal
+  .experience-project-story:is(
+    [data-project="product-practice"],
+    [data-project="cresta-coaching"]
+  )
+  .experience-story-visual {
+  min-height: 440px;
+  aspect-ratio: 1.5;
+}
+.experience-contact .experience-creative-continue {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  margin-top: 28px;
+  font-size: 12px;
+  color: #dfc495;
+}
+.experience-extra-depth {
+  padding-block: 20px 65px;
+}
+.experience-extra-depth > .experience-home-eyebrow {
+  margin-inline: clamp(24px, 5vw, 80px);
+}
+@media (max-width: 759px) {
+  .experience-work-summary {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-block: 28px;
+  }
+  .experience-home
+    :is(
+      .experience-products,
+      .experience-work,
+      .experience-contact,
+      .experience-creative
+    )
+    > h2,
+  .experience-home .experience-contact h2 {
+    font-size: clamp(36px, 10vw, 54px);
+  }
+  .experience-products .experience-project-story {
+    padding-block: 28px;
+  }
+  .experience-work-reveal
+    .experience-project-story[data-project="product-practice"]
+    .experience-story-visual {
+    min-height: 510px;
+  }
+  .experience-work-reveal
+    .experience-project-story[data-project="cresta-coaching"]
+    .experience-story-visual {
+    min-height: 480px;
+  }
+  .experience-work-reveal
+    .experience-project-story[data-project="checkout-redesign"]
+    .experience-story-visual {
+    aspect-ratio: 4 / 5;
+    min-height: 420px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience-disclosure > summary > svg {
+    transition: none;
+  }
+}
+
+/* Keep utility controls without repeating the site identity. */
+.experience .experience-control-bar {
+  justify-content: flex-end;
+}
+.experience .experience-home-section.experience-products {
+  padding-top: 28px;
+}
+.experience-project-story:nth-child(even) .experience-story-runway {
+  order: 2;
+}
+@media (max-width: 899px) {
+  .experience-project-story:nth-child(even) .experience-story-runway {
+    order: 0;
+  }
+}
+@media (max-width: 899px) and (min-height: 600px) {
+  .experience-story-runway[data-quiet="false"] {
+    --career-view-height: min(
+      calc((90vw - 10px) / 1.15),
+      calc(100svh - var(--portfolio-header-height, 61px) - 96px)
+    );
+    height: calc(var(--career-view-height) + 130svh);
+    position: relative;
+    overflow-anchor: none;
+  }
+  .experience.experience-narrative
+    .experience-project-story[data-project="ai-career-operating-system"]
+    .experience-story-runway[data-quiet="false"]
+    .experience-story-visual {
+    position: sticky;
+    top: calc(var(--portfolio-header-height, 61px) + 68px);
+    height: var(--career-view-height);
+    width: calc(100% - 10px);
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+}

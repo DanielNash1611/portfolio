@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import ProductTemplate from "@/components/site/ProductTemplate";
+import ScoutStory from "@/components/overnight-builders/ScoutStory";
 import { getProductEntry } from "@/content/portfolio";
 
 const entry = getProductEntry("immunology-scout");
@@ -16,5 +16,5 @@ export default function ImmunologyScoutPage(): React.JSX.Element {
     notFound();
   }
 
-  return <ProductTemplate entry={entry} />;
+  return <ScoutStory entry={entry} />;
 }

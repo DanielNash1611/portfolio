@@ -356,3 +356,15 @@ test("the actual service sends the filtered schema and records validated coverag
   assert.equal(trace.payload.purpose, "role-relevance");
   assert.equal(trace.payload.catalogSize, 2);
 });
+
+test("career seniority keeps responsibility and operating limits without unrelated eval provenance", () => {
+  const req = request("ai-career-operating-system", "How senior is the work shown here?");
+  const blocks = buildClaimInventory(req);
+  const policy = claimSelectionConstraints(req, blocks);
+  assert.equal(policy.purpose, "qualified-seniority");
+  assert.deepEqual(policy.costs.map((b) => b.id), ["ai-career-operating-system:ownership", "ai-career-operating-system:next"]);
+  const rendered = renderClaimSelection({request:req, blocks, rawText:'{"blockIds":["ai-career-operating-system:ownership","ai-career-operating-system:evaluation"]}', relatedPages:[]});
+  assert.match(rendered.response.answer, /product direction/);
+  assert.match(rendered.response.answer, /do not establish external customer adoption/);
+  assert.doesNotMatch(rendered.response.answer, /5\/12/);
+});

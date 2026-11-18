@@ -118,7 +118,7 @@ export default function EvalEvidence(): React.JSX.Element {
         </div>
 
         <MediaFrame
-          src="/images/products/ai-career-operating-system/six-advisory-review-agents.png"
+          src="/images/products/ai-career-operating-system/six-advisory-review-agents.webp"
           alt="Infographic showing six advisory resume review agents: Recruiter Screen, Hiring Manager, Career Coach, Source Auditor, ATS Readability, and Positioning and Bridge Strategist, followed by structured findings, scores, issue severity, source status, and human approval."
           fallbackTitle="Six advisory review agents"
           sizes="(min-width: 1280px) 1040px, 94vw"

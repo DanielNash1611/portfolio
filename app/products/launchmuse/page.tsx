@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import ProductTemplate from "@/components/site/ProductTemplate";
+import LaunchMuseStory from "@/components/overnight-builders/LaunchMuseStory";
 import { getProductEntry } from "@/content/portfolio";
 
 const entry = getProductEntry("launchmuse");
@@ -16,14 +16,5 @@ export default function LaunchMusePage(): React.JSX.Element {
     notFound();
   }
 
-  const launchMuseEntry = {
-    ...entry,
-    heroImage: "/images/launchmuse-product-hero.png",
-    heroImageAlt:
-      "LaunchMuse campaign plan screen showing a detailed release story and weekly plan.",
-    heroImageClassName: "object-top",
-    heroImageExpandable: true,
-  };
-
-  return <ProductTemplate entry={launchMuseEntry} />;
+  return <LaunchMuseStory entry={entry} />;
 }

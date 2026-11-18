@@ -244,10 +244,16 @@ function DemoArtifact({ frame }: { frame: number }) {
 
 export function BuildConversationDemo({
   onTryIdea,
+  paused = false,
+  embedded = false,
 }: {
   onTryIdea?: () => void;
+  paused?: boolean;
+  embedded?: boolean;
 }) {
-  const reducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = prefersReducedMotion || paused;
+  const Heading = embedded ? "h5" : "h2";
   const root = useRef<HTMLElement>(null);
   const chat = useRef<HTMLDivElement>(null);
   const position = useJourneyPosition();
@@ -381,9 +387,9 @@ export function BuildConversationDemo({
     >
       <div className="build-demo-heading">
         <div>
-          <h2 id="build-demo-title" tabIndex={-1}>
+          <Heading id="build-demo-title" tabIndex={-1}>
             Watch Gravity take shape.
-          </h2>
+          </Heading>
         </div>
         <span className="build-demo-provenance">
           Gravity · condensed reenactment

@@ -1,3 +1,4 @@
+import { omsDeliveryMilestones } from "@/content/projects/oms-delivery";
 import { zimmerAiPrototypes } from "@/content/projects/zimmer-ai-prototypes";
 
 export type NavItem = {
@@ -245,8 +246,8 @@ export const homeContent = {
   metrics: [
     {
       label: "ChatGPT Enterprise scale",
-      value: "~1,000 licensed users",
-      detail: "~800 active users",
+      value: "~1,000 users",
+      detail: "~800 active users · Activity window unspecified",
     },
     {
       label: "Commerce impact",
@@ -324,13 +325,13 @@ export const workEntries: WorkEntry[] = [
     title: "ChatGPT Enterprise from pilot to operating model",
     eyebrow: "Senior Product Manager, AI Platform Strategy",
     summary:
-      "I led ChatGPT Enterprise from a controlled pilot to scaled operating model at Guitar Center, proving measurable value in the contact center, then expanding adoption from roughly ~150 licensed users / ~40 active users to ~1,000 licensed users / ~800 active users through workflow design, governance, enablement, and cross-functional trust.",
+      "I led ChatGPT Enterprise from a controlled contact-center pilot to a broader operating model, with later reported adoption growing from roughly 150 licensed / 40 active users to 1,000 licensed / 800 active users through workflow design, governance, enablement, and cross-functional trust. The activity window is unspecified.",
     description:
       "A recruiter-friendly story about taking AI from early promise into real production environments with measurable impact.",
     role: "Senior Product Manager, Contact Center & AI Strategy",
     company: "The Guitar Center Company",
     timeframe: "2024-2026",
-    heroImage: "/images/chatgpt-enterprise/hero-operating-model.png",
+    heroImage: "/images/chatgpt-enterprise/hero-operating-model.webp",
     heroImageAlt:
       "Sanitized ChatGPT Enterprise hero visual showing the path from pilot to operating model with discovery, governance, pilot, scale, champions, OpenAI GTM partnership, and executive support.",
     tags: [
@@ -351,10 +352,10 @@ export const workEntries: WorkEntry[] = [
     ],
     featuredMetrics: [
       {
-        label: "Annualized pilot impact",
+        label: "Estimated annualized pilot impact",
         value: "~$2.7M",
         detail:
-          "Validated through a six-month pilot with a matched control group.",
+          "Reported business-case estimate from a six-month pilot with a matched control group, separate from realized annual revenue.",
       },
       {
         label: "Licensed users scaled",
@@ -366,7 +367,7 @@ export const workEntries: WorkEntry[] = [
         label: "Active users",
         value: "~40 -> ~800",
         detail:
-          "Active usage grew alongside reusable workflows, training, and governance; no daily measurement period is claimed.",
+          "Approximate reported company-wide endpoints; the activity window and observation dates are unspecified.",
       },
     ],
     overview: [
@@ -417,7 +418,7 @@ export const workEntries: WorkEntry[] = [
       },
       {
         title: "Structured the pilot around measurable proof",
-        body: "The pilot was designed with a cohort and matched control group, using metrics centered on Revenue Per Call, Items Per Transaction, Average Order Value, and supporting efficiency signals. That measurement model turned the initiative from an AI experiment into a business case.",
+        body: "The pilot used a test cohort and matched control group. The source reports average order value, conversion, and revenue per call for both groups; both improved conversion and revenue per call. A separate survey estimated time saved. The comparison supported a business case without establishing a blanket reduction in handle time.",
       },
       {
         title: "Designed the enablement system, not just the workflows",
@@ -445,13 +446,15 @@ export const workEntries: WorkEntry[] = [
         label: "Operating model",
         value: "~40 -> ~800 active users",
         detail:
-          "Active usage grew alongside reusable workflows, training, governance, and trust; no daily measurement period is claimed.",
+          "Reported company-wide adoption endpoints; the activity window and observation dates are unspecified.",
       },
     ],
     results: [
       "The pilot proved two things at once.",
       "First, AI could create measurable value in a frontline workflow. Second, adoption would scale when enablement and guardrails were designed as part of the product rather than added later.",
-      "The initial six-month pilot produced an annualized impact estimate of ~$2.7M, with pilot agents outperforming a matched control group across revenue and efficiency indicators. That proof point became the basis for expanding ChatGPT Enterprise from roughly ~150 licensed users / ~40 active users to ~1,000 licensed users / ~800 active users across the company.",
+      "The six-month pilot supported a reported annualized impact estimate of ~$2.7M, separate from observed cohort measures and later adoption. Source slide 12 reports both the test and adjusted-control groups; both improved conversion and revenue per call. The full test-group change alone is not a causal AI lift, and the annualized estimate is not realized revenue or a calculation derived here from that table.",
+      "Source slide 13 reports longer customer conversations for test agents. Slide 26's survey-estimated time savings are a separate self-reported measure and do not establish lower handle time across the pilot.",
+      "The pilot supported expansion to roughly 350 contact-center agents. Later company-wide endpoints were roughly 150 licensed / 40 active users and 1,000 licensed / 800 active users. These are different scopes; dates and the activity window for those endpoints are unspecified.",
     ],
     scaledBeyondPilot: [
       "The most important outcome was not just the pilot result. It was the operating model that came out of it.",
@@ -471,7 +474,7 @@ export const workEntries: WorkEntry[] = [
         title: "Frontline ideation that shaped early GPT workflows",
         description:
           "Sanitized excerpt from a structured ideation session with contact center stakeholders. The team started with free brainstorming, then built on the strongest concepts through collaborative expansion and lightweight voting. The session helped surface several of the early workflow opportunities that shaped the rollout, including Gear Companion, a GPT I created to recommend complementary products customers often needed alongside a primary purchase, such as accessories for a digital keyboard. Gear Companion went on to become one of the most-used GPT workflows after launch.",
-        image: "/images/chatgpt-enterprise/frontline-ideation.png",
+        image: "/images/chatgpt-enterprise/frontline-ideation.webp",
         alt: "Sanitized ideation board showing brainstorming, idea expansion, team signal, and an early Gear Companion workflow concept.",
         placement: "execution",
         imageFit: "contain",
@@ -481,7 +484,7 @@ export const workEntries: WorkEntry[] = [
         title: "Enterprise AI operating model",
         description:
           "Sanitized view of the operating model that helped ChatGPT Enterprise move from pilot to scale. The rollout combined use-case discovery, governance, measured pilots, enablement, and feedback loops so adoption could grow without losing trust. This system made it possible to move from an initial proof point in the contact center to broader enterprise usage.",
-        image: "/images/chatgpt-enterprise/enterprise-ai-operating-model.png",
+        image: "/images/chatgpt-enterprise/enterprise-ai-operating-model.webp",
         alt: "Sanitized enterprise AI operating model showing discovery, governance, pilot, scale, feedback, and supporting layers for guidance, trusted data, enablement, and adoption.",
         placement: "scale",
         imageFit: "contain",
@@ -491,7 +494,7 @@ export const workEntries: WorkEntry[] = [
         title: "Grassroots champions model that scaled into enterprise support",
         description:
           "Sanitized view of the adoption model that helped ChatGPT Enterprise scale beyond the initial pilot. I started the ChatGPT Champions program grassroots to share workflows, surface strong use cases, and build trust across teams. As adoption grew, the effort gained cross-functional structure, partnership with OpenAI GTMs, and C-suite sponsorship, helping turn early momentum into a broader enterprise capability.",
-        image: "/images/chatgpt-enterprise/grassroots-champions-model.png",
+        image: "/images/chatgpt-enterprise/grassroots-champions-model.webp",
         alt: "Sanitized champions model showing functional champions, local use cases, peer enablement, cross-functional alignment, OpenAI GTM partnership, and executive sponsorship.",
         placement: "scale",
         imageFit: "contain",
@@ -869,7 +872,7 @@ export const productEntries: ProductEntry[] = [
       "A focused AI-native product that helps artists turn the meaning behind a release into a cohesive six-week narrative.",
     description:
       "A live product case study about narrative-driven release planning, sharp product scoping, and how quickly a PM can now move from concept to working software.",
-    heroImage: "/images/launchmuse-screenshot.png",
+    heroImage: "/images/launchmuse-screenshot.webp",
     heroImageAlt:
       "LaunchMuse campaign wizard screenshot showing the product's release planning flow.",
     tags: ["AI-native MVP", "Creator Tools", "Workflow Design", "Music Tech"],
@@ -940,7 +943,7 @@ export const productEntries: ProductEntry[] = [
         title: "LaunchMuse campaign wizard",
         description:
           "The live product flow shows how artists move from release context into a guided campaign planning workflow.",
-        image: "/images/launchmuse-screenshot.png",
+        image: "/images/launchmuse-screenshot.webp",
         alt: "LaunchMuse screenshot showing the campaign wizard description step.",
       },
     ],
@@ -1055,11 +1058,11 @@ export const productEntries: ProductEntry[] = [
     href: "/products/oms-chatgpt-app",
     title: "OMS ChatGPT App",
     eyebrow: "Product Artifact",
-    status: "Live prototype",
+    status: "Public demo · Internal pilot",
     summary:
-      "A prototype ChatGPT App that enables users to interact with Order Management Systems through a conversational interface, handling workflows like order lookup and cancellation with built-in guardrails.",
+      "A conversational OMS workflow with a public simulated prototype and a separate internal delivery record: production connection in March 2026, followed by small-group production testing in April 2026.",
     description:
-      "Conversational OMS prototype showing how AI can support order lookup and cancellation inside enterprise workflows with clear safeguards and user control.",
+      "Order lookup and human-reviewed cancellation, from a simulated public prototype to an internal production connection using OpenAI and custom OMS APIs and small-group testing.",
     heroImage: "/images/oms-chatgpt-app/web-prototype-stylized.png",
     heroImageAlt:
       "Stylized presentation of the OMS ChatGPT App web prototype used as a hero asset.",
@@ -1107,14 +1110,14 @@ export const productEntries: ProductEntry[] = [
     ],
     productExperience: [
       {
-        title: "Retrieve order details through natural language",
+        title: "Review an order in conversation",
         description:
-          "Users can ask for order information conversationally instead of navigating across multiple OMS screens.",
+          "The recorded public prototype shows structured order details and expanded items using simulated OMS data.",
       },
       {
-        title: "Execute guarded cancellations",
+        title: "Inspect the confirmation decision",
         description:
-          "Cancellation flows require confirmation and make safeguards visible before any action is taken.",
+          "The public confirmation state displays an irreversible-action warning, a deliberate confirmation phrase, and keep-order and cancel choices. The capture demonstrates interface design rather than backend enforcement or tool-call ordering.",
       },
       {
         title: "See reasoning and stay in control",
@@ -1124,7 +1127,7 @@ export const productEntries: ProductEntry[] = [
     ],
     evaluationAndTrust: [
       "The prototype uses simulated data to respect the sensitivity of OMS systems and avoid exposing PII.",
-      "It represents a functional concept rather than a production deployment, with the goal of validating interaction patterns instead of replacing existing systems.",
+      "The public demo remains a simulated prototype. A separate internal workflow reached production connection in March 2026 and small-group production testing in April 2026; these milestones do not establish broad adoption or measured business impact.",
       "Designed to explore how AI agents can safely operate within enterprise workflows.",
     ],
     learnings: [
@@ -1135,12 +1138,13 @@ export const productEntries: ProductEntry[] = [
     buildStory: [
       "The prototype created enough alignment to move from a promising interaction concept into more serious exploration of production viability.",
       "Follow-on work included evaluating SSO integration for secure access, defining PII-safe interaction patterns, building an internal MCP server to support agent workflows, and exploring a production-oriented architecture that paired Java for team alignment with a Python wrapper around the Agents SDK.",
+      ...omsDeliveryMilestones.map(({ when, detail }) => `${when}: ${detail}`),
     ],
     visuals: [
       {
         title: "Order lookup inside ChatGPT",
         description:
-          "Natural-language lookup returns a structured order view with order status, shipping details, totals, and expandable items.",
+          "Recorded simulated prototype state showing order status, shipping details, totals, and expandable items.",
         image: "/images/oms-chatgpt-app/order-items-chatgpt.png",
         alt: "OMS ChatGPT App order summary view inside ChatGPT showing order details and expanded line items.",
         expandable: true,
@@ -1148,7 +1152,7 @@ export const productEntries: ProductEntry[] = [
       {
         title: "Cancellation with guardrails",
         description:
-          "The confirmation state makes the risk explicit, requires a deliberate phrase, and keeps the user in control before submission.",
+          "Recorded simulated confirmation state with a warning, deliberate phrase field, and both keep-order and cancel controls. The image does not establish backend enforcement.",
         image: "/images/oms-chatgpt-app/cancellation-guardrails-chatgpt.png",
         alt: "OMS ChatGPT App cancellation confirmation flow inside ChatGPT showing warning text and explicit confirmation controls.",
         expandable: true,
@@ -1156,7 +1160,7 @@ export const productEntries: ProductEntry[] = [
       {
         title: "Completed state after action",
         description:
-          "After confirmation, the assistant shows the updated order state clearly instead of hiding the result behind a generic success message.",
+          "A separate recorded simulated state shows the order marked Cancelled. The image does not prove the ordering of confirmation and tool execution.",
         image: "/images/oms-chatgpt-app/cancelled-state-chatgpt.png",
         alt: "OMS ChatGPT App order summary after cancellation showing the updated cancelled state.",
         expandable: true,
@@ -1655,7 +1659,7 @@ export const aboutContent = {
     "I turn emerging AI capability into products, workflows, and adoption strategies that create measurable business outcomes while advancing trust, creativity, and more meaningful human work.",
   paragraphs: [
     "My work usually starts the same way: find the leverage point in a system, then turn emerging capability into something operationally useful.",
-    "That has taken me across ecommerce, contact center, workflow modernization, and enterprise AI. At Guitar Center, I helped scale ChatGPT Enterprise from roughly ~150 licensed users / ~40 active users to ~1,000 licensed users / ~800 active users by pairing reusable workflows with governance, enablement, and close partnership across Legal, Security, Engineering, and Operations.",
+    "That has taken me across ecommerce, contact center, workflow modernization, and enterprise AI. At Guitar Center, I helped scale ChatGPT Enterprise from roughly 150 licensed / 40 active users to 1,000 licensed / 800 active users by pairing reusable workflows with governance, enablement, and close partnership across Legal, Security, Engineering, and Operations. The reported active-user figures do not specify a daily window.",
     "I stay close to the build because better AI product decisions come from understanding the system, not just the roadmap. My work has included agent-based workflows, retrieval across structured and unstructured data, and eval-driven iteration to improve quality, trust, and reliability over time.",
     "I also keep a hands-on builder practice through AI-native product and research experiments, including multi-agent research workflows in immunology. Music remains part of the story because it sharpens narrative sense, systems awareness, and craft. It supports the product work rather than competing with it.",
   ],
@@ -1780,7 +1784,7 @@ export const aboutContent = {
         theme: "ai",
         visual: {
           kind: "image",
-          src: "/images/chatgpt-enterprise/enterprise-ai-operating-model.png",
+          src: "/images/chatgpt-enterprise/enterprise-ai-operating-model.webp",
           alt: "Enterprise AI operating model visual showing discovery, governance, pilot, scale, and enablement.",
           eyebrow: "AI operating model",
         },
@@ -1797,7 +1801,7 @@ export const aboutContent = {
         theme: "builder",
         visual: {
           kind: "image",
-          src: "/images/launchmuse-product-hero.png",
+          src: "/images/launchmuse-product-hero.webp",
           alt: "LaunchMuse product visual showing an AI-assisted campaign planning workflow.",
           eyebrow: "Current practice",
         },

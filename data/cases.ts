@@ -87,14 +87,10 @@ export const cases: Case[] = [
     cardType: "Case Study",
     kpis: [
       { label: "Licensed Users", value: "~1,000" },
-      { label: "Active Users", value: "~800" },
-      { label: "Program", value: "Champions + AI COE" },
+      { label: "Active Users · Window Unspecified", value: "~800" },
+      { label: "Program", value: "Champions + COE groundwork" },
     ],
-    chips: [
-      "~1,000 licensed users",
-      "~800 active users",
-      "AI COE groundwork",
-    ],
+    chips: ["~1,000 licensed users", "~800 active users", "AI COE groundwork"],
     href: "/products/chatgpt-org-scale",
   },
   {
@@ -161,7 +157,7 @@ export const cases: Case[] = [
     summary:
       "An AI-native MVP for release planning that demonstrates product incubation, prompt system design, and workflow prototyping in a creator context.",
     tags: ["Prototype", "AI Workflow", "Product Incubation"],
-    heroImage: "/images/launchmuse-screenshot.png",
+    heroImage: "/images/launchmuse-screenshot.webp",
     roleLens: ["builder-pm"],
     bestFor: "Builder PM",
     cardType: "Case Study",

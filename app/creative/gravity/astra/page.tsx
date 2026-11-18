@@ -1,3 +1,5 @@
+import AstraInteractionStory from "@/components/overnight-creative/AstraInteractionStory";
+import interactionStyles from "@/components/overnight-creative/astra-interaction.module.css";
 import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import {
   getPageContextByPath,
@@ -14,7 +16,7 @@ import {
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowLeft, ArrowUpRight, Check, Minus } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUpRight } from "lucide-react";
 import GravityEvolutionSlides from "@/components/creative/GravityEvolutionSlides";
 import Container from "@/components/site/Container";
 import MediaFrame from "@/components/site/MediaFrame";
@@ -53,7 +55,7 @@ export default function GravityAstraPage(): React.JSX.Element {
   const pageContext = getPageContextByPath("/creative/gravity/astra");
   const portfolioContext = getPortfolioContext();
   return (
-    <div className="overflow-hidden bg-[#030708] text-[#eef7f4]">
+    <div className="overflow-clip bg-[#030708] text-[#eef7f4]">
       <section className="relative min-h-[calc(100svh-5rem)] overflow-hidden border-b border-white/10">
         <Image
           src="/images/gravity/astra/celestial-orbits.webp"
@@ -106,7 +108,7 @@ export default function GravityAstraPage(): React.JSX.Element {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href="#decisions"
+                href="#astra-interaction-story"
                 className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#7fe0d3] px-6 py-3 text-sm font-semibold text-[#04100f] transition hover:-translate-y-0.5 hover:bg-white"
               >
                 See what changed
@@ -141,605 +143,595 @@ export default function GravityAstraPage(): React.JSX.Element {
         </div>
       </section>
 
-      <section className="bg-[color:var(--color-background)] px-5 py-8 sm:px-6 md:px-8 md:py-10">
-        <div className="mx-auto max-w-[1280px]">
-          {pageContext ? (
-            <PortfolioGuide
-              pageContext={pageContext}
-              portfolioContext={portfolioContext}
-            />
-          ) : null}
-        </div>
-      </section>
+      <AstraInteractionStory />
+      <details id="astra-full-detail" className={interactionStyles.fullDetail}>
+        <summary>Full build, interaction decisions, and evidence</summary>
+        <section className="bg-[color:var(--color-background)] px-5 py-8 sm:px-6 md:px-8 md:py-10">
+          <div className="mx-auto max-w-[1280px]">
+            {pageContext ? (
+              <PortfolioGuide
+                pageContext={pageContext}
+                portfolioContext={portfolioContext}
+              />
+            ) : null}
+          </div>
+        </section>
 
-      <section className="bg-[#e9ece5] text-[#0b1516]">
-        <Container className="py-20 md:py-28 lg:py-32">
-          <MotionReveal className="grid gap-10 lg:grid-cols-[0.76fr_1.24fr] lg:gap-24">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#21796f]">
-                The second build
-              </p>
-              <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
-                Astra widened the possible.
-              </h2>
-            </div>
-            <div className="max-w-3xl self-end space-y-6 text-pretty text-lg leading-8 text-[#0b1516]/66 md:text-xl md:leading-9">
-              <p>
-                The first browser version proved the composition could work:
-                independent performers, spatial audio, and two views of one
-                gravitational system. With Astra, I could work at the scale of
-                the whole experience rather than one feature at a time.
-              </p>
-              <p>
-                A product observation could become a revised interaction rule, a
-                physics and audio change, a visual treatment, a browser test,
-                and a documented decision in the same working loop. That made a
-                much more ambitious version practical—but it did not make every
-                ambitious idea good.
-              </p>
-            </div>
-          </MotionReveal>
-
-          <dl className="mt-16 border-t border-[#0b1516]/18 md:mt-20">
-            {gravityCapabilities.map((capability, index) => (
-              <MotionReveal key={capability.number} delay={(index % 3) * 0.035}>
-                <div className="grid gap-4 border-b border-[#0b1516]/14 py-7 md:grid-cols-[4rem_minmax(220px,0.7fr)_minmax(0,1.3fr)] md:items-baseline md:gap-8">
-                  <dt className="text-xs font-semibold tracking-[0.18em] text-[#21796f]">
-                    {capability.number}
-                  </dt>
-                  <dd className="font-serif text-2xl tracking-[-0.025em] md:text-3xl">
-                    {capability.title}
-                  </dd>
-                  <dd className="max-w-2xl text-sm leading-7 text-[#0b1516]/58 md:text-base">
-                    {capability.body}
-                  </dd>
-                </div>
-              </MotionReveal>
-            ))}
-          </dl>
-        </Container>
-      </section>
-
-      <section
-        id="blender"
-        className="relative overflow-hidden border-y border-white/10 bg-[#071011]"
-      >
-        <div
-          className="absolute inset-0 bg-[radial-gradient(circle_at_84%_18%,rgba(127,224,211,0.1),transparent_28%),radial-gradient(circle_at_16%_82%,rgba(239,182,94,0.08),transparent_24%)]"
-          aria-hidden="true"
-        />
-        <Container className="relative py-20 md:py-28 lg:py-32">
-          <MotionReveal className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-24">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
-                The Blender turn
-              </p>
-              <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
-                Better objects made the flat world feel wrong.
-              </h2>
-            </div>
-            <div className="self-end">
-              <p className="max-w-3xl text-pretty font-serif text-3xl leading-[1.08] tracking-[-0.03em] text-white/90 md:text-5xl">
-                As soon as the instruments had volume, the world around them had
-                to gain depth.
-              </p>
-              <div className="mt-8 max-w-3xl space-y-5 text-base leading-8 text-white/58 md:text-lg">
+        <section className="bg-[#e9ece5] text-[#0b1516]">
+          <Container className="py-20 md:py-28 lg:py-32">
+            <MotionReveal className="grid gap-10 lg:grid-cols-[0.76fr_1.24fr] lg:gap-24">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#21796f]">
+                  The second build
+                </p>
+                <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
+                  Astra widened the possible.
+                </h2>
+              </div>
+              <div className="max-w-3xl self-end space-y-6 text-pretty text-lg leading-8 text-[#0b1516]/66 md:text-xl md:leading-9">
                 <p>
-                  Astra made it practical to bring Blender into the working
-                  loop—not as a detached asset pass, but as part of continuous
-                  product iteration. I could improve the cello and mobile
-                  instruments, bring those assets back into the browser, and
-                  judge the models, motion, material, lighting, and audio
-                  together.
+                  The first browser version proved the composition could work:
+                  independent performers, spatial audio, and two views of one
+                  gravitational system. With Astra, I could work at the scale of
+                  the whole experience rather than one feature at a time.
                 </p>
                 <p>
-                  That changed the ambition of the environment. A static, flat
-                  background could no longer support objects that looked and
-                  moved in three dimensions, so the backdrop became a navigable
-                  3D space with galaxies positioned at different depths.
+                  A product observation could become a revised interaction rule,
+                  a physics and audio change, a visual treatment, a browser
+                  test, and a documented decision in the same working loop. That
+                  made a much more ambitious version practical—but it did not
+                  make every ambitious idea good.
                 </p>
               </div>
-            </div>
-          </MotionReveal>
+            </MotionReveal>
 
-          <ol className="mt-16 grid border-y border-white/14 md:mt-20 md:grid-cols-3">
-            {gravityBlenderEvolution.map((step, index) => (
-              <MotionReveal key={step.number} delay={index * 0.05}>
-                <li
-                  className={`h-full py-8 md:px-8 md:py-10 ${
-                    index > 0
-                      ? "border-t border-white/12 md:border-l md:border-t-0"
-                      : ""
-                  }`}
+            <dl className="mt-16 border-t border-[#0b1516]/18 md:mt-20">
+              {gravityCapabilities.map((capability, index) => (
+                <MotionReveal
+                  key={capability.number}
+                  delay={(index % 3) * 0.035}
                 >
-                  <div className="flex items-center justify-between gap-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[#7fe0d3]">
-                    <span>{step.label}</span>
-                    <span className="text-white/28">{step.number}</span>
+                  <div className="grid gap-4 border-b border-[#0b1516]/14 py-7 md:grid-cols-[4rem_minmax(220px,0.7fr)_minmax(0,1.3fr)] md:items-baseline md:gap-8">
+                    <dt className="text-xs font-semibold tracking-[0.18em] text-[#21796f]">
+                      {capability.number}
+                    </dt>
+                    <dd className="font-serif text-2xl tracking-[-0.025em] md:text-3xl">
+                      {capability.title}
+                    </dd>
+                    <dd className="max-w-2xl text-sm leading-7 text-[#0b1516]/58 md:text-base">
+                      {capability.body}
+                    </dd>
                   </div>
-                  <h3 className="mt-8 max-w-[12ch] font-serif text-3xl leading-[1.02] tracking-[-0.035em] md:text-4xl">
-                    {step.title}
-                  </h3>
-                  <p className="mt-5 max-w-md text-sm leading-7 text-white/50 md:text-base">
-                    {step.body}
-                  </p>
-                </li>
-              </MotionReveal>
-            ))}
-          </ol>
+                </MotionReveal>
+              ))}
+            </dl>
+          </Container>
+        </section>
 
-          <MotionReveal className="mt-10 flex items-start gap-4 border-l border-[#efb65e]/70 pl-5 md:ml-auto md:max-w-3xl">
-            <p className="font-serif text-2xl leading-tight text-white/82 md:text-3xl">
-              This was not a decorative background upgrade. The assets became
-              convincing enough to require a more convincing world.
-            </p>
-          </MotionReveal>
-        </Container>
-      </section>
-
-      <section id="film" className="border-y border-white/10 bg-[#020607]">
-        <Container className="py-20 md:py-28 lg:py-32">
-          <MotionReveal className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-24">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#efb65e]">
-                60-second film
-              </p>
-              <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
-                Reach into the music.
-              </h2>
-            </div>
-            <div className="self-end">
-              <p className="max-w-3xl text-pretty font-serif text-3xl leading-[1.08] tracking-[-0.03em] text-white/88 md:text-5xl">
-                The product decisions become clearer when the whole system is
-                moving.
-              </p>
-              <p className="mt-6 max-w-2xl text-base leading-8 text-white/56 md:text-lg">
-                This short film moves from hand-launched sounds to independent
-                orbits, listener navigation, performer follow, and the two
-                three-dimensional worlds enabled by the Astra-and-Blender build.
-              </p>
-            </div>
-          </MotionReveal>
-
-          <MotionReveal delay={0.06} className="mt-14 md:mt-20">
-            <figure>
-              <div className="aspect-video overflow-hidden border border-white/16 bg-black">
-                <video
-                  controls
-                  playsInline
-                  preload="metadata"
-                  poster="/videos/gravity/gravity-reach-into-the-music-poster.jpg"
-                  title="Gravity — Reach into the music"
-                  aria-describedby="gravity-film-caption"
-                  className="h-full w-full bg-black object-contain"
-                >
-                  <source
-                    src="https://km9upglctugamtw6.public.blob.vercel-storage.com/gravity-reach-into-the-music.mp4"
-                    type="video/mp4"
-                  />
-                  <track
-                    kind="captions"
-                    src="/videos/gravity/gravity-reach-into-the-music.en.vtt"
-                    srcLang="en"
-                    label="English"
-                  />
-                  Your browser does not support HTML video.
-                </video>
+        <section
+          id="blender"
+          className="relative overflow-hidden border-y border-white/10 bg-[#071011]"
+        >
+          <div
+            className="absolute inset-0 bg-[radial-gradient(circle_at_84%_18%,rgba(127,224,211,0.1),transparent_28%),radial-gradient(circle_at_16%_82%,rgba(239,182,94,0.08),transparent_24%)]"
+            aria-hidden="true"
+          />
+          <Container className="relative py-20 md:py-28 lg:py-32">
+            <MotionReveal className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-24">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
+                  The Blender turn
+                </p>
+                <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
+                  Better objects made the flat world feel wrong.
+                </h2>
               </div>
-              <figcaption
-                id="gravity-film-caption"
-                className="flex flex-col gap-2 border-b border-white/14 py-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/42 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <span>Original Gravity session audio</span>
-                <span>01:00 · no narration</span>
-              </figcaption>
-            </figure>
-          </MotionReveal>
+              <div className="self-end">
+                <p className="max-w-3xl text-pretty font-serif text-3xl leading-[1.08] tracking-[-0.03em] text-white/90 md:text-5xl">
+                  As soon as the instruments had volume, the world around them
+                  had to gain depth.
+                </p>
+                <div className="mt-8 max-w-3xl space-y-5 text-base leading-8 text-white/58 md:text-lg">
+                  <p>
+                    Astra made it practical to bring Blender into the working
+                    loop—not as a detached asset pass, but as part of continuous
+                    product iteration. I could improve the cello and mobile
+                    instruments, bring those assets back into the browser, and
+                    judge the models, motion, material, lighting, and audio
+                    together.
+                  </p>
+                  <p>
+                    That changed the ambition of the environment. A static, flat
+                    background could no longer support objects that looked and
+                    moved in three dimensions, so the backdrop became a
+                    navigable 3D space with galaxies positioned at different
+                    depths.
+                  </p>
+                </div>
+              </div>
+            </MotionReveal>
 
-          <MotionReveal className="mt-8">
-            <details className="group border-b border-white/14 pb-7">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-3 text-sm font-semibold text-white/72 transition hover:text-white">
-                <span>Read the film transcript</span>
-                <span
-                  className="text-xl font-light text-[#7fe0d3] transition group-open:rotate-45"
-                  aria-hidden="true"
-                >
-                  +
-                </span>
-              </summary>
-              <ol className="mt-5 grid gap-x-10 border-t border-white/10 md:grid-cols-2">
-                {gravityFilmTranscript.map((cue) => (
+            <ol className="mt-16 grid border-y border-white/14 md:mt-20 md:grid-cols-3">
+              {gravityBlenderEvolution.map((step, index) => (
+                <MotionReveal key={step.number} delay={index * 0.05}>
                   <li
-                    key={cue.time}
-                    className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-white/10 py-5 text-sm leading-7"
+                    className={`h-full py-8 md:px-8 md:py-10 ${
+                      index > 0
+                        ? "border-t border-white/12 md:border-l md:border-t-0"
+                        : ""
+                    }`}
                   >
-                    <span className="font-mono text-xs text-[#7fe0d3]">
-                      {cue.time}
-                    </span>
-                    <span className="text-white/52">{cue.text}</span>
+                    <div className="flex items-center justify-between gap-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[#7fe0d3]">
+                      <span>{step.label}</span>
+                      <span className="text-white/28">{step.number}</span>
+                    </div>
+                    <h3 className="mt-8 max-w-[12ch] font-serif text-3xl leading-[1.02] tracking-[-0.035em] md:text-4xl">
+                      {step.title}
+                    </h3>
+                    <p className="mt-5 max-w-md text-sm leading-7 text-white/50 md:text-base">
+                      {step.body}
+                    </p>
                   </li>
-                ))}
-              </ol>
-            </details>
-          </MotionReveal>
-        </Container>
-      </section>
+                </MotionReveal>
+              ))}
+            </ol>
 
-      <section className="border-y border-white/10 bg-[#061011]">
-        <Container className="py-20 md:py-28 lg:py-32">
-          <div className="grid gap-12 lg:grid-cols-[minmax(300px,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
-            <MotionReveal className="lg:sticky lg:top-28 lg:self-start">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
-                The earlier signal
+            <MotionReveal className="mt-10 flex items-start gap-4 border-l border-[#efb65e]/70 pl-5 md:ml-auto md:max-w-3xl">
+              <p className="font-serif text-2xl leading-tight text-white/82 md:text-3xl">
+                This was not a decorative background upgrade. The assets became
+                convincing enough to require a more convincing world.
               </p>
-              <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
-                One tester tried to move through the music.
-              </h2>
-              <div className="mt-8 max-w-lg space-y-5 text-base leading-8 text-white/60 md:text-lg">
-                <p>
-                  While I watched people use the earlier version, one person
-                  treated the field like a place. They wanted to navigate
-                  through it, not just switch views from outside.
+            </MotionReveal>
+          </Container>
+        </section>
+
+        <section id="film" className="border-y border-white/10 bg-[#020607]">
+          <Container className="py-20 md:py-28 lg:py-32">
+            <MotionReveal className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-24">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#efb65e]">
+                  60-second film
                 </p>
-                <p>
-                  That instinct clarified the product direction. Perspective was
-                  not a camera feature; it was part of the composition. Moving
-                  closer to a performer should change both what you see and what
-                  you hear.
-                </p>
+                <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
+                  Reach into the music.
+                </h2>
               </div>
-              <div className="mt-9 border-l border-[#7fe0d3]/55 pl-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7fe0d3]">
-                  Product decision
+              <div className="self-end">
+                <p className="max-w-3xl text-pretty font-serif text-3xl leading-[1.08] tracking-[-0.03em] text-white/88 md:text-5xl">
+                  The product decisions become clearer when the whole system is
+                  moving.
                 </p>
-                <p className="mt-3 max-w-md font-serif text-2xl leading-tight text-white/88">
-                  Build Free view, dimensional cello and performer perspectives,
-                  and one shared visual-and-audible listener pose.
+                <p className="mt-6 max-w-2xl text-base leading-8 text-white/56 md:text-lg">
+                  This short film moves from hand-launched sounds to independent
+                  orbits, listener navigation, performer follow, and the two
+                  three-dimensional worlds enabled by the Astra-and-Blender
+                  build.
                 </p>
               </div>
             </MotionReveal>
 
-            <MotionReveal delay={0.08}>
-              <figure className="group">
-                <MediaFrame
-                  src="/images/gravity/astra/performer-follow.webp"
-                  alt="A close Gravity view following a clarinet performer as sculptural instruments orbit the cello in Celestial space."
-                  sizes="(min-width: 1024px) 58vw, 100vw"
-                  className="aspect-[1494/900] border border-white/12 bg-black"
-                  imageClassName="object-cover transition duration-700 group-hover:scale-[1.012]"
-                  expandable
-                  expandLabel="Expand the performer-follow view"
-                />
-                <figcaption className="grid gap-3 border-b border-white/12 py-5 sm:grid-cols-[8rem_1fr]">
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#7fe0d3]">
-                    Performer view
+            <MotionReveal delay={0.06} className="mt-14 md:mt-20">
+              <figure>
+                <a
+                  href="/videos/gravity/gravity-reach-into-the-music.mp4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-12 items-center border-b border-[#efb65e]/50 py-4 text-sm text-[#efb65e]"
+                >
+                  Open the original source film ↗
+                </a>
+                <figcaption
+                  id="gravity-film-caption"
+                  className="flex flex-col gap-2 border-b border-white/14 py-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/42 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <span>Original Gravity session audio</span>
+                  <span>01:00 · no narration</span>
+                </figcaption>
+              </figure>
+            </MotionReveal>
+
+            <MotionReveal className="mt-8">
+              <details className="group border-b border-white/14 pb-7">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-3 text-sm font-semibold text-white/72 transition hover:text-white">
+                  <span>Read the film transcript</span>
+                  <span
+                    className="text-xl font-light text-[#7fe0d3] transition group-open:rotate-45"
+                    aria-hidden="true"
+                  >
+                    +
                   </span>
-                  <p className="text-sm leading-6 text-white/48">
-                    The listener can follow an autonomous instrument while its
-                    audio continues to move from the same rendered position.
-                  </p>
-                </figcaption>
-              </figure>
-
-              <figure className="group mt-14 ml-auto w-[88%]">
-                <MediaFrame
-                  src="/images/gravity/astra/cello-perspective.webp"
-                  alt="Gravity viewed from close beside and below the spectral cello, with other instruments suspended in the surrounding Atomic field."
-                  sizes="(min-width: 1024px) 50vw, 88vw"
-                  className="aspect-[1494/900] border border-white/12 bg-black"
-                  imageClassName="object-cover transition duration-700 group-hover:scale-[1.012]"
-                  expandable
-                  expandLabel="Expand the close cello listening perspective"
-                />
-                <figcaption className="border-b border-white/12 py-5 text-sm leading-6 text-white/48">
-                  The close cello perspective makes scale and listener position
-                  perceptible rather than merely configurable.
-                </figcaption>
-              </figure>
+                </summary>
+                <ol className="mt-5 grid gap-x-10 border-t border-white/10 md:grid-cols-2">
+                  {gravityFilmTranscript.map((cue) => (
+                    <li
+                      key={cue.time}
+                      className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-white/10 py-5 text-sm leading-7"
+                    >
+                      <span className="font-mono text-xs text-[#7fe0d3]">
+                        {cue.time}
+                      </span>
+                      <span className="text-white/52">{cue.text}</span>
+                    </li>
+                  ))}
+                </ol>
+              </details>
             </MotionReveal>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
 
-      <section
-        id="decisions"
-        className="scroll-mt-24 bg-[#e3a956] text-[#171006]"
-      >
-        <Container className="py-20 md:py-28 lg:py-32">
-          <MotionReveal className="grid gap-10 lg:grid-cols-[0.68fr_1.32fr] lg:gap-24">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#5d3b0d]">
-                The five-year-old test
-              </p>
-              <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
-                The magic was making it clunky.
-              </h2>
-            </div>
-            <div className="self-end">
-              <p className="max-w-3xl text-pretty font-serif text-3xl leading-[1.08] tracking-[-0.03em] md:text-5xl">
-                The clearest signal came from frustrating my five-year-old.
-              </p>
-              <div className="mt-8 max-w-3xl space-y-5 text-base leading-8 text-[#171006]/66 md:text-lg">
-                <p>
-                  Waving to change worlds sounded natural. In use, it was
-                  inconsistent, slow to confirm, and too easy to confuse with
-                  ordinary movement. The full gesture set asked a visitor to
-                  remember too much while waiting to learn whether Gravity had
-                  understood them.
+        <section className="border-y border-white/10 bg-[#061011]">
+          <Container className="py-20 md:py-28 lg:py-32">
+            <div className="grid gap-12 lg:grid-cols-[minmax(300px,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
+              <MotionReveal className="lg:sticky lg:top-28 lg:self-start">
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
+                  The earlier signal
                 </p>
-                <p>
-                  I first treated that as a recognition problem. Testing showed
-                  it was a product problem. More gestures did not create more
-                  agency; they created more uncertainty. So I pulled back.
-                </p>
-              </div>
-            </div>
-          </MotionReveal>
-
-          <div className="mt-16 border-t border-[#171006]/25 md:mt-20">
-            <div className="hidden grid-cols-[0.42fr_1fr_1fr] gap-8 border-b border-[#171006]/18 py-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[#171006]/54 md:grid">
-              <span>Decision</span>
-              <span>Before testing</span>
-              <span>After testing</span>
-            </div>
-            {gravityDecisionChanges.map((decision, index) => (
-              <MotionReveal key={decision.label} delay={(index % 3) * 0.04}>
-                <div className="grid gap-6 border-b border-[#171006]/20 py-7 md:grid-cols-[0.42fr_1fr_1fr] md:gap-8">
-                  <h3 className="font-serif text-2xl tracking-[-0.025em]">
-                    {decision.label}
-                  </h3>
-                  <div className="flex gap-3 text-sm leading-7 text-[#171006]/55 md:text-base">
-                    <Minus
-                      className="mt-2 h-4 w-4 shrink-0"
-                      aria-hidden="true"
-                    />
-                    <p>{decision.before}</p>
-                  </div>
-                  <div className="flex gap-3 text-sm leading-7 text-[#171006]/78 md:text-base">
-                    <Check
-                      className="mt-1.5 h-4 w-4 shrink-0"
-                      aria-hidden="true"
-                    />
-                    <p>{decision.after}</p>
-                  </div>
+                <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
+                  One tester tried to move through the music.
+                </h2>
+                <div className="mt-8 max-w-lg space-y-5 text-base leading-8 text-white/60 md:text-lg">
+                  <p>
+                    While I watched people use the earlier version, one person
+                    treated the field like a place. They wanted to navigate
+                    through it, not just switch views from outside.
+                  </p>
+                  <p>
+                    That instinct clarified the product direction. Perspective
+                    was not a camera feature; it was part of the composition.
+                    Moving closer to a performer should change both what you see
+                    and what you hear.
+                  </p>
+                </div>
+                <div className="mt-9 border-l border-[#7fe0d3]/55 pl-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7fe0d3]">
+                    Product decision
+                  </p>
+                  <p className="mt-3 max-w-md font-serif text-2xl leading-tight text-white/88">
+                    Build Free view, dimensional cello and performer
+                    perspectives, and one shared visual-and-audible listener
+                    pose.
+                  </p>
                 </div>
               </MotionReveal>
-            ))}
-          </div>
 
-          <MotionReveal className="mt-12 border-l-2 border-[#171006] pl-6 md:ml-[29%] md:max-w-3xl">
-            <p className="font-serif text-2xl leading-tight md:text-3xl">
-              Waving, palm swipes, and full-hand world switching remain useful
-              research. They are no longer the default product.
-            </p>
-            <p className="mt-4 text-sm leading-7 text-[#171006]/62 md:text-base">
-              The live grammar now favors visible pointing, relaxed grabbing,
-              explicit dwell progress, and conventional controls that remain
-              available alongside the webcam.
-            </p>
-          </MotionReveal>
-        </Container>
-      </section>
+              <MotionReveal delay={0.08}>
+                <figure className="group">
+                  <MediaFrame
+                    src="/images/gravity/astra/performer-follow.webp"
+                    alt="A close Gravity view following a clarinet performer as sculptural instruments orbit the cello in Celestial space."
+                    sizes="(min-width: 1024px) 58vw, 100vw"
+                    className="aspect-[1494/900] border border-white/12 bg-black"
+                    imageClassName="object-cover transition duration-700 group-hover:scale-[1.012]"
+                    expandable
+                    expandLabel="Expand the performer-follow view"
+                  />
+                  <figcaption className="grid gap-3 border-b border-white/12 py-5 sm:grid-cols-[8rem_1fr]">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#7fe0d3]">
+                      Performer view
+                    </span>
+                    <p className="text-sm leading-6 text-white/48">
+                      The listener can follow an autonomous instrument while its
+                      audio continues to move from the same rendered position.
+                    </p>
+                  </figcaption>
+                </figure>
 
-      <section className="bg-[#020607]">
-        <GravityEvolutionSlides />
-
-        <Container className="py-20 md:py-28 lg:py-32">
-          <MotionReveal className="max-w-4xl">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
-              What stayed ambitious
-            </p>
-            <h2 className="mt-5 max-w-[12ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
-              Simpler control. A much richer instrument.
-            </h2>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-white/58 md:text-lg">
-              Pulling back on gesture novelty created room to deepen the parts
-              that actually make Gravity feel alive.
-            </p>
-          </MotionReveal>
-
-          <div className="mt-14 grid gap-x-8 gap-y-16 md:grid-cols-2 md:mt-20">
-            <MotionReveal>
-              <figure className="group">
-                <MediaFrame
-                  src="/images/gravity/astra/atomic-orbits.webp"
-                  alt="Gravity's Atomic field filled with sculptural performers moving through dimensional orbital planes around the cello."
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="aspect-[1494/900] border border-white/12 bg-black"
-                  imageClassName="object-cover transition duration-700 group-hover:scale-[1.015]"
-                  expandable
-                  expandLabel="Expand the dimensional Atomic field"
-                />
-                <figcaption className="border-b border-white/12 py-5">
-                  <h3 className="font-serif text-2xl">Spatial orbits</h3>
-                  <p className="mt-2 text-sm leading-6 text-white/48">
-                    Performers no longer share a flat stage. Their individual
-                    orbital planes feed both the scene and the spatial mix.
-                  </p>
-                </figcaption>
-              </figure>
-            </MotionReveal>
-
-            <MotionReveal delay={0.06} className="md:mt-24">
-              <figure className="group">
-                <MediaFrame
-                  src="/images/gravity/astra/hand-launch.webp"
-                  alt="Gravity's hand-control interface showing a visitor pulling back a Viola spring before launching it into Celestial space."
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="aspect-[1494/900] border border-white/12 bg-black"
-                  imageClassName="object-cover transition duration-700 group-hover:scale-[1.015]"
-                  expandable
-                  expandLabel="Expand the hand-launched Viola interaction"
-                />
-                <figcaption className="border-b border-white/12 py-5">
-                  <h3 className="font-serif text-2xl">Physical invitation</h3>
-                  <p className="mt-2 text-sm leading-6 text-white/48">
-                    A visible spring makes the grab, pull, and release model
-                    legible—and turns launch direction into musical physics.
-                  </p>
-                </figcaption>
-              </figure>
-            </MotionReveal>
-
-            <MotionReveal>
-              <figure className="group">
-                <MediaFrame
-                  src="/images/gravity/astra/session-recording.webp"
-                  alt="Gravity recording a local evaluation session with an elapsed timer, marked moment, camera inset, and Atomic cello view."
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="aspect-[8/5] border border-white/12 bg-black"
-                  imageClassName="object-cover transition duration-700 group-hover:scale-[1.015]"
-                  expandable
-                  expandLabel="Expand the local session recording view"
-                />
-                <figcaption className="border-b border-white/12 py-5">
-                  <h3 className="font-serif text-2xl">
-                    An evaluation instrument
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-white/48">
-                    A local recording and matching event log make recognition
-                    delays and misunderstood intent inspectable after a session.
-                  </p>
-                </figcaption>
-              </figure>
-            </MotionReveal>
-
-            <MotionReveal delay={0.06} className="md:mt-24">
-              <figure className="group">
-                <MediaFrame
-                  src="/images/gravity/astra/cello-dissolving.webp"
-                  alt="The central Celestial cello fading into sparse starlight after the last sound of the composition."
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="aspect-[1494/900] border border-white/12 bg-black"
-                  imageClassName="object-cover transition duration-700 group-hover:scale-[1.015]"
-                  expandable
-                  expandLabel="Expand the cello's final starlight dissolution"
-                />
-                <figcaption className="border-b border-white/12 py-5">
-                  <h3 className="font-serif text-2xl">A composed ending</h3>
-                  <p className="mt-2 text-sm leading-6 text-white/48">
-                    After the final audio tail, the cello dissolves into
-                    starlight. Replay rebuilds the instrument without changing
-                    the visitor&apos;s chosen world.
-                  </p>
-                </figcaption>
-              </figure>
-            </MotionReveal>
-          </div>
-        </Container>
-      </section>
-
-      <section className="border-y border-white/10 bg-[#081213]">
-        <Container className="py-20 md:py-28 lg:py-32">
-          <MotionReveal className="grid gap-10 lg:grid-cols-[0.74fr_1.26fr] lg:gap-24">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
-                My approach
-              </p>
-              <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
-                Direct the system. Test the feeling.
-              </h2>
-            </div>
-            <div className="self-end">
-              <p className="max-w-3xl text-pretty text-xl leading-9 text-white/66 md:text-2xl md:leading-10">
-                Astra changed the scale and continuity of the collaboration. It
-                could carry a decision across a large, interdependent product.
-                My job was to keep deciding what the product should become.
-              </p>
-            </div>
-          </MotionReveal>
-
-          <ol className="mt-16 border-t border-white/15 md:mt-20">
-            {gravityWorkingMethod.map((step, index) => (
-              <MotionReveal key={step.number} delay={(index % 3) * 0.04}>
-                <li className="grid gap-4 border-b border-white/12 py-7 md:grid-cols-[4rem_minmax(260px,0.8fr)_minmax(0,1.2fr)] md:items-baseline md:gap-8">
-                  <span className="text-xs font-semibold tracking-[0.18em] text-[#7fe0d3]">
-                    {step.number}
-                  </span>
-                  <h3 className="font-serif text-2xl tracking-[-0.025em] md:text-3xl">
-                    {step.title}
-                  </h3>
-                  <p className="max-w-2xl text-sm leading-7 text-white/52 md:text-base">
-                    {step.body}
-                  </p>
-                </li>
+                <figure className="group mt-14 ml-auto w-[88%]">
+                  <MediaFrame
+                    src="/images/gravity/astra/cello-perspective.webp"
+                    alt="Gravity viewed from close beside and below the spectral cello, with other instruments suspended in the surrounding Atomic field."
+                    sizes="(min-width: 1024px) 50vw, 88vw"
+                    className="aspect-[1494/900] border border-white/12 bg-black"
+                    imageClassName="object-cover transition duration-700 group-hover:scale-[1.012]"
+                    expandable
+                    expandLabel="Expand the close cello listening perspective"
+                  />
+                  <figcaption className="border-b border-white/12 py-5 text-sm leading-6 text-white/48">
+                    The close cello perspective makes scale and listener
+                    position perceptible rather than merely configurable.
+                  </figcaption>
+                </figure>
               </MotionReveal>
-            ))}
-          </ol>
+            </div>
+          </Container>
+        </section>
 
-          <MotionReveal className="mt-14 grid gap-8 border-y border-[#7fe0d3]/22 py-9 md:grid-cols-2 md:gap-14">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#7fe0d3]">
-                Astra accelerated
-              </p>
-              <p className="mt-4 max-w-xl font-serif text-2xl leading-tight text-white/88 md:text-3xl">
-                {gravityAuthorship.accelerated}
-              </p>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#efb65e]">
-                I remained responsible for
-              </p>
-              <p className="mt-4 max-w-xl font-serif text-2xl leading-tight text-white/88 md:text-3xl">
-                {gravityAuthorship.responsible}
-              </p>
-            </div>
-          </MotionReveal>
-        </Container>
-      </section>
+        <section
+          id="decisions"
+          className="scroll-mt-24 bg-[#e3a956] text-[#171006]"
+        >
+          <Container className="py-20 md:py-28 lg:py-32">
+            <MotionReveal className="grid gap-10 lg:grid-cols-[0.68fr_1.32fr] lg:gap-24">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#5d3b0d]">
+                  The five-year-old test
+                </p>
+                <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
+                  The magic was making it clunky.
+                </h2>
+              </div>
+              <div className="self-end">
+                <p className="max-w-3xl text-pretty font-serif text-3xl leading-[1.08] tracking-[-0.03em] md:text-5xl">
+                  The clearest signal came from frustrating my five-year-old.
+                </p>
+                <div className="mt-8 max-w-3xl space-y-5 text-base leading-8 text-[#171006]/66 md:text-lg">
+                  <p>
+                    Waving to change worlds sounded natural. In use, it was
+                    inconsistent, slow to confirm, and too easy to confuse with
+                    ordinary movement. The full gesture set asked a visitor to
+                    remember too much while waiting to learn whether Gravity had
+                    understood them.
+                  </p>
+                  <p>
+                    I first treated that as a recognition problem. Testing
+                    showed it was a product problem. More gestures did not
+                    create more agency; they created more uncertainty. So I
+                    pulled back.
+                  </p>
+                </div>
+              </div>
+            </MotionReveal>
 
-      <section className="relative min-h-[72svh] overflow-hidden">
-        <Image
-          src="/images/gravity/astra/celestial-orbits.webp"
-          alt=""
-          fill
-          className="object-cover object-center opacity-52"
-          sizes="100vw"
-        />
-        <div
-          className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,7,0.98)_0%,rgba(2,6,7,0.78)_50%,rgba(2,6,7,0.35)_100%),linear-gradient(0deg,rgba(2,6,7,0.96),transparent_60%)]"
-          aria-hidden="true"
-        />
-        <Container className="relative flex min-h-[72svh] items-center py-20">
-          <MotionReveal className="max-w-3xl">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
-              The result
-            </p>
-            <h2 className="mt-5 max-w-[11ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
-              Better because I knew what to remove.
-            </h2>
-            <p className="mt-7 max-w-xl text-pretty text-base leading-8 text-white/62 md:text-lg">
-              Gravity is now a deeper spatial world with dimensional, textured
-              instruments, a more expressive musical system, and a more honest
-              interaction design. The model expanded the build. Watching people
-              use it sharpened the product.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href={appUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#7fe0d3] px-6 py-3 text-sm font-semibold text-[#04100f] transition hover:-translate-y-0.5 hover:bg-white"
-              >
-                Experience Gravity
-                <ArrowUpRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  aria-hidden="true"
-                />
-              </a>
-              <Link
-                href="/creative/gravity"
-                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/24 bg-black/20 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-black/38"
-              >
-                Read chapter one
-                <ArrowLeft
-                  className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </Link>
+            <dl className="mt-12 border-t border-[#171006]/25">
+              {gravityDecisionChanges.map((decision) => (
+                <div
+                  key={decision.label}
+                  className="grid gap-5 border-b border-[#171006]/25 py-8 md:grid-cols-[.5fr_1fr_1fr]"
+                >
+                  <dt className="font-serif text-2xl">{decision.label}</dt>
+                  <dd className="text-sm leading-7">
+                    <strong className="block text-xs uppercase tracking-wider">
+                      Before testing
+                    </strong>
+                    {decision.before}
+                  </dd>
+                  <dd className="text-sm leading-7">
+                    <strong className="block text-xs uppercase tracking-wider">
+                      After testing
+                    </strong>
+                    {decision.after}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <MotionReveal className="mt-12 border-l-2 border-[#171006] pl-6 md:ml-[29%] md:max-w-3xl">
+              <p className="font-serif text-2xl leading-tight md:text-3xl">
+                Waving, palm swipes, and full-hand world switching remain useful
+                research. They are no longer the default product.
+              </p>
+              <p className="mt-4 text-sm leading-7 text-[#171006]/62 md:text-base">
+                The live grammar now favors visible pointing, relaxed grabbing,
+                explicit dwell progress, and conventional controls that remain
+                available alongside the webcam.
+              </p>
+            </MotionReveal>
+          </Container>
+        </section>
+
+        <section className="bg-[#020607]">
+          <GravityEvolutionSlides />
+
+          <Container className="py-20 md:py-28 lg:py-32">
+            <MotionReveal className="max-w-4xl">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
+                What stayed ambitious
+              </p>
+              <h2 className="mt-5 max-w-[12ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
+                Simpler control. A much richer instrument.
+              </h2>
+              <p className="mt-7 max-w-2xl text-base leading-8 text-white/58 md:text-lg">
+                Pulling back on gesture novelty created room to deepen the parts
+                that actually make Gravity feel alive.
+              </p>
+            </MotionReveal>
+
+            <div className="mt-14 grid gap-x-8 gap-y-16 md:grid-cols-2 md:mt-20">
+              <MotionReveal>
+                <figure className="group">
+                  <MediaFrame
+                    src="/images/gravity/astra/atomic-orbits.webp"
+                    alt="Gravity's Atomic field filled with sculptural performers moving through dimensional orbital planes around the cello."
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="aspect-[1494/900] border border-white/12 bg-black"
+                    imageClassName="object-cover transition duration-700 group-hover:scale-[1.015]"
+                    expandable
+                    expandLabel="Expand the dimensional Atomic field"
+                  />
+                  <figcaption className="border-b border-white/12 py-5">
+                    <h3 className="font-serif text-2xl">Spatial orbits</h3>
+                    <p className="mt-2 text-sm leading-6 text-white/48">
+                      Performers no longer share a flat stage. Their individual
+                      orbital planes feed both the scene and the spatial mix.
+                    </p>
+                  </figcaption>
+                </figure>
+              </MotionReveal>
+
+              <MotionReveal delay={0.06} className="md:mt-24">
+                <figure className="group">
+                  <MediaFrame
+                    src="/images/gravity/astra/hand-launch.webp"
+                    alt="Gravity's hand-control interface showing a visitor pulling back a Viola spring before launching it into Celestial space."
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="aspect-[1494/900] border border-white/12 bg-black"
+                    imageClassName="object-cover transition duration-700 group-hover:scale-[1.015]"
+                    expandable
+                    expandLabel="Expand the hand-launched Viola interaction"
+                  />
+                  <figcaption className="border-b border-white/12 py-5">
+                    <h3 className="font-serif text-2xl">Physical invitation</h3>
+                    <p className="mt-2 text-sm leading-6 text-white/48">
+                      A visible spring makes the grab, pull, and release model
+                      legible—and turns launch direction into musical physics.
+                    </p>
+                  </figcaption>
+                </figure>
+              </MotionReveal>
+
+              <MotionReveal>
+                <figure className="group">
+                  <MediaFrame
+                    src="/images/gravity/astra/session-recording.webp"
+                    alt="Gravity recording a local evaluation session with an elapsed timer, marked moment, camera inset, and Atomic cello view."
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="aspect-[8/5] border border-white/12 bg-black"
+                    imageClassName="object-cover transition duration-700 group-hover:scale-[1.015]"
+                    expandable
+                    expandLabel="Expand the local session recording view"
+                  />
+                  <figcaption className="border-b border-white/12 py-5">
+                    <h3 className="font-serif text-2xl">
+                      An evaluation instrument
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-white/48">
+                      A local recording and matching event log make recognition
+                      delays and misunderstood intent inspectable after a
+                      session.
+                    </p>
+                  </figcaption>
+                </figure>
+              </MotionReveal>
+
+              <MotionReveal delay={0.06} className="md:mt-24">
+                <figure className="group">
+                  <MediaFrame
+                    src="/images/gravity/astra/cello-dissolving.webp"
+                    alt="The central Celestial cello fading into sparse starlight after the last sound of the composition."
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="aspect-[1494/900] border border-white/12 bg-black"
+                    imageClassName="object-cover transition duration-700 group-hover:scale-[1.015]"
+                    expandable
+                    expandLabel="Expand the cello's final starlight dissolution"
+                  />
+                  <figcaption className="border-b border-white/12 py-5">
+                    <h3 className="font-serif text-2xl">A composed ending</h3>
+                    <p className="mt-2 text-sm leading-6 text-white/48">
+                      After the final audio tail, the cello dissolves into
+                      starlight. Replay rebuilds the instrument without changing
+                      the visitor&apos;s chosen world.
+                    </p>
+                  </figcaption>
+                </figure>
+              </MotionReveal>
             </div>
-          </MotionReveal>
-        </Container>
-      </section>
+          </Container>
+        </section>
+
+        <section className="border-y border-white/10 bg-[#081213]">
+          <Container className="py-20 md:py-28 lg:py-32">
+            <MotionReveal className="grid gap-10 lg:grid-cols-[0.74fr_1.26fr] lg:gap-24">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
+                  My approach
+                </p>
+                <h2 className="mt-5 max-w-[10ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
+                  Direct the system. Test the feeling.
+                </h2>
+              </div>
+              <div className="self-end">
+                <p className="max-w-3xl text-pretty text-xl leading-9 text-white/66 md:text-2xl md:leading-10">
+                  Astra changed the scale and continuity of the collaboration.
+                  It could carry a decision across a large, interdependent
+                  product. My job was to keep deciding what the product should
+                  become.
+                </p>
+              </div>
+            </MotionReveal>
+
+            <ol className="mt-16 border-t border-white/15 md:mt-20">
+              {gravityWorkingMethod.map((step, index) => (
+                <MotionReveal key={step.number} delay={(index % 3) * 0.04}>
+                  <li className="grid gap-4 border-b border-white/12 py-7 md:grid-cols-[4rem_minmax(260px,0.8fr)_minmax(0,1.2fr)] md:items-baseline md:gap-8">
+                    <span className="text-xs font-semibold tracking-[0.18em] text-[#7fe0d3]">
+                      {step.number}
+                    </span>
+                    <h3 className="font-serif text-2xl tracking-[-0.025em] md:text-3xl">
+                      {step.title}
+                    </h3>
+                    <p className="max-w-2xl text-sm leading-7 text-white/52 md:text-base">
+                      {step.body}
+                    </p>
+                  </li>
+                </MotionReveal>
+              ))}
+            </ol>
+
+            <MotionReveal className="mt-14 grid gap-8 border-y border-[#7fe0d3]/22 py-9 md:grid-cols-2 md:gap-14">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#7fe0d3]">
+                  Astra accelerated
+                </p>
+                <p className="mt-4 max-w-xl font-serif text-2xl leading-tight text-white/88 md:text-3xl">
+                  {gravityAuthorship.accelerated}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#efb65e]">
+                  I remained responsible for
+                </p>
+                <p className="mt-4 max-w-xl font-serif text-2xl leading-tight text-white/88 md:text-3xl">
+                  {gravityAuthorship.responsible}
+                </p>
+              </div>
+            </MotionReveal>
+          </Container>
+        </section>
+
+        <section className="relative min-h-[72svh] overflow-hidden">
+          <Image
+            src="/images/gravity/astra/celestial-orbits.webp"
+            alt=""
+            fill
+            className="object-cover object-center opacity-52"
+            sizes="100vw"
+          />
+          <div
+            className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,7,0.98)_0%,rgba(2,6,7,0.78)_50%,rgba(2,6,7,0.35)_100%),linear-gradient(0deg,rgba(2,6,7,0.96),transparent_60%)]"
+            aria-hidden="true"
+          />
+          <Container className="relative flex min-h-[72svh] items-center py-20">
+            <MotionReveal className="max-w-3xl">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#7fe0d3]">
+                The result
+              </p>
+              <h2 className="mt-5 max-w-[11ch] text-balance font-serif text-5xl leading-[0.9] tracking-[-0.05em] md:text-7xl">
+                Better because I knew what to remove.
+              </h2>
+              <p className="mt-7 max-w-xl text-pretty text-base leading-8 text-white/62 md:text-lg">
+                Gravity is now a deeper spatial world with dimensional, textured
+                instruments, a more expressive musical system, and a more honest
+                interaction design. The model expanded the build. Watching
+                people use it sharpened the product.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href={appUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#7fe0d3] px-6 py-3 text-sm font-semibold text-[#04100f] transition hover:-translate-y-0.5 hover:bg-white"
+                >
+                  Experience Gravity
+                  <ArrowUpRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden="true"
+                  />
+                </a>
+                <Link
+                  href="/creative/gravity"
+                  className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/24 bg-black/20 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-black/38"
+                >
+                  Read chapter one
+                  <ArrowLeft
+                    className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </div>
+            </MotionReveal>
+          </Container>
+        </section>
+      </details>
     </div>
   );
 }

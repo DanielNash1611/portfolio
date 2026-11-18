@@ -1,0 +1,116 @@
+{
+  "method": "Lossless WebP encoding; full-resolution decoded RGBA bytes verified equal. Original bytes retained outside deployment.",
+  "savingsBytes": 11747241,
+  "assets": [
+    {
+      "original": "public/images/farraginous/emotiv-kit-fixed.png",
+      "archive": "source-assets/portfolio-image-originals/images/farraginous/emotiv-kit-fixed.png",
+      "derivative": "public/images/farraginous/emotiv-kit-fixed.webp",
+      "originalBytes": 7244406,
+      "derivativeBytes": 3720224,
+      "originalSha256": "582f9544402642f6ab56f5f1b4bf629bdd33a0475db9f04348260184c62ee5d2",
+      "derivativeSha256": "f7f3a497a9a0e8fcea60473a6cf6bc54a66240fe85a5cf450c859b3db753fb8b",
+      "decodedRgbaSha256": "705ff1c45f409a47752789c2a05b4c2532b0cc46dba4a24b2c25a99958a9af61",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/farraginous/emotiv-portrait-fixed.png",
+      "archive": "source-assets/portfolio-image-originals/images/farraginous/emotiv-portrait-fixed.png",
+      "derivative": "public/images/farraginous/emotiv-portrait-fixed.webp",
+      "originalBytes": 3603119,
+      "derivativeBytes": 1610064,
+      "originalSha256": "a7ab3b855c7eaec26058be809df834f364918d0638568b8a8622322e9bbefd37",
+      "derivativeSha256": "fa3ed157d0a3e246d7e6805da73ba298cb8c05a8e0da8f0856febc9648d66766",
+      "decodedRgbaSha256": "34ce8519fd6131c714381b4f25f7e0bd5bd5c382f3b0e2e8ceba4f5c9c736e9d",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/chatgpt-enterprise/hero-operating-model.png",
+      "archive": "source-assets/portfolio-image-originals/images/chatgpt-enterprise/hero-operating-model.png",
+      "derivative": "public/images/chatgpt-enterprise/hero-operating-model.webp",
+      "originalBytes": 2441212,
+      "derivativeBytes": 1449452,
+      "originalSha256": "8c86cf8431fad56ce906ad943a809d27c30996faec5422cbff3880d76bc00172",
+      "derivativeSha256": "e743ff06fdccec25a067b63560ab47f01615924027b2119bee2d6d9f0dd42864",
+      "decodedRgbaSha256": "ad21cf1cf5c26cc20e2e97f9b812aad2e4ea860cb6a7c45bb211105da42ee57b",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/chatgpt-enterprise/enterprise-ai-operating-model.png",
+      "archive": "source-assets/portfolio-image-originals/images/chatgpt-enterprise/enterprise-ai-operating-model.png",
+      "derivative": "public/images/chatgpt-enterprise/enterprise-ai-operating-model.webp",
+      "originalBytes": 2147642,
+      "derivativeBytes": 1288764,
+      "originalSha256": "188986f8f9503a75a27c5f730e9f33346ff1db98537060bcf7fae84579044a75",
+      "derivativeSha256": "6689e55bdddd29f82ea37e253987e97dd51009613d83fa575ce39752702798a2",
+      "decodedRgbaSha256": "48be37b58288b68bf27efd3a26b1b82f871735629761f5529b562d52e8c0fae6",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/chatgpt-enterprise/grassroots-champions-model.png",
+      "archive": "source-assets/portfolio-image-originals/images/chatgpt-enterprise/grassroots-champions-model.png",
+      "derivative": "public/images/chatgpt-enterprise/grassroots-champions-model.webp",
+      "originalBytes": 2181257,
+      "derivativeBytes": 1320606,
+      "originalSha256": "1b57e62504012ffb9cd7109067fa18f9f6afb862f16c6fd1db50faddb78edd10",
+      "derivativeSha256": "468b7193ee22c966cabae1218c058bd4fedc1848bef8a8a641b480b9c453b720",
+      "decodedRgbaSha256": "4d55a848af651aba6643a43c5ef011e0949cecb3f0a5c37199ef304b40420704",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/products/ai-career-operating-system/six-advisory-review-agents.png",
+      "archive": "source-assets/portfolio-image-originals/images/products/ai-career-operating-system/six-advisory-review-agents.png",
+      "derivative": "public/images/products/ai-career-operating-system/six-advisory-review-agents.webp",
+      "originalBytes": 1902097,
+      "derivativeBytes": 1241450,
+      "originalSha256": "386779a8ae8af5c10a31db43d51ba64fac76eef19bdf519752db8bb4d3737b47",
+      "derivativeSha256": "0166418d4fd609c17d6a92518ef9600141109bdf5e2ddfa23a6466208ac9239b",
+      "decodedRgbaSha256": "be2806c38c2fb69901f7dc3dcc1071a8187325e07d7b49d9b04cc8543927c8d0",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/launchmuse-product-hero.png",
+      "archive": "source-assets/portfolio-image-originals/images/launchmuse-product-hero.png",
+      "derivative": "public/images/launchmuse-product-hero.webp",
+      "originalBytes": 1877355,
+      "derivativeBytes": 1178426,
+      "originalSha256": "ceb0be8d29bd4058d7020f7894c23a9547de86f164dccc9ab4b9933ad514f977",
+      "derivativeSha256": "efdbc5efe7af486e75033d90c167159d2300b66dd83acbb8df4416bcc0b7a930",
+      "decodedRgbaSha256": "466c6f0907283f3d8c200898e19051cac6f0087ef4bafb485875d42251742bd2",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/launchmuse-screenshot.png",
+      "archive": "source-assets/portfolio-image-originals/images/launchmuse-screenshot.png",
+      "derivative": "public/images/launchmuse-screenshot.webp",
+      "originalBytes": 1849967,
+      "derivativeBytes": 1170068,
+      "originalSha256": "7fed13b4f47ea6cd8b0803481b27554114a61decf0202fa264d0c086a37f2b13",
+      "derivativeSha256": "d45fb1c1903d64b7e3dbd8977880b2a56dc75ba6f3a3da09de7cf9a47763690c",
+      "decodedRgbaSha256": "452c9f29ce70e896bbeff4ead287dd344e521eb1b008a555a74db73059e5ddca",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/chatgpt-enterprise/frontline-ideation.png",
+      "archive": "source-assets/portfolio-image-originals/images/chatgpt-enterprise/frontline-ideation.png",
+      "derivative": "public/images/chatgpt-enterprise/frontline-ideation.webp",
+      "originalBytes": 1715225,
+      "derivativeBytes": 1060506,
+      "originalSha256": "27c28687863d566de9dd34cc1a5eff2d91231e15230f1bbb557ae90382e4c164",
+      "derivativeSha256": "892b98f4d8f4d9344982686e862f8b6ce5bc2211a2a0f4eff229adb701605d66",
+      "decodedRgbaSha256": "05cecc7acaf148ef6953930158712eeca45454905dca049345e2cb01995ef0bd",
+      "decodedPixelsEqual": true
+    },
+    {
+      "original": "public/images/farraginous/program-credit-fixed.png",
+      "archive": "source-assets/portfolio-image-originals/images/farraginous/program-credit-fixed.png",
+      "derivative": "public/images/farraginous/program-credit-fixed.webp",
+      "originalBytes": 1695627,
+      "derivativeBytes": 871106,
+      "originalSha256": "27bc39781be364ec00cb75a906ce6172c741213f72c3d417c71757617b34931b",
+      "derivativeSha256": "4d6abb1b384d13460ad928dd771278349c5705bb7b63881e858c17223c6bd552",
+      "decodedRgbaSha256": "9c6aec912d02abdfa3d3fb2f606957632403eaff4f9c125729374ad5f7a15082",
+      "decodedPixelsEqual": true
+    }
+  ]
+}

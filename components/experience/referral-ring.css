@@ -1,0 +1,561 @@
+.experience-recommendation-flow[data-mode="ring"] {
+  min-height: calc(100svh + var(--recommendation-featured-count) * 280px);
+}
+.experience-recommendation-flow[data-mode="ring"][data-static="true"] {
+  min-height: 0;
+}
+.experience-referral-space {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: clip;
+  margin: 8px 0;
+  touch-action: pan-y;
+}
+/* Project each paper independently and order it by depth, keeping the complete
+   front quote readable while neighboring panels overlap in projection. */
+.experience-referral-world {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform-style: flat;
+  perspective: 2000px;
+  perspective-origin: 50% 50%;
+}
+.experience-referral-space[data-compact="true"] .experience-referral-world {
+  perspective: 1200px;
+}
+.experience-referral-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform-style: flat;
+  will-change: transform;
+}
+.experience-referral-front,
+.experience-referral-deck {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #173f3d55;
+  border-radius: 4px;
+  box-shadow: 0 8px 18px #14273312;
+  background: #f3eee4;
+}
+.experience-referral-front {
+  overflow: clip;
+}
+.experience-referral-card[data-active="true"] .experience-referral-front {
+  border-color: #aa4935aa;
+  box-shadow: 0 12px 24px #14273322;
+}
+.experience-referral-deck {
+  background: #173f3d;
+  color: #f3eee4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  pointer-events: none;
+}
+.experience-referral-deck > span {
+  font-family: var(--font-serif), Georgia, serif;
+  color: #dfc495;
+  font-size: 90px;
+  height: 90px;
+}
+.experience-referral-deck strong {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 27px;
+  line-height: 1.15;
+}
+.experience-referral-deck small {
+  font-size: 11px;
+  margin-top: 12px;
+  opacity: 0.7;
+}
+.experience-referral-deck i {
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-style: normal;
+  margin-top: 30px;
+  opacity: 0.45;
+}
+.experience-referral-full {
+  position: absolute;
+  inset: 0;
+  padding: 23px;
+}
+.experience-referral-full figure {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+.experience-referral-full .experience-voice-context {
+  font-size: 8px;
+  line-height: 1.5;
+  margin-bottom: 13px;
+  gap: 10px;
+}
+.experience-referral-full .experience-voice-context span + span {
+  padding-left: 10px;
+}
+.experience-referral-full blockquote,
+.experience-referral-full blockquote[data-long="true"] {
+  font-size: 27px;
+  line-height: 1.13;
+  letter-spacing: -0.025em;
+}
+.experience-referral-full figcaption {
+  margin-top: 16px;
+  gap: 4px;
+}
+.experience-referral-full figcaption strong {
+  font-size: 12px;
+}
+.experience-recommender-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.experience-recommender-portrait {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #173f3d12;
+  box-shadow: 0 0 0 1px #173f3d22;
+  color: #173f3d;
+  font-size: 11px;
+  font-weight: 700;
+}
+.experience-recommender-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.experience-recommender-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.experience-recommender-details > span {
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+.experience-referral-full .experience-recommender-details > span {
+  font-size: 10px;
+  line-height: 1.4;
+}
+.experience-referral-full figcaption a {
+  font-size: 9px;
+  min-height: 44px;
+}
+.experience-referral-full[aria-hidden="true"] {
+  pointer-events: none;
+}
+.experience-referral-summary {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border-left: 3px solid #aa4935;
+  background: #f3eee4;
+  pointer-events: none;
+}
+.experience-referral-select {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  color: inherit;
+  pointer-events: auto;
+}
+.experience-referral-select:disabled {
+  pointer-events: none;
+}
+.experience-referral-select:not(:disabled) {
+  cursor: pointer;
+}
+.experience-referral-select:not(:disabled):hover {
+  background: #173f3d0a;
+}
+.experience-referral-select:focus-visible {
+  outline: 2px solid #aa4935;
+  outline-offset: -4px;
+}
+.experience-referral-summary .experience-recommender-portrait {
+  width: 32px;
+  height: 32px;
+  flex-basis: 32px;
+  font-size: 9px;
+}
+.experience-referral-summary strong {
+  font-size: 13px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+.experience-referral-summary .experience-recommender-details > span {
+  font-size: 10px;
+  line-height: 1.3;
+  opacity: 0.7;
+}
+.experience-referral-card[data-group="1"] .experience-referral-summary,
+.experience-referral-card[data-group="2"] .experience-referral-summary {
+  border-color: #173f3d;
+}
+.experience-referral-card[data-group="3"] .experience-referral-summary,
+.experience-referral-card[data-group="4"] .experience-referral-summary {
+  border-color: #b08650;
+}
+.experience-referral-groups {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.experience-referral-group-label {
+  position: absolute;
+  padding: 7px 0;
+}
+.experience-referral-group-label h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 20px;
+  line-height: 1.02;
+  max-width: 16ch;
+}
+.experience-referral-group-label button {
+  display: block;
+  text-align: left;
+  min-height: 44px;
+  pointer-events: auto;
+}
+.experience-referral-group-label button:disabled {
+  pointer-events: none;
+}
+.experience-referral-group-label button:not(:disabled):hover {
+  color: #793a2c;
+}
+.experience-referral-group-label button:focus-visible {
+  outline: 2px solid #aa4935;
+  outline-offset: 3px;
+}
+.experience-referral-group-label button > span {
+  display: block;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 9px;
+  line-height: 1.5;
+  opacity: 0.65;
+  margin-top: 5px;
+}
+.experience-referral-group-label button svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+.experience-referral-space[data-compact="true"] .experience-referral-full {
+  padding: 16px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-full
+  .experience-voice-context {
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  gap: 7px;
+  margin-bottom: 12px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-full
+  .experience-voice-context
+  span
+  + span {
+  padding-left: 7px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-full
+  blockquote {
+  font-size: 22px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-full
+  blockquote[data-long="true"] {
+  font-size: 20px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-full
+  figcaption {
+  margin-top: 13px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-full
+  .experience-recommender-details
+  > span {
+  font-size: 9px;
+}
+.experience-referral-space[data-compact="true"] .experience-referral-deck {
+  padding: 18px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-deck
+  strong {
+  font-size: 24px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-deck
+  > span {
+  font-size: 70px;
+  height: 70px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-group-label {
+  padding-top: 1px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-group-label
+  h3 {
+  font-size: 13px;
+  line-height: 1.1;
+  max-width: none;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-group-label
+  button > span {
+  font-size: 9px;
+  margin-top: 3px;
+}
+.experience-referral-space[data-compact="true"] .experience-referral-select {
+  padding: 6px 8px;
+  gap: 7px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-summary
+  .experience-recommender-portrait {
+  width: 24px;
+  height: 24px;
+  flex-basis: 24px;
+  font-size: 8px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-summary
+  .experience-recommender-details {
+  gap: 3px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-summary
+  strong {
+  font-size: 11.5px;
+}
+.experience-referral-space[data-compact="true"]
+  .experience-referral-summary
+  .experience-recommender-details > span {
+  font-size: 9px;
+}
+.experience-recommender-read-more {
+  min-height: 44px;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.experience-referral-detail {
+  position: fixed;
+  inset: 0;
+  width: min(960px, calc(100vw - 32px));
+  max-height: min(820px, calc(100dvh - 32px));
+  margin: auto;
+  padding: 0;
+  border: 1px solid #173f3d55;
+  border-radius: 8px;
+  background: #f3eee4;
+  color: #142733;
+  box-shadow: 0 24px 100px #0005;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.experience-referral-detail::backdrop {
+  background: #142733b8;
+}
+.experience-referral-detail-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 24px;
+  background: #f3eee4;
+  border-bottom: 1px solid #173f3d25;
+}
+.experience-referral-detail-header p {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.experience-referral-detail-header p span {
+  display: inline-block;
+  margin-left: 14px;
+  opacity: 0.6;
+  font-size: 9px;
+}
+.experience-referral-detail-header button {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  flex-shrink: 0;
+}
+.experience-referral-detail button:focus-visible,
+.experience-referral-detail select:focus-visible,
+.experience-referral-detail a:focus-visible,
+.experience-recommender-read-more:focus-visible {
+  outline: 2px solid #aa4935;
+  outline-offset: 2px;
+}
+.experience-referral-detail-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 30px;
+  padding: 28px;
+}
+.experience-referral-detail nav {
+  position: sticky;
+  top: 92px;
+  align-self: start;
+}
+.experience-referral-detail label {
+  display: block;
+  font-size: 11px;
+}
+.experience-referral-detail select {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  border: 1px solid #173f3d55;
+  border-radius: 3px;
+  padding: 8px;
+  background: #fff7;
+  font-size: 12px;
+}
+.experience-referral-detail nav ul {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.experience-referral-detail nav button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 54px;
+  padding: 8px;
+  border-radius: 4px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.experience-referral-detail nav button[aria-pressed="true"] {
+  color: #f3eee4;
+  background: #173f3d;
+}
+.experience-referral-detail nav .experience-recommender-portrait {
+  width: 30px;
+  height: 30px;
+  flex-basis: 30px;
+}
+.experience-referral-detail h2 {
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.1;
+}
+.experience-referral-detail-capacity {
+  margin: 20px 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #793a2c;
+}
+.experience-referral-detail blockquote {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 21px;
+  line-height: 1.55;
+}
+.experience-referral-detail blockquote p + p {
+  margin-top: 20px;
+}
+.experience-referral-detail article > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 24px;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.experience-referral-detail-source {
+  font-size: 11px;
+  margin-top: 24px;
+  opacity: 0.7;
+}
+@media (max-width: 759px) {
+  .experience-referral-detail {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+  .experience-referral-detail-header {
+    padding: 6px 16px;
+  }
+  .experience-referral-detail-header p span {
+    display: block;
+    margin: 4px 0 0;
+  }
+  .experience-referral-detail-layout {
+    display: block;
+    padding: 18px;
+  }
+  .experience-referral-detail nav {
+    position: static;
+    margin-bottom: 24px;
+  }
+  .experience-referral-detail select {
+    font-size: 16px;
+  }
+  .experience-referral-detail nav ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 12px;
+  }
+  .experience-referral-detail nav button {
+    gap: 7px;
+    font-size: 11px;
+  }
+  .experience-referral-detail h2 {
+    font-size: 25px;
+  }
+  .experience-referral-detail blockquote {
+    font-size: 19px;
+  }
+  .experience-recommendation-flow[data-mode="ring"] .experience-home-eyebrow {
+    font-size: 8.5px;
+    letter-spacing: 0.13em;
+  }
+  .experience-recommendation-flow[data-mode="ring"] .experience-voices-footer {
+    font-size: 9px;
+    gap: 8px;
+  }
+}

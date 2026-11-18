@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import StudioSystemsHomePage from "@/components/homepage/StudioSystemsHomePage";
+import ExperiencePreview from "@/components/experience/ExperiencePreview";
 import { homeContent } from "@/content/portfolio";
+import { getExperienceHomeContent } from "@/content/experience-home";
 
 export const metadata: Metadata = {
   title: { absolute: homeContent.metadata.title },
@@ -20,5 +21,11 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage(): React.JSX.Element {
-  return <StudioSystemsHomePage />;
+  return (
+    <ExperiencePreview
+      home={getExperienceHomeContent()}
+      personalVideo={false}
+      presentation="home"
+    />
+  );
 }

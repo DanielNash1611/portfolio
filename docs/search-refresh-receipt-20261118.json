@@ -1,0 +1,43 @@
+{
+  "approvedCapUsd": 0.001,
+  "endpoint": "https://api.openai.com/v1/embeddings",
+  "model": "text-embedding-3-small",
+  "corpusHash": "2576803d12f82a8a2126b0adb96572c1de923fbf61d54d7e142c94046e0e556f",
+  "passages": 17,
+  "reused": 56,
+  "utf8Bytes": 16924,
+  "maxRequests": 1,
+  "attempts": 1,
+  "startedAt": "2026-11-18T14:04:43.889Z",
+  "outcome": "indexed-and-validated",
+  "httpStatus": 200,
+  "usage": {
+    "prompt_tokens": 3128,
+    "total_tokens": 3128
+  },
+  "actualCostUsd": 6.256e-05,
+  "completedAt": "2026-11-18T14:04:45.753Z",
+  "dimensions": 1536,
+  "automaticRetries": 0,
+  "refreshedIds": [
+    "chatgpt-enterprise:evidence-0",
+    "chatgpt-enterprise:evidence-1",
+    "chatgpt-enterprise:evidence-2",
+    "chatgpt-enterprise:evidence-3",
+    "chatgpt-enterprise:evidence-4",
+    "chatgpt-enterprise:perspective",
+    "immunology-scout:evidence-0",
+    "immunology-scout:evidence-1",
+    "immunology-scout:evidence-2",
+    "immunology-scout:evidence-3",
+    "immunology-scout:ownership",
+    "immunology-scout:perspective",
+    "oms-chatgpt-app:evidence-0",
+    "oms-chatgpt-app:evidence-1",
+    "oms-chatgpt-app:evidence-2",
+    "oms-chatgpt-app:ownership",
+    "oms-chatgpt-app:perspective"
+  ],
+  "totalVectors": 73,
+  "additionalPaidRequestsAuthorized": 0
+}

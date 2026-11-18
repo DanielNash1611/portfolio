@@ -1,0 +1,414 @@
+.oc-case {
+  --oc-pine: #173f3d;
+  --oc-cream: #f3eee4;
+  --oc-coral: #db6048;
+  background: var(--oc-cream);
+}
+.oc-case > section:first-child {
+  background: #173f3d;
+}
+.oc-case > section:first-child > [aria-hidden="true"] {
+  display: none;
+}
+.oc-case > section:not(:first-child) {
+  background: #f3eee4;
+}
+.oc-case > section:nth-of-type(even) {
+  background: #ebe3d6;
+}
+.oc-case h1 {
+  font-family: var(--font-serif), Georgia, serif;
+}
+.oc-case [id] {
+  scroll-margin-top: 140px;
+}
+.oc-reading-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 17px max(24px, calc((100vw - 1280px) / 2));
+  background: #f3eee4f5;
+  border-bottom: 1px solid #173f3d30;
+  color: #173f3d;
+  font-size: 12px;
+}
+.oc-reading-nav > span {
+  opacity: 0.65;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.oc-reading-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  border-bottom: 1px solid transparent;
+}
+.oc-reading-nav a:hover {
+  border-color: #db6048;
+}
+.oc-comparison {
+  color: #173f3d;
+  background: #f3eee4;
+  border: 1px solid #f3eee450;
+}
+.oc-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #173f3d30;
+}
+.oc-selector > span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.oc-selector button,
+.oc-steps button {
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  font-size: 12px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.oc-selector button[aria-pressed="true"] {
+  background: #173f3d;
+  color: #f3eee4;
+}
+.oc-screen {
+  position: relative;
+  aspect-ratio: 4/3;
+  background: white;
+  animation: oc-arrive 0.3s ease both;
+}
+.oc-comparison figcaption {
+  padding: 18px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.oc-comparison figcaption a {
+  display: block;
+  margin-top: 7px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.oc-sequence {
+  width: 100%;
+  padding: clamp(22px, 3vw, 42px);
+  background: #e5dccb;
+  color: #173f3d;
+  border-top: 4px solid #db6048;
+}
+.oc-sequence-label {
+  margin: 0 0 26px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.oc-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid #173f3d40;
+}
+.oc-steps button {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 3px solid transparent;
+}
+.oc-steps button span {
+  display: block;
+  font-size: 10px;
+  opacity: 0.65;
+  margin-bottom: 6px;
+}
+.oc-steps button[aria-pressed="true"] {
+  border-bottom-color: #db6048;
+  background: #f3eee4;
+}
+.oc-steps button:hover {
+  background: #f3eee490;
+}
+.oc-stage {
+  min-height: 355px;
+  padding: 30px 0 18px;
+  animation: oc-arrive 0.3s ease both;
+}
+.oc-kicker {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.oc-value {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(40px, 4.5vw, 65px);
+  line-height: 1.1;
+  letter-spacing: -0.045em;
+  margin-top: 12px;
+  overflow-wrap: anywhere;
+}
+.oc-unit {
+  margin-top: 8px;
+  font-size: 15px;
+}
+.oc-signal-line {
+  display: flex;
+  margin-top: 28px;
+  border-block: 1px solid #173f3d30;
+  padding-block: 16px;
+  gap: 16px;
+  font-size: 10px;
+}
+.oc-signal-line span {
+  flex: 1;
+}
+.oc-detail {
+  margin-top: 22px;
+  font-size: 13px;
+  line-height: 1.85;
+  max-width: 58ch;
+}
+.oc-sequence figcaption {
+  border-top: 1px solid #173f3d30;
+  padding-top: 16px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #365653;
+}
+.oc-jpd-hero {
+  padding: clamp(35px, 6vw, 90px) max(24px, calc((100vw - 1280px) / 2));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6vw;
+  align-items: center;
+  background: #173f3d;
+  color: #f3eee4;
+}
+.oc-jpd-hero h1 {
+  margin: 30px 0;
+  font-size: clamp(48px, 5.8vw, 82px);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+.oc-jpd-hero p {
+  line-height: 1.8;
+}
+.oc-jpd-hero .oc-jpd-role {
+  font-size: 12px;
+  border-top: 1px solid #f3eee440;
+  margin-top: 30px;
+  padding-top: 20px;
+}
+.oc-jpd-body {
+  max-width: 900px;
+  padding: 60px 24px;
+  margin: auto;
+}
+.oc-jpd-body article {
+  margin-top: 50px;
+}
+.oc-jpd-body article h2 {
+  padding-top: 25px;
+  border-top: 1px solid #173f3d30;
+}
+.oc-enter {
+  animation: oc-arrive 0.6s ease both;
+}
+@keyframes oc-arrive {
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 800px) {
+  .oc-jpd-hero {
+    grid-template-columns: 1fr;
+  }
+  .oc-stage {
+    min-height: 335px;
+  }
+  .oc-reading-nav {
+    gap: 20px;
+    padding: 10px 24px;
+  }
+  .oc-reading-nav > span {
+    display: none;
+  }
+  .oc-selector {
+    padding: 10px;
+  }
+  .oc-signal-line {
+    gap: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oc-case *,
+  .oc-case *::before,
+  .oc-case *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  html:has(.oc-case) {
+    scroll-behavior: auto;
+  }
+}
+.oc-case .oc-hero-grid {
+  min-height: 0;
+  padding-block: 24px 45px;
+}
+.oc-case > section:first-child h1 {
+  font-size: clamp(44px, 5.5vw, 78px);
+}
+.oc-checkout > section:first-child h1 {
+  max-width: 11ch;
+}
+@media (max-width: 800px) {
+  .oc-checkout .oc-hero-grid {
+    gap: 24px;
+  }
+  .oc-checkout .oc-hero-grid > div:first-child ul {
+    margin-top: 16px;
+  }
+  .oc-checkout .oc-hero-grid > div:first-child dl {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 0.5fr;
+    gap: 14px;
+    margin-top: 22px;
+    padding-top: 16px;
+  }
+  .oc-checkout .oc-hero-grid > div:first-child dd {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+}
+.oc-adoption > section:first-child h1 > span:first-child {
+  font-size: clamp(48px, 5.8vw, 80px);
+}
+.oc-adoption > section:first-child h1 > span:last-child {
+  font-size: clamp(28px, 3vw, 40px);
+}
+.oc-adoption > div > section:not(:last-child) {
+  background: #f3eee4;
+}
+.oc-adoption > div > section:nth-child(even):not(:last-child) {
+  background: #ebe3d6;
+}
+@media (max-width: 800px) {
+  .oc-adoption > section:first-child dl {
+    grid-template-columns: 1.3fr 1fr 0.6fr;
+    gap: 12px;
+  }
+  .oc-adoption > section:first-child dd {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+}
+.oc-case > section.oc-dark {
+  background: #173f3d;
+}
+.oc-case > section.oc-jpd-hero {
+  padding-block: clamp(28px, 3vw, 42px);
+}
+.oc-case > section.oc-jpd-hero h1 {
+  font-size: clamp(44px, 5vw, 68px);
+}
+.oc-jpd-hero .oc-stage {
+  min-height: 310px;
+}
+/* Scroll enhancement: content never depends on the observer or an animation. */
+.oc-case .motion-reveal {
+  animation: none;
+}
+.oc-case [data-oc-reveal="entered"] {
+  animation: oc-scroll-reveal 0.7s cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+@keyframes oc-scroll-reveal {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.oc-motion-graphic {
+  margin-block: 35px;
+  padding-block: 28px;
+  border-block: 1px solid #173f3d35;
+  color: #173f3d;
+}
+.oc-graphic-heading {
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: 25px;
+  align-items: baseline;
+}
+.oc-graphic-heading > span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+.oc-graphic-heading h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.oc-motion-graphic svg {
+  display: block;
+  width: 100%;
+  max-height: 300px;
+  margin-block: 25px;
+  overflow: visible;
+}
+.oc-graphic-lines {
+  opacity: 0.65;
+}
+.oc-graphic-traveler {
+  fill: #db6048;
+  stroke: #f3eee4;
+  stroke-width: 3px;
+}
+.oc-motion-graphic figcaption {
+  font-size: 12px;
+  line-height: 1.8;
+  max-width: 78ch;
+}
+@media (max-width: 600px) {
+  .oc-graphic-heading {
+    display: block;
+  }
+  .oc-graphic-heading h2 {
+    margin-top: 12px;
+  }
+  .oc-motion-graphic svg {
+    min-height: 130px;
+  }
+  .oc-motion-graphic svg text {
+    font-size: 17px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oc-case [data-oc-reveal="entered"] {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+@media (max-width: 600px) {
+  .oc-motion-graphic svg text {
+    font-size: 24px;
+  }
+}

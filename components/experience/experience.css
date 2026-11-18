@@ -1,0 +1,1231 @@
+.experience {
+  --exp-cream: #f3eee4;
+  --exp-coral: #db6048;
+  --exp-ink: #142733;
+  color: var(--exp-ink);
+  background: var(--exp-cream);
+  position: relative;
+  --experience-tools-height: 52px;
+}
+.experience button,
+.experience a {
+  -webkit-tap-highlight-color: transparent;
+}
+.experience button {
+  cursor: pointer;
+}
+.experience button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.experience :is(a, button, input):focus-visible {
+  outline: 2px solid #db6048;
+  outline-offset: 5px;
+}
+.experience :is(h1, h2) {
+  font-weight: 450;
+  letter-spacing: -0.065em;
+  line-height: 1;
+  text-wrap: balance;
+}
+.experience [hidden] {
+  display: none !important;
+}
+.experience [id] {
+  scroll-margin-top: calc(var(--portfolio-header-height, 60px) + 75px);
+}
+.experience-control-bar {
+  position: sticky;
+  top: var(--portfolio-header-height, 60px);
+  height: var(--experience-tools-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 0 4vw;
+  border-bottom: 1px solid #14273320;
+  background: #f3eee4f5;
+  z-index: 20;
+  font-size: 11px;
+}
+.experience-control-bar > a {
+  font-weight: 650;
+}
+.experience-control-bar > a span {
+  font-size: 10px;
+  font-weight: 400;
+  opacity: 0.6;
+  margin-left: 10px;
+}
+.experience-control-bar > div {
+  display: flex;
+  gap: 20px;
+}
+.experience-control-bar button {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+}
+.experience-career-hero {
+  position: relative;
+  min-height: calc(
+    100svh - var(--portfolio-header-height, 60px) -
+      var(--experience-tools-height)
+  );
+  padding: clamp(45px, 5.5vw, 90px) 5vw 110px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 4vw;
+  align-items: center;
+  overflow: clip;
+}
+.experience-career-copy {
+  position: relative;
+  z-index: 2;
+}
+.experience-career-copy .experience-home-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  margin-bottom: 18px;
+  color: #a64131;
+}
+.experience-career-name {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(24px, 3vw, 42px);
+  letter-spacing: -0.05em;
+  margin-bottom: 24px;
+}
+.experience-career-name span {
+  color: #db6048;
+}
+.experience-career-hero h1 {
+  font-size: clamp(3rem, 5.2vw, 5.9rem);
+  line-height: 1.02;
+  max-width: 760px;
+}
+.experience-career-hero h1 em {
+  font-style: normal;
+  color: #a64131;
+}
+.experience-career-description {
+  font-size: clamp(14px, 1.3vw, 17px);
+  line-height: 1.75;
+  max-width: 520px;
+  margin-top: 26px;
+}
+.experience-career-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 30px;
+  background: #173f3d;
+  color: #f3eee4;
+  padding: 14px 20px;
+  min-height: 48px;
+  margin-top: 26px;
+  font-size: 12px;
+  font-weight: 650;
+}
+.experience-career-portrait {
+  position: relative;
+  aspect-ratio: 4/5;
+  width: 94%;
+  max-width: 430px;
+  justify-self: end;
+  box-shadow: 16px 18px 0 #dfc495;
+}
+.experience-career-portrait img {
+  object-fit: cover;
+}
+.experience-career-portrait > span {
+  position: absolute;
+  bottom: -45px;
+  left: 0;
+  font-size: 9px;
+  letter-spacing: 0.03em;
+  width: 100%;
+  text-align: center;
+}
+.experience-career-chapters {
+  position: absolute;
+  bottom: 0;
+  left: 5vw;
+  right: 5vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid #14273330;
+  padding: 15px 0;
+}
+.experience-career-chapters a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+}
+.experience-career-chapters span {
+  font-size: 9px;
+  opacity: 0.5;
+}
+.experience-narrative[data-motion="true"]
+  :is(.experience-home-section, .experience-film)::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 80px;
+  pointer-events: none;
+  background: linear-gradient(var(--handoff-from, transparent), transparent);
+  z-index: 0;
+}
+.experience-narrative .experience-home-section > *,
+.experience-film > * {
+  position: relative;
+}
+.experience-direction {
+  background: #e7dfcc;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 7vw;
+  align-items: center;
+}
+.experience-home .experience-direction h2 {
+  font-size: clamp(3rem, 5.8vw, 6rem);
+}
+.experience-direction .experience-home-intro {
+  max-width: 520px;
+}
+.experience-decision-board {
+  position: relative;
+}
+.experience-decision-notes {
+  height: 275px;
+  position: relative;
+  margin-bottom: 35px;
+}
+.experience-decision-note {
+  position: absolute;
+  background: #f3eee4;
+  box-shadow: 0 12px 35px #14273313;
+  border: 1px solid #14273322;
+  padding: 28px;
+  width: 76%;
+  min-height: 180px;
+}
+.experience-decision-note:nth-child(2) {
+  left: 12%;
+  top: 32px;
+}
+.experience-decision-note:nth-child(3) {
+  left: 24%;
+  top: 64px;
+}
+.experience-decision-note span {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  opacity: 0.5;
+}
+.experience-decision-note p {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(25px, 2.6vw, 36px);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin-top: 20px;
+}
+.experience-decision-note i {
+  display: block;
+  width: 45%;
+  height: 3px;
+  background: #db6048;
+  margin-top: 24px;
+}
+.experience-decision-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid #14273330;
+  gap: 12px;
+}
+.experience-decision-controls button {
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.4;
+  min-height: 65px;
+  border-bottom: 2px solid transparent;
+  opacity: 0.6;
+}
+.experience-decision-controls button span {
+  display: block;
+  font-size: 9px;
+  margin-bottom: 8px;
+}
+.experience-decision-controls button[aria-pressed="true"] {
+  opacity: 1;
+  border-color: #a64131;
+}
+.experience-decision-detail {
+  padding: 24px 0;
+  min-height: 235px;
+}
+.experience-decision-detail h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 27px;
+}
+.experience-decision-detail p {
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 16px;
+}
+.experience-decision-detail a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  min-height: 44px;
+  margin-top: 14px;
+}
+.experience-decision-board > small {
+  font-size: 10px;
+  line-height: 1.7;
+  opacity: 0.6;
+  display: block;
+}
+.experience-ai-proof {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7vw;
+  background: #142f33;
+  color: #f3eee4;
+  align-items: start;
+}
+.experience-home .experience-ai-proof h2 em {
+  color: #dfc495;
+}
+.experience-ai-proof .experience-home-link {
+  margin-top: 20px;
+}
+.experience-workflow {
+  min-width: 0;
+  position: relative;
+}
+.experience-walkthrough-label {
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+.experience-walkthrough-label span {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.65;
+  margin-top: 8px;
+}
+.experience-workflow-stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.experience-workflow-stages button {
+  text-align: left;
+  font-size: 10px;
+  line-height: 1.4;
+  padding: 12px 0 18px;
+  border-bottom: 2px solid #f3eee430;
+  min-height: 80px;
+  opacity: 0.6;
+}
+.experience-workflow-stages button span {
+  display: block;
+  font-size: 9px;
+  color: #dfc495;
+  margin-bottom: 14px;
+}
+.experience-workflow-stages button[aria-pressed="true"] {
+  opacity: 1;
+  border-color: #dfc495;
+}
+.experience-workflow-detail {
+  padding: 24px 0;
+  min-height: 330px;
+}
+.experience-workflow-detail h3 {
+  font-size: 28px;
+  font-family: var(--font-serif), Georgia, serif;
+  line-height: 1.1;
+}
+.experience-workflow-detail p {
+  font-size: 12px;
+  line-height: 1.9;
+  margin-top: 17px;
+}
+.experience-proof {
+  border-left: 1px solid #dfc49550;
+  padding-left: 16px;
+  margin-top: 20px;
+}
+.experience-proof .experience-proof-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  opacity: 0.6;
+}
+.experience-proof mark {
+  color: inherit;
+  background: #dfc49520;
+}
+.experience-proof details {
+  margin-top: 12px;
+  font-size: 11px;
+}
+.experience-proof summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.experience-proof summary::before {
+  content: "+";
+  margin-right: 10px;
+}
+.experience-proof blockquote {
+  border-left: 2px solid #dfc49555;
+  padding-left: 15px;
+  margin: 14px 0;
+  line-height: 1.8;
+}
+.experience-proof a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+}
+.experience-boundary {
+  border-left: 1px solid #dfc49555;
+  padding-left: 14px;
+}
+.experience-film {
+  position: relative;
+  background: #142f33;
+  color: #f3eee4;
+}
+.experience-film-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 35px 5vw;
+  font-size: 12px;
+  z-index: 1;
+}
+.experience-film-caption a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+}
+.experience-film-surface {
+  min-height: calc(56.25vw + 88px);
+}
+.experience-film-player {
+  position: relative;
+}
+.experience-film-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 5vw 30px;
+  background: #142f33;
+  font-size: 11px;
+}
+.experience-film-controls button {
+  min-height: 44px;
+  white-space: nowrap;
+  border: 1px solid #f3eee470;
+  padding: 8px 20px;
+}
+.experience-film-controls label {
+  flex: 1;
+}
+.experience-film-controls input {
+  width: 100%;
+  min-height: 44px;
+  accent-color: #dfc495;
+  cursor: ew-resize;
+}
+.experience-film-controls > span {
+  opacity: 0.65;
+}
+.experience-film-poster {
+  position: relative;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  padding: 7vw;
+}
+.experience-film-poster img {
+  object-fit: cover;
+  opacity: 0.2;
+}
+.experience-film-poster p {
+  position: relative;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(40px, 7vw, 100px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.experience-film-poster em {
+  color: #dfc495;
+}
+.experience-gravity-story {
+  position: relative;
+  overflow-anchor: none;
+  background: #041018;
+  color: #f3eee4;
+}
+.experience-gravity-stage {
+  position: relative;
+  background: #041018;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 5vw;
+  padding: 85px 5vw;
+  min-height: 700px;
+}
+.experience-gravity-story[data-motion="true"] {
+  height: 260svh;
+}
+.experience-gravity-story[data-motion="true"] .experience-gravity-stage {
+  position: sticky;
+  top: calc(
+    var(--portfolio-header-height, 60px) + var(--experience-tools-height)
+  );
+  height: calc(
+    100svh - var(--portfolio-header-height, 60px) -
+      var(--experience-tools-height)
+  );
+  min-height: 0;
+  display: block;
+  padding: 0;
+}
+.experience-gravity-canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.experience-gravity-canvas * {
+  pointer-events: none !important;
+}
+.experience-gravity-story[data-live="true"] .experience-gravity-canvas {
+  opacity: 1;
+}
+.experience-gravity-copy {
+  position: relative;
+  z-index: 3;
+  max-width: 550px;
+}
+.experience-gravity-story[data-motion="true"] .experience-gravity-copy {
+  position: absolute;
+  top: 50%;
+  left: 5vw;
+  width: 43%;
+  translate: 0 -50%;
+}
+.experience-gravity-copy .experience-home-eyebrow {
+  color: #dfc495;
+  margin-bottom: 24px;
+}
+.experience-gravity-copy h2 {
+  font-size: clamp(70px, 7.4vw, 110px);
+}
+.experience-gravity-copy h2 span {
+  display: block;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 14px;
+  letter-spacing: 0;
+  margin-top: 20px;
+  font-weight: 400;
+}
+.experience-gravity-description {
+  font-size: 14px;
+  line-height: 1.85;
+  max-width: 460px;
+  margin-top: 24px;
+}
+.experience-perspectives {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+  width: max-content;
+  border-bottom: 1px solid #f3eee440;
+}
+.experience-perspectives button {
+  min-height: 44px;
+  font-size: 11px;
+  opacity: 0.65;
+  padding: 0 15px;
+  border-bottom: 2px solid transparent;
+}
+.experience-perspectives button[aria-pressed="true"] {
+  opacity: 1;
+  border-color: #dfc495;
+}
+.experience-audio {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.experience-audio button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  border: 1px solid #f3eee455;
+  padding: 8px 13px;
+  font-size: 11px;
+}
+.experience-audio small {
+  font-size: 10px;
+  opacity: 0.65;
+}
+.experience-audio input {
+  width: 100px;
+  min-height: 44px;
+  accent-color: #dfc495;
+}
+.experience-now-playing {
+  font-size: 10px;
+  margin-top: 10px;
+  color: #dfc495;
+}
+.experience-gravity-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin-top: 15px;
+}
+.experience-gravity-links a,
+.experience-gravity-links button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 11px;
+}
+.experience-gravity-links button {
+  flex-basis: 100%;
+  color: #dfc495;
+  text-align: left;
+  border-bottom: 1px solid #f3eee430;
+}
+.experience-gravity-scroll {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-top: 16px;
+}
+.experience-gravity-poster {
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 0;
+}
+.experience-gravity-poster img {
+  object-fit: contain;
+}
+.experience-gravity-story[data-motion="true"] .experience-gravity-poster {
+  position: absolute;
+  right: 3%;
+  top: 15%;
+  width: 47%;
+}
+.experience-touch-surface {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 2;
+  touch-action: pan-y;
+}
+.experience-gravity-afterword {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #142733;
+  text-align: center;
+  padding: 30px;
+  z-index: 4;
+}
+.experience-gravity-afterword p {
+  font-size: 12px;
+  margin-bottom: 25px;
+}
+.experience-gravity-afterword h2 {
+  font-size: clamp(50px, 8vw, 110px);
+}
+.experience-gravity-afterword a {
+  min-height: 44px;
+  font-size: 12px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+}
+.experience-fallback-note {
+  grid-column: 1/-1;
+  font-size: 11px;
+  line-height: 1.7;
+  opacity: 0.7;
+}
+.experience-narrative
+  .experience-home
+  :is(.experience-work, .experience-thinking, .experience-compass) {
+  padding-top: clamp(90px, 12vw, 170px);
+}
+@media (max-width: 899px) {
+  .experience-career-hero {
+    grid-template-columns: 1.4fr 1fr;
+    gap: 3vw;
+  }
+  .experience-career-hero h1 {
+    font-size: clamp(40px, 5.8vw, 70px);
+  }
+  .experience-direction {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .experience-direction-intro {
+    max-width: 720px;
+  }
+  .experience-decision-board {
+    max-width: 650px;
+    width: 100%;
+  }
+  .experience-ai-proof {
+    grid-template-columns: 1fr;
+    gap: 55px;
+  }
+}
+@media (max-width: 759px) {
+  .experience-control-bar {
+    padding: 0 20px;
+    gap: 10px;
+  }
+  .experience-control-bar > a span {
+    display: none;
+  }
+  .experience-control-bar > div {
+    gap: 15px;
+  }
+  .experience-control-bar button {
+    font-size: 9px;
+  }
+  .experience-career-hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 35px 24px 0;
+    gap: 25px;
+    overflow: clip;
+  }
+  .experience-career-copy .experience-home-eyebrow {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .experience-career-name {
+    font-size: 30px;
+    margin-bottom: 16px;
+  }
+  .experience-career-hero h1 {
+    font-size: clamp(38px, 10.2vw, 62px);
+    line-height: 1.06;
+  }
+  .experience-career-description {
+    font-size: 13px;
+    line-height: 1.75;
+    max-width: 90%;
+    margin-top: 20px;
+  }
+  .experience-career-entry {
+    margin-top: 20px;
+    min-height: 44px;
+    padding: 10px 15px;
+    font-size: 11px;
+  }
+  .experience-career-portrait {
+    width: 40%;
+    aspect-ratio: 1;
+    position: absolute;
+    right: 24px;
+    bottom: 96px;
+    box-shadow: 8px 9px 0 #dfc495;
+    opacity: 0.95;
+  }
+  .experience-career-portrait > span {
+    display: none;
+  }
+  .experience-career-copy {
+    padding-bottom: 130px;
+  }
+  .experience-career-chapters {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    grid-column: 1/-1;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0 20px;
+    z-index: 2;
+    padding: 10px 0;
+    margin-top: 0;
+  }
+  .experience-career-chapters a {
+    font-size: 9px;
+    min-height: 34px;
+    gap: 6px;
+  }
+  .experience-career-chapters span {
+    font-size: 8px;
+  }
+  .experience-home .experience-direction h2 {
+    font-size: clamp(40px, 11vw, 66px);
+  }
+  .experience-decision-notes {
+    height: 235px;
+    margin-bottom: 20px;
+  }
+  .experience-decision-note {
+    padding: 22px;
+    width: 76%;
+    min-height: 152px;
+  }
+  .experience-decision-note p {
+    font-size: 26px;
+  }
+  .experience-decision-controls {
+    gap: 10px;
+  }
+  .experience-decision-controls button {
+    font-size: 10px;
+  }
+  .experience-decision-detail {
+    min-height: 260px;
+  }
+  .experience-decision-detail h3 {
+    font-size: 25px;
+  }
+  .experience-decision-detail p {
+    font-size: 12px;
+  }
+  .experience-workflow-detail {
+    min-height: 300px;
+  }
+  .experience-workflow-stages {
+    gap: 6px;
+  }
+  .experience-workflow-stages button {
+    font-size: 9px;
+  }
+  .experience-film-caption {
+    padding: 20px 24px;
+    font-size: 10px;
+  }
+  .experience-film-surface {
+    min-height: calc(133.333vw + 110px);
+  }
+  .experience-film-controls {
+    gap: 12px;
+    padding: 10px 24px 24px;
+    flex-wrap: wrap;
+  }
+  .experience-film-controls > span {
+    width: 100%;
+    font-size: 10px;
+  }
+  .experience-film-controls button {
+    padding: 8px 12px;
+  }
+  .experience-film-poster {
+    aspect-ratio: 3/4;
+  }
+  .experience-gravity-stage {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 65px 24px;
+    gap: 30px;
+  }
+  .experience-gravity-copy h2 {
+    font-size: 58px;
+  }
+  .experience-gravity-story[data-motion="true"] .experience-gravity-copy {
+    left: 24px;
+    right: 24px;
+    width: auto;
+    max-width: none;
+    top: 28%;
+    translate: none;
+  }
+  .experience-gravity-copy .experience-home-eyebrow {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .experience-gravity-copy h2 span {
+    display: none;
+  }
+  .experience-gravity-description {
+    font-size: 11px;
+    line-height: 1.7;
+    margin-top: 12px;
+  }
+  .experience-perspectives {
+    margin-top: 10px;
+  }
+  .experience-perspectives button {
+    font-size: 10px;
+    min-height: 40px;
+  }
+  .experience-audio {
+    margin-top: 10px;
+    gap: 12px;
+  }
+  .experience-audio button {
+    font-size: 10px;
+    padding: 8px 12px;
+  }
+  .experience-gravity-links {
+    margin-top: 8px;
+    gap: 0 20px;
+  }
+  .experience-gravity-links a,
+  .experience-gravity-links button {
+    font-size: 10px;
+    min-height: 40px;
+  }
+  .experience-gravity-scroll {
+    display: none;
+  }
+  .experience-gravity-story[data-motion="true"] .experience-gravity-poster {
+    width: 60%;
+    height: 28%;
+    top: 0;
+    right: 20%;
+  }
+  .experience-gravity-canvas {
+    mask-image: linear-gradient(#000 0%, #000 22%, transparent 43%);
+  }
+  .experience-touch-surface {
+    width: 100%;
+    height: 28%;
+    bottom: auto;
+  }
+  .experience-narrative[data-motion="true"]
+    :is(.experience-home-section, .experience-film)::before {
+    height: 60px;
+  }
+  .experience-gravity-afterword h2 {
+    font-size: 55px;
+  }
+}
+@media (max-height: 600px) and (min-width: 760px) {
+  .experience-gravity-copy h2 {
+    font-size: 60px;
+  }
+  .experience-gravity-copy .experience-home-eyebrow {
+    margin-bottom: 12px;
+  }
+  .experience-gravity-description {
+    font-size: 12px;
+    margin-top: 12px;
+  }
+  .experience-gravity-copy h2 span {
+    display: none;
+  }
+  .experience-gravity-scroll {
+    display: none;
+  }
+  .experience-gravity-links {
+    margin-top: 7px;
+  }
+}
+@media (max-height: 560px) {
+  .experience-gravity-story[data-motion="true"] {
+    height: auto;
+    min-height: 180svh;
+  }
+  .experience-gravity-story[data-motion="true"] .experience-gravity-stage {
+    position: relative;
+    height: 650px;
+    top: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience *,
+  .experience *::before,
+  .experience *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.experience-gravity-player {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: #041018;
+  color: #f3eee4;
+  z-index: 100;
+}
+.experience-gravity-player::backdrop {
+  background: #041018;
+}
+.experience-gravity-player[open] {
+  display: flex;
+  flex-direction: column;
+}
+.experience-gravity-player > header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 24px;
+  border-bottom: 1px solid #f3eee430;
+}
+.experience-gravity-player h2 {
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.experience-gravity-player header p {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-top: 6px;
+}
+.experience-gravity-player header a {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+}
+.experience-gravity-player header button {
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+}
+.experience-gravity-player iframe {
+  width: 100%;
+  border: 0;
+  flex: 1;
+  min-height: 0;
+  background: #041018;
+}
+@media (max-width: 759px) {
+  .experience-career-copy {
+    padding-bottom: 0;
+  }
+  .experience-career-hero {
+    gap: 20px;
+  }
+  .experience-career-portrait {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 42%;
+    max-width: 180px;
+    justify-self: end;
+    margin-top: -64px;
+  }
+}
+.experience-gravity-story::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 80px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(#dfc495, transparent);
+}
+
+/* Keep the entire film and its controls in one viewport while scroll plays it. */
+.experience-film {
+  min-height: 200svh;
+}
+.experience-film-surface {
+  position: sticky;
+  top: calc(var(--portfolio-header-height, 61px) + 52px);
+  min-height: 0;
+  padding-bottom: 20px;
+}
+.experience-film-caption {
+  padding: 6px 5vw;
+  min-height: 44px;
+}
+.experience-film-player {
+  scroll-margin-top: calc(var(--portfolio-header-height, 61px) + 52px);
+}
+.experience-film-controls {
+  padding: 8px 5vw;
+  min-height: 60px;
+}
+.experience-film-frame {
+  width: min(
+    100%,
+    calc((100svh - var(--portfolio-header-height, 61px) - 190px) * 16 / 9)
+  );
+  margin: 0 auto;
+}
+.experience-film-poster {
+  width: 100%;
+  min-height: 300px;
+}
+.experience-film[data-reading="true"] {
+  min-height: 0;
+}
+.experience-film[data-reading="true"] .experience-film-surface {
+  position: relative;
+  top: auto;
+}
+.experience-open-decisions {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+.experience-open-decisions article {
+  background: #f3eee4;
+  padding: clamp(25px, 3vw, 42px);
+  border-bottom: 3px solid #db6048;
+}
+.experience-open-decisions h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+}
+.experience-open-decisions strong {
+  font-size: 13px;
+  line-height: 1.7;
+}
+.experience-open-decisions article > p:not(:first-child) {
+  font-size: 12px;
+  line-height: 1.85;
+  margin-top: 12px;
+  opacity: 0.8;
+}
+.experience-open-decisions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 44px;
+  font-size: 11px;
+  margin-top: 15px;
+}
+.experience-direction {
+  align-items: start;
+}
+.experience-open-workflow {
+  list-style: none;
+}
+.experience-open-workflow li {
+  position: relative;
+  border-left: 1px solid #dfc49566;
+  padding: 0 0 38px 35px;
+}
+.experience-open-workflow li:last-child {
+  border-left-color: transparent;
+}
+.experience-workflow-number {
+  position: absolute;
+  top: 0;
+  left: -12px;
+  background: #142f33;
+  color: #dfc495;
+  padding: 4px 0;
+  font-size: 10px;
+}
+.experience-open-workflow .experience-home-eyebrow {
+  color: #dfc495;
+  margin-bottom: 15px;
+}
+.experience-open-workflow h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 29px;
+}
+.experience-open-workflow li > p:not(.experience-home-eyebrow),
+.experience-proof {
+  font-size: 12px;
+  line-height: 1.85;
+  margin-top: 16px;
+}
+.experience-proof blockquote {
+  border-left: 2px solid #dfc49555;
+  padding-left: 15px;
+  margin: 18px 0;
+}
+.experience-workflow > .experience-boundary {
+  font-size: 11px;
+  line-height: 1.8;
+}
+@media (min-width: 900px) {
+  .experience[data-motion="true"] .experience-direction-intro,
+  .experience[data-motion="true"] .experience-ai-proof > div:first-child {
+    position: sticky;
+    top: calc(var(--portfolio-header-height, 61px) + 85px);
+  }
+  .experience-ai-proof {
+    align-items: start;
+  }
+}
+@media (max-width: 759px) {
+  .experience-film-frame {
+    width: min(
+      100%,
+      calc((100svh - var(--portfolio-header-height, 61px) - 190px) * 3 / 4)
+    );
+  }
+  .experience-film-caption {
+    padding: 4px 24px;
+  }
+  .experience-film-controls {
+    padding: 6px 24px;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+  .experience-film-controls > span {
+    display: none;
+  }
+  .experience-film-controls label {
+    min-width: 0;
+  }
+  .experience-open-decisions {
+    margin-top: 30px;
+  }
+  .experience-open-workflow li {
+    padding-left: 28px;
+  }
+}
+@media (max-height: 480px) and (min-width: 760px) {
+  .experience-film-frame {
+    width: min(
+      100%,
+      calc((100svh - var(--portfolio-header-height, 61px) - 150px) * 16 / 9)
+    );
+  }
+  .experience-film-caption {
+    display: none;
+  }
+}

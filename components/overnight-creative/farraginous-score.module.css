@@ -1,0 +1,339 @@
+.root {
+  background: #e6e1d4;
+  color: #18363a;
+  height: auto;
+  scroll-margin-top: 60px;
+}
+.root[data-enhanced="true"] {
+  height: 440svh;
+  position: relative;
+  padding-bottom: 0;
+}
+.stage {
+  position: sticky;
+  top: 60px;
+  height: calc(100svh - 60px);
+  display: grid;
+  grid-template-rows: 42px minmax(0, 1fr) auto 64px;
+  background: #e6e1d4;
+  overflow: hidden;
+}
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 28px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid #18363a40;
+}
+.toolbar > div {
+  display: flex;
+  gap: 22px;
+}
+.toolbar button {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.aperture {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  margin: 16px 28px 0;
+  min-height: 0;
+  border: 1px solid #18363a40;
+}
+.patch {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+.patchImage {
+  object-fit: contain;
+}
+.provenance {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  background: #17383c;
+  color: #fff7e8;
+  border: 1px solid #fff8;
+  padding: 10px 14px;
+  font-size: 11px;
+  max-width: calc(100% - 24px);
+  line-height: 1.45;
+}
+.caption {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 35px;
+  padding: 22px 35px 15px;
+  align-items: center;
+}
+.eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #8e402d;
+  line-height: 1.5;
+}
+.caption h2 {
+  font:
+    clamp(27px, 3vw, 43px) / 1.05 Georgia,
+    serif;
+  letter-spacing: -0.025em;
+  max-width: 23ch;
+  margin-top: 9px;
+}
+.caption > p {
+  font-size: 13px;
+  line-height: 1.75;
+  max-width: 68ch;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 30px;
+  align-items: start;
+}
+.footer nav {
+  display: flex;
+  gap: 25px;
+  margin-left: 170px;
+}
+.footer button,
+.footer a {
+  font-size: 11px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #18363a50;
+}
+.footer button[aria-pressed="true"] {
+  color: #8e402d;
+  border-color: #8e402d;
+}
+.root button:focus-visible,
+.root a:focus-visible {
+  outline: 2px solid #8e402d;
+  outline-offset: 5px;
+}
+.reading {
+  display: none;
+  padding: 55px 35px;
+}
+.root[data-enhanced="false"] .stage {
+  display: none;
+}
+.root[data-enhanced="false"] .reading {
+  display: block;
+}
+.readingHeading {
+  max-width: 1150px;
+  margin: auto auto 30px;
+}
+.readingHeading h2 {
+  font:
+    44px/1.05 Georgia,
+    serif;
+  margin: 15px 0;
+}
+.readingHeading button {
+  font-size: 12px;
+  text-decoration: underline;
+}
+.reading figure {
+  max-width: 1150px;
+  margin: auto;
+}
+.reading figure img {
+  width: 100%;
+  height: auto;
+}
+.reading figcaption {
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 15px;
+}
+.reading figcaption a {
+  text-decoration: underline;
+}
+.readingCopy {
+  max-width: 1150px;
+  margin: 45px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+}
+.reading h3 {
+  font:
+    28px/1.1 Georgia,
+    serif;
+  margin: 16px 0;
+}
+.readingCopy article > p:last-child {
+  font-size: 14px;
+  line-height: 1.8;
+}
+.limits {
+  background: #18363a;
+  color: #f5ecd9;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 70px;
+  padding: 70px max(30px, calc((100vw - 1150px) / 2));
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.limits .eyebrow {
+  color: #f7bb91;
+}
+.limits h2 {
+  font:
+    40px/1.1 Georgia,
+    serif;
+  margin-top: 20px;
+}
+.limits > div > p:not(.eyebrow) {
+  font-size: 14px;
+  line-height: 1.85;
+  margin-bottom: 20px;
+}
+.root[data-enhanced="false"] .limits {
+  position: relative;
+}
+.root[data-enhanced="true"] {
+  margin-bottom: 630px;
+}
+@media (min-width: 761px) and (max-height: 720px) {
+  .caption {
+    padding-top: 17px;
+    padding-bottom: 10px;
+  }
+  .caption h2 {
+    font-size: 32px;
+  }
+  .caption > p {
+    font-size: 12px;
+  }
+  .stage {
+    grid-template-rows: 42px minmax(0, 1fr) auto 64px;
+  }
+  .aperture {
+    margin-top: 10px;
+  }
+}
+@media (max-width: 760px) {
+  .root[data-enhanced="true"] {
+    height: 440svh;
+    margin-bottom: 1040px;
+  }
+  .toolbar {
+    padding: 0 16px;
+  }
+  .toolbar > span {
+    display: none;
+  }
+  .toolbar > div {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .stage {
+    grid-template-rows: 42px minmax(0, 1fr) auto 108px;
+  }
+  .aperture {
+    margin: 12px 14px 0;
+  }
+  .provenance {
+    font-size: 9px;
+    padding: 8px;
+    left: 8px;
+    bottom: 8px;
+    max-width: calc(100% - 16px);
+  }
+  .caption {
+    display: block;
+    padding: 18px 22px 8px;
+  }
+  .caption h2 {
+    font-size: 33px;
+    margin: 10px 0 14px;
+  }
+  .caption > p {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .footer {
+    display: block;
+    padding: 10px 22px;
+  }
+  .footer nav {
+    margin-left: 0;
+    gap: 14px;
+    justify-content: space-between;
+  }
+  .footer button {
+    font-size: 10px;
+    text-align: left;
+    max-width: 90px;
+  }
+  .footer > a {
+    display: inline-block;
+    margin: 12px 0 0 165px;
+    font-size: 10px;
+  }
+  .reading {
+    padding: 40px 22px;
+  }
+  .readingHeading h2 {
+    font-size: 38px;
+  }
+  .readingCopy {
+    display: block;
+  }
+  .readingCopy article {
+    margin-top: 35px;
+  }
+  .limits {
+    display: block;
+    padding: 45px 22px;
+  }
+  .limits h2 {
+    font-size: 36px;
+    margin-bottom: 35px;
+  }
+  .limits > div > p:not(.eyebrow) {
+    font-size: 14px;
+  }
+  .root[data-enhanced="false"] {
+    margin-bottom: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    height: auto !important;
+    margin-bottom: 0 !important;
+  }
+  .stage {
+    display: none !important;
+  }
+  .reading {
+    display: block !important;
+  }
+  .limits {
+    position: relative !important;
+  }
+}
+
+/* The evidence boundary stays in normal flow at every text size. */
+.limits {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+}
+.root[data-enhanced="true"] {
+  margin-bottom: 0;
+}

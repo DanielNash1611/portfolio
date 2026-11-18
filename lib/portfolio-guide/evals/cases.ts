@@ -1027,6 +1027,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
       answerMustExclude: [
         { value: "enterprise-scale" },
         { value: "external adoption" },
+          { value: "external customer adoption" },
         { value: "fully autonomous" },
       ],
       maxSentences: 5,
@@ -1110,6 +1111,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
           { value: "personal operating context" },
           { value: "does not prove enterprise scale" },
           { value: "external adoption" },
+          { value: "external customer adoption" },
           { value: "not proven" },
         ],
       ],
@@ -1202,6 +1204,7 @@ export const portfolioGuideEvalCases: PortfolioGuideEvalCase[] = [
         ],
         [
           { value: "external adoption" },
+          { value: "external customer adoption" },
           { value: "hiring outcomes" },
           { value: "enterprise scale" },
         ],

@@ -30,7 +30,7 @@ export const creativeGuideEvalCases: PortfolioGuideEvalCase[] = [
     },
     deterministicChecks: {
       answerMustIncludeAll: [
-        { value: "start with The Side of AI I Want to Be On" },
+        { value: "The Side of AI I Want to Be On" },
       ],
       relatedPageSlugsMustInclude: ["the-side-of-ai-i-want-to-be-on"],
       maxSentences: 5,

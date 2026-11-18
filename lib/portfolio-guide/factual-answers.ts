@@ -348,6 +348,19 @@ export function claimSelectionPolicy(
     minItems = blocks.length;
     maxItems = Math.max(1, blocks.length);
   } else if (
+    slug === "ai-career-operating-system" &&
+    /\b(?:how senior|seniority|level of work)\b/i.test(request.message) &&
+    request.scope !== "portfolio"
+  ) {
+    // Seniority needs product responsibility and operating limits together;
+    // historical evaluation provenance answers a different question.
+    blocks = ["ownership", "next"].flatMap((key) =>
+      current.filter((block) => block.id === `${slug}:${key}`),
+    );
+    fallbackIds = blocks.map((block) => block.id);
+    purpose = "qualified-seniority";
+    minItems = blocks.length;
+  } else if (
     request.scope === "portfolio" &&
     !(ownershipQuestion(request.message) && across && own)
   ) {

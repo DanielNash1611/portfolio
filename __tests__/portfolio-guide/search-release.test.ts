@@ -60,7 +60,7 @@ test("lexical path makes no provider call and retains complete canonical qualifi
     {
       kind: "project",
       projectId: "immunology-scout",
-      query: "literature scouting evidence clustering",
+      query: "source evidence provenance graph",
     },
     { semantic: false },
   );

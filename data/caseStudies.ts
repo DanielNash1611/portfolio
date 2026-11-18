@@ -47,23 +47,26 @@ The redesigned flow simplified a dense multi-step experience, cut checkout time 
     title: "Contact Center ChatGPT pilot",
     summary:
       "Launched a six-month ChatGPT Enterprise pilot with a matched control group to quantify agent copilot impact.",
-    headlineMetrics: [{ label: "annualized impact", value: "~$2.7M" }],
+    headlineMetrics: [
+      { label: "estimated annualized impact", value: "~$2.7M" },
+    ],
     measuredMetrics: [
       {
-        label: "Annualized revenue influence",
+        label: "Estimated annualized pilot impact",
         value: "~$2.7M",
-        context: "Pilot cohort extrapolated over 12 months",
+        context:
+          "Reported business-case estimate; model inputs are not reconstructed from the cohort comparison",
       },
     ],
     body: `
 ## Scaling AI pilot impact
 
 <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-  <p className="text-3xl font-semibold text-slate-900">$2.7M+ annualized impact</p>
-  <p className="mt-1 text-sm text-slate-600">Derived from initial pilot lift across 150 agent licenses.</p>
+  <p className="text-3xl font-semibold text-slate-900">~$2.7M estimated annualized impact</p>
+  <p className="mt-1 text-sm text-slate-600">Reported pilot business-case estimate, separate from realized revenue and later company-wide adoption.</p>
 </div>
 
-Measured outcomes demonstrate the upside of expanding generative AI assistance into additional contact center queues.
+The six-month pilot supported the expansion decision. Both test and adjusted-control groups improved conversion and revenue per call. The comparison does not establish the full test-group change as causal AI lift or supply the annualized estimate's model inputs.
     `.trim(),
     href: "/products/chatgpt-contact-center",
   },
@@ -82,10 +85,10 @@ Measured outcomes demonstrate the upside of expanding generative AI assistance i
     slug: "chatgpt-org-scale",
     title: "Scaling ChatGPT across the organization",
     summary:
-      "Expanded ChatGPT Enterprise access, launched ChatGPT Champions, and established AI COE guardrails.",
+      "Expanded ChatGPT Enterprise access, launched ChatGPT Champions, and contributed to AI COE groundwork.",
     headlineMetrics: [
       { label: "licensed users", value: "~1,000" },
-      { label: "active users", value: "~800" },
+      { label: "active users · window unspecified", value: "~800" },
     ],
     href: "/products/chatgpt-org-scale",
   },

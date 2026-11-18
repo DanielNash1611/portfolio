@@ -1,71 +1,10 @@
+import {
+  checkoutUsabilityCards as resultsCards,
+  checkoutUsabilityQuotes as quotes,
+  type CheckoutComparisonRow as ComparisonRowProps,
+  type CheckoutEvidenceCard as EvidenceCardProps,
+} from "@/content/checkout-page-content";
 import ContentSection from "@/components/site/ContentSection";
-
-type ComparisonRowProps = {
-  label: string;
-  before?: string;
-  after: string;
-  beforePrefix?: string;
-};
-
-type EvidenceCardProps = {
-  title: string;
-  speedLabel?: string;
-  interpretation: string;
-  rows: ComparisonRowProps[];
-  tone?: "default" | "nuanced";
-};
-
-const resultsCards: EvidenceCardProps[] = [
-  {
-    title: "Full checkout flow",
-    speedLabel: "32% faster",
-    interpretation: "Faster overall flow with stronger perceived usability",
-    rows: [
-      { label: "Time", before: "3:00", after: "2:03" },
-      { label: "Difficulty", before: "3.8", after: "5.0" },
-      { label: "Success", before: "6/6", after: "6/6" },
-    ],
-  },
-  {
-    title: "Entering a discount code",
-    speedLabel: "37% faster",
-    interpretation: "Eliminated a previous failure point",
-    rows: [
-      { label: "Time", before: "0:46", after: "0:29" },
-      { label: "Difficulty", before: "3.8", after: "4.6" },
-      { label: "Success", before: "5/6", after: "6/6" },
-    ],
-  },
-  {
-    title: "Changing item quantity",
-    speedLabel: "Slower, but clearer",
-    interpretation: "More deliberate interaction, higher clarity",
-    tone: "nuanced",
-    rows: [
-      { label: "Time", before: "0:57", after: "1:10" },
-      { label: "Difficulty", before: "3.5", after: "5.0" },
-      { label: "Success", before: "6/6", after: "6/6" },
-    ],
-  },
-  {
-    title: "Changing shipping method/location",
-    interpretation: "Higher confidence with fewer user errors",
-    rows: [
-      { label: "Difficulty", before: "3.6", after: "5.0" },
-      {
-        label: "Success",
-        after: "6/6",
-        beforePrefix: "Improved to",
-      },
-    ],
-  },
-];
-
-const quotes = [
-  "Very easy to use",
-  "Everything I needed was right there",
-  "Not confusing at all",
-];
 
 function ComparisonRow({
   label,

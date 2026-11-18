@@ -1,30 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Button from "@/components/Button";
-import CaseStudyHeader from "@/components/CaseStudyHeader";
+import OrgPlaybook from "@/components/overnight-enterprise/OrgPlaybook";
+import MediaFrame from "@/components/site/MediaFrame";
 import SocialProofSnippet from "@/components/SocialProofSnippet";
 import { caseStudySocialProof } from "@/data/socialProof";
-
-const heroTags = [
-  "AI Platform & Strategy",
-  "AI Product Management",
-  "Organizational Change",
-  "ChatGPT Enterprise",
-  "Enablement & Training",
-];
-
-const heroKpis = [
-  { label: "Licensed Users", value: "~1,000" },
-  { label: "Active Users", value: "~800" },
-  { label: "Program", value: "ChatGPT Champions" },
-];
-
 export const metadata: Metadata = {
-  title: "Scaling ChatGPT Across the Organization - ChatGPT Champions & AI COE",
+  title: "Scaling ChatGPT Through Training & Champions",
   description:
-    "Expanded ChatGPT Enterprise from a focused contact center pilot to hundreds of HQ users, launched a ChatGPT Champions program, and laid the groundwork for an AI Center of Excellence.",
+    "Daniel Nash's work expanding ChatGPT Enterprise through reusable learning, a cross-department Champions practice, and AI Center of Excellence groundwork.",
 };
-
 const snapshotItems = [
   {
     label: "Role",
@@ -54,9 +38,9 @@ const approachThemes = [
   {
     title: "Turn pilot results into a scalable story",
     body: [
-      "Used the Contact Center ChatGPT Pilot as proof of value - clear ROI, strong governance, and agent advocacy.",
+      "Used the measured contact-center pilot, its governance boundaries, and agent advocacy to inform expansion.",
       'Framed a roadmap from "one team tool" to "company-wide capability" with milestones for access, enablement, and governance.',
-      "Paired every expansion ask with the business outcomes already demonstrated in the pilot.",
+      "Paired every expansion ask with the reported pilot results, keeping the annualized estimate qualified.",
     ],
   },
   {
@@ -89,22 +73,22 @@ const outcomes = [
   {
     heading: "Scaled ChatGPT access across HQ",
     detail:
-      "Moved from a focused pilot to roughly 1,000 licensed users and about 800 active users, plus full deployment to the contact center (~350 agents).",
+      "Reported roughly 1,000 licensed users and about 800 active users organization-wide. The contact-center rollout covered ~350 agents; these scopes should not be added together.",
   },
   {
     heading: "ChatGPT Champions community",
     detail:
-      "Champions across Product, Marketing, Merchandising, and Ops ran dozens of experiments using a shared, responsible pattern.",
+      "Champions across departments shared workflows, experiments, and lessons through a responsible pattern.",
   },
   {
     heading: "Training & self-serve enablement",
     detail:
-      "Video primers and starter prompts reduced onboarding friction and raised the floor on prompt quality and safety.",
+      "Video primers and starter prompts gave teams reusable foundations for prompt quality and responsible use.",
   },
   {
     heading: "Structured AI platform strategy",
     detail:
-      "Clarified platform ownership, governance flow, and enablement responsibilities - boosting executive confidence in scaling AI.",
+      "Clarified platform ownership, governance flow, and enablement responsibilities as part of the platform strategy.",
   },
 ];
 
@@ -115,189 +99,136 @@ const nextSteps = [
 ];
 
 export default function ChatGPTOrgScalePage(): React.JSX.Element {
-  const socialProof = caseStudySocialProof["chatgpt-org-scale"];
-
   return (
-    <div className="container space-y-12 py-10">
-      <Link href="/work">
-        <Button variant="ghost" className="mb-4">
-          Back to portfolio
-        </Button>
-      </Link>
-
-      <CaseStudyHeader
-        title="Scaling ChatGPT Across the Organization - ChatGPT Champions & AI COE"
-        subtitle="Expanded ChatGPT Enterprise from a focused contact center pilot to hundreds of HQ users, launched a ChatGPT Champions program, and laid the groundwork for an AI Center of Excellence."
-        kpis={heroKpis}
-        tags={heroTags}
-      />
-
-      <section className="space-y-4 rounded-3xl border border-brand-slate/10 bg-white/90 p-8 shadow-soft">
-        <h2 className="text-2xl font-semibold text-brand-teal md:text-3xl">
-          Snapshot
-        </h2>
-        <dl className="grid gap-4 md:grid-cols-2">
-          {snapshotItems.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-2xl border border-brand-slate/10 bg-white/80 p-4"
-            >
-              <dt className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-teal/70">
-                {item.label}
-              </dt>
-              <dd className="mt-2 text-base text-brand-slate/80">
-                {item.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      <section className="space-y-4 rounded-3xl border border-brand-slate/10 bg-white/90 p-8 shadow-soft">
-        <h2 className="text-2xl font-semibold text-brand-teal md:text-3xl">
-          Context &amp; problem
-        </h2>
-        <p className="text-brand-slate/80">
-          The success of the contact center pilot triggered organization-wide
-          demand. Without a strategy, AI adoption risked becoming a patchwork of
-          one-off experiments, inconsistent quality, and unmanaged risk. The
-          opportunity: build a coherent AI platform and enablement model around
-          ChatGPT Enterprise.
-        </p>
-      </section>
-
-      <section className="space-y-4 rounded-3xl border border-brand-slate/10 bg-white/90 p-8 shadow-soft">
-        <h2 className="text-2xl font-semibold text-brand-teal md:text-3xl">
-          My role
-        </h2>
-        <ul className="list-disc space-y-2 pl-6 text-brand-slate/80">
-          <li>
-            Served as the de facto AI product lead for ChatGPT across the
-            company.
-          </li>
-          <li>
-            Defined expansion strategy, guardrails, and adoption patterns for
-            multiple business units.
-          </li>
-          <li>
-            Created and ran the ChatGPT Champions program to distribute
-            experimentation.
-          </li>
-          <li>
-            Partnered with leadership to sketch the first iteration of an AI
-            Center of Excellence.
-          </li>
-          <li>
-            Connected AI investments to revenue, efficiency, and customer
-            experience objectives.
-          </li>
-        </ul>
-      </section>
-
-      <section className="space-y-4 rounded-3xl border border-brand-teal/12 bg-brand-teal/5 p-8 shadow-soft">
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-teal/70">
-            External validation
+    <OrgPlaybook
+      socialProof={caseStudySocialProof["chatgpt-org-scale"].map((item) => (
+        <SocialProofSnippet
+          key={`${item.author}-${item.quote}`}
+          item={item}
+          className="org-recommendation"
+          showSourceLink
+        />
+      ))}
+    >
+      <details open>
+        <summary>My role and the boundaries of this work</summary>
+        <div>
+          <p>
+            I served as the de facto AI product lead for ChatGPT across the
+            company, defining expansion strategy and adoption patterns across
+            business units.
           </p>
-          <h2 className="text-2xl font-semibold text-brand-teal md:text-3xl">
-            Why this rollout resonated with leadership partners
-          </h2>
-        </div>
-        <div className="grid gap-4 lg:grid-cols-2">
-          {socialProof.map((item) => (
-            <SocialProofSnippet
-              key={`${item.author}-${item.quote}`}
-              item={item}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-6 rounded-3xl border border-brand-slate/10 bg-white/90 p-8 shadow-soft">
-        <div className="space-y-3">
-          <h2 className="text-2xl font-semibold text-brand-teal md:text-3xl">
-            Approach
-          </h2>
-          <p className="text-brand-slate/80">
-            Scaling required repeatable patterns - grounded in the pilot results
-            but extensible across functions.
+          <p>
+            I created and ran the Champions program, connected AI investments to
+            business objectives, and partnered with leadership on the first
+            iteration of an AI Center of Excellence.
           </p>
-          <p className="text-sm text-brand-slate/70">
-            Building on the{" "}
-            <Link
-              href="/products/chatgpt-contact-center"
-              className="font-semibold text-brand-teal underline-offset-4 hover:underline"
-            >
-              Contact Center ChatGPT Pilot
-            </Link>
-            , we translated proven value into an enterprise-ready playbook.
+          <dl>
+            {snapshotItems.map((item) => (
+              <div key={item.label}>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p>
+            The reported figures describe historical access and active users,
+            not present-day adoption. The activity window is not established in
+            the supporting case account. Contact-center and organization-wide
+            scopes should not be added together.
           </p>
+          <Link
+            className="org-text-link"
+            href="/products/chatgpt-contact-center"
+          >
+            Inspect the controlled pilot ↗
+          </Link>
         </div>
-        <div className="space-y-6">
+      </details>
+      <details>
+        <summary>Expansion, enablement, and COE groundwork</summary>
+        <div>
           {approachThemes.map((theme) => (
-            <div
-              key={theme.title}
-              className="space-y-3 rounded-2xl border border-brand-teal/10 bg-brand-teal/5 p-5"
-            >
-              <h3 className="text-xl font-semibold text-brand-teal">
-                {theme.title}
-              </h3>
-              <ul className="list-disc space-y-2 pl-6 text-brand-slate/80">
+            <section key={theme.title}>
+              <h3>{theme.title}</h3>
+              <ul>
                 {theme.body.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
               </ul>
-            </div>
+            </section>
           ))}
-        </div>
-      </section>
-
-      <section className="space-y-4 rounded-3xl border border-brand-slate/10 bg-white/90 p-8 shadow-soft">
-        <h2 className="text-2xl font-semibold text-brand-teal md:text-3xl">
-          Outcomes
-        </h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          {outcomes.map((outcome) => (
-            <div
-              key={outcome.heading}
-              className="space-y-2 rounded-2xl border border-brand-teal/10 bg-white p-5 shadow-sm"
-            >
-              <h3 className="text-lg font-semibold text-brand-teal">
-                {outcome.heading}
-              </h3>
-              <p className="text-sm leading-relaxed text-brand-slate/80">
-                {outcome.detail}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-4 rounded-3xl border border-brand-slate/10 bg-white/90 p-8 shadow-soft">
-        <h2 className="text-2xl font-semibold text-brand-teal md:text-3xl">
-          What I&apos;d do next
-        </h2>
-        <ul className="list-disc space-y-2 pl-6 text-brand-slate/80">
-          {nextSteps.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="rounded-3xl border border-brand-teal/15 bg-brand-teal/10 p-8 text-brand-teal shadow-soft">
-        <div className="space-y-3">
-          <h2 className="text-2xl font-semibold md:text-3xl">
-            Interested in building something similar?
-          </h2>
-          <p className="text-brand-teal/80">
-            Let&apos;s talk about your AI roadmap and how to scale ChatGPT
-            adoption responsibly.
+          <p>
+            The original training plan is a design for blended learning. The
+            artifact itself does not establish course completion or performance
+            impact.
           </p>
-          <Link href="/contact">
-            <Button variant="primary">Start the conversation</Button>
-          </Link>
         </div>
-      </section>
-    </div>
+      </details>
+      <details>
+        <summary>Published models and what they represent</summary>
+        <div>
+          <p>
+            These published exhibits summarize the operating approach. They are
+            not production architecture or audited organization charts.
+          </p>
+          <figure>
+            <MediaFrame
+              src="/images/chatgpt-enterprise/enterprise-ai-operating-model.webp"
+              alt="Published enterprise AI operating-model exhibit."
+              fallbackTitle="Enterprise AI operating model"
+              sizes="80vw"
+              className="aspect-[16/9] bg-white"
+              imageClassName="object-contain"
+              expandable
+            />
+            <figcaption>
+              Operating-model exhibit: discovery, governance, measurement,
+              scale, and feedback.
+            </figcaption>
+          </figure>
+          <figure>
+            <MediaFrame
+              src="/images/chatgpt-enterprise/grassroots-champions-model.webp"
+              alt="Published Champions model summarizing cross-department workflow sharing and sponsorship."
+              fallbackTitle="ChatGPT Champions model"
+              sizes="80vw"
+              className="aspect-[16/9] bg-white"
+              imageClassName="object-contain"
+              expandable
+            />
+            <figcaption>
+              Champions exhibit: distributed learning, not reporting lines.
+            </figcaption>
+          </figure>
+        </div>
+      </details>
+      <details>
+        <summary>Reported outcomes and the next questions</summary>
+        <div>
+          {outcomes.map((o) => (
+            <section key={o.heading}>
+              <h3>{o.heading}</h3>
+              <p>{o.detail}</p>
+            </section>
+          ))}
+          <p>
+            The pilot’s estimated annualized impact is separate from
+            organization-wide usage; these do not establish company-wide
+            realized ROI.
+          </p>
+          <h3>Proposed next steps</h3>
+          <ul>
+            {nextSteps.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <p>
+            These are proposed next steps. COE groundwork does not mean a fully
+            established COE or implemented agentic workflow.
+          </p>
+        </div>
+      </details>
+    </OrgPlaybook>
   );
 }

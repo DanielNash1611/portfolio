@@ -1,0 +1,222 @@
+.story {
+  --story-accent: #287d76;
+  --story-surface: #f1eee6;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  margin-top: 3rem;
+  position: relative;
+}
+.story[data-kind="astra"] {
+  --story-accent: #7d421a;
+  --story-surface: #e9c58d;
+}
+.story[data-kind="coals"] {
+  --story-accent: #a24b2c;
+}
+.story[data-kind="tabletop"] {
+  --story-accent: #d6a84f;
+  --story-surface: #0d1726;
+}
+.story[data-kind="signals"] {
+  --story-accent: #a04d35;
+}
+.visual {
+  position: sticky;
+  top: 110px;
+  align-self: start;
+  color: var(--story-accent);
+  padding-top: 1.5rem;
+  border-top: 1px solid currentColor;
+}
+.graphic {
+  aspect-ratio: 400/310;
+  max-height: 45vh;
+}
+.svg {
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow: visible;
+}
+.svg text {
+  font: 9px sans-serif;
+  letter-spacing: 1.3px;
+  fill: currentColor;
+}
+.visual figcaption {
+  border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  padding-top: 1rem;
+}
+.current {
+  display: block;
+  font-family: var(--font-serif), serif;
+  font-size: 1.4rem;
+  line-height: 1.25;
+}
+.visual figcaption p {
+  font-size: 0.75rem;
+  line-height: 1.7;
+  margin-top: 0.8rem;
+  max-width: 50ch;
+}
+.controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  font-size: 0.65rem;
+}
+.controls > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+.controls button {
+  min-width: 32px;
+  min-height: 36px;
+  padding: 0.4rem;
+  border-bottom: 2px solid transparent;
+}
+.controls button[aria-pressed="true"] {
+  border-color: currentColor;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+.controls button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.scenes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.scenes li {
+  padding: 2rem 0 3rem 1.5rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border-left: 2px solid transparent;
+}
+.scenes li[data-current="true"] {
+  border-left-color: var(--story-accent);
+}
+.scenes h3 {
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  line-height: 1.1;
+  margin: 1rem 0 1.5rem;
+  letter-spacing: -0.03em;
+}
+.scenes p {
+  font-size: 1rem;
+  line-height: 1.9;
+  margin-top: 1rem;
+  max-width: 61ch;
+}
+.scenes .eyebrow {
+  font-size: 0.65rem;
+  line-height: 1.5;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--story-accent);
+  margin: 0;
+}
+.draw {
+  stroke-dasharray: 800;
+  animation: trace 1.1s ease-out both;
+}
+.orbit {
+  transform-origin: 200px 150px;
+  animation: orbit 23s linear infinite;
+}
+.coalGlow {
+  animation: glow 2.5s ease-in-out infinite alternate;
+}
+@keyframes trace {
+  from {
+    stroke-dashoffset: 800;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes glow {
+  to {
+    opacity: 0.45;
+  }
+}
+.story[data-still="true"] .draw {
+  animation: none;
+}
+.story[data-still="true"] .orbit,
+.story[data-still="true"] .coalGlow {
+  animation-play-state: paused;
+}
+@media (max-width: 760px) {
+  .story {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .visual {
+    position: relative;
+    top: auto;
+  }
+  .graphic {
+    max-height: none;
+    height: 240px;
+  }
+  .scenes li {
+    padding: 1.5rem 0 2rem 1rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .story * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media (max-height: 650px) {
+  .visual {
+    position: relative;
+    top: auto;
+  }
+}
+.chapterPath {
+  transition: stroke-dasharray 0.5s ease-out;
+}
+.scenes li[data-current="true"] > h3,
+.scenes li[data-current="true"] > p:not(.eyebrow) {
+  animation: readingReveal 0.45s ease-out both;
+}
+@keyframes readingReveal {
+  from {
+    opacity: 0.7;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.story[data-still="true"] .scenes * {
+  animation: none;
+}
+.story[data-still="true"] .chapterPath {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .story * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media (min-width: 761px) and (min-height: 651px) {
+  .scenes li:last-child {
+    min-height: calc(100svh - 110px);
+  }
+}

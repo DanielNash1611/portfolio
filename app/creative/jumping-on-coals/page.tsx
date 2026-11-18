@@ -1,3 +1,5 @@
+import CoalsAlbumStory from "@/components/overnight-creative/CoalsAlbumStory";
+import { jumpingOnCoalsAudioChapters as audioChapters } from "@/content/creative-extra-content";
 import type { Metadata } from "next";
 import Image from "next/image";
 import {
@@ -44,98 +46,6 @@ const streamingLinks = [
   },
 ] as const;
 
-const chapters = [
-  {
-    number: "01",
-    title: "Back in the Swing",
-    description:
-      "Build momentum, collect fireflies, and decide when to jump away from the safety of repetition.",
-  },
-  {
-    number: "02",
-    title: "Losing Balance",
-    description:
-      "Cross a narrow beam by reading the environment instead of relying on a conventional balance meter.",
-  },
-  {
-    number: "03",
-    title: "Jumping on Coals",
-    description:
-      "Manage Heat and Flow across a 26,400-pixel route while a wall of fire closes in behind you.",
-  },
-  {
-    number: "04",
-    title: "Digging In",
-    description:
-      "Keep working as productive effort quietly turns into compulsion, exhaustion, and collapse.",
-  },
-  {
-    number: "05",
-    title: "At the Bottom",
-    description:
-      "Use breath, focus, and memory to recover the ability to stand instead of treating recovery as another score.",
-  },
-  {
-    number: "06",
-    title: "Digging Out",
-    description:
-      "Turn alternating shovel strikes into a difficult ascent through the same earth you once dug into.",
-  },
-  {
-    number: "07",
-    title: "By the Shovel",
-    description:
-      "Rest beneath an opening sky, then choose whether to leave the playground or return to the swing.",
-  },
-  {
-    number: "08",
-    title: "Back in the Swing (Again)",
-    description:
-      "Return to a satisfying familiar motion and decide for yourself when—or whether—to step away.",
-  },
-] as const;
-
-const audioChapters = [
-  {
-    time: "0:00",
-    title: "The personal origin",
-    description: "Work, the first PTO day, and the weekend the album appeared.",
-  },
-  {
-    time: "1:55",
-    title: "The swing-and-coals metaphor",
-    description: "Safety, momentum, burnout, the hole, recovery, and return.",
-  },
-  {
-    time: "4:26",
-    title: "One sound, many states",
-    description: "How a single cello pizzicato became the entire sound world.",
-  },
-  {
-    time: "5:56",
-    title: "Trying to make it interactive",
-    description:
-      "The early GDD, prototype, visual experiments, and false starts.",
-  },
-  {
-    time: "9:54",
-    title: "Returning during Build Week",
-    description:
-      "Why the existing foundation was kept and how the full arc emerged.",
-  },
-  {
-    time: "11:52",
-    title: "An album-driven game",
-    description:
-      "Mechanics that sustain attention without turning it into a rhythm game.",
-  },
-  {
-    time: "14:09",
-    title: "The ambiguous ending",
-    description: "What the work is meant to make players feel and discuss.",
-  },
-] as const;
-
 export const metadata: Metadata = {
   title: "Jumping on Coals",
   description:
@@ -165,7 +75,7 @@ export const metadata: Metadata = {
 
 export default function JumpingOnCoalsPage(): React.JSX.Element {
   return (
-    <div className="overflow-hidden pb-20 md:pb-24">
+    <div className="overflow-clip pb-20 md:pb-24">
       <JumpingOnCoalsHero />
 
       <Container id="overview" className="scroll-mt-28 py-16 md:py-24">
@@ -273,72 +183,7 @@ export default function JumpingOnCoalsPage(): React.JSX.Element {
         </MotionReveal>
       </Container>
 
-      <Container className="pb-16 md:pb-24">
-        <MotionReveal>
-          <figure className="group overflow-hidden rounded-[1.8rem] bg-[#180c0b] shadow-[0_30px_80px_rgba(41,20,16,0.18)]">
-            <div className="relative aspect-video">
-              <Image
-                src="/images/jumping-on-coals/coals-traversal.png"
-                alt="The player running and jumping over glowing coals while the Heat and Flow system tracks momentum."
-                fill
-                sizes="(min-width: 1200px) 1136px, 100vw"
-                className="object-cover transition duration-700 ease-out group-hover:scale-[1.015]"
-              />
-            </div>
-            <figcaption className="flex flex-col gap-2 border-t border-white/8 px-5 py-4 text-[#fff1d6] sm:flex-row sm:items-center sm:justify-between sm:px-6">
-              <span className="text-sm font-semibold">
-                Chapter 03 / Jumping on Coals
-              </span>
-              <span className="text-xs uppercase tracking-[0.18em] text-[#fff1d6]/55">
-                Heat + Flow + a pursuing fire
-              </span>
-            </figcaption>
-          </figure>
-        </MotionReveal>
-      </Container>
-
-      <Container className="pb-16 md:pb-24">
-        <MotionReveal>
-          <section className="space-y-10">
-            <div className="grid gap-5 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9b4a31]">
-                  The playable arc
-                </p>
-                <h2 className="mt-4 max-w-[11ch] text-balance text-4xl font-semibold tracking-tight text-[color:var(--color-slate)] md:text-5xl">
-                  Every mechanic carries part of the metaphor.
-                </h2>
-              </div>
-              <p className="max-w-3xl self-end text-base leading-7 text-[color:var(--color-slate)]/70 md:text-lg md:leading-8">
-                The experience moves from comfortable repetition to risk,
-                compulsion, collapse, recovery, and an ending that remains
-                deliberately unresolved.
-              </p>
-            </div>
-
-            <div className="grid gap-x-12 md:grid-cols-2">
-              {chapters.map((chapter) => (
-                <article
-                  key={chapter.number}
-                  className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-4 border-t border-[color:var(--color-slate)]/14 py-6"
-                >
-                  <p className="pt-1 text-xs font-semibold tabular-nums tracking-[0.18em] text-[#a34e31]">
-                    {chapter.number}
-                  </p>
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-semibold tracking-tight text-[color:var(--color-slate)]">
-                      {chapter.title}
-                    </h3>
-                    <p className="text-sm leading-6 text-[color:var(--color-slate)]/68">
-                      {chapter.description}
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        </MotionReveal>
-      </Container>
+      <CoalsAlbumStory />
 
       <MotionReveal>
         <section className="bg-[#190d0d] text-[#fff1d6]">

@@ -112,28 +112,44 @@ test("release-status source contracts retain both authored blocks after boundary
   );
 });
 
-test("historical fixture preserves fifty-eight unchanged texts after approved career additions and adoption correction", () => {
+test("historical fixture preserves compatible texts after the approved page refresh", () => {
   const documents = getPortfolioSearchDocuments();
-  assert.equal(documents.length, 69);
+  assert.equal(documents.length, 73);
   const old = fixture.originalPortfolioDocumentHashes as Record<string, string>;
   const changed = documents
     .filter((d) => old[d.id] !== hashText(d.text))
     .map((d) => d.id)
     .sort();
   assert.deepEqual(changed, [
-    "ai-career-operating-system:evaluation",
-    "ai-career-operating-system:ownership",
-    "ai-career-operating-system:perspective",
-    "ai-career-operating-system:private-local-profile",
-    "ai-career-operating-system:retrieval",
-    "chatgpt-enterprise:evidence-0",
-    "zimmer-ai-prototypes:evidence-0",
-    "zimmer-ai-prototypes:evidence-1",
-    "zimmer-ai-prototypes:evidence-2",
-    "zimmer-ai-prototypes:evidence-3",
-    "zimmer-ai-prototypes:ownership",
-  ]);
-  assert.equal(documents.length - changed.length, 58);
+  "ai-career-operating-system:evaluation",
+  "ai-career-operating-system:ownership",
+  "ai-career-operating-system:perspective",
+  "ai-career-operating-system:private-local-profile",
+  "ai-career-operating-system:retrieval",
+  "chatgpt-enterprise:evidence-0",
+  "chatgpt-enterprise:evidence-1",
+  "chatgpt-enterprise:evidence-2",
+  "chatgpt-enterprise:evidence-3",
+  "chatgpt-enterprise:evidence-4",
+  "chatgpt-enterprise:perspective",
+  "immunology-scout:evidence-0",
+  "immunology-scout:evidence-1",
+  "immunology-scout:evidence-2",
+  "immunology-scout:evidence-3",
+  "immunology-scout:ownership",
+  "immunology-scout:perspective",
+  "oms-chatgpt-app:evidence-0",
+  "oms-chatgpt-app:evidence-1",
+  "oms-chatgpt-app:evidence-2",
+  "oms-chatgpt-app:ownership",
+  "oms-chatgpt-app:perspective",
+  "zimmer-ai-prototypes:evidence-0",
+  "zimmer-ai-prototypes:evidence-1",
+  "zimmer-ai-prototypes:evidence-2",
+  "zimmer-ai-prototypes:evidence-3",
+  "zimmer-ai-prototypes:ownership"
+]);
+  assert.equal(documents.length - changed.length, 46);
 });
 
 test("reconciled corpus replaces every stale text and preserves every compatible cached vector", async (t) => {
@@ -154,27 +170,43 @@ test("reconciled corpus replaces every stale text and preserves every compatible
       ),
   );
   assert.deepEqual(missing.map((d) => d.id).sort(), [
-    "ai-career-operating-system:evaluation",
-    "ai-career-operating-system:ownership",
-    "ai-career-operating-system:perspective",
-    "ai-career-operating-system:retrieval",
-    "chatgpt-enterprise:evidence-0",
-    "zimmer-ai-prototypes:evidence-0",
-    "zimmer-ai-prototypes:evidence-1",
-    "zimmer-ai-prototypes:evidence-2",
-    "zimmer-ai-prototypes:evidence-3",
-    "zimmer-ai-prototypes:ownership",
-  ]);
+  "ai-career-operating-system:evaluation",
+  "ai-career-operating-system:ownership",
+  "ai-career-operating-system:perspective",
+  "ai-career-operating-system:retrieval",
+  "chatgpt-enterprise:evidence-0",
+  "chatgpt-enterprise:evidence-1",
+  "chatgpt-enterprise:evidence-2",
+  "chatgpt-enterprise:evidence-3",
+  "chatgpt-enterprise:evidence-4",
+  "chatgpt-enterprise:perspective",
+  "immunology-scout:evidence-0",
+  "immunology-scout:evidence-1",
+  "immunology-scout:evidence-2",
+  "immunology-scout:evidence-3",
+  "immunology-scout:ownership",
+  "immunology-scout:perspective",
+  "oms-chatgpt-app:evidence-0",
+  "oms-chatgpt-app:evidence-1",
+  "oms-chatgpt-app:evidence-2",
+  "oms-chatgpt-app:ownership",
+  "oms-chatgpt-app:perspective",
+  "zimmer-ai-prototypes:evidence-0",
+  "zimmer-ai-prototypes:evidence-1",
+  "zimmer-ai-prototypes:evidence-2",
+  "zimmer-ai-prototypes:evidence-3",
+  "zimmer-ai-prototypes:ownership"
+]);
   assert.equal(
     missing.reduce((sum, d) => sum + Buffer.byteLength(d.text), 0),
-    9784,
+    26252,
   );
   const reusable = previous.records.filter((record) =>
     docs.some((doc) => doc.id === record.id && record.hash === hashText(doc.text)),
   );
   const stale = previous.records.filter((record) => !reusable.includes(record));
-  assert.equal(reusable.length, 59);
-  assert.deepEqual(stale.map((record) => record.id), ["chatgpt-enterprise:evidence-0", "ai-career-operating-system:evaluation"]);
+  assert.equal(reusable.length, 47);
+  assert.deepEqual(stale.map((record) => record.id), ["chatgpt-enterprise:evidence-0", "chatgpt-enterprise:evidence-1", "chatgpt-enterprise:evidence-2", "chatgpt-enterprise:perspective", "ai-career-operating-system:evaluation", "immunology-scout:evidence-0", "immunology-scout:evidence-1", "immunology-scout:ownership", "immunology-scout:perspective", "oms-chatgpt-app:evidence-0", "oms-chatgpt-app:evidence-1", "oms-chatgpt-app:evidence-2", "oms-chatgpt-app:ownership", "oms-chatgpt-app:perspective"]);
   let attempts = 0;
   t.mock.method(
     globalThis,

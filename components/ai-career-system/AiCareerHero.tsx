@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Container from "@/components/site/Container";
 import MediaFrame from "@/components/site/MediaFrame";
 import MotionReveal from "@/components/site/MotionReveal";
+import PortfolioAssistantTrigger from "@/components/portfolio/PortfolioAssistantTrigger";
 
 const actionClassName =
   "group inline-flex items-center justify-center gap-2 border px-5 py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-orange)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-slate)]";
@@ -46,16 +47,15 @@ export default function AiCareerHero(): React.JSX.Element {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="#portfolio-guide-ai-career-operating-system"
+              <PortfolioAssistantTrigger
                 className={`${actionClassName} border-[color:var(--color-cream)] bg-[color:var(--color-cream)] text-[color:var(--color-slate)] hover:border-[color:var(--color-tan)] hover:bg-[color:var(--color-tan)]`}
               >
                 Ask the Portfolio Guide
-                <ArrowDown
-                  className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
+                <ArrowUpRight
+                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
                   aria-hidden="true"
                 />
-              </Link>
+              </PortfolioAssistantTrigger>
               <Link
                 href="/resume/generate"
                 className={`${actionClassName} border-white/24 text-[color:var(--color-cream)] hover:border-[color:var(--color-tan)] hover:text-[color:var(--color-tan)]`}
