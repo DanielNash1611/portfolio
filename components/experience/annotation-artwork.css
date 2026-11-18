@@ -1,0 +1,159 @@
+.experience.experience-narrative .experience-checkout-comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+.experience.experience-narrative .experience-checkout-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 11px;
+}
+.experience.experience-narrative .experience-checkout-controls button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid #14273344;
+}
+.experience.experience-narrative
+  .experience-checkout-controls
+  button[aria-pressed="true"] {
+  background: #173f3d;
+  color: #f3eee4;
+}
+.experience.experience-narrative .experience-checkout-controls > span {
+  opacity: 0.7;
+  font-size: 10px;
+}
+.experience.experience-narrative .experience-checkout-image {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  overflow: hidden;
+  border: 1px solid #14273333;
+}
+.experience.experience-narrative .experience-checkout-image img {
+  top: 0 !important;
+  height: 100% !important;
+  object-fit: contain;
+  object-position: center;
+}
+.experience.experience-narrative .experience-checkout-after {
+  position: absolute;
+  inset: 0;
+  background: white;
+}
+.experience.experience-narrative .experience-checkout-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--checkout-reveal);
+  width: 2px;
+  background: #a14835;
+}
+.experience.experience-narrative .experience-checkout-divider > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #a14835;
+  color: white;
+  font-size: 20px;
+}
+.experience.experience-narrative .experience-checkout-range input {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  accent-color: #a14835;
+  cursor: ew-resize;
+}
+.experience.experience-narrative .experience-checkout-comparison figcaption {
+  position: static;
+  font-size: 10px;
+}
+.experience.experience-narrative .experience-phone-artwork {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 26px;
+  background: radial-gradient(ellipse at 50% 30%, #284344, #0c1526 75%);
+}
+.experience.experience-narrative .experience-phone-device {
+  position: relative;
+  min-height: 0;
+  max-height: calc(100% - 35px);
+  height: 100%;
+  aspect-ratio: 430/932;
+  border: 6px solid #19212b;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #0e1829;
+  box-shadow:
+    15px 18px 35px #0005,
+    0 0 0 1px #b2bbb866;
+}
+.experience.experience-narrative .experience-phone-device img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.experience.experience-narrative .experience-phone-speaker {
+  position: absolute;
+  top: 3px;
+  left: 35%;
+  right: 35%;
+  height: 8px;
+  border-radius: 0 0 12px 12px;
+  background: #19212b;
+  z-index: 1;
+}
+.experience.experience-narrative .experience-phone-artwork figcaption {
+  color: #e7dfcc;
+  font-size: 9px;
+  text-align: center;
+}
+.experience
+  .experience-creative
+  .experience-project-story[data-project="tabletop-symphony"]
+  .experience-story-visual {
+  aspect-ratio: 4/5;
+}
+@media (max-width: 899px) {
+  .experience
+    .experience-creative
+    .experience-project-story[data-project="tabletop-symphony"]
+    .experience-story-visual {
+    aspect-ratio: 1;
+  }
+  .experience.experience-narrative .experience-checkout-comparison {
+    padding: 14px;
+    gap: 8px;
+  }
+}
+@media (max-width: 899px) {
+  .experience.experience-narrative
+    .experience-project-story:is(
+      [data-project="chatgpt-enterprise"],
+      [data-project="ai-platform-mcp"],
+      [data-project="ai-career-operating-system"],
+      [data-project="immunology-scout"]
+    )
+    .experience-story-visual {
+    aspect-ratio: 1;
+    min-height: 340px;
+  }
+}

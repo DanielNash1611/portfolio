@@ -50,7 +50,7 @@ export const UNIFIED_IMPACT_METRICS: UnifiedImpactMetric[] = [
     value: contactCenterPilot?.value ?? "~$2.7M estimated annual lift",
     support:
       contactCenterPilot?.detail ??
-      "Measured from a controlled pilot that validated AI-assisted workflows in the contact center.",
+      "Reported annualized business-case estimate from the controlled contact-center pilot, separate from realized revenue.",
     intent: "revenue",
   },
   {

@@ -6,6 +6,10 @@ import type {
 } from "@/lib/portfolio-guide/types";
 import { creativeGuideMetadata } from "@/content/projects/creative-guide";
 import {
+  omsDeliveryBoundary,
+  omsDeliveryMilestones,
+} from "@/content/projects/oms-delivery";
+import {
   decisionsEvaluation,
   modelBakeoff,
 } from "@/content/projects/decisions-evaluation";
@@ -355,16 +359,28 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
     ],
     evidenceHighlights: [
       {
-        label: "Measured adoption",
+        label: "Reported adoption endpoints",
         detail:
-          "About 1,000 licensed users and 800 active users after scaling beyond the initial pilot; the activity measurement period is unspecified.",
+          "Later company-wide adoption was reported at roughly 1,000 licensed users and 800 active users, from earlier endpoints around 150 licensed and 40 active users. The activity measurement period is unspecified, as are observation dates; these are not established DAU figures or pilot cohort counts.",
         type: "metric",
       },
       {
         label: "Credible business signal",
         detail:
-          "A matched-control pilot in the contact center showed about ~$2.7M in projected annual impact.",
+          "The six-month contact-center pilot supported a reported ~$2.7M estimated annualized impact. It is a separate business-case estimate, not realized annual revenue or a calculation derived here from the original cohort table.",
         type: "metric",
+      },
+      {
+        label: "Original cohort comparison",
+        detail:
+          "Roadmap slide 12 reports test/control-adjusted weekly endpoints: AOV $804 to $867 / $851 to $782; conversion 3.27% to 7.73% / 3.76% to 7.14%; revenue per call $26 to $67 / $32 to $56. Both groups improved conversion and revenue per call; the full test-group change alone is not a causal AI lift.",
+        type: "metric",
+      },
+      {
+        label: "Original learning plan and COE boundary",
+        detail:
+          "Roadmap slide 23 describes blended online learning, in-person practice, and ChatGPT Champions sharing knowledge, feedback, and innovation. It is a learning design, not a completion or performance report. The separate authored governance brief describes AI Center of Excellence groundwork and proposed next steps, not a fully implemented COE.",
+        type: "artifact",
       },
       {
         label: "Operating model artifact",
@@ -389,6 +405,9 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       ],
       explicitUnknowns: [
         "The page does not specify team size, org structure, or an exact ownership split across Product, Engineering, Operations, and Security.",
+        "The company-wide active-user endpoints do not establish a daily activity window, observation dates, an adoption curve, or additional users beyond the reported licensed-user scope. Do not describe these as DAU or add the contact-center rollout count to the company-wide count.",
+        "The weekly source comparison supplies neither the control-group size nor adjustment inputs, observation dates, uncertainty estimates, or a causal AI lift. Both cohorts improved conversion and revenue per call. The ~$2.7M annualized estimate is a separate reported business-case measure, not realized revenue or a model reconstructed from the table.",
+        "Source slide 13 describes longer conversations for test agents. Slide 26's survey-estimated time savings are separate self-reports, not objective evidence of lower handle time or improvement across every efficiency indicator.",
       ],
     },
     recruiterPrompts: [
@@ -416,6 +435,18 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       "ai-strategy",
     ],
     artifacts: [
+      {
+        label: "Original pilot measurement slide 12",
+        type: "image",
+        description:
+          "Original roadmap review slide with the weekly test and adjusted-control comparison for average order value, conversion, and revenue per call. Both cohorts and the source limits remain visible on the canonical page.",
+      },
+      {
+        label: "Original training plan slide 23",
+        type: "image",
+        description:
+          "Blended online learning, in-person practice, and cross-department ChatGPT Champions collaboration. The original plan demonstrates a learning design, not completion rates, measured performance improvement, or a fully established AI Center of Excellence.",
+      },
       {
         label: "Enterprise AI operating model",
         type: "diagram",
@@ -765,49 +796,69 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
   "immunology-scout": {
     category: "AI + science",
     oneLiner:
-      "An early-stage AI workflow concept focused on literature scouting, evidence clustering, and hypothesis support in immunology research.",
+      "An early-stage research-grounding concept with actual mechanism-to-source interface captures using fictional Aster data, alongside an expert-informed evaluation account.",
+    role: "Early product build and expert-informed evaluation",
+    actions: [
+      "Daniel's published account describes building formal evals with a scientific collaborator to define useful, trustworthy research outputs.",
+      "Structured expert feedback informed a lightweight evaluation set that exposed hallucinated patent references; the page supplies no evaluation scores, case outputs, or expert sign-off.",
+      "The published captures show the actual mechanism workspace, relationship selection, and source inspection using invented Aster demonstration fixtures, without a real research thread, external retrieval, or AI request.",
+    ],
     tools: [
       "Research workflow design",
-      "Evidence clustering",
-      "Citation-oriented product framing",
+      "Mechanism relationship and source inspection",
+      "Expert-informed evaluation",
     ],
     outcomes: [
-      "The concept is intentionally early and described with restraint rather than inflated claims.",
-      "The strongest signal on the page is product framing around traceability, trust, and next-step clarity.",
+      "Actual application captures make a relationship-to-source interaction inspectable while explicitly identifying the demonstration data as fictional.",
+      "The published evaluation account describes detecting hallucinated patent references, without supplying a numeric improvement result or independent validation.",
+      "The product remains Concept in progress; its paper-and-patent research workflow is intended product context, not proof of a launched or scientifically validated service.",
     ],
     leadershipSignals: [
       "Framed the opportunity as a trustworthy workflow product rather than a generic answer engine.",
-      "Kept the public narrative modest while making the scientific use case concrete enough to discuss.",
+      "Sought scientific expertise to define output quality and expose source failures rather than treating fluent answers as sufficient evidence.",
+      "Separated an implemented interface, fictional demonstration content, intended research workflows, and unproven scientific outcomes.",
     ],
     evidenceHighlights: [
       {
-        label: "Traceability focus",
+        label: "Actual mechanism-to-source interface",
         detail:
-          "The page emphasizes literature scouting, evidence clustering, and citation-oriented product framing.",
+          "Captures of Daniel's actual MechanismsWorkspace show a mechanism map, selected relationship, and source panel with a document identifier, access level, and extraction method. All Aster entities, relationships, evidence states, confidence values, and source notes are invented fixtures.",
+        type: "artifact",
+      },
+      {
+        label: "Expert-informed evaluation account",
+        detail:
+          "Daniel's published account says a scientific collaborator helped define useful outputs; structured feedback became a lightweight evaluation set that surfaced hallucinated patent references. No evaluation scores, case outputs, or expert sign-off are supplied on the page.",
         type: "workflow",
       },
       {
-        label: "Intentional restraint",
+        label: "Earlier retrieval workbench",
         detail:
-          "It explicitly describes the concept as early and avoids inflated claims about traction or scale.",
-        type: "outcome",
+          "The earlier search-and-synthesis workbench remains a separate artifact in the product-context disclosure; paper-and-patent exploration is the intended research workflow.",
+        type: "artifact",
+      },
+      {
+        label: "Demonstration boundary",
+        detail:
+          "The Aster captures demonstrate interface traceability, not a scientific finding, scientific validity, a working patent result, a product launch, or expert approval. No real research thread, external retrieval, or AI request was used for the captures.",
+        type: "workflow",
       },
     ],
     claimBoundaries: {
       directOwnership: [
-        "The page supports product framing ownership around trustworthy scientific evidence workflows.",
+        "The page supports early product build and framing of trustworthy scientific evidence workflows. Daniel's evaluation account describes working with a scientific collaborator; it is not independent validation or expert sign-off.",
       ],
       influence: [
-        "It shows how Daniel frames an AI research workflow opportunity, not a large cross-functional rollout.",
+        "Scientific collaborator feedback informed the stated evaluation criteria and exposed hallucinated patent references. The page does not establish a large cross-functional rollout.",
       ],
       conceptualExploration: [
-        "This page is intentionally early-stage concept work with concrete workflow thinking but limited market proof.",
+        "The intended paper-and-patent research workflow remains Concept in progress; interface captures are distinct from scientific findings, working patent results, or validated research.",
       ],
       implementation: [
-        "It does not claim a full production implementation or large-scale deployment.",
+        "Actual MechanismsWorkspace application code rendered the captures in an isolated preview using fictional Aster fixtures. No real research thread, external retrieval, or AI request was used. The captures do not establish a production launch or large-scale deployment.",
       ],
       explicitUnknowns: [
-        "The page does not provide adoption metrics, team size, or proof that the concept became a shipped product.",
+        "The page does not provide evaluation scores, case outputs, expert sign-off, scientific validity, adoption metrics, team size, or proof of a shipped product. Do not infer measured hallucination reduction or expert approval from the fictional demonstration or the evaluation account.",
       ],
     },
     recruiterPrompts: [
@@ -823,10 +874,22 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
     relatedProjectSlugs: ["ai-platform-mcp", "oms-chatgpt-app", "launchmuse"],
     artifacts: [
       {
-        label: "Immunology Scout retrieval workflow",
+        label: "Actual mechanism map and selected relationship",
         type: "prototype",
         description:
-          "A workbench-style concept visual showing retrieval, synthesis, and scoped query inputs.",
+          "Original application interface captures populated with explicitly fictional Aster entities, relationships, evidence states, and confidence values.",
+      },
+      {
+        label: "Actual source inspection panel",
+        type: "prototype",
+        description:
+          "Source record with a document identifier, access level, extraction method, and explicitly fictional study note. It contains no scientific finding or fabricated PMID, DOI, patent, or external source link.",
+      },
+      {
+        label: "Earlier Immunology Scout retrieval workbench",
+        type: "prototype",
+        description:
+          "The separate earlier search-and-synthesis artifact remains available in the complete-product-context disclosure.",
       },
     ],
     crossPageLinks: [
@@ -846,17 +909,23 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
   "oms-chatgpt-app": {
     category: "Enterprise AI workflow",
     oneLiner:
-      "A conversational AI interface for Order Management workflows, designed to make common support and operations tasks faster, clearer, and safer to execute.",
-    role: "PM-led builder",
+      "A public simulated OMS prototype plus a separate internal workflow that reached production connection in March 2026 and small-group production testing in April 2026.",
+    role: "PM-led prototype design and internal workflow piloting",
+    actions: [
+      "Piloted an OpenAI API-integrated operational workflow from a Canvas prototype through production connection and small-group testing, using custom OMS APIs for order lookup and human-in-the-loop cancellation.",
+      "Designed lookup and explicit confirmation interactions with PII-safe validation, guardrails, and human review. The public screenshots demonstrate interface states rather than backend enforcement or tool-call ordering.",
+    ],
     tools: [
       "Conversational workflow design",
       "Guardrail-oriented interaction design",
       "Mock-data prototyping",
+      "OpenAI APIs and custom OMS APIs",
       "Internal system orchestration patterns",
     ],
     outcomes: [
-      "The page shows a focused prototype artifact instead of a vague AI concept statement.",
-      "It connects hands-on prototype work to follow-on system design around SSO, PII-safe interactions, MCP support, and production architecture exploration.",
+      "The public prototype and recorded screenshots use simulated OMS data and remain inspectable separately from the later internal delivery record.",
+      ...omsDeliveryMilestones.map(({ when, detail }) => `${when}: ${detail}`),
+      omsDeliveryBoundary,
     ],
     leadershipSignals: [
       "Uses a working prototype to make an enterprise workflow concept tangible and easier to align around.",
@@ -866,7 +935,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
       {
         label: "Workflow artifact",
         detail:
-          "The page centers a conversational OMS prototype focused on order lookup and guarded cancellation workflows.",
+          "The public simulated prototype and recorded screenshots show order lookup, an irreversible-action warning, an explicit confirmation phrase field, keep-order and cancel choices, and a separate Cancelled state.",
         type: "artifact",
       },
       {
@@ -876,27 +945,27 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         type: "workflow",
       },
       {
-        label: "Production bridge",
+        label: "Separate internal delivery record",
         detail:
-          "The page cites follow-on work around SSO, PII-safe interaction patterns, an internal MCP server, and production-oriented architecture exploration.",
+          "Approved delivery notes, also published on the product page, record a Canvas prototype around April 2025, a working prototype around December 2025, production connection using OpenAI and custom OMS APIs in March 2026, and small-group production testing in April 2026. These milestones do not establish broad adoption or measured business impact.",
         type: "outcome",
       },
     ],
     claimBoundaries: {
       directOwnership: [
-        "The page supports PM-led ownership of the prototype framing, workflow design, and the follow-on system-direction exploration it created.",
+        "The page supports PM-led prototype framing, workflow design, and piloting through internal production connection and small-group testing. It does not define end-to-end engineering ownership or the implementation split across teams.",
       ],
       influence: [
         "It shows how a focused prototype created alignment and shaped production viability discussions.",
       ],
       conceptualExploration: [
-        "This is a concrete product artifact, but it remains a prototype focused on validating interaction patterns rather than proving scaled deployment.",
+        "The public demo and screenshots remain simulated prototype evidence. Follow-on SSO, MCP, and architecture exploration should be distinguished from the specifically documented internal production milestones.",
       ],
       implementation: [
-        "The page supports hands-on build credibility and architectural exploration, but it does not claim a full production launch or end-to-end implementation ownership.",
+        "The separate internal workflow reached production connection in March 2026 with OpenAI APIs and custom OMS APIs, followed by small-group production testing in April 2026. The recorded public screenshots do not prove backend enforcement, tool-call ordering, broad deployment, or production behavior.",
       ],
       explicitUnknowns: [
-        "It does not provide production usage metrics, org scope, or a detailed ownership split across engineering and platform teams.",
+        "No production adoption or usage metrics, revenue, post-launch time savings, broad rollout, or detailed engineering ownership split is established here. Do not attach the separate ChatGPT Enterprise ~$2.7M annualized pilot estimate or Contact Center return-flow hold-time savings to this OMS application.",
       ],
     },
     recruiterPrompts: [
@@ -920,7 +989,7 @@ export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
         label: "OMS workflow prototype",
         type: "prototype",
         description:
-          "A conversational order-management prototype showing order lookup, cancellation guardrails, and explicit user control.",
+          "Public mock-data prototype and recorded simulated states showing order lookup, cancellation controls, and user choice. These are separate from the internal production delivery record.",
       },
     ],
     crossPageLinks: [

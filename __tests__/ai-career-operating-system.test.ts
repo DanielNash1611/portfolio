@@ -70,7 +70,7 @@ test("AI Career Operating System final visual assets are present", async () => {
     "governed-ai-workflow-career-evidence.png",
     "claim-to-evidence-engine.png",
     "portfolio-guide-grounding-improvement.png",
-    "six-advisory-review-agents.png",
+    "six-advisory-review-agents.webp",
   ];
 
   await Promise.all(

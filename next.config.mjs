@@ -19,6 +19,59 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Lossless delivery derivatives; original files remain in source-assets.
+      ...[
+  {
+    "source": "/images/farraginous/emotiv-kit-fixed.png",
+    "destination": "/images/farraginous/emotiv-kit-fixed.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/farraginous/emotiv-portrait-fixed.png",
+    "destination": "/images/farraginous/emotiv-portrait-fixed.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/chatgpt-enterprise/hero-operating-model.png",
+    "destination": "/images/chatgpt-enterprise/hero-operating-model.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/chatgpt-enterprise/enterprise-ai-operating-model.png",
+    "destination": "/images/chatgpt-enterprise/enterprise-ai-operating-model.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/chatgpt-enterprise/grassroots-champions-model.png",
+    "destination": "/images/chatgpt-enterprise/grassroots-champions-model.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/products/ai-career-operating-system/six-advisory-review-agents.png",
+    "destination": "/images/products/ai-career-operating-system/six-advisory-review-agents.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/launchmuse-product-hero.png",
+    "destination": "/images/launchmuse-product-hero.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/launchmuse-screenshot.png",
+    "destination": "/images/launchmuse-screenshot.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/chatgpt-enterprise/frontline-ideation.png",
+    "destination": "/images/chatgpt-enterprise/frontline-ideation.webp",
+    "permanent": true
+  },
+  {
+    "source": "/images/farraginous/program-credit-fixed.png",
+    "destination": "/images/farraginous/program-credit-fixed.webp",
+    "permanent": true
+  }
+],
       {
         source: "/work/sound-synthesist",
         destination: "/work/ai-platform-mcp#sound-seeker-live-demo",
@@ -36,7 +89,7 @@ const nextConfig = {
       },
       {
         source: "/products/chatgpt-org-scale",
-        destination: "/work/ai-platform-mcp",
+        destination: "/work/chatgpt-enterprise",
         permanent: true,
       },
       {

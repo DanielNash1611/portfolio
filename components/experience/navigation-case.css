@@ -1,0 +1,311 @@
+/* The selected concept uses generated case artwork and live chart leaves. */
+.experience-card-collection[data-container="navigation-case"] .outcome-vault {
+  width: min(100%, calc((var(--outcome-stage-height) - 220px) * 2.2843));
+  height: auto;
+  aspect-ratio: 1896 / 830;
+  bottom: 55px;
+  transform: translateX(-50%);
+  perspective: none;
+}
+.navigation-case-shell {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.navigation-case-art {
+  object-fit: contain;
+}
+.navigation-compass-position {
+  position: absolute;
+  left: 18.1%;
+  top: 18.3%;
+  width: 16%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+.navigation-compass-needle {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50.3% 50.8%;
+}
+.navigation-route {
+  position: absolute;
+  overflow: hidden;
+}
+.navigation-route img {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.navigation-lid-route {
+  left: 26%;
+  right: 7%;
+  top: 3%;
+  height: 27%;
+}
+.navigation-chart-route {
+  left: 6%;
+  right: 4%;
+  top: 76%;
+  height: 13%;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-vault-cards {
+  inset: 35% 7% 14%;
+  gap: 0;
+  transform: none;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  color: #142733;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  > button {
+  border-radius: 2px;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  > button:hover {
+  background: #fff9e92e;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  .outcome-paper-face {
+  padding: 4px 18px;
+  flex: 0 0 80.392%;
+  background: transparent;
+  color: #173f3d;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  .outcome-paper-category {
+  font-size: 9px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  color: #142733;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  h3 {
+  font-size: clamp(28px, 2.85vw, 38px);
+  max-width: 6.2em;
+  line-height: 1.03;
+  margin-top: 8px;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card[data-tone="0"]
+  :is(h3, .outcome-paper-value) {
+  color: #a14835;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  .outcome-paper-proof {
+  margin-top: auto;
+  padding-top: 6px;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  .outcome-paper-value {
+  font-size: clamp(32px, 3.125vw, 44px);
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  .outcome-paper-measure {
+  font-size: 10px;
+  line-height: 1.4;
+  margin-top: 7px;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  .outcome-paper-qualification {
+  font-size: 9px;
+  line-height: 1.5;
+  margin-top: 5px;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-card-open {
+  display: none;
+}
+
+/* Keep the chart's material while the shared-layout leaf lifts and unfolds. */
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-lifted-paper {
+  --outcome-face: transparent;
+  --outcome-face-ink: #173f3d;
+  --outcome-edge: #b6a583;
+  background-color: #f3e8ce;
+  background-image: url("/images/experience/navigation-case/map-leaf.webp");
+  background-size: 100% auto;
+  background-repeat: repeat-y;
+  border-radius: 3px;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-lifted-paper
+  .outcome-paper-face {
+  border-bottom: 1px solid #173f3d25;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-lifted-paper[data-tone="0"]
+  :is(h3, .outcome-paper-value) {
+  color: #a14835;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-paper-artifact {
+  background: #faf5e9b3;
+  border: 1px solid #173f3d20;
+}
+@media (max-height: 759px) and (min-height: 600px) and (min-width: 760px) {
+  .experience-card-collection[data-container="navigation-case"] .outcome-vault {
+    width: min(100%, calc((var(--outcome-stage-height) - 170px) * 2.2843));
+    bottom: 48px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    h3 {
+    font-size: 27px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-value {
+    font-size: 34px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-proof {
+    padding-top: 8px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-measure {
+    font-size: 9px;
+    margin-top: 5px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-qualification {
+    font-size: 8.5px;
+    margin-top: 4px;
+  }
+}
+@media (max-width: 759px) {
+  .experience-card-collection[data-container="navigation-case"] .outcome-vault {
+    width: min(100%, calc((var(--outcome-stage-height) - 210px) * 0.75));
+    aspect-ratio: 3 / 4;
+    bottom: 52px;
+  }
+  .navigation-compass-position {
+    left: 24.2%;
+    top: 14.2%;
+    width: 30%;
+  }
+  .navigation-lid-route {
+    left: 40%;
+    right: 7%;
+    top: 3%;
+    height: 17%;
+  }
+  .navigation-chart-route {
+    left: 7%;
+    right: 6%;
+    top: 80%;
+    height: 8%;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-vault-cards {
+    inset: 26% 7% 10%;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-face {
+    padding: 7px 8px;
+    flex-basis: 81.25%;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-category {
+    font-size: 7px;
+    letter-spacing: 0;
+    min-height: 36px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    h3 {
+    font-size: 20px;
+    min-height: 46px;
+    margin-top: 7px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-value {
+    font-size: 25px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-proof {
+    padding-top: 10px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-measure {
+    font-size: 8px;
+    margin-top: 7px;
+    line-height: 1.5;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-qualification {
+    font-size: 8px;
+    line-height: 1.5;
+    margin-top: 7px;
+  }
+}
+@media (max-width: 759px) and (max-height: 699px) and (min-height: 600px) {
+  .experience-card-collection[data-container="navigation-case"]
+    .experience-outcomes-intro
+    > p {
+    display: none;
+  }
+  .experience-card-collection[data-container="navigation-case"] .outcome-vault {
+    width: min(100%, calc((var(--outcome-stage-height) - 135px) * 0.75));
+    bottom: 46px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-face {
+    padding-inline: 5px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    h3 {
+    font-size: 18px;
+    min-height: 40px;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-value {
+    font-size: 23px;
+  }
+}
+
+/* Reserve the measured introduction before placing the case at narrow widths. */
+@media (max-width: 759px) {
+  .experience-card-collection[data-container="navigation-case"] .outcome-vault {
+    width: min(
+      100%,
+      calc(
+        (
+            var(--outcome-stage-height) -
+              var(--collection-intro-height, 190px) - 84px
+          ) *
+          0.75
+      )
+    );
+  }
+}

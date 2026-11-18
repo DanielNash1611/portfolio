@@ -103,8 +103,7 @@ export const RESUME_TRACKS: ResumeTrack[] = [
       "Balances growth, operations, experimentation, and cross-functional execution with explicit business outcomes.",
     resumeHref: "/resume#senior-product-manager",
     downloadHref: "/resumes/daniel-nash-senior-product-manager-resume.pdf",
-    filePath:
-      "/public/resumes/daniel-nash-senior-product-manager-resume.pdf",
+    filePath: "/public/resumes/daniel-nash-senior-product-manager-resume.pdf",
     availabilityNote:
       "Live PDF is available now for recruiter handoff or direct download.",
   },
@@ -174,7 +173,7 @@ export const APPROVED_METRICS: ApprovedMetric[] = [
     label: "Contact Center ChatGPT pilot",
     value: "~$2.7M estimated annual lift",
     detail:
-      "Measured from a controlled pilot that validated AI-assisted workflows in the contact center.",
+      "Reported annualized business-case estimate from the controlled contact-center pilot, separate from realized revenue.",
     narrativeIds: ["senior-product-manager", "builder-pm"],
   },
   {

@@ -1,0 +1,63 @@
+/* Preserve the app's space and spectral instrument, including on narrow screens. */
+.experience-gravity-story[data-live="true"] .experience-gravity-canvas {
+  mask-image: none;
+}
+.experience-gravity-story[data-live="true"] .experience-gravity-copy {
+  filter: drop-shadow(0 2px 12px #041018);
+}
+.experience-gravity-image-credit {
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+  z-index: 3;
+  color: #c6d3d7;
+  font-size: 8px;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.experience-gravity-story[data-live="true"] .experience-gravity-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, #041018e8, #041018a8 40%, transparent 66%);
+}
+.experience-gravity-story[data-perspective="cello"]
+  .experience-gravity-stage::before {
+  background: linear-gradient(90deg, #041018e8, #041018a0 40%, transparent 66%);
+}
+@media (max-width: 759px) {
+  .experience-gravity-story[data-live="true"]
+    .experience-gravity-stage::before {
+    background: linear-gradient(
+      transparent 10%,
+      #04101860 26%,
+      #041018e8 42%,
+      #041018f5 100%
+    );
+  }
+  .experience-gravity-story[data-motion="true"] .experience-gravity-copy {
+    top: 35%;
+  }
+  .experience-gravity-story[data-motion="true"] .experience-gravity-copy h2 {
+    font-size: clamp(42px, 8vw, 58px);
+  }
+  .experience-gravity-story[data-motion="true"] .experience-touch-surface {
+    height: 35%;
+  }
+}
+@media (max-width: 759px) and (max-height: 650px) {
+  .experience-gravity-story[data-motion="true"] .experience-gravity-copy {
+    top: 25%;
+  }
+  .experience-gravity-story[data-motion="true"]
+    .experience-gravity-description {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .experience-gravity-story[data-motion="true"] .experience-gravity-copy h2 {
+    font-size: 38px;
+  }
+}

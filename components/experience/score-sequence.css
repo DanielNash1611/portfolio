@@ -1,0 +1,281 @@
+/* One held stage: the same notes become the score on the unfolding leaves. */
+.experience
+  .experience-card-collection[data-container="score-folio"][data-reading="false"] {
+  position: relative;
+  height: calc(
+    var(--outcome-stage-height) + var(--score-overture-travel, 0px) +
+      max(var(--outcome-travel, 0px), 320px)
+  );
+}
+.experience .score-sequence-anchor {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-margin-top: calc(var(--portfolio-header-height, 61px) + 52px);
+}
+.score-stage-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.score-heading-visibility {
+  position: relative;
+  z-index: 2;
+}
+.score-orchestra-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+.score-orchestra-intro .experience-ensemble {
+  height: 100%;
+  padding: 26px 0;
+  background: transparent;
+  overflow: visible;
+  grid-template-columns: 0.8fr 1.2fr;
+}
+.score-orchestra-space {
+  width: 100%;
+  aspect-ratio: 800 / 410;
+}
+.score-flying-notes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+  overflow: visible;
+}
+.score-transfer-note {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.score-transfer-note circle {
+  stroke: none;
+}
+.score-transfer-note path {
+  fill: none;
+}
+.score-overture-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 5;
+  color: #8b6940;
+  font-size: 11px;
+  pointer-events: none;
+}
+.experience-card-collection[data-container="score-folio"][data-score-ready="false"]
+  .outcome-stage-footer {
+  visibility: hidden;
+  pointer-events: none;
+}
+.experience-card-collection[data-container="score-folio"] .outcome-vault {
+  z-index: 1;
+  perspective: 2400px;
+  perspective-origin: 50% 0%;
+  transform-style: flat;
+}
+.experience-card-collection[data-container="score-folio"] .outcome-vault-cards {
+  inset: 2% 0% 15%;
+  grid-template-columns: 35.2fr 28.8fr 36fr;
+}
+.score-leaf-cell {
+  position: relative;
+  min-width: 0;
+  transform-style: flat;
+  backface-visibility: visible;
+}
+.score-leaf-cell .outcome-docked-card {
+  height: 100%;
+  transform-style: flat;
+}
+.score-leaf-cell .outcome-docked-card > button {
+  position: relative;
+  z-index: 1;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  .outcome-paper-face {
+  position: absolute;
+  top: 9.63855%;
+  left: 0;
+  right: 0;
+  height: 50.6024%;
+  flex: none;
+}
+.score-page-art,
+.score-page-engraving {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  overflow: hidden;
+}
+.score-page-art {
+  --folio-image-top: -2.40964%;
+}
+.score-page-art[data-leaf="0"] {
+  --folio-image-width: 284.09091%;
+  --folio-image-x: 0%;
+}
+.score-page-art[data-leaf="1"] {
+  --folio-image-width: 347.22222%;
+  --folio-image-x: -122.22222%;
+}
+.score-page-art[data-leaf="2"] {
+  --folio-image-width: 277.77778%;
+  --folio-image-x: -177.77778%;
+}
+.score-page-art img {
+  width: var(--folio-image-width) !important;
+  max-width: none;
+  height: 120.48193% !important;
+  top: var(--folio-image-top) !important;
+  left: var(--folio-image-x) !important;
+  right: auto !important;
+  bottom: auto !important;
+  object-fit: fill;
+}
+.score-reading-intro {
+  padding: 4px 0 28px;
+  border-bottom: 1px solid #173f3d25;
+  margin-bottom: 10px;
+}
+.score-reading-intro h2 {
+  font-size: clamp(30px, 4vw, 48px);
+  margin: 10px 0 16px;
+}
+.score-reading-intro p:last-child {
+  max-width: 52ch;
+  font-size: 14px;
+  line-height: 1.7;
+}
+@media (max-width: 759px) {
+  .score-orchestra-intro .experience-ensemble {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 30px 4px 38px;
+    align-content: center;
+  }
+  .score-orchestra-intro
+    .experience-ensemble-copy
+    > p:not(.experience-home-eyebrow) {
+    font-size: 12px;
+    margin-top: 14px;
+  }
+  .score-orchestra-intro .experience-ensemble-copy > a {
+    margin-top: 10px;
+  }
+  .score-orchestra-space {
+    max-width: 400px;
+    margin-inline: auto;
+  }
+  .score-orchestra-intro .experience-ensemble h2 {
+    font-size: 36px;
+  }
+  .score-orchestra-intro .ensemble-controls {
+    margin-top: 12px;
+    padding-top: 9px;
+    gap: 10px;
+  }
+  .score-orchestra-intro .ensemble-controls button {
+    min-width: 65px;
+  }
+  .score-orchestra-intro .ensemble-controls label {
+    font-size: 9px;
+  }
+  .score-orchestra-intro .ensemble-parts {
+    gap: 8px 15px;
+    font-size: 8px;
+  }
+  .score-overture-caption {
+    font-size: 10px;
+    bottom: 16px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-vault-cards {
+    inset: 6% 0% 11%;
+    grid-template-columns: 36.1fr 28.3fr 35.6fr;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-face {
+    top: 4.81928%;
+    height: 72.28916%;
+  }
+  .score-page-art {
+    --folio-image-top: -7.22892%;
+  }
+  .score-page-art[data-leaf="0"] {
+    --folio-image-width: 277.00831%;
+    --folio-image-x: 0%;
+  }
+  .score-page-art[data-leaf="1"] {
+    --folio-image-width: 353.35689%;
+    --folio-image-x: -127.56184%;
+  }
+  .score-page-art[data-leaf="2"] {
+    --folio-image-width: 280.89888%;
+    --folio-image-x: -180.89888%;
+  }
+}
+@media (min-width: 540px) and (max-width: 759px) {
+  .score-orchestra-intro .experience-ensemble {
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 24px;
+  }
+  .score-orchestra-intro .ensemble-controls {
+    flex-wrap: wrap;
+  }
+  .score-orchestra-intro .ensemble-controls input {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+@media (max-width: 539px) and (max-height: 719px) {
+  .score-orchestra-intro .experience-ensemble {
+    gap: 12px;
+    padding-block: 20px 38px;
+  }
+  .score-orchestra-intro .experience-ensemble h2 {
+    font-size: 30px;
+  }
+  .score-orchestra-intro .score-orchestra-space {
+    max-width: 290px;
+  }
+  .score-orchestra-intro .experience-ensemble-copy > a {
+    margin-top: 0;
+  }
+}
+
+.experience-card-collection[data-container="score-folio"]
+  .score-leaf-cell[data-leaf="0"]
+  .outcome-paper-face {
+  left: 17.04545%;
+}
+.experience-card-collection[data-container="score-folio"]
+  .score-leaf-cell[data-leaf="2"]
+  .outcome-paper-face {
+  right: 16.66667%;
+}
+@media (max-width: 759px) {
+  .experience-card-collection[data-container="score-folio"]
+    .score-leaf-cell[data-leaf="0"]
+    .outcome-paper-face {
+    left: 16.6205%;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .score-leaf-cell[data-leaf="2"]
+    .outcome-paper-face {
+    right: 16.85393%;
+  }
+}

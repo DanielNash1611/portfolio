@@ -1,3 +1,9 @@
+import FarraginousScore from "@/components/overnight-creative/FarraginousScore";
+import {
+  eegMusicMetadataItems as metadataItems,
+  eegMusicOverviewParagraphs as overviewParagraphs,
+  eegMusicWhyItExistsParagraphs as whyItExistsParagraphs,
+} from "@/content/creative-extra-content";
 import type { Metadata } from "next";
 import Link from "next/link";
 import clsx from "clsx";
@@ -25,44 +31,6 @@ const exhibitionOverviewImageUrl =
 const programCreditImageUrl = "/images/farraginous/program-raw.jpg";
 const homeDemoVideoUrl = "https://km9upglctugamtw6.public.blob.vercel-storage.com/home-demo.mp4";
 const homeDemoPosterImageUrl = "/images/farraginous/home-demo-poster.png";
-
-const metadataItems = [
-  { label: "Year", value: "2021" },
-  { label: "Context", value: "Center for Latter-day Saint Arts" },
-  { label: "Medium", value: "Composition + Video" },
-  { label: "Themes", value: "Identity, Tuning, Biometrics" },
-] as const;
-
-const overviewParagraphs = [
-  "Farraginous is one of my most personal creative works: an experimental composition and video that translates the feeling of living in-between into sound.",
-  "Created for the Center for Latter-day Saint Arts, the piece brings together a melody rooted in Chinese tuning, harmony shaped by Western Just Intonation, and biometric-driven experimentation to explore mixed identity, alienation, and the strange beauty of not fitting neatly into a single category.",
-  "It is also a statement about coexistence. The tuning systems are not forced into the same frame. They remain distinct, yet they can still live together and create something harmonically rich without one tradition needing to flatten the other.",
-] as const;
-
-const whyItExistsParagraphs = [
-  "I grew up half Taiwanese and half white in the United States, often feeling close to both worlds without being fully claimed by either. Farraginous came from that tension.",
-  "I did not want to make a piece that only explained the idea intellectually. I wanted the music itself to carry that feeling. The tuning systems do not fully resolve into a single frame. The sound world stays beautiful, but unstable.",
-  "I also wanted the piece to resist a more typical Western move, where another culture's musical language gets absorbed and normalized into a dominant system. Here, the different tuning systems are allowed to stay themselves. The result is a piece about identity, misreading, coexistence, and the middle space.",
-] as const;
-
-const howItWorksItems = [
-  {
-    title: "Melody",
-    body: "The melodic language draws from Chinese tuning, giving the piece a tonal center that feels rooted but not conventionally Western.",
-  },
-  {
-    title: "Harmony",
-    body: "The harmonic world is shaped through Western Just Intonation, creating a different kind of stability and tension around the melodic material.",
-  },
-  {
-    title: "Biometrics",
-    body: "The piece also incorporates EEG-related and facial-expression-linked input. In particular, blinking influenced the melody, turning small physical gestures into musical events.",
-  },
-  {
-    title: "System adaptation",
-    body: "The original concept for Farraginous was to incorporate EEG-derived emotional readings, especially frustration, into the musical behavior. I was working with an Emotiv EPOC+, but by that stage the hardware was beginning to fail, and its emotional-state readings were no longer precise enough to use confidently. I also intended to incorporate live heartbeat, but I was not able to patch live Fitbit data into Pure Data reliably, so the BPM of the final piece oscillates between the highest and lowest heart rates I measured while working on it. Rather than overstate what the system could do, I adapted the piece around the signals that remained dependable, particularly blink-related and expression-linked input.",
-  },
-] as const;
 
 export const metadata: Metadata = {
   title: "Farraginous",
@@ -200,7 +168,7 @@ export default function EegMusicPage(): React.JSX.Element {
   }
 
   return (
-    <div className="overflow-hidden pb-20 md:pb-28">
+    <div className="overflow-clip pb-20 md:pb-28">
       <section className="bg-[color:var(--color-slate)] text-[color:var(--color-cream)]">
         <Container className="py-10 md:py-14 lg:py-20">
           <Link
@@ -284,8 +252,30 @@ export default function EegMusicPage(): React.JSX.Element {
               </MotionReveal>
             ))}
           </dl>
+          <nav
+            aria-label="Explore Farraginous"
+            className="mt-8 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/20 pt-5 text-sm"
+          >
+            <a href="#watch" className="underline underline-offset-4">
+              Watch the piece
+            </a>
+            <a href="#signal-system" className="underline underline-offset-4">
+              Signals and limits
+            </a>
+            <a
+              href="#process-artifacts"
+              className="underline underline-offset-4"
+            >
+              Inspect the apparatus
+            </a>
+            <a href="#exhibition" className="underline underline-offset-4">
+              Exhibition evidence
+            </a>
+          </nav>
         </Container>
       </section>
+
+      <FarraginousScore />
 
       <Container className="py-20 md:py-28">
         <MotionReveal>
@@ -376,50 +366,10 @@ export default function EegMusicPage(): React.JSX.Element {
         </Container>
       </section>
 
-      <Container className="py-20 md:py-28">
-        <MotionReveal className="grid gap-10 lg:grid-cols-[minmax(260px,0.62fr)_minmax(0,1.38fr)] lg:gap-20">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[color:var(--color-orange)]">
-              Inside the system
-            </p>
-            <h2 className="mt-5 max-w-[9ch] text-balance font-serif text-4xl font-medium leading-[0.96] tracking-[-0.045em] text-[color:var(--color-slate)] md:text-6xl">
-              Body becomes material.
-            </h2>
-            <p className="mt-6 max-w-sm text-base leading-7 text-[color:var(--color-slate)]/62">
-              Tuning and biometrics shaped behavior, but the piece remained
-              grounded in musical feeling rather than technical display.
-            </p>
-          </div>
-
-          <ol className="border-t border-[color:var(--color-slate)]/16">
-            {howItWorksItems.map((item, index) => (
-              <li
-                key={item.title}
-                className="grid gap-4 border-b border-[color:var(--color-slate)]/14 py-7 sm:grid-cols-[44px_160px_1fr] sm:gap-7"
-              >
-                <span className="font-mono text-[10px] text-[color:var(--color-orange)]">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-serif text-2xl font-medium tracking-[-0.03em] text-[color:var(--color-slate)]">
-                  {item.title}
-                </h3>
-                <p className="text-sm leading-7 text-[color:var(--color-slate)]/64">
-                  {item.body}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </MotionReveal>
-
-        <MotionReveal>
-          <blockquote className="mt-16 border-l-4 border-[color:var(--color-orange)] py-2 pl-6 font-serif text-2xl italic leading-[1.3] tracking-[-0.025em] text-[color:var(--color-slate)] md:ml-[32%] md:mt-20 md:pl-8 md:text-3xl">
-            Different cultural systems can coexist without one needing to erase
-            the other.
-          </blockquote>
-        </MotionReveal>
-      </Container>
-
-      <section className="border-y border-[color:var(--color-slate)]/12 bg-[color:var(--color-background-soft)] py-20 md:py-28">
+      <section
+        id="process-artifacts"
+        className="scroll-mt-28 border-y border-[color:var(--color-slate)]/12 bg-[color:var(--color-background-soft)] py-20 md:py-28"
+      >
         <Container>
           <MotionReveal className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
             <div>
@@ -483,7 +433,7 @@ export default function EegMusicPage(): React.JSX.Element {
         </Container>
       </section>
 
-      <section className="py-20 md:py-28">
+      <section id="exhibition" className="scroll-mt-28 py-20 md:py-28">
         <Container>
           <MotionReveal className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
             <div>
@@ -497,8 +447,8 @@ export default function EegMusicPage(): React.JSX.Element {
             <div className="space-y-5 self-end">
               <p className="max-w-2xl text-base leading-8 text-[color:var(--color-slate)]/64">
                 Farraginous was presented as part of the Center for Latter-day
-                Saint Arts exhibition, alongside other artists in a public
-                event setting.
+                Saint Arts exhibition, alongside other artists in a public event
+                setting.
               </p>
               <p className="max-w-2xl text-base leading-8 text-[color:var(--color-slate)]/64">
                 Seeing people encounter it changed my understanding of the

@@ -1,0 +1,231 @@
+/* A shared score follows the orchestra; each movement stays a real button. */
+.experience-card-collection[data-container="score-folio"] .outcome-vault {
+  width: min(100%, calc((var(--outcome-stage-height) - 230px) * 2.3747));
+  height: auto;
+  aspect-ratio: 1933 / 814;
+  bottom: 52px;
+  transform: translateX(-50%);
+  perspective: none;
+}
+.score-folio-art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.score-folio-art img {
+  object-fit: contain;
+}
+.experience-card-collection[data-container="score-folio"] .outcome-vault-cards {
+  inset: 10% 6% 15%;
+  gap: 0;
+  transform: none;
+}
+.experience-card-collection[data-container="score-folio"] .outcome-docked-card {
+  border: 0;
+  border-radius: 2px;
+  box-shadow: none;
+  background: transparent;
+  color: #173f3d;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  > button:hover {
+  background: #fff9e933;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  .outcome-paper-face {
+  padding: 4px 24px;
+  flex: 0 0 56%;
+  background: transparent;
+  color: #173f3d;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  .outcome-paper-category {
+  font-size: 8px;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  h3 {
+  font-size: clamp(28px, 2.65vw, 36px);
+  line-height: 1.04;
+  max-width: 5.9em;
+  min-height: 2.08em;
+  margin-top: 8px;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  .outcome-paper-proof {
+  padding-top: 6px;
+  margin-top: auto;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  .outcome-paper-value {
+  font-size: 40px;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  .outcome-paper-measure {
+  font-size: 10px;
+  line-height: 1.4;
+  margin-top: 6px;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-docked-card
+  .outcome-paper-qualification {
+  font-size: 9px;
+  line-height: 1.5;
+  margin-top: 5px;
+}
+.experience-card-collection[data-container="score-folio"] .outcome-card-open {
+  display: none;
+}
+.experience-card-collection[data-container="score-folio"]
+  [data-tone="0"]
+  :is(h3, .outcome-paper-value) {
+  color: #a14835;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-lifted-paper {
+  --outcome-face: transparent;
+  --outcome-face-ink: #173f3d;
+  --outcome-edge: #b6a583;
+  background-color: #f5ead8;
+  background-image: url("/images/experience/score-folio/score-paper.webp");
+  background-size: 100% auto;
+  background-repeat: repeat-y;
+  border-radius: 3px;
+}
+.experience-card-collection[data-container="score-folio"]
+  .outcome-lifted-paper
+  .outcome-paper-face {
+  padding-top: 128px;
+  background-image: url("/images/experience/score-folio/score-leaf.webp");
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid #173f3d25;
+}
+@media (max-height: 759px) and (min-height: 600px) and (min-width: 760px) {
+  .experience-card-collection[data-container="score-folio"] .outcome-vault {
+    width: min(100%, calc((var(--outcome-stage-height) - 175px) * 2.3747));
+    bottom: 46px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-face {
+    padding-inline: 18px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    h3 {
+    font-size: 27px;
+    margin-top: 6px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-value {
+    font-size: 32px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-measure {
+    font-size: 9px;
+    margin-top: 5px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-qualification {
+    font-size: 8px;
+    margin-top: 4px;
+  }
+}
+@media (max-width: 759px) {
+  .experience-card-collection[data-container="score-folio"] .outcome-vault {
+    width: min(100%, calc((var(--outcome-stage-height) - 215px) * 0.75));
+    aspect-ratio: 3 / 4;
+    bottom: 52px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-vault-cards {
+    inset: 10% 6% 13%;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-face {
+    padding: 7px 8px;
+    flex-basis: 77.922%;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-category {
+    font-size: 7px;
+    letter-spacing: 0;
+    min-height: 42px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    h3 {
+    font-size: clamp(
+      17px,
+      calc((var(--outcome-stage-height) - 215px) * 0.043),
+      20px
+    );
+    min-height: 62px;
+    margin-top: 7px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-proof {
+    padding-top: 10px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-value {
+    font-size: 26px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-measure {
+    font-size: 8px;
+    line-height: 1.5;
+    margin-top: 7px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-qualification {
+    font-size: 8px;
+    line-height: 1.5;
+    margin-top: 7px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-lifted-paper
+    .outcome-paper-face {
+    padding-top: 52px;
+  }
+}
+@media (max-width: 759px) and (max-height: 699px) and (min-height: 600px) {
+  .experience-card-collection[data-container="score-folio"]
+    .experience-outcomes-intro
+    > p {
+    display: none;
+  }
+  .experience-card-collection[data-container="score-folio"] .outcome-vault {
+    width: min(100%, calc((var(--outcome-stage-height) - 140px) * 0.75));
+    bottom: 46px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    .outcome-paper-face {
+    padding-inline: 5px;
+  }
+  .experience-card-collection[data-container="score-folio"]
+    .outcome-docked-card
+    h3 {
+    font-size: 18px;
+    min-height: 56px;
+  }
+}

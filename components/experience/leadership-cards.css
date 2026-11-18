@@ -1,0 +1,68 @@
+.leadership-card-details {
+  padding: 30px 34px;
+}
+.leadership-card-reasoning {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 28px;
+}
+.leadership-card-reasoning dt {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.leadership-card-reasoning dd {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.leadership-card-artifact {
+  position: relative;
+  width: 100%;
+  height: 470px;
+  overflow: clip;
+}
+.leadership-card-artifact[data-project="chatgpt-enterprise"] {
+  height: 540px;
+}
+.experience-more-work {
+  padding: 12px 5vw 36px;
+}
+.experience-more-work .experience-supporting-work {
+  margin-top: 0;
+}
+.experience-leadership-cases .outcome-linear-stories {
+  gap: 30px;
+}
+@media (max-width: 759px) {
+  .leadership-card-details {
+    padding: 24px 22px;
+  }
+  .leadership-card-reasoning {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .leadership-card-reasoning dd {
+    font-size: 13px;
+  }
+  .leadership-card-artifact {
+    height: 490px;
+  }
+  .leadership-card-artifact[data-project="product-practice"] {
+    height: 520px;
+  }
+  .leadership-card-artifact[data-project="chatgpt-enterprise"] {
+    height: 400px;
+  }
+}
+.leadership-case-status {
+  margin-top: 20px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #655738;
+}
+.leadership-case-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 30px;
+}

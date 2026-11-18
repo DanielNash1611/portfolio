@@ -1,0 +1,156 @@
+/* The case arrives first. Its original paper then unfolds from left to right. */
+.experience
+  .experience-card-collection[data-container="navigation-case"][data-reading="false"] {
+  height: calc(
+    var(--outcome-stage-height) + var(--navigation-unfold-travel, 0px) +
+      max(var(--outcome-travel, 0px), 320px)
+  );
+}
+.experience-card-collection[data-container="navigation-case"] .outcome-vault {
+  perspective: 2400px;
+  perspective-origin: 50% 0%;
+  transform-style: flat;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-vault-cards {
+  inset: 31.8% 2.8% 13.4% 3.2%;
+  grid-template-columns: 31.3fr 29.5fr 33.2fr;
+}
+.navigation-leaf-cell {
+  position: relative;
+  min-width: 0;
+  transform-style: flat;
+  backface-visibility: visible;
+}
+.navigation-leaf-cell .outcome-docked-card {
+  height: 100%;
+  transform-style: flat;
+}
+.navigation-leaf-cell .outcome-docked-card > button {
+  position: relative;
+  z-index: 1;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .outcome-docked-card
+  .outcome-paper-face {
+  position: absolute;
+  top: 5.83942%;
+  left: 0;
+  right: 0;
+  height: 74.81752%;
+  flex: none;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .navigation-leaf-cell[data-leaf="0"]
+  .outcome-paper-face {
+  left: 12.14058%;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .navigation-leaf-cell[data-leaf="1"]
+  .outcome-paper-face {
+  left: 3.9548%;
+}
+.experience-card-collection[data-container="navigation-case"]
+  .navigation-leaf-cell[data-leaf="2"]
+  .outcome-paper-face {
+  left: 1.00402%;
+  right: 12.6506%;
+}
+.navigation-page-art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  overflow: hidden;
+}
+.navigation-page-art[data-leaf="0"] {
+  --map-image-width: 319.48882%;
+  --map-image-x: -10.22364%;
+  clip-path: polygon(15% 2%, 100% 3%, 100% 100%, 0 99%);
+}
+.navigation-page-art[data-leaf="1"] {
+  --map-image-width: 338.98305%;
+  --map-image-x: -116.94915%;
+  clip-path: polygon(0 3%, 100% 3%, 100% 100%, 0 100%);
+}
+.navigation-page-art[data-leaf="2"] {
+  --map-image-width: 301.20482%;
+  --map-image-x: -192.77108%;
+  clip-path: polygon(0 3%, 87% 2%, 100% 99%, 0 100%);
+}
+.navigation-page-canvas {
+  position: absolute;
+  display: block;
+  width: var(--map-image-width);
+  height: 182.48175%;
+  left: var(--map-image-x);
+  top: -58.0292%;
+}
+.navigation-unfold-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  text-align: center;
+  font-size: 11px;
+  color: #655738;
+  pointer-events: none;
+}
+.experience-card-collection[data-container="navigation-case"][data-navigation-ready="false"]
+  .outcome-stage-footer {
+  visibility: hidden;
+  pointer-events: none;
+}
+@media (max-width: 759px) {
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-vault-cards {
+    inset: 23.2% 4.2% 8.7% 4.5%;
+    grid-template-columns: 31.5fr 27.5fr 32.3fr;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .outcome-docked-card
+    .outcome-paper-face {
+    top: 4.1116%;
+    height: 76.3583%;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .navigation-leaf-cell[data-leaf="0"]
+    .outcome-paper-face {
+    left: 7.9365%;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .navigation-leaf-cell[data-leaf="1"]
+    .outcome-paper-face {
+    left: 0;
+  }
+  .experience-card-collection[data-container="navigation-case"]
+    .navigation-leaf-cell[data-leaf="2"]
+    .outcome-paper-face {
+    left: 2.58%;
+    right: 8.6687%;
+  }
+  .navigation-page-art[data-leaf="0"] {
+    --map-image-width: 317.46032%;
+    --map-image-x: -14.28571%;
+    clip-path: polygon(12.7% 2%, 100% 2%, 100% 100%, 0 100%);
+  }
+  .navigation-page-art[data-leaf="1"] {
+    --map-image-width: 363.63636%;
+    --map-image-x: -130.90909%;
+    clip-path: polygon(0 2%, 100% 2%, 100% 100%, 0 100%);
+  }
+  .navigation-page-art[data-leaf="2"] {
+    --map-image-width: 309.59752%;
+    --map-image-x: -196.59443%;
+    clip-path: polygon(0 2%, 86% 2%, 100% 100%, 0 100%);
+  }
+  .navigation-page-canvas {
+    height: 146.84288%;
+    top: -34.06755%;
+  }
+  .navigation-unfold-caption {
+    font-size: 10px;
+    bottom: 16px;
+  }
+}

@@ -1,0 +1,610 @@
+/* One readable beat per viewport, scoped to the experience preview. */
+.experience.experience-narrative .experience-direction-stack,
+.experience.experience-narrative .experience-reasoning-sequence,
+.experience.experience-narrative .experience-values-sequence {
+  display: block;
+  padding: 0;
+  position: relative;
+}
+.experience
+  [data-sequence="true"]:is(
+    .experience-direction-stack,
+    .experience-values-sequence
+  ) {
+  min-height: 210svh;
+}
+.experience.experience-narrative
+  .experience-reasoning-sequence[data-sequence="true"] {
+  min-height: 250svh;
+}
+.experience.experience-narrative
+  [data-sequence="true"]
+  > .experience-sequence-stage {
+  position: sticky;
+  top: calc(var(--portfolio-header-height, 61px) + 52px);
+  height: calc(100svh - var(--portfolio-header-height, 61px) - 52px);
+  min-height: 0;
+  overflow: clip;
+}
+.experience.experience-narrative .experience-sequence-stage {
+  padding: 32px 5vw 20px;
+}
+.experience.experience-narrative .experience-direction-stage {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-rows: 1fr auto;
+  gap: 24px 5vw;
+  align-items: center;
+}
+.experience.experience-narrative
+  .experience-direction-stack
+  .experience-direction-intro {
+  position: relative;
+  top: auto;
+}
+.experience.experience-narrative .experience-direction-stack h2 {
+  font-size: clamp(32px, 4.2vw, 60px);
+}
+.experience.experience-narrative
+  .experience-direction-stack
+  .experience-home-intro {
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 20px;
+}
+.experience.experience-narrative .experience-card-deck {
+  position: relative;
+  height: min(100%, 450px);
+  min-height: 390px;
+  align-self: center;
+}
+.experience.experience-narrative [data-sequence="true"] .experience-stack-card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  min-height: 275px;
+  border: 1px solid #173f3d36;
+  border-bottom: 3px solid #aa4935;
+  background: #f3eee4;
+  box-shadow: 0 10px 24px #14273318;
+  transform-origin: center bottom;
+}
+.experience.experience-narrative .experience-stack-card:nth-child(2) {
+  background: #ebe7dc;
+}
+.experience.experience-narrative .experience-stack-card:nth-child(3) {
+  background: #e3e6dd;
+}
+.experience.experience-narrative .experience-stack-card h3 {
+  font:
+    500 clamp(17px, 1.7vw, 25px) / 1.1 var(--font-serif),
+    Georgia,
+    serif;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+.experience.experience-narrative .experience-stack-card h3 button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  text-align: left;
+  width: 100%;
+  padding: 10px 20px;
+}
+.experience.experience-narrative .experience-stack-card h3 span {
+  font:
+    600 10px/1 var(--font-sans),
+    sans-serif;
+  color: #a14835;
+  flex-shrink: 0;
+}
+.experience.experience-narrative .experience-stack-card-body {
+  padding: 20px;
+  border-top: 1px solid #14273322;
+}
+.experience.experience-narrative
+  .experience-stack-card-body
+  .experience-home-eyebrow {
+  font-size: 9px;
+  margin-bottom: 16px;
+}
+.experience.experience-narrative .experience-stack-card-body strong {
+  display: block;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.experience.experience-narrative
+  .experience-stack-card-body
+  > p:not(.experience-home-eyebrow) {
+  font-size: 13px;
+  line-height: 1.7;
+  margin-top: 12px;
+}
+.experience.experience-narrative .experience-stack-card-body a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 11px;
+  margin-top: 10px;
+}
+.experience
+  [data-sequence="true"]
+  .experience-stack-card[data-active="false"]
+  .experience-stack-card-body {
+  visibility: visible;
+}
+.experience.experience-narrative .experience-sequence-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 20px;
+  grid-column: 1/-1;
+  border-top: 1px solid currentColor;
+  padding-top: 12px;
+  font-size: 10px;
+  line-height: 1.4;
+  opacity: 0.7;
+}
+.experience.experience-narrative .experience-sequence-footer small {
+  font-size: 9px;
+}
+.experience.experience-narrative .experience-reasoning-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.experience.experience-narrative .experience-reasoning-stage header {
+  flex-shrink: 0;
+}
+.experience.experience-narrative .experience-reasoning-stage h2 {
+  font-size: clamp(30px, 4vw, 55px);
+}
+.experience.experience-narrative
+  .experience-reasoning-stage
+  .experience-home-eyebrow {
+  margin-bottom: 12px;
+}
+.experience.experience-narrative
+  .experience-reasoning-stage
+  .experience-walkthrough-label {
+  margin-top: 12px;
+  font-size: 10px;
+  opacity: 0.7;
+}
+.experience.experience-narrative .experience-beat-nav {
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+  border-top: 1px solid currentColor;
+}
+.experience.experience-narrative .experience-beat-nav button {
+  flex: 1;
+  min-height: 48px;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: 0.5;
+  border-top: 3px solid transparent;
+  margin-top: -1px;
+  padding: 8px 0;
+}
+.experience.experience-narrative .experience-beat-nav button > span {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 9px;
+}
+.experience.experience-narrative
+  .experience-beat-nav
+  button[aria-current="step"] {
+  opacity: 1;
+  border-top-color: currentColor;
+}
+.experience.experience-narrative .experience-beat-window {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  overflow-y: auto;
+}
+.experience.experience-narrative .experience-beat-window > div {
+  width: 100%;
+}
+.experience.experience-narrative .experience-reasoning-beat {
+  position: relative;
+  max-width: 900px;
+  padding-right: 15%;
+}
+.experience.experience-narrative .experience-reasoning-icon {
+  position: absolute;
+  right: 0;
+  top: 15px;
+  width: 70px;
+  height: 70px;
+  stroke-width: 0.8;
+  color: #dfc495;
+}
+.experience.experience-narrative .experience-reasoning-beat h3 {
+  font:
+    500 clamp(27px, 3.8vw, 48px) / 1.05 var(--font-serif),
+    Georgia,
+    serif;
+  max-width: 25ch;
+}
+.experience.experience-narrative
+  .experience-reasoning-beat
+  > p:not(.experience-home-eyebrow) {
+  font-size: 15px;
+  line-height: 1.7;
+  margin-top: 20px;
+  max-width: 65ch;
+}
+.experience.experience-narrative .experience-reasoning-beat a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  margin-top: 14px;
+}
+.experience.experience-narrative .experience-evidence-inspect {
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.experience.experience-narrative .experience-evidence-inspect summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding-top: 12px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.experience.experience-narrative .experience-evidence-inspect mark {
+  background: #dfc49524;
+  color: inherit;
+}
+.experience.experience-narrative .experience-evidence-inspect > p {
+  margin-top: 10px;
+}
+.experience.experience-narrative .experience-values-stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+.experience.experience-narrative .experience-values-stage header h2 {
+  font-size: clamp(26px, 3vw, 42px);
+}
+.experience.experience-narrative
+  .experience-values-stage
+  .experience-home-eyebrow {
+  margin-bottom: 12px;
+}
+.experience.experience-narrative
+  .experience-values-stage
+  > .experience-value-window {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+.experience.experience-narrative .experience-value-window article {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 6vw;
+  border: 0;
+  padding: 0;
+  width: 100%;
+}
+.experience.experience-narrative .experience-value-word {
+  font:
+    450 clamp(80px, 12vw, 175px) / 0.9 var(--font-serif),
+    Georgia,
+    serif;
+  letter-spacing: -0.07em;
+}
+.experience.experience-narrative .experience-value-window h3 {
+  font:
+    500 clamp(25px, 3vw, 40px) / 1.1 var(--font-serif),
+    Georgia,
+    serif;
+  margin: 15px 0;
+}
+.experience.experience-narrative .experience-value-window p {
+  font-size: 15px;
+  line-height: 1.75;
+  margin: 0;
+  opacity: 1;
+  max-width: 40ch;
+}
+.experience.experience-narrative .experience-value-window article > div > span {
+  font-size: 10px;
+}
+.experience.experience-narrative .experience-values-hint {
+  font-size: 10px;
+  opacity: 0.65;
+}
+.experience.experience-narrative
+  [data-sequence="false"]
+  .experience-sequence-stage {
+  height: auto;
+  padding-block: 60px;
+}
+.experience.experience-narrative
+  [data-sequence="false"]
+  .experience-direction-stage {
+  display: block;
+}
+.experience.experience-narrative [data-sequence="false"] .experience-card-deck {
+  height: auto;
+  min-height: 0;
+  margin-top: 30px;
+}
+.experience.experience-narrative
+  [data-sequence="false"]
+  .experience-stack-card {
+  margin-bottom: 24px;
+  background: #f3eee4;
+  border-bottom: 2px solid #aa4935;
+}
+.experience.experience-narrative
+  [data-sequence="false"]
+  .experience-stack-card
+  h3
+  button:disabled {
+  color: inherit;
+  opacity: 1;
+  cursor: default;
+}
+.experience.experience-narrative .experience-static-beats {
+  display: grid;
+  gap: 40px;
+  padding-block: 30px;
+}
+.experience.experience-narrative .experience-static-values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+/* Specificity matters: the general chapter > * rule must not cancel sticky. */
+.experience.experience-narrative .experience-film > .experience-film-surface {
+  position: sticky;
+  top: calc(var(--portfolio-header-height, 61px) + 52px);
+  height: calc(100svh - var(--portfolio-header-height, 61px) - 52px);
+  min-height: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+}
+.experience.experience-narrative .experience-film-caption {
+  flex: 0 0 44px;
+  padding: 0 5vw;
+}
+.experience.experience-narrative .experience-film-player {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.experience.experience-narrative .experience-film-controls {
+  flex: 0 0 60px;
+  min-height: 60px;
+  padding: 4px 5vw;
+}
+.experience.experience-narrative .experience-film-frame {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+}
+.experience.experience-narrative .experience-film-frame > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+.experience.experience-narrative .experience-film-poster {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: auto;
+}
+.experience.experience-narrative
+  .experience-film[data-reading="true"]
+  > .experience-film-surface {
+  position: relative;
+  top: auto;
+  height: min(80svh, 650px);
+}
+@media (max-width: 899px) {
+  .experience.experience-narrative .experience-direction-stage {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 18px;
+    align-items: stretch;
+    padding: 22px 24px 14px;
+  }
+  .experience.experience-narrative
+    .experience-direction-stack
+    .experience-direction-intro {
+    width: 100%;
+  }
+  .experience.experience-narrative .experience-direction-stack h2 {
+    font-size: clamp(28px, 5vw, 38px);
+  }
+  .experience.experience-narrative
+    .experience-direction-intro
+    .experience-home-eyebrow {
+    margin-bottom: 10px;
+  }
+  .experience.experience-narrative
+    .experience-direction-stack
+    .experience-home-intro {
+    display: none;
+  }
+  .experience.experience-narrative .experience-card-deck {
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+  }
+  .experience.experience-narrative .experience-stack-card h3 {
+    font-size: clamp(16px, 3vw, 23px);
+  }
+  .experience.experience-narrative .experience-stack-card h3 button {
+    padding-inline: 16px;
+    gap: 10px;
+  }
+  .experience.experience-narrative .experience-stack-card-body {
+    padding: 16px;
+  }
+  .experience.experience-narrative .experience-stack-card-body strong {
+    font-size: 14px;
+  }
+  .experience.experience-narrative
+    .experience-stack-card-body
+    > p:not(.experience-home-eyebrow) {
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .experience.experience-narrative .experience-sequence-footer small {
+    display: none;
+  }
+  .experience.experience-narrative .experience-reasoning-stage,
+  .experience.experience-narrative .experience-values-stage {
+    padding: 24px;
+    gap: 16px;
+  }
+  .experience.experience-narrative .experience-reasoning-stage h2 {
+    max-width: 20ch;
+  }
+  .experience.experience-narrative .experience-beat-nav {
+    gap: 10px;
+  }
+  .experience.experience-narrative .experience-beat-nav button {
+    font-size: 9px;
+  }
+  .experience.experience-narrative .experience-beat-nav button > span {
+    display: block;
+    margin: 0 0 3px;
+  }
+  .experience.experience-narrative .experience-reasoning-beat {
+    padding: 0;
+  }
+  .experience.experience-narrative .experience-reasoning-icon {
+    display: none;
+  }
+  .experience.experience-narrative .experience-reasoning-beat h3 {
+    font-size: 30px;
+  }
+  .experience.experience-narrative
+    .experience-reasoning-beat
+    > p:not(.experience-home-eyebrow) {
+    font-size: 13px;
+    line-height: 1.65;
+    margin-top: 16px;
+  }
+  .experience.experience-narrative .experience-value-window article {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .experience.experience-narrative .experience-value-word {
+    font-size: clamp(85px, 20vw, 140px);
+  }
+  .experience.experience-narrative .experience-value-window h3 {
+    margin: 12px 0;
+  }
+  .experience.experience-narrative .experience-value-window p {
+    font-size: 14px;
+  }
+  .experience.experience-narrative .experience-static-values {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-height: 620px) {
+  .experience.experience-narrative .experience-sequence-stage {
+    padding-top: 16px;
+    gap: 12px;
+  }
+  .experience.experience-narrative .experience-direction-stack h2 {
+    font-size: 27px;
+  }
+  .experience.experience-narrative .experience-stack-card-body {
+    padding: 12px 16px;
+  }
+  .experience.experience-narrative
+    .experience-stack-card-body
+    .experience-home-eyebrow {
+    display: none;
+  }
+  .experience.experience-narrative
+    .experience-stack-card-body
+    > p:not(.experience-home-eyebrow) {
+    margin-top: 8px;
+  }
+  .experience.experience-narrative .experience-stack-card-body a {
+    margin-top: 4px;
+  }
+  .experience.experience-narrative .experience-reasoning-stage h2 {
+    font-size: 27px;
+  }
+  .experience.experience-narrative
+    .experience-reasoning-stage
+    .experience-walkthrough-label {
+    margin-top: 8px;
+  }
+  .experience.experience-narrative
+    .experience-reasoning-stage
+    .experience-home-eyebrow {
+    margin-bottom: 8px;
+    font-size: 9px;
+  }
+  .experience.experience-narrative .experience-reasoning-beat h3 {
+    font-size: 25px;
+  }
+  .experience.experience-narrative
+    .experience-reasoning-beat
+    > p:not(.experience-home-eyebrow) {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  .experience.experience-narrative .experience-value-word {
+    font-size: 78px;
+  }
+  .experience.experience-narrative .experience-value-window article {
+    gap: 16px;
+  }
+}
+.experience.experience-narrative
+  .experience-home
+  [data-sequence="true"]
+  > .experience-sequence-stage {
+  position: sticky;
+  top: calc(var(--portfolio-header-height, 61px) + 52px);
+}
+.experience.experience-narrative
+  .experience-direction-stack
+  .experience-direction-intro {
+  position: relative;
+  top: auto;
+}
+@media (max-height: 620px) {
+  .experience.experience-narrative
+    [data-sequence="true"]
+    .experience-stack-card {
+    min-height: 0;
+  }
+  .experience.experience-narrative .experience-stack-card-body strong {
+    font-size: 13px;
+  }
+  .experience.experience-narrative
+    .experience-stack-card-body
+    > p:not(.experience-home-eyebrow) {
+    font-size: 11px;
+  }
+}
+
+.experience.experience-narrative [data-sequence="true"] .experience-card-deck {
+  overflow: clip;
+}
