@@ -1229,3 +1229,36 @@
     display: none;
   }
 }
+
+/* Touch gestures stop at section boundaries; mouse/wheel scrolling stays native. */
+.experience-touch-navigation {
+  display: none;
+}
+@media (max-width: 899px), (pointer: coarse) {
+  .experience-touch-navigation {
+    display: flex;
+    gap: 12px;
+  }
+  .experience-control-bar:has(.experience-touch-navigation) > div {
+    gap: 12px;
+  }
+  .experience-control-bar:has(.experience-touch-navigation)
+    .experience-toolbar-assistant {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .experience-touch-navigation {
+    gap: 0;
+  }
+  .experience-touch-navigation button {
+    min-width: 32px;
+  }
+  .experience-touch-navigation button span {
+    display: none;
+  }
+  .experience-control-bar:has(.experience-touch-navigation) > div {
+    gap: 8px;
+  }
+}
