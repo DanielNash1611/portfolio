@@ -399,7 +399,6 @@ function MethodJourney({ paused }: { paused: boolean }) {
         <div className="clarity-journey-stops" aria-hidden="true">
           <span
             id="clarity-method-clearing"
-            data-interaction-landing="light-sunrise"
             className="clarity-journey-stop"
             style={{ top: "calc(var(--journey-step, 70svh) * 5.52)" }}
           />
@@ -408,7 +407,6 @@ function MethodJourney({ paused }: { paused: boolean }) {
               key={item.title}
               className="clarity-journey-stop"
               id={`clarity-method-${i}`}
-              data-interaction-landing={i === 0 ? "light-entry" : undefined}
               style={{
                 top: `calc(var(--journey-step, 70svh) * ${i + approachLead})`,
               }}

@@ -1229,21 +1229,3 @@
     display: none;
   }
 }
-
-/* Three optional resting places on touch: the resolved hero, Imagine, sunrise.
- * No mandatory stops, gesture handlers, or extra targets in ordinary content.
- * The browser keeps ownership of momentum, reversal, zoom and keyboard input. */
-@media (pointer: coarse) and (prefers-reduced-motion: no-preference) {
-  html:has(.experience[data-home-landings="true"]) {
-    scroll-snap-type: y proximity;
-  }
-  .experience[data-home-landings="true"] [data-interaction-landing] {
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
-  }
-  .experience[data-home-landings="true"] .cue-animation-landing {
-    /* Match ConductorCue's final "85% 40%" progress alignment. */
-    scroll-margin-top: 40vh;
-    scroll-margin-top: 40dvh;
-  }
-}
