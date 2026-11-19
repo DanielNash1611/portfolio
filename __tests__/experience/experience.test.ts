@@ -301,6 +301,14 @@ test("the leadership selection retains the existing work previews and status qua
     content.work.map((entry) => entry.slug),
     ["product-practice", "chatgpt-enterprise", "cresta-coaching"],
   );
+  const homepage = getExperienceHomeContent("home");
+  assert.deepEqual(
+    homepage.work.map((entry) => entry.slug),
+    ["contact-center-roadmap", "product-practice", "chatgpt-enterprise"],
+  );
+  assert.equal(homepage.outcomes[0].value, "16 → 9");
+  assert.equal(homepage.outcomes[0].href, homepage.work[0].href);
+  assert.equal(content.outcomes[0].href, "#experience-systems");
   const retained = new Set(
     [...content.work, ...content.supportingWork].map((entry) => entry.slug),
   );

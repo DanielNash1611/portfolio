@@ -3,7 +3,7 @@ import test from 'node:test';
 import {readFileSync} from 'node:fs';
 import {getPageContextBySlug, getPortfolioContext} from '@/lib/portfolio-guide/context';
 import {getNamedProjectIds} from '@/lib/portfolio-guide/project-references';
-import {pageClaimBlocks} from '@/lib/portfolio-guide/factual-answers';
+import {claimSelectionPolicy, pageClaimBlocks} from '@/lib/portfolio-guide/factual-answers';
 import {getPortfolioSearchDocuments} from '@/lib/portfolio-guide/search';
 import {validIndex} from '@/lib/search/hybrid';
 
@@ -31,5 +31,22 @@ test('current public adoption copy never assigns a daily timeframe to 800 or 40 
 test('released index covers all current claims without stale embeddings',()=>{
  const index=JSON.parse(readFileSync('content/search-index/portfolio.json','utf8'));
  assert.equal(validIndex(index,getPortfolioSearchDocuments()),true);
- assert.equal(index.records.length,73);
+ assert.equal(index.records.length,79);
+});
+
+test("the roadmap release adds six scoped claim blocks and keeps the sequencing rationale together", () => {
+  const pageContext = getPageContextBySlug("contact-center-roadmap");
+  assert.ok(pageContext);
+  const blocks = pageClaimBlocks(pageContext);
+  assert.equal(blocks.length, 6);
+  assert.deepEqual(getNamedProjectIds("What did Daniel do on the Contact Center roadmap?"), ["contact-center-roadmap"]);
+  const policy = claimSelectionPolicy({
+    pageContext,
+    portfolioContext: getPortfolioContext(),
+    message: "How did Daniel win support for this roadmap, and why did the returns integration come before the larger work?",
+    scope: "page",
+    sessionContext: { visitedPages: [], clickedPrompts: [], askedQuestions: [], inferredInterestTags: [] },
+  }, blocks);
+  assert.deepEqual(policy.fallbackIds, ["contact-center-roadmap:sequencing"]);
+  assert.match(policy.blocks[0].claims.join(" "), /originally wanted to tackle first.*near the end.*18 months/);
 });

@@ -14,6 +14,7 @@ import {
 } from "@/content/experience-systems";
 import {
   quarterlySystemNodeFrame,
+  systemsMilestoneStop,
   systemsTimelineFrame,
 } from "@/lib/experience/systems-timeline";
 import type { SystemNode } from "@/lib/experience/scroll-stories";
@@ -104,15 +105,14 @@ function Connections({
     </svg>
   );
 }
-function Diagram({
+export function SystemsDiagram({
   progress,
   index,
-  still,
 }: {
   progress?: MotionValue<number>;
   index: number;
-  still?: number;
 }) {
+  const still = systemsMilestoneStop(index);
   return (
     <div className="experience-system-diagram" aria-hidden="true">
       <Rings />
@@ -126,11 +126,12 @@ function Diagram({
       {contactCenterSystems.map((node) => {
         if (progress)
           return <MovingNode key={node.id} node={node} progress={progress} />;
-        const pose = quarterlySystemNodeFrame(still!, node);
+        const pose = quarterlySystemNodeFrame(still, node);
         return pose.opacity > 0 ? (
           <span
             key={node.id}
             className="experience-system-node"
+            data-system={node.id}
             data-new={!node.before}
             style={{
               left: `${pose.x}%`,
@@ -145,24 +146,45 @@ function Diagram({
     </div>
   );
 }
-export default function SystemsTransformation({
-  reading,
-}: {
-  reading: boolean;
-}) {
-  const root = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion(),
-    short = useShortViewport();
-  const staticView = reading || Boolean(reduced) || short;
+
+export function useSystemsTimelineScroll<T extends HTMLElement>() {
+  const root = useRef<T>(null);
   const [index, setIndex] = useState(0);
   const { scrollYProgress } = useScroll({
     target: root,
     offset: ["start start", "end end"],
   });
-  useMotionValueEvent(scrollYProgress, "change", (p) => {
-    const next = systemsTimelineFrame(p).index;
+  useMotionValueEvent(scrollYProgress, "change", (progress) => {
+    const next = systemsTimelineFrame(progress).index;
     setIndex((previous) => (previous === next ? previous : next));
   });
+
+  function jumpTo(index: number) {
+    const element = root.current;
+    if (!element) return;
+    const travel = element.offsetHeight - window.innerHeight;
+    window.scrollTo({
+      top:
+        element.getBoundingClientRect().top +
+        window.scrollY +
+        travel * systemsMilestoneStop(index),
+      behavior: "smooth",
+    });
+  }
+
+  return { root, index, scrollYProgress, jumpTo };
+}
+
+export default function SystemsTransformation({
+  reading,
+}: {
+  reading: boolean;
+}) {
+  const reduced = useReducedMotion(),
+    short = useShortViewport();
+  const staticView = reading || Boolean(reduced) || short;
+  const { root, index, scrollYProgress, jumpTo } =
+    useSystemsTimelineScroll<HTMLElement>();
   const stage = systemsMilestones[index];
   return (
     <>
@@ -205,14 +227,14 @@ export default function SystemsTransformation({
                     <strong>{step.label}</strong> · {step.kind}
                     <span>{step.title}</span>
                   </figcaption>
-                  <Diagram index={i} still={i === 4 ? 1 : (i + 0.3) / 5} />
+                  <SystemsDiagram index={i} />
                   <p>{step.detail}</p>
                 </figure>
               ))}
             </div>
           ) : (
             <>
-              <Diagram index={index} progress={scrollYProgress} />
+              <SystemsDiagram index={index} progress={scrollYProgress} />
               <ol
                 className="experience-system-timeline"
                 aria-label="Contact Center roadmap milestones"
@@ -222,20 +244,7 @@ export default function SystemsTransformation({
                     <button
                       type="button"
                       aria-current={index === i ? "step" : undefined}
-                      onClick={() => {
-                        const element = root.current!;
-                        const range = element.offsetHeight - innerHeight;
-                        window.scrollTo({
-                          top:
-                            element.getBoundingClientRect().top +
-                            scrollY +
-                            range *
-                              (i === systemsMilestones.length - 1
-                                ? 0.97
-                                : (i + 0.35) / 5),
-                          behavior: "smooth",
-                        });
-                      }}
+                      onClick={() => jumpTo(i)}
                     >
                       <span>0{i + 1}</span>
                       {step.label}

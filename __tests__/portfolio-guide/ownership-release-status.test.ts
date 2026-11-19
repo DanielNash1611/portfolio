@@ -113,7 +113,7 @@ test("release-status source contracts retain both authored blocks after boundary
 });
 
 test("historical fixture preserves compatible texts after the approved page refresh", () => {
-  const documents = getPortfolioSearchDocuments();
+  const documents = getPortfolioSearchDocuments().filter((doc) => doc.projectId !== "contact-center-roadmap");
   assert.equal(documents.length, 73);
   const old = fixture.originalPortfolioDocumentHashes as Record<string, string>;
   const changed = documents
@@ -153,7 +153,7 @@ test("historical fixture preserves compatible texts after the approved page refr
 });
 
 test("reconciled corpus replaces every stale text and preserves every compatible cached vector", async (t) => {
-  const docs = getPortfolioSearchDocuments();
+  const docs = getPortfolioSearchDocuments().filter((doc) => doc.projectId !== "contact-center-roadmap");
   const previous: EmbeddingIndex = JSON.parse(
     readFileSync("content/search-index/portfolio-cache.json", "utf8"),
   );

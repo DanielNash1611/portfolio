@@ -257,7 +257,7 @@ export const testimonials: Testimonial[] = [
     profileUrl: linkedinRecommendationsUrl,
     narrativeTags: ["product-leader", "senior-product-manager"],
     pageTargets: ["about", "contact-center"],
-    projectIds: ["chatgpt-enterprise"],
+    projectIds: ["chatgpt-enterprise", "contact-center-roadmap"],
     projectRelevance:
       "Senior executive who watched Daniel build the first 3-year Contact Center roadmap that anchors the ChatGPT Enterprise case study.",
   },

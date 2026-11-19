@@ -1,3 +1,4 @@
+import { contactCenterRoadmap } from "@/content/projects/contact-center-roadmap";
 import { omsDeliveryMilestones } from "@/content/projects/oms-delivery";
 import { zimmerAiPrototypes } from "@/content/projects/zimmer-ai-prototypes";
 
@@ -318,6 +319,7 @@ export const homeContent = {
 };
 
 export const workEntries: WorkEntry[] = [
+  contactCenterRoadmap,
   zimmerAiPrototypes,
   {
     slug: "chatgpt-enterprise",

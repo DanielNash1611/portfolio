@@ -1,0 +1,553 @@
+.roadmap {
+  --ink: #1b302e;
+  --pine: #142f2c;
+  --paper: #f8f5ec;
+  --rust: #8c3529;
+  --line: #867f6b52;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.04rem;
+  line-height: 1.68;
+}
+
+.shell {
+  width: min(100% - 3rem, 67rem);
+  margin-inline: auto;
+}
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(2rem, 5vw, 5rem) 0 clamp(3rem, 7vw, 7rem);
+  background: var(--pine);
+  color: var(--paper);
+}
+
+.hero::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 0 37%;
+  background:
+    linear-gradient(90deg, var(--pine), transparent 68%),
+    url("/images/contact-center-roadmap/roadmap-rings.svg") center right / cover
+      no-repeat;
+  opacity: 0.6;
+  content: "";
+}
+
+.back,
+.heroLink,
+.textLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.28em;
+}
+
+.back {
+  color: #e4ddcd;
+}
+.heroLink {
+  margin-top: 1rem;
+  color: #f1cb90;
+}
+.textLink {
+  color: var(--rust);
+}
+
+.eyebrow {
+  color: var(--rust);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero .eyebrow {
+  margin-top: clamp(2rem, 5vw, 4rem);
+  color: #f1cb90;
+}
+
+.roadmap h1,
+.roadmap h2,
+.roadmap h3,
+.roadmap h4,
+.turningPoint blockquote {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.hero h1 {
+  max-width: 19ch;
+  margin: 0.36em 0 0.32em;
+  font-size: clamp(2.65rem, 6vw, 5.4rem);
+  letter-spacing: -0.045em;
+}
+
+.opening {
+  max-width: 58ch;
+  color: #f5ecdc;
+  font-size: clamp(1.02rem, 1.65vw, 1.24rem);
+}
+
+.readingNav,
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.7rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.readingNav a,
+.related a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.roadmap :is(a, summary):focus-visible,
+.exhibitTab:focus-visible,
+.exhibitTab:focus-within:has(input:focus-visible) {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.section {
+  padding: clamp(2.5rem, 6vw, 6rem) 0;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: calc(var(--portfolio-header-height, 61px) + 1rem);
+}
+
+.sectionIntro {
+  max-width: 48rem;
+}
+
+.section h2 {
+  max-width: 20ch;
+  margin-bottom: 1rem;
+  font-size: clamp(2.15rem, 4.2vw, 3.85rem);
+  letter-spacing: -0.035em;
+}
+
+.section h3 {
+  font-size: clamp(1.35rem, 2.6vw, 1.95rem);
+}
+.sectionIntro h3 {
+  margin-top: 1.75rem;
+}
+.section h3 + p {
+  margin-top: 0.55rem;
+}
+
+.discoveries {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(1.25rem, 5vw, 4rem);
+  margin: 1.9rem 0 2.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.discoveries li {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.85rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.discoveries li > svg {
+  margin-top: 0.15rem;
+  color: var(--rust);
+}
+
+.discoveries h3,
+.decisions h4 {
+  font-size: clamp(1.22rem, 2.25vw, 1.7rem);
+}
+
+.discoveries h3 + p,
+.decisions h4 + p {
+  margin-top: 0.45rem;
+}
+
+.sequencing {
+  padding-top: 1.75rem;
+  scroll-margin-top: calc(var(--portfolio-header-height, 61px) + 1rem);
+}
+
+.sequencing .sectionIntro h3 {
+  margin-top: 0;
+  max-width: 25ch;
+  font-size: clamp(1.85rem, 3.75vw, 3.2rem);
+  letter-spacing: -0.03em;
+}
+
+.evidence,
+.decisions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-block: 2rem;
+}
+
+.evidence > div,
+.decisions > div {
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--line);
+}
+
+.evidence dt {
+  color: #485951;
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+.evidence dd {
+  margin: 0;
+  color: var(--rust);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(2.4rem, 5.2vw, 4.6rem);
+  line-height: 1.15;
+}
+
+.turningPoint {
+  max-width: 48rem;
+  margin-top: 2rem;
+  padding-left: clamp(1rem, 3vw, 2rem);
+  border-left: 2px solid var(--rust);
+  scroll-margin-top: calc(var(--portfolio-header-height, 61px) + 1rem);
+}
+
+.turningPoint blockquote {
+  margin: 0.6rem 0 0;
+  font-size: clamp(1.7rem, 4vw, 2.8rem);
+}
+
+.recommendation {
+  max-width: 42rem;
+  margin: 2rem 0 0;
+}
+.recommendation blockquote {
+  margin: 0;
+  color: #46534c;
+  font-style: italic;
+}
+.recommendation figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.7rem;
+  margin-top: 0.55rem;
+  font-size: 0.8rem;
+}
+.recommendation a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: underline;
+}
+
+.exhibit {
+  scroll-margin-top: calc(var(--portfolio-header-height, 61px) + 1rem);
+  margin: 2rem 0;
+  padding: clamp(0.8rem, 3vw, 2.1rem);
+  background: #eee9db;
+  border: 1px solid #d4cebc;
+}
+
+.reframe {
+  margin-top: clamp(2.75rem, 7vw, 5.75rem);
+  padding-top: clamp(2.25rem, 5vw, 4.5rem);
+  border-top: 1px solid var(--line);
+}
+
+.reframe h3 {
+  font-size: clamp(2.05rem, 4.15vw, 3.7rem);
+  letter-spacing: -0.035em;
+}
+
+.reframe :global(.oc-graphic-roadmap) {
+  padding: clamp(1rem, 3.5vw, 2.5rem);
+  border: 0;
+  background: var(--pine);
+  color: var(--paper);
+}
+
+.reframe :global(.oc-graphic-roadmap svg) {
+  max-height: 15rem;
+}
+
+.reframe :global(.oc-roadmap-trace) {
+  stroke: #eac180;
+}
+
+.exhibitFieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.exhibitTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.exhibitTab {
+  position: relative;
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid #65766c;
+  color: var(--pine);
+  font-size: 0.8rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.exhibitTab:hover {
+  background: #dfe5d9;
+}
+.exhibitTab:has(input:checked) {
+  background: var(--pine);
+  border-color: var(--pine);
+  color: var(--paper);
+}
+
+.exhibitTab[aria-current="step"] {
+  background: var(--pine);
+  border-color: var(--pine);
+  color: var(--paper);
+}
+
+.exhibitTrack {
+  min-height: 220svh;
+}
+
+.exhibitSticky {
+  position: sticky;
+  top: calc(var(--portfolio-header-height, 61px) + 0.6rem);
+  background: #eee9db;
+}
+
+.scrollHint {
+  margin-bottom: 0.6rem;
+  color: #45534b;
+  font-size: 0.79rem;
+}
+
+.exhibitPanel {
+  display: none;
+  grid-template-columns: minmax(0, 0.66fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  min-height: clamp(20rem, 48vw, 32rem);
+  padding: 1rem 0;
+}
+
+.exhibitFieldset:has(input[value="baseline"]:checked) [data-stage="baseline"],
+.exhibitFieldset:has(input[value="q2"]:checked) [data-stage="q2"],
+.exhibitFieldset:has(input[value="q3"]:checked) [data-stage="q3"],
+.exhibitFieldset:has(input[value="q4"]:checked) [data-stage="q4"],
+.exhibitFieldset:has(input[value="review"]:checked) [data-stage="review"],
+.exhibitPanel[data-animated="true"] {
+  display: grid;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .exhibitPanel:not([data-animated]) {
+    animation: reveal 260ms ease-out both;
+  }
+}
+
+.stageCopy h4 {
+  margin-top: 0.35rem;
+  font-size: clamp(1.35rem, 2.6vw, 1.95rem);
+}
+.stageCopy > p:last-child {
+  font-size: 0.94rem;
+}
+.map {
+  min-width: 0;
+  padding-inline: 0.4rem;
+}
+.map :global(.experience-system-diagram) {
+  width: 100%;
+  max-width: 30rem;
+  margin-inline: auto;
+}
+.map :global(.experience-system-node) {
+  font-size: clamp(0.52rem, 1vw, 0.73rem);
+  min-height: 1.5rem;
+}
+.map :global(.experience-system-node[data-new="true"]) {
+  background: #dfc495;
+}
+
+.featureTimeline {
+  margin: 1.6rem 0 0;
+  padding: clamp(0.75rem, 3.25vw, 2rem);
+  border: 1px solid #b8bfbb;
+  background: #e9ece9;
+  color: #31433f;
+}
+
+.timeline {
+  width: 100%;
+  margin: 1rem 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: clamp(0.66rem, 1.35vw, 0.91rem);
+  line-height: 1.25;
+}
+
+.timeline th,
+.timeline td {
+  padding: 0.5rem clamp(0.15rem, 1vw, 0.7rem);
+  border-bottom: 1px solid #a2afa791;
+}
+
+.timeline thead th {
+  text-align: center;
+  font-size: 0.88em;
+}
+
+.timeline thead th:first-child {
+  width: 39%;
+}
+
+.timeline th:first-child {
+  text-align: left;
+  padding-left: 0;
+}
+
+.timeline tbody th {
+  font-weight: 650;
+}
+
+.timeline small {
+  display: block;
+  margin-top: 0.15rem;
+  color: #4c5d57;
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
+.timeline td {
+  border-inline: 1px solid #a2afa76b;
+  background: #f8f8f352;
+}
+
+.timelineBar {
+  display: block;
+  height: 0.7rem;
+  border-radius: 2px;
+  background: #4b6b60;
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .featureTimeline[data-oc-reveal="entered"] .timelineBar {
+    animation: drawFeature 420ms ease-out backwards;
+  }
+}
+
+@keyframes drawFeature {
+  from {
+    transform: scaleX(0.08);
+    opacity: 0.35;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.caption {
+  color: #49554d;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.sectionIntro .caption {
+  margin-top: 0.5rem;
+}
+.transcript {
+  margin-top: 0.75rem;
+  font-size: 0.87rem;
+}
+.transcript summary {
+  width: fit-content;
+  min-height: 2.75rem;
+  padding: 0.55rem 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.transcript ol {
+  padding-left: 1.5rem;
+  list-style: revert;
+}
+.transcript ol > li + li {
+  margin-top: 0.65rem;
+}
+.related {
+  padding: 1.3rem 0 2.5rem;
+  border-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .shell {
+    width: calc(100% - 2rem);
+  }
+  .hero::before {
+    left: 22%;
+    opacity: 0.28;
+  }
+  .exhibitPanel {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    min-height: 0;
+  }
+  .map {
+    padding-inline: 0.65rem;
+  }
+  .map :global(.experience-system-node) {
+    min-height: 1.18rem;
+    padding: 0.12rem;
+  }
+  .decisions {
+    grid-template-columns: 1fr;
+  }
+  .discoveries {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .evidence {
+    gap: 0.9rem;
+  }
+}

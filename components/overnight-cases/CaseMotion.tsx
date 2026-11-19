@@ -9,7 +9,7 @@ export default function CaseMotion({
   className,
 }: {
   children: ReactNode;
-  className: string;
+  className?: string;
 }) {
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function CaseMotion({
     if (!scope || !("IntersectionObserver" in window)) return;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const targets = scope.querySelectorAll<HTMLElement>(
-      ".motion-reveal h1, .motion-reveal h2, .motion-reveal h3, .motion-reveal p, .motion-reveal li, .motion-reveal figure, .motion-reveal .oc-sequence, .motion-reveal .oc-comparison, .oc-jpd-body article > *, .oc-jpd-hero > div:first-child",
+      "[data-case-reveal], .motion-reveal h1, .motion-reveal h2, .motion-reveal h3, .motion-reveal p, .motion-reveal li, .motion-reveal figure, .motion-reveal .oc-sequence, .motion-reveal .oc-comparison, .oc-jpd-body article > *, .oc-jpd-hero > div:first-child",
     );
     const observer = new IntersectionObserver(
       (entries) => {

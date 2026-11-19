@@ -1063,3 +1063,18 @@
     margin-top: 55px;
   }
 }
+.experience-roadmap-entry {
+  padding: 0.75rem var(--experience-gutter, 6vw) 2rem;
+  background: #f3eee4;
+}
+.experience-roadmap-entry a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  color: #173f3d;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  scroll-margin-top: calc(var(--portfolio-header-height, 61px) + 1rem);
+}

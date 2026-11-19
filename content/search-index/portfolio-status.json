@@ -1,8 +1,8 @@
 {
   "model": "text-embedding-3-small",
-  "corpusHash": "2576803d12f82a8a2126b0adb96572c1de923fbf61d54d7e142c94046e0e556f",
-  "documents": 73,
-  "reusable": 73,
+  "corpusHash": "dd327eefd646cc8f639c913fc9f94f683626ffdce3f082d696e9f169fae2c70e",
+  "documents": 79,
+  "reusable": 79,
   "pending": [],
   "pendingUtf8Bytes": 0,
   "maxEmbeddingRequests": 0,

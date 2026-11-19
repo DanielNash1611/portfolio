@@ -14,6 +14,12 @@ import {
   modelBakeoff,
 } from "@/content/projects/decisions-evaluation";
 
+import {
+  roadmapDiscoveryActivities,
+  roadmapSequencingSummary,
+  roadmapStory,
+} from "@/content/projects/contact-center-roadmap";
+
 type GuideOverlay = Partial<
   Pick<
     PageContext,
@@ -48,6 +54,71 @@ type GuideOverlay = Partial<
 
 export const portfolioGuideMetadata: Record<string, GuideOverlay> = {
   ...creativeGuideMetadata,
+  "contact-center-roadmap": {
+    category: "Product leadership and operations",
+    roleLens: ["senior-product-manager", "product-leader"],
+    strengths: ["leadership", "enablement", "operations", "contact-center"],
+    interestTags: ["pm-leadership"],
+    authoredSections: [
+      {
+        label: "How the first PM got started and when the roadmap request arrived",
+        snippets: [
+          roadmapStory.opening,
+          "Daniel began discovery before the roadmap request, finding 16 systems where leadership expected about five. About six weeks into the assignment he felt ready to build the roadmap, and within days the Contact Center director relayed the CEO’s request for one.",
+        ],
+      },
+      {
+        label: "Discovery activities before the Contact Center roadmap",
+        snippets: roadmapDiscoveryActivities.map(({ title, detail }) => `${title}. ${detail}`),
+      },
+      {
+        label: "How the roadmap won support and why returns came first",
+        snippets: [
+          roadmapSequencingSummary,
+          roadmapStory.longerTerm,
+        ],
+      },
+      {
+        label: "The planning practice and handoff to the incoming PM",
+        snippets: [roadmapStory.practice, roadmapStory.handoff, roadmapStory.reflection],
+      },
+      {
+        label: "One-year results and what accounted for the hold-time savings",
+        snippets: [
+          roadmapStory.results,
+          "The circles’ quarterly stages are planned milestones. The earlier feature timeline is a separate reconstruction based on slide 36 and Daniel’s recollection.",
+        ],
+      },
+    ],
+    evidenceHighlights: [
+      { label: "First dedicated PM", detail: roadmapStory.opening, type: "ownership" },
+      { label: "Discovery before the executive request", detail: roadmapStory.request, type: "workflow" },
+      { label: "Executive and cross-functional alignment", detail: roadmapStory.alignment, type: "workflow" },
+      { label: "Incoming PM used the roadmap", detail: roadmapStory.handoff, type: "outcome" },
+      { label: "One-year review", detail: roadmapStory.results, type: "metric" },
+    ],
+    claimBoundaries: {
+      directOwnership: [
+        "Daniel started discovery, created and presented the roadmap, and trained the incoming PM on it.",
+      ],
+      influence: [
+        "In Daniel’s firsthand account, the incoming PM kept using the roadmap and quickly began contributing to meaningful decisions. Contact Center and Technology leaders backed the direction together.",
+      ],
+      explicitUnknowns: [
+        "The original first draft, the successor’s specific decisions and ramp time, and sole implementation ownership are not established.",
+      ],
+    },
+    recruiterPrompts: [
+      "What did Daniel establish as the Contact Center’s first PM?",
+      "How did he get leadership aligned?",
+      "What did the next PM inherit?",
+    ],
+    relatedProjectSlugs: ["jira-product-discovery", "chatgpt-enterprise"],
+    crossPageLinks: [
+      { slug: "jira-product-discovery", bridge: "Read how Daniel helped build shared planning and prioritization practices across teams." },
+      { slug: "chatgpt-enterprise", bridge: "Read the separate pilot and enterprise adoption case." },
+    ],
+  },
   "zimmer-ai-prototypes": zimmerGuide,
   "ai-career-operating-system": {
     category: "AI product systems",
