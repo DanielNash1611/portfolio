@@ -230,8 +230,8 @@ export function pageClaimBlocks(page: SourcePage): ClaimBlock[] {
         claims: block.claims,
         qualifications: block.qualifications,
         sourceRefs: block.sourceRefs.map((ref) => `${page.slug}.${ref}`),
-        ...("coveredStatuses" in block
-          ? { coveredStatuses: block.coveredStatuses }
+        ...("coveredStatuses" in block && Array.isArray(block.coveredStatuses)
+          ? { coveredStatuses: block.coveredStatuses.filter((status): status is string => typeof status === "string") }
           : {}),
         ...("label" in block ? { label: block.label } : {}),
       },
