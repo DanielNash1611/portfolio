@@ -6,7 +6,7 @@ import {
 } from "@/lib/experience/intro-map-sequence";
 
 import {
-  orchestraController,
+  orchestraArrivalGuard,
   type OrchestraGeometry,
 } from "@/lib/experience/orchestra-stop";
 
@@ -38,14 +38,14 @@ function nativeTarget(target: EventTarget | null, root: HTMLElement) {
 /** Measure only the actual hero and first three-leaf map, once per touch gesture. */
 function geometry(root: HTMLElement): IntroMapGeometry | null {
   const hero = root.querySelector<HTMLElement>("#experience-intro");
-  const ending = hero?.querySelector<HTMLElement>(".cue-animation-landing");
+  const products = root.querySelector<HTMLElement>("#experience-products");
   const map = root.querySelector<HTMLElement>(
     '#experience-outcomes[data-container="navigation-case"][data-reading="false"]',
   );
   const stage = map?.querySelector<HTMLElement>(".outcome-stage");
   if (
     !hero ||
-    !ending ||
+    !products ||
     !map ||
     !stage ||
     stage.dataset.open === "true" ||
@@ -57,17 +57,16 @@ function geometry(root: HTMLElement): IntroMapGeometry | null {
   );
   const top = parseFloat(getComputedStyle(stage).top) || 113;
   const start = Math.max(0, hero.getBoundingClientRect().top + scrollY - top);
-  const heroEnd =
-    ending.getBoundingClientRect().top + scrollY - innerHeight * 0.4;
   const mapStart = map.getBoundingClientRect().top + scrollY - top;
+  const nextSection = products.getBoundingClientRect().top + scrollY - top;
   if (
     !Number.isFinite(travel) ||
     travel <= 0 ||
-    heroEnd <= start ||
-    mapStart <= heroEnd
+    mapStart <= start ||
+    nextSection <= mapStart + travel
   )
     return null;
-  return { start, heroEnd, mapStart, travel };
+  return { start, mapStart, travel, nextSection };
 }
 
 /** Match useScoreOverture's live sticky geometry; no generic section stop. */
@@ -126,19 +125,22 @@ export function useIntroMapSequence(
       settle,
       cancel,
     };
-    const controllers = [
-      introMapController({ ...host, geometry: () => geometry(element) }),
-      orchestraController({
-        ...host,
-        geometry: () => orchestraGeometry(element),
-      }),
-    ];
+    const intro = introMapController({
+      ...host,
+      geometry: () => geometry(element),
+    });
+    const orchestra = orchestraArrivalGuard({
+      ...host,
+      geometry: () => orchestraGeometry(element),
+    });
+    const controllers = [intro, orchestra];
     const start = (event: TouchEvent) =>
       controllers.forEach((c) => c.start(event));
     const move = (event: TouchEvent) =>
       controllers.forEach((c) => c.move(event));
     const end = (event: TouchEvent) => controllers.forEach((c) => c.end(event));
     const abort = () => controllers.forEach((c) => c.abort());
+    const scrolled = () => orchestra.scrolled();
     // Collapsing phone browser chrome changes height during a swipe. Only
     // a width/orientation change invalidates and cancels this gesture.
     let width = innerWidth;
@@ -157,6 +159,7 @@ export function useIntroMapSequence(
     element.addEventListener("touchend", end, { passive: true });
     element.addEventListener("touchcancel", abort, { passive: true });
     element.addEventListener("click", click, true);
+    window.addEventListener("scroll", scrolled, { passive: true });
     window.addEventListener("wheel", abort, { passive: true });
     window.addEventListener("keydown", abort);
     window.addEventListener("hashchange", abort);
@@ -168,6 +171,7 @@ export function useIntroMapSequence(
       element.removeEventListener("touchend", end);
       element.removeEventListener("touchcancel", abort);
       element.removeEventListener("click", click, true);
+      window.removeEventListener("scroll", scrolled);
       window.removeEventListener("wheel", abort);
       window.removeEventListener("keydown", abort);
       window.removeEventListener("hashchange", abort);

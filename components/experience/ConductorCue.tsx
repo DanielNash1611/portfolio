@@ -164,7 +164,6 @@ export default function ConductorCue({
         </div>
       </div>
       <div ref={composition} className="cue-composition">
-        <span className="cue-animation-landing" aria-hidden="true" />
         <p className="cue-perspectives">Many inputs. One way forward.</p>
         <figure className="cue-portrait">
           <Image

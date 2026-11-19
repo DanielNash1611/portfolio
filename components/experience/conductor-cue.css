@@ -306,13 +306,3 @@
     animation: none !important;
   }
 }
-
-/* Align the three resolved outcomes before handing off to leadership work. */
-.cue-animation-landing {
-  position: absolute;
-  top: 85%;
-  left: 50%;
-  width: 1px;
-  height: 1px;
-  pointer-events: none;
-}
