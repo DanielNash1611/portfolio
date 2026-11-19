@@ -26,7 +26,11 @@ export function mapLeafFrame(progress: number, index: number) {
   };
 }
 
-export function mapUnfoldTravel(stageHeight: number) {
+export function mapUnfoldTravel(stageHeight: number, compact = false) {
+  if (compact)
+    return Number.isFinite(stageHeight)
+      ? Math.max(1000, Math.min(1450, stageHeight * 1.65))
+      : 1150;
   return Number.isFinite(stageHeight)
     ? Math.max(620, Math.min(850, stageHeight * 0.95))
     : 680;

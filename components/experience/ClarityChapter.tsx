@@ -272,6 +272,7 @@ function MethodJourney({ paused }: { paused: boolean }) {
         canvas.getBoundingClientRect().height,
         parseFloat(getComputedStyle(canvas).top) || 0,
         viewport.compact,
+        Boolean(element.closest('.experience[data-home-pacing="true"]')),
       );
       if (measuredStep !== geometry.step) {
         measuredStep = geometry.step;

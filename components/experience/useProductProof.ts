@@ -8,6 +8,8 @@ import {
   productProofTravel,
 } from "@/lib/experience/product-proof";
 
+import { useCompactHomePacing } from "./useCompactHomePacing";
+
 /** Ordinary document scrolling owns the story. No wheel/touch interception. */
 export function useProductProof(
   root: RefObject<HTMLElement | null>,
@@ -15,6 +17,7 @@ export function useProductProof(
   reading: boolean,
   paused: boolean,
 ) {
+  const compact = useCompactHomePacing(root);
   const progress = useMotionValue(0);
   const [fits, setFits] = useState(false);
   const [travel, setTravel] = useState(0);
@@ -28,12 +31,13 @@ export function useProductProof(
   useEffect(() => {
     const element = stage.current;
     if (!enabled || !element) return;
-    const measure = () => setTravel(productProofTravel(element.clientHeight));
+    const measure = () =>
+      setTravel(productProofTravel(element.clientHeight, compact));
     const observer = new ResizeObserver(measure);
     observer.observe(element);
     measure();
     return () => observer.disconnect();
-  }, [enabled, stage]);
+  }, [enabled, stage, compact]);
   // Read live DOM geometry at interaction time; ref identity remains stable.
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const start = useCallback(() => {

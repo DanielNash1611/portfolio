@@ -2,8 +2,9 @@ import { referralPhases, referralReadingStops } from "./referral-ring";
 import { sceneSwipeController, type SceneSwipeHost } from "./scene-swipe";
 
 export type ReferralGeometry = { start: number; travel: number; count: number };
+// Land inside the grouped plateau: native pixel rounding must not leave its controls disabled.
 export function referralStops({ start, travel, count }: ReferralGeometry) {
-  return [...referralReadingStops(count), referralPhases.grouped].map(
+  return [...referralReadingStops(count), referralPhases.grouped + 0.06].map(
     (p) => start + p * travel,
   );
 }

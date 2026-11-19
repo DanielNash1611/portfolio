@@ -56,7 +56,11 @@ export function productProofTarget(project: number, step: number) {
   return (index + targets[view]) / 3;
 }
 
-export function productProofTravel(stageHeight: number) {
+export function productProofTravel(stageHeight: number, compact = false) {
+  if (compact)
+    return Number.isFinite(stageHeight)
+      ? Math.max(2600, Math.min(4200, stageHeight * 4.8))
+      : 3300;
   return Number.isFinite(stageHeight)
     ? Math.max(1500, Math.min(2400, stageHeight * 2.8))
     : 1900;

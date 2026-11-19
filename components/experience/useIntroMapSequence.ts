@@ -130,8 +130,13 @@ export function useIntroMapSequence(
       cancel();
       const from = scrollY,
         started = performance.now();
+      const duration =
+        element.dataset.homePacing === "true" &&
+        matchMedia("(max-width: 899px), (pointer: coarse)").matches
+          ? 480
+          : 320;
       const tick = (now: number) => {
-        const t = Math.min(1, (now - started) / 320);
+        const t = Math.min(1, (now - started) / duration);
         window.scrollTo({
           top: from + (target - from) * (1 - (1 - t) ** 3),
           behavior: "instant",

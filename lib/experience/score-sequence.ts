@@ -101,7 +101,29 @@ export function scoreNoteFrame(
   };
 }
 
-export function scoreOvertureTravel(stageHeight: number) {
+/** Mobile scroll has a broad fully-formed interval before the score transfer. */
+export function scoreOvertureProgress(offset: number, compact = false) {
+  const p = clamp(offset);
+  if (!compact || p <= orchestraFormationProgress) return p;
+  if (p <= 0.48)
+    return orchestraFormationProgress + (p - orchestraFormationProgress) * 0.1;
+  return 0.3 + ((p - 0.48) / 0.52) * 0.7;
+}
+
+/** Inverse mapping keeps slider/replay and direct navigation on their real frames. */
+export function scoreOvertureOffset(progress: number, compact = false) {
+  const p = clamp(progress);
+  if (!compact || p <= orchestraFormationProgress) return p;
+  if (p <= 0.3)
+    return orchestraFormationProgress + (p - orchestraFormationProgress) / 0.1;
+  return 0.48 + ((p - 0.3) / 0.7) * 0.52;
+}
+
+export function scoreOvertureTravel(stageHeight: number, compact = false) {
+  if (compact)
+    return Number.isFinite(stageHeight)
+      ? Math.max(1800, Math.min(2500, stageHeight * 3.2))
+      : 2100;
   return Number.isFinite(stageHeight)
     ? Math.max(860, Math.min(1300, stageHeight * 1.7))
     : 1000;

@@ -42,6 +42,7 @@ import "./navigation-case.css";
 import "./score-folio.css";
 import "./score-sequence.css";
 import "./map-unfold.css";
+import "./home-pacing.css";
 
 export default function ExperiencePreview({
   home,
@@ -154,6 +155,7 @@ export default function ExperiencePreview({
       className="experience experience-narrative"
       data-paused={stopMotion}
       data-motion={mounted && !quiet}
+      data-home-pacing={presentation === "home"}
       data-intro-map-sequence={introSequence}
       data-personal-video={personalVideo}
       data-testid="experience-preview"
