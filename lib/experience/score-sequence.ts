@@ -5,12 +5,15 @@ const ease = (value: number, from: number, to: number) => {
   return t * t * (3 - 2 * t);
 };
 
+/** Fully gathered, still visible, before the score transfer starts. */
+export const orchestraFormationProgress = 0.28;
+
 /** The folio cannot unfold until the orchestra has arrived and gathered. */
 export function scoreSequenceFrame(progress: number) {
   const p = clamp(progress);
   return {
     progress: p,
-    gather: ease(p, 0.03, 0.28),
+    gather: ease(p, 0.03, orchestraFormationProgress),
     orchestra: 1 - ease(p, 0.3, 0.46),
     surface: ease(p, 0.32, 0.45),
     heading: ease(p, 0.44, 0.6),

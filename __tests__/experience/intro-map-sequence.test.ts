@@ -5,6 +5,14 @@ import {
   introMapTarget,
   type IntroMapGeometry,
 } from "@/lib/experience/intro-map-sequence";
+import {
+  orchestraController,
+  orchestraTarget,
+} from "@/lib/experience/orchestra-stop";
+import {
+  orchestraFormationProgress,
+  scoreSequenceFrame,
+} from "@/lib/experience/score-sequence";
 import { mapLeafFrame, mapLeafStops } from "@/lib/experience/map-unfold";
 
 const geometry: IntroMapGeometry = {
@@ -14,7 +22,11 @@ const geometry: IntroMapGeometry = {
   travel: 620,
 };
 const end = geometry.mapStart + geometry.travel;
-function fixture(origin = 0) {
+const orchestraGeometry = { start: 5000, travel: 1000 };
+const formed =
+  orchestraGeometry.start +
+  orchestraGeometry.travel * orchestraFormationProgress;
+function fixture(origin = 0, orchestra = false) {
   let position = origin,
     native = false,
     zoomed = false,
@@ -22,23 +34,29 @@ function fixture(origin = 0) {
     cancels = 0;
   const moves: number[] = [],
     settles: number[] = [];
-  const controller = introMapController({
+  const host = {
     position: () => position,
     geometry: () => (available ? geometry : null),
     native: () => native,
     zoomed: () => zoomed,
-    move: (y) => {
+    move: (y: number) => {
       position = y;
       moves.push(y);
     },
-    settle: (y) => {
+    settle: (y: number) => {
       position = y;
       settles.push(y);
     },
     cancel: () => {
       cancels++;
     },
-  });
+  };
+  const controller = orchestra
+    ? orchestraController({
+        ...host,
+        geometry: () => (available ? orchestraGeometry : null),
+      })
+    : introMapController(host);
   function event(
     y: number,
     time: number,
@@ -242,4 +260,103 @@ test("interruptions and replay do not accumulate scene state or snap tiny nudges
     geometry.mapStart + mapLeafStops[0] * geometry.travel,
   );
   assert.equal(introMapTarget(midway, -1, geometry), geometry.mapStart);
+});
+
+test("fast reverse from the closed compass leaves for the resolved hero instead of recapturing the case", () => {
+  for (const offset of [-1.5, 0, 1.5]) {
+    for (const fast of [false, true]) {
+      const f = fixture(geometry.mapStart + offset);
+      f.swipe(-1, fast);
+      assert.equal(f.position, geometry.heroEnd);
+      f.swipe(-1, fast);
+      assert.equal(f.position, geometry.start);
+      assert.ok(f.swipe(-1, fast).every((event) => !event.defaultPrevented));
+      // Repeat the same opening/reverse path without any retained scene index.
+      f.swipe(1, fast);
+      f.swipe(1, fast);
+      assert.equal(f.position, geometry.mapStart);
+      f.swipe(-1, fast);
+      assert.equal(f.position, geometry.heroEnd);
+    }
+  }
+  const f = fixture(end);
+  f.swipe(-1, true);
+  assert.equal(f.position, geometry.mapStart);
+  f.swipe(-1, true);
+  assert.equal(f.position, geometry.heroEnd);
+});
+
+test("orchestra holds at the actual fully gathered frame, before any score transfer", () => {
+  assert.equal(scoreSequenceFrame(orchestraFormationProgress).gather, 1);
+  assert.equal(scoreSequenceFrame(orchestraFormationProgress).orchestra, 1);
+  assert.equal(scoreSequenceFrame(orchestraFormationProgress).surface, 0);
+  for (const fast of [false, true]) {
+    for (const origin of [orchestraGeometry.start, formed - 50]) {
+      const f = fixture(origin, true);
+      assert.ok(f.swipe(1, fast).every((event) => event.defaultPrevented));
+      assert.equal(f.position, formed);
+      assert.ok(f.moves.every((y) => y <= formed));
+      assert.ok(f.swipe(1, fast).every((event) => !event.defaultPrevented));
+      assert.equal(f.settles.length, 1, "a fresh forward swipe exits natively");
+      assert.ok(f.swipe(-1, fast).every((event) => !event.defaultPrevented));
+    }
+  }
+});
+
+test("reverse orchestra travel holds once, then releases toward its start; gaps remain native", () => {
+  for (const fast of [false, true]) {
+    const f = fixture(orchestraGeometry.start + orchestraGeometry.travel, true);
+    f.swipe(-1, fast);
+    assert.equal(f.position, formed);
+    assert.ok(f.moves.every((y) => y >= formed));
+    assert.ok(f.swipe(-1, fast).every((event) => !event.defaultPrevented));
+    // Simulate native reverse travel and then revisit/replay the formation.
+    f.position = orchestraGeometry.start;
+    f.swipe(1, fast);
+    assert.equal(f.position, formed);
+  }
+  for (const origin of [0, orchestraGeometry.start - 10, 7000]) {
+    const f = fixture(origin, true);
+    assert.ok(f.swipe(1, true).every((e) => !e.defaultPrevented));
+    assert.ok(f.swipe(-1, true).every((e) => !e.defaultPrevented));
+  }
+  for (const offset of [-1.5, 0, 1.5]) {
+    assert.equal(orchestraTarget(formed + offset, 1, orchestraGeometry), null);
+    assert.equal(orchestraTarget(formed + offset, -1, orchestraGeometry), null);
+  }
+});
+
+test("orchestra interruption, pinch and mode/widget bypass never force a return to the hold", () => {
+  const f = fixture(orchestraGeometry.start, true);
+  f.controller.start(f.event(500, 0));
+  f.controller.move(f.event(400, 100));
+  f.controller.abort();
+  f.controller.end(f.event(400, 110, 0));
+  assert.equal(f.settles.length, 0);
+  f.swipe();
+  assert.equal(f.position, formed);
+  for (const bypass of [
+    "pinch",
+    "zoom",
+    "widget",
+    "reading",
+    "browser-owned",
+  ]) {
+    const f = fixture(orchestraGeometry.start, true);
+    f.zoomed = bypass === "zoom";
+    f.native = bypass === "widget";
+    f.available = bypass !== "reading";
+    f.controller.start(f.event(500, 0));
+    const move = f.event(
+      300,
+      60,
+      bypass === "pinch" ? 2 : 1,
+      100,
+      bypass !== "browser-owned",
+    );
+    f.controller.move(move);
+    f.controller.end(f.event(300, 70, 0));
+    assert.equal(move.defaultPrevented, false, bypass);
+    assert.equal(f.settles.length, 0, bypass);
+  }
 });

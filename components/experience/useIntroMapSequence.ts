@@ -5,6 +5,11 @@ import {
   type IntroMapGeometry,
 } from "@/lib/experience/intro-map-sequence";
 
+import {
+  orchestraController,
+  type OrchestraGeometry,
+} from "@/lib/experience/orchestra-stop";
+
 function nativeTarget(target: EventTarget | null, root: HTMLElement) {
   if (
     !(target instanceof Element) ||
@@ -65,6 +70,28 @@ function geometry(root: HTMLElement): IntroMapGeometry | null {
   return { start, heroEnd, mapStart, travel };
 }
 
+/** Match useScoreOverture's live sticky geometry; no generic section stop. */
+function orchestraGeometry(root: HTMLElement): OrchestraGeometry | null {
+  if (!matchMedia("(max-width: 759px), (pointer: coarse)").matches) return null;
+  const score = root.querySelector<HTMLElement>(
+    '[data-container="score-folio"][data-reading="false"]',
+  );
+  const stage = score?.querySelector<HTMLElement>(".outcome-stage");
+  if (
+    !score ||
+    !stage ||
+    stage.dataset.open === "true" ||
+    stage.dataset.returning === "true"
+  )
+    return null;
+  const travel = parseFloat(
+    getComputedStyle(score).getPropertyValue("--score-overture-travel"),
+  );
+  if (!Number.isFinite(travel) || travel <= 0) return null;
+  const top = parseFloat(getComputedStyle(stage).top) || 113;
+  return { start: score.getBoundingClientRect().top + scrollY - top, travel };
+}
+
 export function useIntroMapSequence(
   root: RefObject<HTMLDivElement | null>,
   enabled: boolean,
@@ -91,15 +118,27 @@ export function useIntroMapSequence(
       };
       frame = requestAnimationFrame(tick);
     };
-    const { start, move, end, abort } = introMapController({
+    const host = {
       position: () => scrollY,
-      geometry: () => geometry(element),
-      native: (target) => nativeTarget(target, element),
+      native: (target: EventTarget | null) => nativeTarget(target, element),
       zoomed: () => (window.visualViewport?.scale ?? 1) > 1.01,
-      move: (top) => window.scrollTo({ top, behavior: "instant" }),
+      move: (top: number) => window.scrollTo({ top, behavior: "instant" }),
       settle,
       cancel,
-    });
+    };
+    const controllers = [
+      introMapController({ ...host, geometry: () => geometry(element) }),
+      orchestraController({
+        ...host,
+        geometry: () => orchestraGeometry(element),
+      }),
+    ];
+    const start = (event: TouchEvent) =>
+      controllers.forEach((c) => c.start(event));
+    const move = (event: TouchEvent) =>
+      controllers.forEach((c) => c.move(event));
+    const end = (event: TouchEvent) => controllers.forEach((c) => c.end(event));
+    const abort = () => controllers.forEach((c) => c.abort());
     // Collapsing phone browser chrome changes height during a swipe. Only
     // a width/orientation change invalidates and cancels this gesture.
     let width = innerWidth;
