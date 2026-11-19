@@ -10,6 +10,11 @@ import {
   type OrchestraGeometry,
 } from "@/lib/experience/orchestra-stop";
 
+import {
+  referralSwipeController,
+  type ReferralGeometry,
+} from "@/lib/experience/referral-swipe";
+
 function nativeTarget(target: EventTarget | null, root: HTMLElement) {
   if (
     !(target instanceof Element) ||
@@ -91,6 +96,24 @@ function orchestraGeometry(root: HTMLElement): OrchestraGeometry | null {
   return { start: score.getBoundingClientRect().top + scrollY - top, travel };
 }
 
+/** Same start-start/end-end mapping as the recommendation ring's useScroll. */
+function referralGeometry(root: HTMLElement): ReferralGeometry | null {
+  if (!matchMedia("(max-width: 759px), (pointer: coarse)").matches) return null;
+  const section = root.querySelector<HTMLElement>(
+    '#experience-recommendations[data-static="false"]',
+  );
+  if (!section || document.querySelector(".experience-referral-detail[open]"))
+    return null;
+  const travel = section.clientHeight - innerHeight;
+  const count = section.querySelectorAll(".experience-referral-card").length;
+  if (travel <= 0 || !count) return null;
+  return {
+    start: section.getBoundingClientRect().top + scrollY,
+    travel,
+    count,
+  };
+}
+
 export function useIntroMapSequence(
   root: RefObject<HTMLDivElement | null>,
   enabled: boolean,
@@ -133,14 +156,21 @@ export function useIntroMapSequence(
       ...host,
       geometry: () => orchestraGeometry(element),
     });
-    const controllers = [intro, orchestra];
+    const referrals = referralSwipeController({
+      ...host,
+      geometry: () => referralGeometry(element),
+    });
+    const controllers = [intro, orchestra, referrals];
     const start = (event: TouchEvent) =>
       controllers.forEach((c) => c.start(event));
     const move = (event: TouchEvent) =>
       controllers.forEach((c) => c.move(event));
     const end = (event: TouchEvent) => controllers.forEach((c) => c.end(event));
     const abort = () => controllers.forEach((c) => c.abort());
-    const scrolled = () => orchestra.scrolled();
+    const scrolled = () => {
+      orchestra.scrolled();
+      referrals.scrolled();
+    };
     // Collapsing phone browser chrome changes height during a swipe. Only
     // a width/orientation change invalidates and cancels this gesture.
     let width = innerWidth;

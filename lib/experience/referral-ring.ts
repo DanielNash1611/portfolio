@@ -12,12 +12,22 @@ export const referralPhases = {
   grouped: 0.88,
 } as const;
 export const referralFeaturedCount = 3;
+const referralReadingSpan = 0.53;
+/** Land inside each fully face-on reading plateau, before the split starts. */
+export function referralReadingStops(count: number) {
+  const featured = Math.min(referralFeaturedCount, count);
+  return Array.from(
+    { length: featured },
+    (_, i) =>
+      referralPhases.reading + ((i + 0.25) / featured) * referralReadingSpan,
+  );
+}
 export function referralRingFrame(progress: number, count: number) {
   const p = clamp(progress);
   // Rotate through the three featured voices, then gather every card. The rest
   // remain directly available in the category browser instead of a long reel.
   const reading = recommendationFrame(
-    (p - referralPhases.reading) / 0.53,
+    (p - referralPhases.reading) / referralReadingSpan,
     Math.min(referralFeaturedCount, count),
   );
   return {
