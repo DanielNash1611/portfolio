@@ -83,7 +83,10 @@ export function resolveQuestionScope(request: CopilotRequest): QuestionScope {
     )
   )
     return { kind: "broad", query };
-  if (/\b(?:this page|this work|on the page|here)\b/i.test(query))
+  if (
+    /\b(?:this page|this work|on the page|here)\b/i.test(query) ||
+    (request.pageContext.slug === "contact-center-roadmap" && /\bthis roadmap\b/i.test(query))
+  )
     return { kind: "page", projectId: request.pageContext.slug, query };
   const namedProjects = getNamedProjectIds(query);
   if (namedProjects.length > 1) return { kind: "broad", query };
@@ -131,7 +134,7 @@ export function getPortfolioSearchDocuments(): SearchDocument[] {
   return getPortfolioSearchCatalog().map((block) => ({
     id: block.id,
     projectId: block.pageSlug,
-    text: [block.pageTitle, ...block.claims, ...block.qualifications].join(
+    text: block.searchText ?? [block.pageTitle, ...block.claims, ...block.qualifications].join(
       "\n",
     ),
     revision: block.sourceRefs.join("|"),

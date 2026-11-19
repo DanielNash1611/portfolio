@@ -7,6 +7,7 @@ import { useState, type ReactNode } from "react";
 import { usePortfolioAssistant } from "@/components/portfolio/PortfolioAssistantProvider";
 import { findRelevantWork } from "@/lib/portfolio-agent/capabilities";
 import type { ExperienceHomeContent } from "@/content/experience-home";
+import { contactCenterRoadmapHref } from "@/content/projects/contact-center-roadmap";
 import { Products, WorkTheater, CreativeWorlds } from "./ExperienceStories";
 import Recommendations from "./Recommendations";
 import SystemsTransformation from "./SystemsTransformation";
@@ -129,7 +130,7 @@ export default function ExperienceHome({
   direction,
   workflow,
   gravity,
-  refinedProducts = false,
+  presentation,
 }: {
   content: ExperienceHomeContent;
   paused: boolean;
@@ -138,11 +139,12 @@ export default function ExperienceHome({
   direction: (open: boolean) => ReactNode;
   workflow: (open: boolean) => ReactNode;
   gravity: (open: boolean) => ReactNode;
-  refinedProducts?: boolean;
+  presentation: "home" | "preview";
 }) {
+  const isHome = presentation === "home";
   return (
     <div className="experience-home" data-paused={paused}>
-      {refinedProducts ? (
+      {isHome ? (
         <ProductProofChapter
           items={content.products}
           paused={paused}
@@ -151,7 +153,7 @@ export default function ExperienceHome({
       ) : (
         <Products items={content.products} paused={paused || reading} />
       )}
-      {!refinedProducts ? (
+      {!isHome ? (
         <ExperienceDisclosure
           className="experience-depth-green"
           title="Inside the AI review decisions"
@@ -166,20 +168,28 @@ export default function ExperienceHome({
         paused={paused}
         reading={reading}
       />
-      <ExperienceDisclosure
-        title="Inside the roadmap transformation"
-        description="Explore the sequence from fragmented tools to a one-year review."
-      >
-        {(open) => (
-          <section
-            id="experience-impact"
-            className="experience-impact experience-home-section"
-            aria-label="Roadmap transformation"
-          >
-            <SystemsTransformation reading={reading || !open} />
-          </section>
-        )}
-      </ExperienceDisclosure>
+      {isHome ? (
+        <div id="experience-impact" className="experience-roadmap-entry">
+          <Link id="experience-systems" href={`${contactCenterRoadmapHref}#roadmap-exhibit`}>
+            Explore the Contact Center roadmap exhibit <ArrowUpRight size={17} aria-hidden="true" />
+          </Link>
+        </div>
+      ) : (
+        <ExperienceDisclosure
+          title="Inside the roadmap transformation"
+          description="Explore the sequence from fragmented tools to a one-year review."
+        >
+          {(open) => (
+            <section
+              id="experience-impact"
+              className="experience-impact experience-home-section"
+              aria-label="Roadmap transformation"
+            >
+              <SystemsTransformation reading={reading || !open} />
+            </section>
+          )}
+        </ExperienceDisclosure>
+      )}
       <ClarityChapter
         items={content.toolkit}
         values={content.positioning.categories}

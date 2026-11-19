@@ -25,6 +25,7 @@ export type ClaimBlock = {
   sourceRefs: string[];
   coveredStatuses?: string[];
   label?: string;
+  searchText?: string;
 };
 type SourcePage = Pick<
   PageContext,
@@ -36,6 +37,7 @@ type BlockSpec = {
   kind?: ClaimBlock["kind"];
   claims: string[];
   qualifications: string[];
+  indexSection?: number | "overview";
 };
 const unique = (items: string[]) => [...new Set(items.filter(Boolean))];
 const end = (text: string) =>
@@ -55,6 +57,45 @@ const bounds = (name: string) => `claimBoundaries.${name}`;
 // These are references into the approved canonical packet, not rewritten claims.
 // High-risk proof points have explicit, indivisible qualification mappings.
 const SPECS: Record<string, BlockSpec[]> = {
+  "contact-center-roadmap": [
+    {
+      key: "initiative",
+      claims: ["authoredSections.0.snippets.1"],
+      qualifications: [],
+      indexSection: 0,
+    },
+    {
+      key: "discovery",
+      claims: ["authoredSections.1.snippets"],
+      qualifications: [],
+      indexSection: 1,
+    },
+    {
+      key: "sequencing",
+      claims: ["authoredSections.2.snippets.0"],
+      qualifications: [],
+      indexSection: 2,
+    },
+    {
+      key: "handoff",
+      claims: ["authoredSections.3.snippets.1"],
+      qualifications: [],
+      indexSection: 3,
+    },
+    {
+      key: "results",
+      claims: ["authoredSections.4.snippets.0"],
+      qualifications: ["authoredSections.4.snippets.1"],
+      indexSection: 4,
+    },
+    {
+      key: "ownership",
+      kind: "ownership",
+      claims: [bounds("directOwnership"), bounds("influence")],
+      qualifications: [bounds("explicitUnknowns")],
+      indexSection: "overview",
+    },
+  ],
   "ai-platform-mcp": [],
   "ai-strategy": [],
   "ai-career-operating-system": [
@@ -85,6 +126,28 @@ const SPECS: Record<string, BlockSpec[]> = {
     },
   ],
 };
+
+// Keep the roadmap's reviewed public passages as the embedding input.
+// The answer still renders the narrower, explicitly selected claims.
+function indexedCaseSection(page: SourcePage, section: number | "overview") {
+  const source =
+    section === "overview"
+      ? {
+          label: "Overview and evidence",
+          snippets: [
+            page.oneLiner ?? "",
+            ...(page.evidenceHighlights ?? []).map((item) => `${item.label}: ${item.detail}`),
+          ],
+        }
+      : page.authoredSections?.[section];
+  if (!source) return undefined;
+  return [
+    page.title,
+    source.label,
+    ...source.snippets.slice(0, 3),
+    JSON.stringify(page.claimBoundaries ?? {}),
+  ].join("\n");
+}
 
 export function pageClaimBlocks(page: SourcePage): ClaimBlock[] {
   const specs =
@@ -134,6 +197,7 @@ export function pageClaimBlocks(page: SourcePage): ClaimBlock[] {
         qualifications: unique(
           spec.qualifications.flatMap((ref) => field(page, ref)),
         ),
+        ...(spec.indexSection === undefined ? {} : { searchText: indexedCaseSection(page, spec.indexSection) }),
         sourceRefs: [...spec.claims, ...spec.qualifications].map(
           (ref) => `${page.slug}.${ref}`,
         ),
@@ -347,6 +411,19 @@ export function claimSelectionPolicy(
     purpose = "focused-project-ownership";
     minItems = blocks.length;
     maxItems = Math.max(1, blocks.length);
+  } else if (
+    slug === "contact-center-roadmap" &&
+    request.scope !== "portfolio" &&
+    !across &&
+    /\b(?:why|how|what)\b/i.test(request.message) &&
+    /\b(?:returns|OMS|Salesforce)\b/i.test(request.message) &&
+    /\b(?:first|before|start\w*|prioriti[sz]\w*|sequenc\w*)\b/i.test(request.message)
+  ) {
+    blocks = current.filter((block) => block.id === `${slug}:sequencing`);
+    fallbackIds = blocks.map((block) => block.id);
+    purpose = "roadmap-sequencing";
+    minItems = blocks.length;
+    maxItems = 1;
   } else if (
     slug === "ai-career-operating-system" &&
     /\b(?:how senior|seniority|level of work)\b/i.test(request.message) &&

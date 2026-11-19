@@ -274,7 +274,7 @@ export default function ExperiencePreview({
           content={home}
           paused={stopMotion}
           reading={!mounted || quiet}
-          refinedProducts={presentation === "home"}
+          presentation={presentation}
           onGravity={openGravity}
           direction={(open) => (
             <>

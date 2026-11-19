@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export default function HomePage(): React.JSX.Element {
   return (
     <ExperiencePreview
-      home={getExperienceHomeContent()}
+      home={getExperienceHomeContent("home")}
       personalVideo={false}
       presentation="home"
     />

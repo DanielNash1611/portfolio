@@ -1,10 +1,11 @@
 import { getWorkEntry } from "./portfolio";
 import { systemsSource, systemsMilestones } from "./experience-systems";
 import { testimonials } from "@/data/testimonials";
+import { contactCenterRoadmapHref } from "./projects/contact-center-roadmap";
 
 /** Leadership stories for the preview. Outcomes retain their public-source
  * qualifications; the planning/onboarding example links to its own case study. */
-export function getExperienceOutcomes() {
+export function getExperienceOutcomes(presentation: "home" | "preview" = "preview") {
   const checkout = getWorkEntry("checkout-redesign")!;
   const adoption = getWorkEntry("chatgpt-enterprise")!;
   const roadmap = testimonials.find(
@@ -23,8 +24,10 @@ export function getExperienceOutcomes() {
       decision:
         "Connect everyday workflow problems to a sequenced roadmap, explicit quarterly targets, and a review of what actually changed.",
       evidence: systemsMilestones[systemsMilestones.length - 1].detail,
-      href: "#experience-systems",
-      action: "Explore the roadmap and reported result",
+      href: presentation === "home" ? contactCenterRoadmapHref : "#experience-systems",
+      action: presentation === "home"
+        ? "Read the Contact Center roadmap case"
+        : "Explore the roadmap and reported result",
       image: null,
       alt: null,
       caption: "Executive perspective · Contact Center roadmap",

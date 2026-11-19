@@ -72,6 +72,12 @@ const CANONICAL_PROJECTS: CanonicalProject[] = [
     source: "creative",
   },
   {
+    slug: "contact-center-roadmap",
+    href: "/work/contact-center-roadmap",
+    title: "Establishing product management in the Contact Center",
+    source: "work",
+  },
+  {
     slug: "chatgpt-enterprise",
     href: "/work/chatgpt-enterprise",
     title: "ChatGPT Enterprise from pilot to operating model",

@@ -333,7 +333,8 @@
 .oc-case .motion-reveal {
   animation: none;
 }
-.oc-case [data-oc-reveal="entered"] {
+.oc-case [data-oc-reveal="entered"],
+[data-case-reveal][data-oc-reveal="entered"] {
   animation: oc-scroll-reveal 0.7s cubic-bezier(0.2, 0.65, 0.3, 1) both;
 }
 @keyframes oc-scroll-reveal {
@@ -361,7 +362,7 @@
   text-transform: uppercase;
   letter-spacing: 0.16em;
 }
-.oc-graphic-heading h2 {
+.oc-graphic-heading :is(h2, h4) {
   font-family: var(--font-serif), Georgia, serif;
   font-size: clamp(24px, 3vw, 38px);
   line-height: 1.2;
@@ -382,6 +383,11 @@
   stroke: #f3eee4;
   stroke-width: 3px;
 }
+.oc-roadmap-trace {
+  fill: none;
+  stroke: #a14835;
+  stroke-width: 2.7px;
+}
 .oc-motion-graphic figcaption {
   font-size: 12px;
   line-height: 1.8;
@@ -391,7 +397,7 @@
   .oc-graphic-heading {
     display: block;
   }
-  .oc-graphic-heading h2 {
+  .oc-graphic-heading :is(h2, h4) {
     margin-top: 12px;
   }
   .oc-motion-graphic svg {
@@ -402,9 +408,13 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .oc-case [data-oc-reveal="entered"] {
+  .oc-case [data-oc-reveal="entered"],
+  [data-case-reveal][data-oc-reveal="entered"] {
     animation: none !important;
     transform: none !important;
+  }
+  .oc-roadmap-trace {
+    stroke-dashoffset: 0;
   }
 }
 @media (max-width: 600px) {

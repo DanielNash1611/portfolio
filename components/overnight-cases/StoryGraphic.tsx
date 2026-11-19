@@ -3,7 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import "./cases.css";
 
-export type StoryKind = "checkout" | "adoption" | "platform" | "planning";
+export type StoryKind =
+  | "checkout"
+  | "adoption"
+  | "platform"
+  | "planning"
+  | "roadmap";
 const stories = {
   checkout: {
     label: "Simplify the path. Preserve the choices.",
@@ -28,6 +33,12 @@ const stories = {
     caption:
       "Illustrated planning model: opportunities enter a shared workspace, move through prioritization, and return as learning. The graphic summarizes the documented JPD approach.",
     labels: ["Capture ideas", "Compare together", "Review + iterate"],
+  },
+  roadmap: {
+    label: "Follow a customer request",
+    caption:
+      "The revised presentation started with the work agents did for customers. Grouping tools by frequency made it easier to see where to bring work together.",
+    labels: ["Agent tasks", "Tools by frequency", "Consolidate work"],
   },
 };
 
@@ -77,6 +88,7 @@ export default function StoryGraphic({ kind }: { kind: StoryKind }) {
   }, []);
   const story = stories[kind];
   const x = 75 + progress * 650;
+  const Heading = kind === "roadmap" ? "h4" : "h2";
   return (
     <figure
       ref={ref}
@@ -86,7 +98,7 @@ export default function StoryGraphic({ kind }: { kind: StoryKind }) {
     >
       <div className="oc-graphic-heading">
         <span>Follow the decision</span>
-        <h2>{story.label}</h2>
+        <Heading>{story.label}</Heading>
       </div>
       <svg viewBox="0 0 800 230" role="img" aria-label={story.label}>
         <g
@@ -187,8 +199,34 @@ export default function StoryGraphic({ kind }: { kind: StoryKind }) {
               <path d="M633 100h28v28M661 100l-25 28M230 148l-7 12M230 148l10 9" />
             </>
           )}
+          {kind === "roadmap" && (
+            <>
+              {[52, 114, 176].map((y) => (
+                <g key={y}>
+                  <rect x="49" y={y - 15} width="57" height="30" rx="4" />
+                  <path d={`M106 ${y} C210 ${y} 215 114 300 114`} />
+                </g>
+              ))}
+              {[26, 56, 90].map((radius) => (
+                <circle key={radius} cx="395" cy="114" r={radius} />
+              ))}
+              <path d="M300 114H510C590 114 607 74 660 74M510 114C590 114 607 154 660 154" />
+              <rect x="660" y="59" width="72" height="30" rx="4" />
+              <rect x="660" y="139" width="72" height="30" rx="4" />
+            </>
+          )}
         </g>
-        <circle cx={x} cy="114" r="7" className="oc-graphic-traveler" />
+        {kind === "roadmap" ? (
+          <path
+            className="oc-roadmap-trace"
+            d="M106 114H510C590 114 607 74 660 74"
+            pathLength="1"
+            strokeDasharray="1"
+            strokeDashoffset={1 - progress}
+          />
+        ) : (
+          <circle cx={x} cy="114" r="7" className="oc-graphic-traveler" />
+        )}
         {story.labels.map((label, i) => (
           <text
             key={label}
