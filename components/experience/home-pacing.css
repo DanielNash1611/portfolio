@@ -1,0 +1,51 @@
+/* More mobile reading distance, scoped to the public homepage. Native document
+   scrolling owns ordinary content; no snap rules or additional gesture stops. */
+@media (max-width: 899px), (pointer: coarse) {
+  .experience[data-home-pacing="true"] .conductor-cue {
+    row-gap: 28px;
+    padding-bottom: 88px;
+  }
+  .experience[data-home-pacing="true"] .proof-static {
+    padding-block: 56px 40px;
+  }
+  .experience[data-home-pacing="true"] .proof-static-project {
+    padding-block: 52px;
+  }
+  .experience[data-home-pacing="true"] .proof-static-layout {
+    gap: 34px;
+  }
+  .experience[data-home-pacing="true"] .proof-static-surface {
+    min-height: 420px;
+  }
+  .experience[data-home-pacing="true"] .experience-story-list {
+    margin-top: 50px;
+  }
+  .experience[data-home-pacing="true"] .experience-project-story {
+    padding-block: 52px;
+  }
+  .experience[data-home-pacing="true"]
+    :is(.experience-contact, .experience-creative) {
+    padding-block: 96px;
+  }
+  .experience[data-home-pacing="true"] .experience-disclosure > summary {
+    min-height: 96px;
+    padding-block: 28px;
+  }
+  .experience[data-home-pacing="true"] #experience-toolkit {
+    padding-block: 80px;
+  }
+  .experience[data-home-pacing="true"] .clarity-guide-head {
+    padding-block: 64px;
+  }
+  .experience[data-home-pacing="true"] .clarity-guide-footer {
+    padding-block: 64px;
+  }
+  .experience[data-home-pacing="true"]
+    .clarity-principles[data-stacked="true"] {
+    --principles-travel: 340svh;
+  }
+  .experience[data-home-pacing="true"]
+    .experience-recommendation-flow[data-mode="ring"][data-static="false"] {
+    min-height: calc(100svh + var(--recommendation-featured-count) * 480px);
+  }
+}

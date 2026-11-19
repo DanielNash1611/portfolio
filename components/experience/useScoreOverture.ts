@@ -3,7 +3,13 @@
 import { useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useCallback, useEffect, useState, type RefObject } from "react";
 import { mapUnfoldTravel } from "@/lib/experience/map-unfold";
-import { scoreOvertureTravel } from "@/lib/experience/score-sequence";
+import {
+  scoreOvertureTravel,
+  scoreOvertureProgress,
+  scoreOvertureOffset,
+} from "@/lib/experience/score-sequence";
+
+import { useCompactHomePacing } from "./useCompactHomePacing";
 
 export function useScoreOverture(
   root: RefObject<HTMLElement | null>,
@@ -12,6 +18,7 @@ export function useScoreOverture(
   paused: boolean,
   kind: "score" | "map" = "score",
 ) {
+  const compact = useCompactHomePacing(root);
   const progress = useMotionValue(1);
   const [distance, setDistance] = useState(0);
   const [ready, setReady] = useState(true);
@@ -27,14 +34,14 @@ export function useScoreOverture(
     const measure = () =>
       setDistance(
         kind === "map"
-          ? mapUnfoldTravel(element.clientHeight)
-          : scoreOvertureTravel(element.clientHeight),
+          ? mapUnfoldTravel(element.clientHeight, compact)
+          : scoreOvertureTravel(element.clientHeight, compact),
       );
     const resize = new ResizeObserver(measure);
     resize.observe(element);
     measure();
     return () => resize.disconnect();
-  }, [enabled, kind, progress, stage]);
+  }, [enabled, kind, progress, stage, compact]);
   // Read live DOM geometry at interaction time; ref identity remains stable.
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const start = useCallback(() => {
@@ -47,7 +54,12 @@ export function useScoreOverture(
     let frame = 0;
     const update = () => {
       frame = 0;
-      progress.set(Math.max(0, Math.min(1, (scrollY - start()) / travel)));
+      progress.set(
+        scoreOvertureProgress(
+          (scrollY - start()) / travel,
+          compact && kind === "score",
+        ),
+      );
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -60,15 +72,17 @@ export function useScoreOverture(
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
     };
-  }, [enabled, paused, progress, start, travel]);
+  }, [enabled, paused, progress, start, travel, compact, kind]);
   const seek = useCallback(
     (value: number) => {
       window.scrollTo({
-        top: start() + Math.max(0, Math.min(1, value)) * travel,
+        top:
+          start() +
+          scoreOvertureOffset(value, compact && kind === "score") * travel,
         behavior: "instant",
       });
     },
-    [start, travel],
+    [start, travel, compact, kind],
   );
   return { progress, travel, ready: !enabled || ready, seek };
 }

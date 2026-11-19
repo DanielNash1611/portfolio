@@ -10,6 +10,7 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import { ArrowDown, RotateCcw } from "lucide-react";
 import {
   ensembleParts,
+  orchestraFormationProgress,
   ensemblePlayers,
   scoreNoteFrame,
   scoreSequenceFrame,
@@ -163,11 +164,13 @@ export default function LeadershipEnsemble({
                 id="ensemble-alignment"
                 aria-label="Orchestra scroll progress"
                 aria-valuetext={
-                  frame.progress < 0.3
+                  frame.progress < orchestraFormationProgress
                     ? "Bringing the parts together"
-                    : frame.progress < 0.94
-                      ? "Unfolding the score"
-                      : "Score ready"
+                    : frame.progress < 0.32
+                      ? "Parts aligned; continue scrolling to open the score"
+                      : frame.progress < 0.94
+                        ? "Unfolding the score"
+                        : "Score ready"
                 }
                 type="range"
                 min="0"
@@ -233,8 +236,21 @@ export default function LeadershipEnsemble({
               opacity={note.opacity}
               style={{ color: ink(player.part, note.settle) }}
             >
-              <circle r="7" />
-              <path d="M6 0V-22Q15-22 15-12" />
+              <ellipse
+                cx="-5"
+                cy="0"
+                rx="6"
+                ry="4"
+                transform="rotate(-20 -5 0)"
+              />
+              <ellipse
+                cx="12"
+                cy="-4"
+                rx="6"
+                ry="4"
+                transform="rotate(-20 12 -4)"
+              />
+              <path d="M0 0V-25M17-4V-29M0-25L17-29V-24L0-20Z" />
             </g>
           );
         })}
@@ -244,7 +260,7 @@ export default function LeadershipEnsemble({
           className="score-overture-caption"
           style={{ color: captionInk }}
         >
-          {position < 0.3
+          {position < orchestraFormationProgress
             ? "Scroll to bring the parts together."
             : position < 0.55
               ? "One shared direction. Keep scrolling to open the score."

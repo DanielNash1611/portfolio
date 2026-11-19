@@ -5,8 +5,15 @@ export function lightJourneyGeometry(
   documentTop: number,
   sceneHeight: number,
   stickyTop: number,
+  compact = false,
+  homePacing = false,
 ) {
-  const step = Math.max(500, sceneHeight * 1.05);
+  // Give touch swipes more room to settle on each method. Keep the same
+  // reading/flight proportions and native scroll, including reverse travel.
+  const step = Math.max(
+    500,
+    sceneHeight * (compact ? (homePacing ? 2.6 : 1.9) : 1.25),
+  );
   return { start: documentTop - stickyTop, step, distance: step * 6.05 };
 }
 

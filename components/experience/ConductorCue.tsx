@@ -14,6 +14,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { careerNarrative } from "@/content/experience-narrative";
 import "./conductor-cue.css";
+import { useCompactHomePacing } from "./useCompactHomePacing";
 
 const perspectives = [
   {
@@ -106,6 +107,7 @@ export default function ConductorCue({
   paused: boolean;
 }) {
   const root = useRef<HTMLElement>(null);
+  const compact = useCompactHomePacing(root);
   const composition = useRef<HTMLDivElement>(null);
   const [focusMode, setFocusMode] = useState<"scroll" | "questions" | "clear">(
     "scroll",
@@ -114,7 +116,7 @@ export default function ConductorCue({
   const progress = useMotionValue(1);
   const { scrollYProgress } = useScroll({
     target: composition,
-    offset: ["85% 65%", "85% 40%"],
+    offset: compact ? ["85% 80%", "85% 35%"] : ["85% 65%", "85% 40%"],
   });
   useMotionValueEvent(scrollYProgress, "change", (value) => {
     if (!quiet && !paused && focusMode === "scroll") progress.set(value);

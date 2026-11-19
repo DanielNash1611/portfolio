@@ -1584,7 +1584,11 @@ html[data-clarity-immersive] .experience-control-bar button:focus-visible {
 
 /* Return to the paper-card stack used in the earlier scroll chapters. */
 .clarity-principles[data-stacked="true"] {
-  height: calc(100svh - var(--portfolio-header-height, 61px) - 52px + 160svh);
+  --principles-travel: 180svh;
+  height: calc(
+    100svh - var(--portfolio-header-height, 61px) - 52px +
+      var(--principles-travel)
+  );
   position: relative;
   overflow-anchor: none;
 }
@@ -1690,5 +1694,12 @@ html[data-clarity-immersive] .experience-control-bar button:focus-visible {
   }
   .experience .clarity-principles-stage > nav button {
     font-size: 10px;
+  }
+}
+
+/* Match the light journey’s longer reading distance on narrow/touch screens. */
+@media (max-width: 899px), (pointer: coarse) {
+  .clarity-principles[data-stacked="true"] {
+    --principles-travel: 260svh;
   }
 }

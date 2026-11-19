@@ -33,6 +33,7 @@ import ConductorCue from "./ConductorCue";
 import { useIntroLayoutFits, useIntroProgress } from "./useIntroProgress";
 import { portraitPhases } from "@/lib/experience/portrait-scroll";
 import { revealExperienceTarget } from "@/lib/experience/reveal-target";
+import { useIntroMapSequence } from "./useIntroMapSequence";
 import "./experience.css";
 import "./personality-portrait.css";
 import "./opening-outcomes.css";
@@ -41,6 +42,7 @@ import "./navigation-case.css";
 import "./score-folio.css";
 import "./score-sequence.css";
 import "./map-unfold.css";
+import "./home-pacing.css";
 
 export default function ExperiencePreview({
   home,
@@ -66,6 +68,8 @@ export default function ExperiencePreview({
   useInitialChapterAnchor(root, mounted);
   const quiet = Boolean(reduced) || reading;
   const stopMotion = paused || quiet || fullGravity;
+  const introSequence = presentation === "home" && mounted && !stopMotion;
+  useIntroMapSequence(root, introSequence);
   useEffect(() => {
     const element = root.current;
     if (!element) return;
@@ -151,6 +155,8 @@ export default function ExperiencePreview({
       className="experience experience-narrative"
       data-paused={stopMotion}
       data-motion={mounted && !quiet}
+      data-home-pacing={presentation === "home"}
+      data-intro-map-sequence={introSequence}
       data-personal-video={personalVideo}
       data-testid="experience-preview"
     >
