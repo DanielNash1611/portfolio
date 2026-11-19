@@ -233,8 +233,21 @@ export default function LeadershipEnsemble({
               opacity={note.opacity}
               style={{ color: ink(player.part, note.settle) }}
             >
-              <circle r="7" />
-              <path d="M6 0V-22Q15-22 15-12" />
+              <ellipse
+                cx="-5"
+                cy="0"
+                rx="6"
+                ry="4"
+                transform="rotate(-20 -5 0)"
+              />
+              <ellipse
+                cx="12"
+                cy="-4"
+                rx="6"
+                ry="4"
+                transform="rotate(-20 12 -4)"
+              />
+              <path d="M0 0V-25M17-4V-29M0-25L17-29V-24L0-20Z" />
             </g>
           );
         })}

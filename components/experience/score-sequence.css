@@ -56,11 +56,12 @@
   stroke: currentColor;
   stroke-width: 1.5;
 }
-.score-transfer-note circle {
+.score-transfer-note ellipse {
   stroke: none;
 }
 .score-transfer-note path {
-  fill: none;
+  /* Solid beam and straight stems read as notation even while scattered. */
+  fill: currentColor;
 }
 .score-overture-caption {
   position: absolute;
