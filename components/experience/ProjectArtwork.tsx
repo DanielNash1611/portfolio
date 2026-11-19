@@ -6,7 +6,9 @@ import CheckoutArtwork from "./CheckoutArtwork";
 import PhoneArtwork from "./PhoneArtwork";
 import ScoutArtwork from "./ScoutArtwork";
 import LeadershipArtwork from "./LeadershipArtwork";
+import { contactCenterRoadmap } from "@/content/projects/contact-center-roadmap";
 const refreshed = new Set([
+  contactCenterRoadmap.slug,
   "product-practice",
   "cresta-coaching",
   "checkout-redesign",
@@ -28,6 +30,16 @@ export default function ProjectArtwork({
   quiet: boolean;
 }) {
   const lift = useTransform(progress, [0, 1], [22, -18]);
+  if (slug === contactCenterRoadmap.slug)
+    return (
+      <Image
+        src={contactCenterRoadmap.heroImage}
+        alt={contactCenterRoadmap.heroImageAlt}
+        width={720}
+        height={480}
+        sizes="(min-width: 900px) 44vw, 86vw"
+      />
+    );
   if (slug === "product-practice" || slug === "cresta-coaching")
     return <LeadershipArtwork slug={slug} />;
   if (slug === "checkout-redesign") return <CheckoutArtwork />;

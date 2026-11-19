@@ -1,6 +1,7 @@
 import { getAllCanonicalPageContexts } from "./context";
 
 const PROJECT_ALIASES: Record<string, string[]> = {
+  "contact-center-roadmap": ["contact center roadmap", "contact-center roadmap"],
   "oms-chatgpt-app": ["OMS", "order management"],
   "immunology-scout": ["Immunology Scout", "Immiatrics"],
   "chatgpt-enterprise": [

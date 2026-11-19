@@ -65,14 +65,14 @@ const productDecisions: Record<string, string> = {
 };
 
 /** A compact public projection of the same content used by the current homepage. */
-export function getExperienceHomeContent() {
+export function getExperienceHomeContent(presentation: "home" | "preview" = "preview") {
   return {
     hero: homeContent.hero,
-    outcomes: getExperienceOutcomes(),
+    outcomes: getExperienceOutcomes(presentation),
     toolkit: experienceToolkit,
     metrics: homeContent.metrics,
     positioning: homeContent.positioning,
-    work: getExperienceLeadershipCases(),
+    work: getExperienceLeadershipCases(presentation),
     supportingWork: homeContent.featuredWork
       .filter((slug) => slug !== "chatgpt-enterprise")
       .map((slug) => {

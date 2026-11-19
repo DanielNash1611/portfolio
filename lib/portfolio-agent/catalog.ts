@@ -200,6 +200,7 @@ export function getGuideSurfaceContext(slug: string): PageContext | null {
 }
 
 const aliases: Record<string, string[]> = {
+  "contact-center-roadmap": ["contact center roadmap", "contact center product management"],
   "checkout-redesign": [
     "checkout",
     "checkout redesign",

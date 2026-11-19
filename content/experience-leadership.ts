@@ -1,4 +1,5 @@
 import { getWorkEntry } from "./portfolio";
+import { contactCenterRoadmap } from "./projects/contact-center-roadmap";
 
 export type ExperienceWorkStory = {
   slug: string;
@@ -28,9 +29,9 @@ export type ExperienceWorkStory = {
  * player-coach-pm-owner-coaching, executive-roadmaps-outcome-portfolios,
  * rolled-out-cresta-ai-coaching-across and cresta-coaching-quality-insights-modernization.
  */
-export function getExperienceLeadershipCases(): ExperienceWorkStory[] {
+export function getExperienceLeadershipCases(presentation: "home" | "preview" = "preview"): ExperienceWorkStory[] {
   const adoption = getWorkEntry("chatgpt-enterprise")!;
-  return [
+  const shared: ExperienceWorkStory[] = [
     {
       slug: "product-practice",
       card: {
@@ -81,6 +82,37 @@ export function getExperienceLeadershipCases(): ExperienceWorkStory[] {
       // The opening cards already carry the qualified pilot and adoption metrics.
       metrics: [],
     },
+  ];
+
+  if (presentation === "home") {
+    return [
+      {
+        slug: contactCenterRoadmap.slug,
+        card: {
+          title: "Establish product management",
+          value: "First PM",
+          measure: "Guitar Center Contact Center",
+          qualification: "Three-year roadmap and PM handoff.",
+          decision:
+            "Use what agents do every day to sequence work with Contact Center and Technology leaders.",
+        },
+        title: contactCenterRoadmap.title,
+        eyebrow: "Set a shared direction",
+        description:
+          "I started discovery before leadership requested a roadmap, brought business and technology leaders together, and trained the next PM on the practice.",
+        href: contactCenterRoadmap.href,
+        action: "Read the Contact Center roadmap case",
+        previewLabel: "See how the tool map made the roadmap clear",
+        image: contactCenterRoadmap.heroImage,
+        alt: contactCenterRoadmap.heroImageAlt,
+        metrics: [],
+      },
+      ...shared,
+    ];
+  }
+
+  return [
+    ...shared,
     {
       slug: "cresta-coaching",
       card: {

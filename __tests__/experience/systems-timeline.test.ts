@@ -6,6 +6,7 @@ import {
 } from "@/content/experience-systems";
 import {
   quarterlySystemNodeFrame,
+  systemsMilestoneStop,
   systemsTimelineFrame,
 } from "@/lib/experience/systems-timeline";
 
@@ -19,7 +20,7 @@ test("quarterly scenes retain roadmap status and only the review presents the re
     3,
   );
   assert.equal(systemsMilestones[4].kind, "Reported result");
-  for (const p of [0, 0.26, 0.46, 0.66, 0.76]) {
+  for (const p of [0, 0.26, 0.46, 0.66, 0.76, 0.79, 0.799]) {
     const visible = contactCenterSystems.filter(
       (node) => quarterlySystemNodeFrame(p, node).opacity === 1,
     );
@@ -46,6 +47,12 @@ test("quarterly scenes retain roadmap status and only the review presents the re
     }
 });
 test("the quarterly narrative and physical system transition remain deterministic on reverse scroll", () => {
+  systemsMilestones.forEach((_, index) =>
+    assert.equal(
+      systemsTimelineFrame(systemsMilestoneStop(index)).index,
+      index,
+    ),
+  );
   for (const node of contactCenterSystems)
     for (let i = 0; i <= 100; i++) {
       const progress = i / 100,

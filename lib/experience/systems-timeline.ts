@@ -6,6 +6,14 @@ const smooth = (n: number) => {
   const t = clamp(n);
   return t * t * (3 - 2 * t);
 };
+const reviewStart = (systemsMilestones.length - 1) / systemsMilestones.length;
+
+export function systemsMilestoneStop(index: number) {
+  return index === systemsMilestones.length - 1
+    ? 0.97
+    : (index + 0.35) / systemsMilestones.length;
+}
+
 export function systemsTimelineFrame(progress: number) {
   const position = clamp(progress) * systemsMilestones.length;
   return {
@@ -17,7 +25,7 @@ export function quarterlySystemNodeFrame(progress: number, node: SystemNode) {
   // Quarterly targets highlight intended connections. They do not assert that
   // systems were retired in a particular quarter. Actual retirement happens only
   // in the reported-review transition.
-  const actual = smooth((progress - 0.77) / 0.17);
+  const actual = smooth((progress - reviewStart) / (0.94 - reviewStart));
   const pose = systemNodeFrame(actual, node);
   const stage = systemsMilestones[systemsTimelineFrame(progress).index];
   return {
