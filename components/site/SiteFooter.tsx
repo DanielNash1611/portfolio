@@ -77,6 +77,9 @@ export default function SiteFooter(): React.JSX.Element {
                   {item.label}
                 </Link>
               ))}
+              <Link href="/recommendations" className="w-fit hover:text-white">
+                Recommendations
+              </Link>
             </nav>
           </div>
 

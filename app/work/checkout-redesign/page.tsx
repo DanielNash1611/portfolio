@@ -5,6 +5,7 @@ import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import MediaFrame from "@/components/site/MediaFrame";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
 import { getWorkEntry } from "@/content/portfolio";
+import { getSelectedRecommendation } from "@/content/recommendations";
 import { getTestimonialsByIds } from "@/data/testimonials";
 import {
   checkoutRoleChanges,
@@ -21,6 +22,7 @@ import {
 } from "@/lib/portfolio-guide/context";
 
 const entry = getWorkEntry("checkout-redesign");
+const matt = getSelectedRecommendation("matt-winick");
 const pageContext = getPageContextByPath("/work/checkout-redesign");
 const portfolioContext = getPortfolioContext();
 export const metadata: Metadata = {
@@ -219,10 +221,11 @@ export default function CheckoutRedesignPage(): React.JSX.Element {
             eyebrow="Collaborator evidence"
             title="How close collaborators described the work"
             description="Partner perspectives on execution quality and cross-functional collaboration."
-            testimonials={getTestimonialsByIds([
-              "christopher-pruneau",
-              "matt-winick",
-            ])}
+            testimonials={[
+              ...getTestimonialsByIds(["christopher-pruneau"]),
+              matt.testimonial,
+            ]}
+            footerLink={{ href: matt.href, label: "View Matt’s recommendation" }}
           />
         </div>
       </details>

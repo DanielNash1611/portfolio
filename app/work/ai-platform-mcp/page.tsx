@@ -8,6 +8,7 @@ import MotionReveal from "@/components/site/MotionReveal";
 import SoundSynthesistSystemDiagram from "@/components/site/SoundSynthesistSystemDiagram";
 import { SoundSeekerWidget } from "@/components/sound-seeker/SoundSeekerWidget";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
+import { getSelectedRecommendation } from "@/content/recommendations";
 import { getTestimonialsByIds } from "@/data/testimonials";
 import {
   getPageContextByPath,
@@ -68,10 +69,11 @@ const learnings = [
   "Strong ideas need the right system around them to last",
 ];
 
-const relatedTestimonials = getTestimonialsByIds([
-  "sean-richardson",
-  "daniel-das",
-]);
+const daniel = getSelectedRecommendation("daniel-das");
+const relatedTestimonials = [
+  ...getTestimonialsByIds(["sean-richardson"]),
+  daniel.testimonial,
+];
 const pageContext = getPageContextByPath("/work/ai-platform-mcp");
 const portfolioContext = getPortfolioContext();
 
@@ -549,6 +551,10 @@ export default function AiPlatformMcpPage(): React.JSX.Element {
                   title="How collaborators described this work"
                   description="Two adjacent perspectives that reinforce the same pattern: translating early AI momentum into practical systems, stronger guardrails, and credible cross-functional execution."
                   testimonials={relatedTestimonials}
+                  footerLink={{
+                    href: daniel.href,
+                    label: "View Daniel Kingston’s recommendation",
+                  }}
                 />
               </MotionReveal>
             </Container>

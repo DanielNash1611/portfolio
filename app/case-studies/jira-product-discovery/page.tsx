@@ -3,7 +3,7 @@ import JpdFlagship from "@/components/overnight-cases/JpdFlagship";
 import PortfolioGuide from "@/components/portfolio/PortfolioGuide";
 import MediaFrame from "@/components/site/MediaFrame";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
-import { getTestimonialsByIds } from "@/data/testimonials";
+import { getSelectedRecommendation } from "@/content/recommendations";
 import { getCaseMdx } from "@/lib/mdx";
 import {
   getPageContextByPath,
@@ -11,6 +11,7 @@ import {
 } from "@/lib/portfolio-guide/context";
 
 const slug = "jira-product-discovery";
+const colin = getSelectedRecommendation("colin-greene");
 const pageContext = getPageContextByPath(
   "/case-studies/jira-product-discovery",
 );
@@ -134,7 +135,11 @@ export default async function JiraProductDiscoveryPage(): Promise<React.JSX.Elem
             eyebrow="Peer evidence"
             title="Colin Greene on teaching and shared practices"
             description="A peer in the same Guitar Center product group specifically names Daniel's work teaching Jira Product Discovery and spreading stakeholder practices."
-            testimonials={getTestimonialsByIds(["colin-greene"])}
+            testimonials={[colin.testimonial]}
+            footerLink={{
+              href: colin.href,
+              label: "View Colin’s recommendation",
+            }}
           />
         </div>
       </details>
