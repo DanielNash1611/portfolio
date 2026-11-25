@@ -3,7 +3,27 @@ import Link from "next/link";
 import OrgPlaybook from "@/components/overnight-enterprise/OrgPlaybook";
 import MediaFrame from "@/components/site/MediaFrame";
 import SocialProofSnippet from "@/components/SocialProofSnippet";
+import {
+  getSelectedRecommendation,
+  recommendationsHref,
+} from "@/content/recommendations";
 import { caseStudySocialProof } from "@/data/socialProof";
+
+const sumanth = getSelectedRecommendation("sumanth-cherukuri");
+const zac = getSelectedRecommendation("zac-bogart");
+
+const collaboratorQuotes = caseStudySocialProof["chatgpt-org-scale"].map(
+  (item) => {
+    const selection = [sumanth, zac].find(
+      ({ testimonial }) => testimonial.name === item.author,
+    );
+
+    return selection
+      ? { ...item, quote: selection.testimonial.short, mode: "quote" as const }
+      : item;
+  },
+);
+
 const snapshotItems = [
   {
     label: "Role",
@@ -96,7 +116,9 @@ const nextSteps = [
 export default function EnterpriseOrgChapter(): React.JSX.Element {
   return (
     <section
+      id="organization-enablement"
       className="eef-org-host"
+      style={{ scrollMarginTop: "var(--portfolio-header-height, 4rem)" }}
       aria-label="Organization enablement and adoption"
     >
       <div className="eef-chapter-source">
@@ -109,7 +131,8 @@ export default function EnterpriseOrgChapter(): React.JSX.Element {
         </a>
       </div>
       <OrgPlaybook
-        socialProof={caseStudySocialProof["chatgpt-org-scale"].map((item) => (
+        recommendationsHref={recommendationsHref}
+        socialProof={collaboratorQuotes.map((item) => (
           <SocialProofSnippet
             key={`${item.author}-${item.quote}`}
             item={item}

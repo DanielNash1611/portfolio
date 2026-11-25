@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/product-system",
     "/creative",
     "/about",
+    "/recommendations",
     "/resume",
     "/resume/generate",
     "/llms.txt",

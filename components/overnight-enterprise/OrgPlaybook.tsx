@@ -91,9 +91,11 @@ function SourceCrop({ index }: { index: number }) {
 }
 export default function OrgPlaybook({
   children,
+  recommendationsHref,
   socialProof,
 }: {
   children: ReactNode;
+  recommendationsHref?: string;
   socialProof: ReactNode;
 }) {
   const root = useRef<HTMLElement>(null),
@@ -358,6 +360,14 @@ export default function OrgPlaybook({
         <p className="org-eyebrow">Collaborators’ accounts</p>
         <h2>Partners in the work.</h2>
         <div>{socialProof}</div>
+        {recommendationsHref ? (
+          <Link
+            href={recommendationsHref}
+            className="mt-8 inline-flex text-sm font-bold underline underline-offset-4"
+          >
+            Browse professional recommendations
+          </Link>
+        ) : null}
       </section>
       <footer className="org-continuation">
         <p className="org-eyebrow">From enablement to a specific workflow</p>

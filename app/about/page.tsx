@@ -7,6 +7,7 @@ import CTASection from "@/components/site/CTASection";
 import PageHero from "@/components/site/PageHero";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
 import { aboutContent, siteConfig } from "@/content/portfolio";
+import { recommendationsHref } from "@/content/recommendations";
 import { testimonials } from "@/data/testimonials";
 
 const aboutPortrait = getPortrait("about-header");
@@ -138,6 +139,10 @@ export default function AboutPage(): React.JSX.Element {
         title="What leaders, engineers, and partners say about the work"
         description="Short excerpts pull out the strongest signal; tap any card to read the full recommendation and see how the person worked with me. LinkedIn recommendations link out for verification; direct recommendations are noted as such."
         testimonials={testimonials}
+        footerLink={{
+          href: recommendationsHref,
+          label: "Browse recommendations by topic",
+        }}
       />
 
       <CTASection
