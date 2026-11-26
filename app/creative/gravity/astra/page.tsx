@@ -313,7 +313,7 @@ export default function GravityAstraPage(): React.JSX.Element {
             <MotionReveal delay={0.06} className="mt-14 md:mt-20">
               <figure>
                 <a
-                  href="/videos/gravity/gravity-reach-into-the-music.mp4"
+                  href="https://km9upglctugamtw6.public.blob.vercel-storage.com/gravity-reach-into-the-music.mp4"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-12 items-center border-b border-[#efb65e]/50 py-4 text-sm text-[#efb65e]"
